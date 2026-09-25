@@ -1,0 +1,8 @@
+*
+!*/
+!.gitignore
+!app/public/.agents/rules/**
+!app/public/docs/**
+!app/public/docs_plugin_quote/**
+!app/public/wp-content/plugins/ff-frontend-entries/**
+!app/public/wp-content/themes/allship-logistics/**
