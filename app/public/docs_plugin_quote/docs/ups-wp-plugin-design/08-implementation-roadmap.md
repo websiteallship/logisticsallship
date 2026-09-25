@@ -1,7 +1,8 @@
 # 08. Implementation Roadmap — Chi tiết từng Phase/Step
 
 > Plugin: **Allship UPS Quote** (`allship-ups-quote`)
-> Cập nhật: 24/09/2026
+> Cập nhật: 25/09/2026
+> Mockup tham chiếu: [`service-selection-section-v4.html`](../../mockups/service-selection-section-v4.html)
 
 ---
 
@@ -39,21 +40,21 @@
 - `11-backend-tech-spec.md` § 1.1-1.3 — PHP architecture, autoloading
 
 **Tasks**:
-- [ ] Tạo thư mục `wp-content/plugins/allship-ups-quote/`.
-- [ ] Tạo `allship-ups-quote.php` với plugin header:
+- [x] Tạo thư mục `wp-content/plugins/allship-ups-quote/`.
+- [x] Tạo `allship-ups-quote.php` với plugin header:
   - Plugin Name: `Allship UPS Quote`
   - Version: `1.0.0`
   - Text Domain: `allship-ups-quote`
-- [ ] Define constants: `ALLSHIP_UPS_QUOTE_VERSION`, `ALLSHIP_UPS_QUOTE_PATH`, `ALLSHIP_UPS_QUOTE_URL`.
-- [ ] Tạo `includes/class-plugin.php` — main plugin class, register hooks.
-- [ ] Manual autoload: require tất cả includes khi `plugins_loaded`.
-- [ ] Thêm `if (!defined('ABSPATH')) exit;` cho MỌI file PHP.
+- [x] Define constants: `ALLSHIP_UPS_QUOTE_VERSION`, `ALLSHIP_UPS_QUOTE_PATH`, `ALLSHIP_UPS_QUOTE_URL`.
+- [x] Tạo `includes/class-plugin.php` — main plugin class, register hooks.
+- [x] Manual autoload: require tất cả includes khi `plugins_loaded`.
+- [x] Thêm `if (!defined('ABSPATH')) exit;` cho MỌI file PHP.
 
 🧪 **Tests Step 0.1**:
-- [ ] File `allship-ups-quote.php` có đúng plugin header.
-- [ ] Constants defined đúng giá trị.
-- [ ] `class-plugin.php` load được không lỗi.
-- [ ] Plugin xuất hiện trong WP Admin → Plugins list.
+- [x] File `allship-ups-quote.php` có đúng plugin header.
+- [x] Constants defined đúng giá trị.
+- [x] `class-plugin.php` load được không lỗi.
+- [x] Plugin xuất hiện trong WP Admin → Plugins list.
 
 ---
 
@@ -74,16 +75,16 @@
 - `11-backend-tech-spec.md` § 3.1-3.2 — Version tracking, dbDelta
 
 **Tasks**:
-- [ ] Tạo `includes/class-activator.php`.
-- [ ] Viết `dbDelta()` tạo 6 tables:
+- [x] Tạo `includes/class-activator.php`.
+- [x] Viết `dbDelta()` tạo 6 tables:
   - `{prefix}ups_rate_cards` — phiên bản bảng giá, hỗ trợ đặt tên tùy ý.
   - `{prefix}ups_countries` — danh sách quốc gia/IATA.
   - `{prefix}ups_zone_maps` — zone mapping theo rate_card/country/direction/service.
   - `{prefix}ups_rates` — bảng giá theo rate_group/zone/weight.
   - `{prefix}ups_settings` — cấu hình plugin.
   - `{prefix}ups_quote_logs` — log báo giá (gồm origin_province, destination_state, destination_city, destination_postal_code, destination_address).
-- [ ] Lưu schema version vào `wp_options` (`allship_ups_db_version`).
-- [ ] Idempotent: chạy lại không lỗi, không mất data.
+- [x] Lưu schema version vào `wp_options` (`allship_ups_db_version`).
+- [x] Idempotent: chạy lại không lỗi, không mất data.
 
 🧪 **Tests Step 0.2**:
 ```sql
@@ -99,8 +100,8 @@ SHOW TABLES LIKE '%ups_quote_logs';
 SELECT option_value FROM wp_options WHERE option_name = 'allship_ups_db_version';
 -- Expected: '1.0.0'
 ```
-- [ ] 6 tables có đúng columns theo `04-database-and-api-spec.md`.
-- [ ] Chạy activator 2 lần liên tiếp → không lỗi, không duplicate.
+- [x] 6 tables có đúng columns theo `04-database-and-api-spec.md`.
+- [x] Chạy activator 2 lần liên tiếp → không lỗi, không duplicate.
 
 ---
 
@@ -118,7 +119,7 @@ SELECT option_value FROM wp_options WHERE option_name = 'allship_ups_db_version'
 - `04-database-and-api-spec.md` § 6 — Settings schema + defaults
 
 **Tasks**:
-- [ ] Insert settings mặc định khi activate:
+- [x] Insert settings mặc định khi activate:
   - `dim_divisor` = `5500`
   - `rounding_step_kg` = `0.5`
   - `include_vat` = `false`, `vat_percent` = `0`
@@ -133,8 +134,8 @@ SELECT option_value FROM wp_options WHERE option_name = 'allship_ups_db_version'
 SELECT * FROM wp_ups_settings;
 -- Expected: 10+ rows với setting_key/setting_value đúng defaults
 ```
-- [ ] Mỗi setting key tồn tại và có giá trị mặc định.
-- [ ] Insert lại không duplicate.
+- [x] Mỗi setting key tồn tại và có giá trị mặc định.
+- [x] Insert lại không duplicate.
 
 ---
 
@@ -151,16 +152,16 @@ SELECT * FROM wp_ups_settings;
 - `11-backend-tech-spec.md` § 3.3 — Auto-create page logic
 
 **Tasks**:
-- [ ] Tạo page "Báo giá UPS" với slug `bao-gia-ups`.
-- [ ] Nội dung page: `[ups_quote_form]`.
-- [ ] Lưu page ID vào `wp_options` (`allship_ups_quote_page_id`).
-- [ ] Kiểm tra page tồn tại trước khi tạo (idempotent).
+- [x] Tạo page "Báo giá UPS" với slug `bao-gia-ups`.
+- [x] Nội dung page: `[ups_quote_form]`.
+- [x] Lưu page ID vào `wp_options` (`allship_ups_quote_page_id`).
+- [x] Kiểm tra page tồn tại trước khi tạo (idempotent).
 
 🧪 **Tests Step 0.4**:
-- [ ] Page "Báo giá UPS" tồn tại trong WP Admin → Pages.
-- [ ] Page content = `[ups_quote_form]`.
-- [ ] `get_option('allship_ups_quote_page_id')` trả đúng page ID.
-- [ ] Deactivate → activate → KHÔNG tạo page thứ 2.
+- [x] Page "Báo giá UPS" tồn tại trong WP Admin → Pages.
+- [x] Page content = `[ups_quote_form]`.
+- [x] `get_option('allship_ups_quote_page_id')` trả đúng page ID.
+- [x] Deactivate → activate → KHÔNG tạo page thứ 2.
 
 ---
 
@@ -178,13 +179,13 @@ SELECT * FROM wp_ups_settings;
 - `07-adr.md` — ADR decisions on data retention
 
 **Tasks**:
-- [ ] Tạo `includes/class-deactivator.php` — cleanup transients.
-- [ ] Tạo `uninstall.php` — drop tables + delete page nếu setting `delete_data_on_uninstall`.
+- [x] Tạo `includes/class-deactivator.php` — cleanup transients.
+- [x] Tạo `uninstall.php` — drop tables + delete page nếu setting `delete_data_on_uninstall`.
 
 🧪 **Tests Step 0.5**:
-- [ ] Deactivate → transients cleared.
-- [ ] Uninstall (khi `delete_data_on_uninstall` = true) → 6 tables dropped, page deleted.
-- [ ] Uninstall (khi `delete_data_on_uninstall` = false) → data giữ nguyên.
+- [x] Deactivate → transients cleared.
+- [x] Uninstall (khi `delete_data_on_uninstall` = true) → 6 tables dropped, page deleted.
+- [x] Uninstall (khi `delete_data_on_uninstall` = false) → data giữ nguyên.
 
 ---
 
@@ -194,12 +195,12 @@ SELECT * FROM wp_ups_settings;
 
 | # | Check | Status |
 |---|-------|--------|
-| 1 | Plugin activate → không PHP error/warning | ☐ |
-| 2 | 6 tables tồn tại trong DB đúng schema | ☐ |
-| 3 | Page "Báo giá UPS" tồn tại với shortcode | ☐ |
-| 4 | Deactivate → activate lại → không duplicate | ☐ |
-| 5 | Settings mặc định đọc được | ☐ |
-| 6 | Không `ABSPATH` bypass trên bất kỳ file nào | ☐ |
+| 1 | Plugin activate → không PHP error/warning | ☑ |
+| 2 | 6 tables tồn tại trong DB đúng schema | ☑ |
+| 3 | Page "Báo giá UPS" tồn tại với shortcode | ☑ |
+| 4 | Deactivate → activate lại → không duplicate | ☑ |
+| 5 | Settings mặc định đọc được | ☑ |
+| 6 | Không `ABSPATH` bypass trên bất kỳ file nào | ☑ |
 
 ---
 
@@ -223,10 +224,10 @@ SELECT * FROM wp_ups_settings;
 - `11-backend-tech-spec.md` § 1.2 — Class diagram
 
 **Tasks**:
-- [ ] Tạo `includes/class-settings-manager.php`.
-- [ ] Methods: `get($key, $default)`, `set($key, $value)`, `get_all()`, `delete($key)`.
-- [ ] Cache trong memory (static property) trong 1 request.
-- [ ] Sanitize values khi set.
+- [x] Tạo `includes/class-settings-manager.php`.
+- [x] Methods: `get($key, $default)`, `set($key, $value)`, `get_all()`, `delete($key)`.
+- [x] Cache trong memory (static property) trong 1 request.
+- [x] Sanitize values khi set.
 
 🧪 **Tests Step 1.1**:
 ```php
@@ -256,8 +257,8 @@ assert($sm->get('dim_divisor', 5000) === 5000);
 - `11-backend-tech-spec.md` § 4.1-4.3 — Rate card workflow, repository
 
 **Tasks**:
-- [ ] Tạo `includes/class-rate-card-repository.php`.
-- [ ] Methods:
+- [x] Tạo `includes/class-rate-card-repository.php`.
+- [x] Methods:
   - `create(array $data): int` — tạo rate card với tên tùy ý.
   - `get(int $id): ?object`
   - `get_active(): ?object` — rate card đang active.
@@ -268,9 +269,9 @@ assert($sm->get('dim_divisor', 5000) === 5000);
   - `update_name(int $id, string $name): bool` — đổi tên rate card.
   - `update_directions(int $id, array $directions): bool` — bật/tắt chiều vận chuyển.
   - `update_disabled_groups(int $id, array $groups): bool` — toggle rate groups.
-- [ ] Business rule: chỉ 1 card active tại 1 thời điểm.
-- [ ] Tạo `includes/config/service-registry.php` — `SERVICE_REGISTRY` constant (6 services × 2 directions = 18 rate groups).
-- [ ] Tạo `includes/class-service-availability-manager.php`:
+- [x] Business rule: chỉ 1 card active tại 1 thời điểm.
+- [x] Tạo `includes/config/service-registry.php` — `SERVICE_REGISTRY` constant (6 services × 2 directions = 18 rate groups).
+- [x] Tạo `includes/class-service-availability-manager.php`:
   - `get_services_for_direction(string $direction, ?int $rate_card_id): array`
   - `get_available_directions(?int $rate_card_id): array`
   - `resolve_rate_group(string $direction, string $service_code, ?string $shipment_type): string`
@@ -306,10 +307,10 @@ assert($repo->get($id2)->name === 'Renamed Card');
 - `09-iata-data-format-update.md` — IATA data structure
 
 **Tasks**:
-- [ ] Tạo `includes/class-country-repository.php`.
-- [ ] Methods: `find_by_iata`, `get_all_active`, `search`, `insert`, `update`, `toggle_active`, `bulk_upsert`.
-- [ ] Detect `is_us_override` (IATA=US).
-- [ ] Detect `has_extended_area_note` (name chứa `*`).
+- [x] Tạo `includes/class-country-repository.php`.
+- [x] Methods: `find_by_iata`, `get_all_active`, `search`, `insert`, `update`, `toggle_active`, `bulk_upsert`.
+- [x] Detect `is_us_override` (IATA=US).
+- [x] Detect `has_extended_area_note` (name chứa `*`).
 
 🧪 **Tests Step 1.3**:
 ```php
@@ -338,9 +339,9 @@ assert(count($results) >= 1);
 - `04-database-and-api-spec.md` § 4 — `ups_zone_maps` schema
 
 **Tasks**:
-- [ ] Tạo `includes/class-zone-repository.php`.
-- [ ] Methods: `find_zone`, `get_by_rate_card`, `insert`, `update`, `delete`, `bulk_insert`, `delete_by_rate_card`.
-- [ ] Unique constraint: (rate_card_id, country_id, direction, service_code).
+- [x] Tạo `includes/class-zone-repository.php`.
+- [x] Methods: `find_zone`, `get_by_rate_card`, `insert`, `update`, `delete`, `bulk_insert`, `delete_by_rate_card`.
+- [x] Unique constraint: (rate_card_id, country_id, direction, service_code).
 
 🧪 **Tests Step 1.4**:
 ```php
@@ -371,9 +372,9 @@ assert($zone === '5');
 - `01-business-requirements.md` § 8 — Rate lookup rules
 
 **Tasks**:
-- [ ] Tạo `includes/class-rate-repository.php`.
-- [ ] Methods: `find_price`, `get_by_rate_card`, `insert`, `update`, `delete`, `bulk_insert`, `delete_by_rate_card`.
-- [ ] Lookup logic: flat (exact/ceil), per_kg (bracket match), minimum.
+- [x] Tạo `includes/class-rate-repository.php`.
+- [x] Methods: `find_price`, `get_by_rate_card`, `insert`, `update`, `delete`, `bulk_insert`, `delete_by_rate_card`.
+- [x] Lookup logic: flat (exact/ceil), per_kg (bracket match), minimum.
 
 🧪 **Tests Step 1.5**:
 ```php
@@ -405,8 +406,8 @@ assert($result->price_vnd === 500000);
 - `11-backend-tech-spec.md` § 7 — CSV export logic
 
 **Tasks**:
-- [ ] Tạo `includes/class-quote-log-repository.php`.
-- [ ] Methods: `insert`, `get_filtered`, `count_filtered`, `export_csv`, `export_excel`.
+- [x] Tạo `includes/class-quote-log-repository.php`.
+- [x] Methods: `insert`, `get_filtered`, `count_filtered`, `export_csv`, `export_excel`.
 
 🧪 **Tests Step 1.6**:
 ```php
@@ -427,14 +428,14 @@ assert($count >= 1);
 
 | # | Check | Status |
 |---|-------|--------|
-| 1 | Settings CRUD hoạt động (get/set/delete) | ☐ |
-| 2 | Rate Card: create, activate, archive, delete, rename | ☐ |
-| 3 | Rate Card: chỉ 1 active tại 1 thời điểm | ☐ |
-| 4 | Country: CRUD + search + bulk_upsert | ☐ |
-| 5 | Zone: CRUD + find_zone + bulk_insert | ☐ |
-| 6 | Rate: CRUD + find_price (flat, per_kg, minimum) | ☐ |
-| 7 | Quote Log: insert + filter + count | ☐ |
-| 8 | `$wpdb->prepare()` cho MỌI query có user input | ☐ |
+| 1 | Settings CRUD hoạt động (get/set/delete) | ☑ |
+| 2 | Rate Card: create, activate, archive, delete, rename | ☑ |
+| 3 | Rate Card: chỉ 1 active tại 1 thời điểm | ☑ |
+| 4 | Country: CRUD + search + bulk_upsert | ☑ |
+| 5 | Zone: CRUD + find_zone + bulk_insert | ☑ |
+| 6 | Rate: CRUD + find_price (flat, per_kg, minimum) | ☑ |
+| 7 | Quote Log: insert + filter + count | ☑ |
+| 8 | `$wpdb->prepare()` cho MỌI query có user input | ☑ |
 
 ---
 
@@ -456,16 +457,16 @@ assert($count >= 1);
 - `11-backend-tech-spec.md` § 2.2 — CSV Parser spec
 
 **Tasks**:
-- [ ] Tạo `includes/importers/class-csv-parser.php`.
-- [ ] Native `fgetcsv()` / `SplFileObject`.
-- [ ] UTF-8 BOM handling.
-- [ ] Header validation: so sánh headers với expected list.
-- [ ] Return structured array.
+- [x] Tạo `includes/importers/class-csv-parser.php`.
+- [x] Native `fgetcsv()` / `SplFileObject`.
+- [x] UTF-8 BOM handling.
+- [x] Header validation: so sánh headers với expected list.
+- [x] Return structured array.
 
 🧪 **Tests Step 2.1**:
-- [ ] Parse CSV test file → đúng số rows.
-- [ ] CSV with BOM → parse OK.
-- [ ] CSV missing headers → throw error.
+- [x] Parse CSV test file → đúng số rows.
+- [x] CSV with BOM → parse OK.
+- [x] CSV missing headers → throw error.
 
 ---
 
@@ -482,16 +483,16 @@ assert($count >= 1);
 - `11-backend-tech-spec.md` § 2.3 — XLSX Reader spec
 
 **Tasks**:
-- [ ] Download `SimpleXLSX.php` (~100KB) vào `libs/`.
-- [ ] Tạo `includes/importers/class-xlsx-reader.php` wrapper.
-- [ ] Methods: `parse(string $file, ?string $sheet): array`.
-- [ ] Error handling: file corrupt, sheet không tồn tại.
-- [ ] Lazy load: chỉ require khi cần.
+- [x] Download `SimpleXLSX.php` (~100KB) vào `libs/`.
+- [x] Tạo `includes/importers/class-xlsx-reader.php` wrapper.
+- [x] Methods: `parse(string $file, ?string $sheet): array`.
+- [x] Error handling: file corrupt, sheet không tồn tại.
+- [x] Lazy load: chỉ require khi cần.
 
 🧪 **Tests Step 2.2**:
-- [ ] Parse `VN from 20.Aug.2026.xlsx` → data array.
-- [ ] Parse `IATA.xlsx` → 2838+ rows.
-- [ ] Corrupt file → clear error message.
+- [x] Parse `VN from 20.Aug.2026.xlsx` → data array.
+- [x] Parse `IATA.xlsx` → 2838+ rows.
+- [x] Corrupt file → clear error message.
 
 ---
 
@@ -511,22 +512,22 @@ assert($count >= 1);
 - `11-backend-tech-spec.md` § 2.4 — Rate Importer code
 
 **Tasks**:
-- [ ] Tạo `includes/importers/class-rate-importer.php`.
-- [ ] **Hỗ trợ 2 format input:**
+- [x] Tạo `includes/importers/class-rate-importer.php`.
+- [x] **Hỗ trợ 2 format input:**
   - **CSV template**: headers = `rate_group, weight_label, weight_from, weight_to, billing_unit, zone_1...zone_10, zone_us5`.
   - **XLSX gốc UPS**: detect bằng label "Express Saver Document Rates:" → parse tự động.
-- [ ] Chuẩn hóa weight brackets (UPS Envelope, flat, per_kg, minimum).
-- [ ] Validate: 4 rate groups found, zones 1-10 + US5, giá là số dương.
-- [ ] Preview mode: return summary trước khi commit DB.
+- [x] Chuẩn hóa weight brackets (UPS Envelope, flat, per_kg, minimum).
+- [x] Validate: 4 rate groups found, zones 1-10 + US5, giá là số dương.
+- [x] Preview mode: return summary trước khi commit DB.
 
 🧪 **Tests Step 2.3**:
-- [ ] Import `VN from 20.Aug.2026.xlsx` → 4 rate groups found.
-- [ ] Weight "21-44" → `billing_unit=per_kg, weight_from=21, weight_to=44`.
-- [ ] Weight "UPS Envelope" → `billing_unit=flat, weight_from=null`.
-- [ ] Weight ">1000" → `billing_unit=per_kg, weight_from=1000.0001`.
-- [ ] Weight "Minimum" → `billing_unit=minimum`.
-- [ ] Preview mode → summary without DB commit.
-- [ ] Missing rate group → clear error.
+- [x] Import `VN from 20.Aug.2026.xlsx` → 4 rate groups found.
+- [x] Weight "21-44" → `billing_unit=per_kg, weight_from=21, weight_to=44`.
+- [x] Weight "UPS Envelope" → `billing_unit=flat, weight_from=null`.
+- [x] Weight ">1000" → `billing_unit=per_kg, weight_from=1000.0001`.
+- [x] Weight "Minimum" → `billing_unit=minimum`.
+- [x] Preview mode → summary without DB commit.
+- [x] Missing rate group → clear error.
 
 ---
 
@@ -546,21 +547,21 @@ assert($count >= 1);
 - `11-backend-tech-spec.md` § 2.5 — Zone Importer code
 
 **Tasks**:
-- [ ] Tạo `includes/importers/class-zone-importer.php`.
-- [ ] **Auto-detect 2 format:**
+- [x] Tạo `includes/importers/class-zone-importer.php`.
+- [x] **Auto-detect 2 format:**
   - **Pivot CSV template**: `iata_code, country_name, direction, wxs, xpd, wfm, exw, xpr, wxp`.
   - **Flat XLSX (IATA.xlsx)**: `SN, Cty, IATA, Country, Svc Type, Mvn, XPR, XPD, WXS, WXP, WFM, EXW` → pivot tự động.
-- [ ] Skip IATA = `ZZ`.
-- [ ] Detect US → `is_us_override = 1`.
-- [ ] Detect `*` → `has_extended_area_note = 1`.
-- [ ] Validate: có US, có WXS/XPD/WFM export.
+- [x] Skip IATA = `ZZ`.
+- [x] Detect US → `is_us_override = 1`.
+- [x] Detect `*` → `has_extended_area_note = 1`.
+- [x] Validate: có US, có WXS/XPD/WFM export.
 
 🧪 **Tests Step 2.4**:
-- [ ] Import `IATA.xlsx` (flat) → 249 countries (ZZ skipped).
-- [ ] US → `is_us_override = 1`, zone 5 cho WXS/XPD/WFM export.
-- [ ] `United States*` → `has_extended_area_note = 1`.
-- [ ] WFM import → 0 countries available.
-- [ ] Import CSV pivot template → same result.
+- [x] Import `IATA.xlsx` (flat) → 249 countries (ZZ skipped).
+- [x] US → `is_us_override = 1`, zone 5 cho WXS/XPD/WFM export.
+- [x] `United States*` → `has_extended_area_note = 1`.
+- [x] WFM import → 0 countries available.
+- [x] Import CSV pivot template → same result.
 
 ---
 
@@ -579,18 +580,18 @@ assert($count >= 1);
 - `05-admin-ui-and-public-ui.md` § 2 — Import UI flow (Upload → Preview → Import → Activate)
 
 **Tasks**:
-- [ ] Tạo `includes/importers/class-import-orchestrator.php`.
-- [ ] Flow: Upload → Validate → Preview → Create rate card (draft) → Import rates + zones → Return summary.
-- [ ] File upload handling: MIME check, size limit 10MB, private directory, delete after import.
-- [ ] SHA256 hash cho source file.
-- [ ] Atomic: nếu import fail → rollback (delete rate card + data).
+- [x] Tạo `includes/importers/class-import-orchestrator.php`.
+- [x] Flow: Upload → Validate → Preview → Create rate card (draft) → Import rates + zones → Return summary.
+- [x] File upload handling: MIME check, size limit 10MB, private directory, delete after import.
+- [x] SHA256 hash cho source file.
+- [x] Atomic: nếu import fail → rollback (delete rate card + data).
 
 🧪 **Tests Step 2.5**:
-- [ ] Upload + Preview → summary correct, no DB write.
-- [ ] Import → rate card created as draft.
-- [ ] Simulate failure midway → rollback, no orphan data.
-- [ ] File too large → error.
-- [ ] Invalid MIME → error.
+- [x] Upload + Preview → summary correct, no DB write.
+- [x] Import → rate card created as draft.
+- [x] Simulate failure midway → rollback, no orphan data.
+- [x] File too large → error.
+- [x] Invalid MIME → error.
 
 ---
 
@@ -603,11 +604,11 @@ assert($count >= 1);
 - `ups-plugin-data-import.md` — Expected headers
 
 **Tasks**:
-- [ ] Tạo `templates/rate-template.csv` — mẫu bảng giá.
-- [ ] Tạo `templates/zone-template.csv` — mẫu zone chart.
+- [x] Tạo `templates/rate-template.csv` — mẫu bảng giá.
+- [x] Tạo `templates/zone-template.csv` — mẫu zone chart.
 
 🧪 **Tests Step 2.6**:
-- [ ] Templates pass header validation.
+- [x] Templates pass header validation.
 
 ---
 
@@ -617,13 +618,13 @@ assert($count >= 1);
 
 | # | Check | Status |
 |---|-------|--------|
-| 1 | Import `VN from 20.Aug.2026.xlsx` → 4 rate groups, đúng số dòng | ☐ |
-| 2 | Import `IATA.xlsx` (flat) → 249 countries, US `is_us_override` | ☐ |
-| 3 | Import CSV template → cùng kết quả | ☐ |
-| 4 | Preview mode → summary đúng, không commit DB | ☐ |
-| 5 | File sai format → error message rõ ràng | ☐ |
-| 6 | ZZ bị skip | ☐ |
-| 7 | Atomic rollback khi fail | ☐ |
+| 1 | Import `VN from 20.Aug.2026.xlsx` → 4 rate groups, đúng số dòng | ☑ |
+| 2 | Import `IATA.xlsx` (flat) → 249 countries, US `is_us_override` | ☑ |
+| 3 | Import CSV template → cùng kết quả | ☑ |
+| 4 | Preview mode → summary đúng, không commit DB | ☑ |
+| 5 | File sai format → error message rõ ràng | ☑ |
+| 6 | ZZ bị skip | ☑ |
+| 7 | Atomic rollback khi fail | ☑ |
 
 ---
 
@@ -647,13 +648,13 @@ assert($count >= 1);
 - `06-test-plan-and-acceptance.md` § 2 — Weight calculator test cases
 
 **Tasks**:
-- [ ] Tạo `includes/class-weight-calculator.php`.
-- [ ] `calculate_dim_weight(L, W, H, dim_divisor): float`
-- [ ] `ceil_to_step(weight, step): float`
-- [ ] `calculate_piece(actual, L, W, H, dim_divisor, step): PieceResult`
-- [ ] `calculate_pieces(array $pieces, dim_divisor, step): array`
-- [ ] `total_chargeable(array $piece_results): float`
-- [ ] Xử lý `quantity > 1`: tính 1 kiện × quantity.
+- [x] Tạo `includes/class-weight-calculator.php`.
+- [x] `calculate_dim_weight(L, W, H, dim_divisor): float`
+- [x] `ceil_to_step(weight, step): float`
+- [x] `calculate_piece(actual, L, W, H, dim_divisor, step): PieceResult`
+- [x] `calculate_pieces(array $pieces, dim_divisor, step): array`
+- [x] `total_chargeable(array $piece_results): float`
+- [x] Xử lý `quantity > 1`: tính 1 kiện × quantity.
 
 🧪 **Tests Step 3.1** (BẮT BUỘC tất cả pass):
 ```php
@@ -697,10 +698,10 @@ assert($wc->total_chargeable($pieces) === 4.0);
 - `07-adr.md` — ADR-004: US5 rate column override
 
 **Tasks**:
-- [ ] Tạo `includes/class-zone-resolver.php`.
-- [ ] `resolve(direction, service_code, destination_iata, rate_card_id): ZoneResult`.
-- [ ] US5 override: destination = US → `rate_zone = "US5"`.
-- [ ] Error codes: `UNKNOWN_DESTINATION`, `LANE_NOT_AVAILABLE`, `SERVICE_NOT_SUPPORTED`.
+- [x] Tạo `includes/class-zone-resolver.php`.
+- [x] `resolve(direction, service_code, destination_iata, rate_card_id): ZoneResult`.
+- [x] US5 override: destination = US → `rate_zone = "US5"`.
+- [x] Error codes: `UNKNOWN_DESTINATION`, `LANE_NOT_AVAILABLE`, `SERVICE_NOT_SUPPORTED`.
 
 🧪 **Tests Step 3.2** (BẮT BUỘC tất cả pass):
 ```php
@@ -740,18 +741,18 @@ assert($r->zone === '7');
 - `07-adr.md` — ADR-007: Heavy bracket per_kg
 
 **Tasks**:
-- [ ] Tạo `includes/class-rate-lookup.php`.
-- [ ] `find_price(rate_card_id, rate_group, rate_zone, chargeable_weight, is_envelope): RateResult`.
-- [ ] Logic: flat, per_kg, minimum.
-- [ ] `map_rate_group(service_code, shipment_type): string`.
-- [ ] Document > 5kg → error `DOCUMENT_OVER_5KG`.
+- [x] Tạo `includes/class-rate-lookup.php`.
+- [x] `find_price(rate_card_id, rate_group, rate_zone, chargeable_weight, is_envelope): RateResult`.
+- [x] Logic: flat, per_kg, minimum.
+- [x] `map_rate_group(service_code, shipment_type): string`.
+- [x] Document > 5kg → error `DOCUMENT_OVER_5KG`.
 
 🧪 **Tests Step 3.3** (BẮT BUỘC tất cả pass):
-- [ ] WXS Document 1kg US → cột US5, giá dòng 1kg.
-- [ ] WXS Non-doc 6kg Zone 5 → flat giá dòng 6kg.
-- [ ] WXS Non-doc 25kg → bracket 21-44, per_kg × 25.
-- [ ] WFM 80kg → max(minimum, bracket 71-99 × 80).
-- [ ] Document 6kg → error `DOCUMENT_OVER_5KG`.
+- [x] WXS Document 1kg US → cột US5, giá dòng 1kg.
+- [x] WXS Non-doc 6kg Zone 5 → flat giá dòng 6kg.
+- [x] WXS Non-doc 25kg → bracket 21-44, per_kg × 25.
+- [x] WFM 80kg → max(minimum, bracket 71-99 × 80).
+- [x] Document 6kg → error `DOCUMENT_OVER_5KG`.
 
 ---
 
@@ -770,15 +771,15 @@ assert($r->zone === '7');
 - `07-adr.md` — ADR-006: Phụ phí phase 1 default off
 
 **Tasks**:
-- [ ] Tạo `includes/class-surcharge-engine.php`.
-- [ ] `calculate(base_price, input, pieces): array<Fee>`.
-- [ ] Đọc settings: VAT, FSC, Surge, customs_fee. Mặc định tất cả off.
-- [ ] Filter hook: `allship_ups_surcharges`.
+- [x] Tạo `includes/class-surcharge-engine.php`.
+- [x] `calculate(base_price, input, pieces): array<Fee>`.
+- [x] Đọc settings: VAT, FSC, Surge, customs_fee. Mặc định tất cả off.
+- [x] Filter hook: `allship_ups_surcharges`.
 
 🧪 **Tests Step 3.4**:
-- [ ] Default OFF → `$fees = []`.
-- [ ] VAT ON 10% → fee added correctly.
-- [ ] Filter hook callable.
+- [x] Default OFF → `$fees = []`.
+- [x] VAT ON 10% → fee added correctly.
+- [x] Filter hook callable.
 
 ---
 
@@ -797,10 +798,10 @@ assert($r->zone === '7');
 - `03-system-architecture.md` § 4-5 — Luồng báo giá, pseudocode
 
 **Tasks**:
-- [ ] Tạo `includes/class-quote-calculator.php`.
-- [ ] `calculate(array $input): QuoteResult`.
-- [ ] Flow: Validate → Rate card → Weight → Zone → Rate → Surcharge → Log → Return.
-- [ ] Error handling: catch + wrap thành structured error response.
+- [x] Tạo `includes/class-quote-calculator.php`.
+- [x] `calculate(array $input): QuoteResult`.
+- [x] Flow: Validate → Rate card → Weight → Zone → Rate → Surcharge → Log → Return.
+- [x] Error handling: catch + wrap thành structured error response.
 
 🧪 **Tests Step 3.5** (Integration — BẮT BUỘC):
 ```php
@@ -829,20 +830,28 @@ assert($r->base_price_vnd > 0);
 
 | # | Check | Status |
 |---|-------|--------|
-| 1 | Weight Calculator: 5/5 test cases pass | ☐ |
-| 2 | Zone Resolver: 5/5 test cases pass (including US5) | ☐ |
-| 3 | Rate Lookup: 5/5 test cases pass | ☐ |
-| 4 | Surcharge Engine: default OFF, extensible | ☐ |
-| 5 | Quote Calculator: 4/4 integration cases pass | ☐ |
-| 6 | Quote log written correctly | ☐ |
-| 7 | Multi-piece calculation tính từng kiện riêng | ☐ |
-| 8 | WFM minimum logic đúng | ☐ |
+| 1 | Weight Calculator: 5/5 test cases pass | ☑ |
+| 2 | Zone Resolver: 5/5 test cases pass (including US5) | ☑ |
+| 3 | Rate Lookup: 5/5 test cases pass | ☑ |
+| 4 | Surcharge Engine: default OFF, extensible | ☑ |
+| 5 | Quote Calculator: 4/4 integration cases pass | ☑ |
+| 6 | Quote log written correctly | ☑ |
+| 7 | Multi-piece calculation tính từng kiện riêng | ☑ |
+| 8 | WFM minimum logic đúng | ☑ |
 
 ---
 
-## Phase 4: REST API, Shortcode & Frontend UI/UX (Theo Mockup V2)
+## Phase 4: REST API, Shortcode & Frontend UI/UX (Theo Mockup V4)
 
-> **Mục tiêu**: Hiện thực hóa trọn vẹn giao diện và trải nghiệm người dùng theo bản thiết kế chuẩn [public-quote-mockup-v2.html](../../mockups/public-quote-mockup-v2.html).
+> **Mục tiêu**: Hiện thực hóa trọn vẹn giao diện và trải nghiệm người dùng theo bản thiết kế chuẩn [service-selection-section-v4.html](../../mockups/service-selection-section-v4.html).
+>
+> **Thay đổi chính so với V2**:
+> - Hiển thị đầy đủ **6 services** dạng card grid với category filter (Parcel < 70kg / Freight > 70kg).
+> - Kết quả tính cước hiển thị **so sánh đồng thời tất cả 6 services**, bao gồm các services chưa có bảng giá riêng (EXW, XPR, WXP dùng hệ số nhân từ WXS/WFM).
+> - Mobile UX: compact comparison list (1 screen), sticky bottom action bar, view toggle (compact / full cards).
+> - Pieces detail modal (Bảng kê quy đổi trọng lượng kiện hàng).
+> - Booking modal kèm tóm tắt đầy đủ địa chỉ.
+> - Animation: **Anime.js** (CDN) thay vì GSAP cho form animations.
 
 ### Step 4.1 — REST Controller
 
@@ -863,11 +872,28 @@ assert($r->base_price_vnd > 0);
 **Tasks**:
 - [ ] Tạo `includes/class-rest-controller.php`.
 - [ ] Register routes: `POST /calculate`, `POST /lead`, `GET /countries`, `GET /services`, `GET /directions`.
-- [ ] `/services` nhận query param `direction` (default `export`), trả về services từ `Service_Availability_Manager`.
+- [ ] `/services` nhận query param `direction` (default `export`), trả về **đầy đủ 6 services** với metadata phù hợp V4:
+  ```json
+  {
+    "code": "WXS",
+    "name": "Express Saver",
+    "enabled": true,
+    "has_data": true,
+    "has_document_split": true,
+    "cat": "parcel",
+    "icon": "ph-airplane-tilt",
+    "icon_bg": "#FEF3C7",
+    "icon_color": "#D97706",
+    "desc_vi": "Nhanh nhất · 1-3 ngày",
+    "eta_vi": "1-3 ngày",
+    "badge_text": "Phổ biến",
+    "badge_color": "amber"
+  }
+  ```
 - [ ] `/directions` trả về chiều vận chuyển khả dụng từ `Service_Availability_Manager`.
 - [ ] `/calculate` nhận field `direction` (default `export`), dùng `resolve_rate_group()` để xác định rate_group.
 - [ ] Input validation với WP REST `args` schema.
-- [ ] `service_code` enum mở rộng: `['EXW', 'XPR', 'WXS', 'XPD', 'WXP', 'WFM']`.
+- [ ] `service_code` enum: `['EXW', 'XPR', 'WXS', 'XPD', 'WXP', 'WFM']`.
 - [ ] Sanitize: `sanitize_text_field()`, `absint()`, `floatval()`.
 - [ ] Ghi log vào `ups_quote_logs` kèm đầy đủ address fields.
 
@@ -883,9 +909,9 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 curl http://logistic.local/wp-json/ups-quote/v1/countries?direction=export&service_code=WXS
 # Expected: {"success":true,"data":[...249 countries...]}
 
-# Test services endpoint
+# Test services endpoint — phải trả đầy đủ 6 services
 curl http://logistic.local/wp-json/ups-quote/v1/services
-# Expected: {"success":true,"data":[{"code":"WXS","enabled":true},{"code":"XPD","enabled":true},{"code":"WFM","enabled":true},...]}
+# Expected: {"success":true,"data":[{"code":"EXW",...},{"code":"XPR",...},{"code":"WXS",...},{"code":"XPD",...},{"code":"WXP",...},{"code":"WFM",...}]}
 
 # Test invalid input
 curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
@@ -902,7 +928,7 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - `wordpress` — Conditional enqueue
 
 📏 **Rules**:
-- `ups-plugin-frontend.md` — Enqueue strategy, nur trên page có shortcode
+- `ups-plugin-frontend.md` — Enqueue strategy, chỉ trên page có shortcode
 - `ups-plugin-coding-standards.md` — Script handle naming
 
 📖 **Docs**:
@@ -913,16 +939,32 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - [ ] Tạo `includes/class-shortcode.php`.
 - [ ] Register `[ups_quote_form]`.
 - [ ] Chỉ enqueue assets khi shortcode xuất hiện.
-- [ ] `wp_localize_script()`: apiBase, nonce, currency, COUNTRIES, VN_PROVINCES, dim_divisor, rounding_step.
+- [ ] `wp_localize_script()` inject `upsQuoteConfig`:
+  ```json
+  {
+    "apiBase": "...",
+    "nonce": "...",
+    "currency": "VND",
+    "COUNTRIES": [...],
+    "VN_PROVINCES": [...],
+    "POPULAR_IATA": ["US","JP","KR","AU","CA","DE","GB","FR","SG","TW"],
+    "dim_divisor": 5500,
+    "rounding_step": 0.5
+  }
+  ```
+- [ ] Enqueue `states_by_country.js` — static JSON cho destination address dropdowns.
+- [ ] Enqueue **Anime.js 3.2** CDN: `https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js`.
 
 🧪 **Tests Step 4.2**:
 - [ ] Visit page "Báo giá UPS" → CSS/JS loaded.
 - [ ] Visit homepage → CSS/JS NOT loaded.
 - [ ] `upsQuoteConfig` JS object available in browser console.
+- [ ] `window.anime` available (Anime.js loaded).
+- [ ] `STATES_BY_COUNTRY` global available (address data loaded).
 
 ---
 
-### Step 4.3 — Quote Form Template (PHP / HTML theo Mockup V2)
+### Step 4.3 — Quote Form Template (PHP / HTML theo Mockup V4)
 
 🛠 **Skills**:
 - `frontend-design` — Production-grade UI, visual excellence
@@ -939,15 +981,103 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - `05-admin-ui-and-public-ui.md` § 4-7 — Public UI layout, result table, UX edge cases
 - `12-theme-integration.md` § 2-4 — Design tokens, typography, shapes
 - `13-destination-address-dropdown-research.md` — Address fields design
+- `service-selection-section-v4.html` — **Mockup V4 (nguồn truth cho UI)**
 
 **Tasks**:
-- [ ] Tạo `public/views/quote-form.php` kế thừa 100% từ mockup V2.
-- [ ] 7 sections: Header, Direction selector, Service tabs (dynamic), Route/Address, Pieces table, Results/Compare, Booking modal.
-- [ ] Direction selector: ẩn nếu chỉ 1 chiều bật, hiện 2 tabs nếu 2 chiều.
-- [ ] Service tabs: render dynamic từ `/services?direction=...` API.
+- [ ] Tạo `public/views/quote-form.php` kế thừa 100% từ mockup V4.
+- [ ] **8 sections chính** (theo V4):
+
+  **Section 1 — Hero Header:**
+  - Badge "Tính Cước UPS Tức Thì".
+  - H1: "Báo Giá Vận Chuyển Quốc Tế".
+  - Direction badge (dynamic: "Việt Nam → Quốc tế" / "Quốc tế → Việt Nam").
+
+  **Section 2 — Chiều vận chuyển (Direction Selector):**
+  - 2 segmented card buttons trong container `bg-slate-100 rounded-xl`.
+  - Card "Xuất hàng đi Quốc tế" (export) với badge `Xuất khẩu` và icon `ph-airplane-takeoff`.
+  - Card "Nhập hàng về Việt Nam" (import) với badge `Nhập khẩu` và icon `ph-airplane-landing`.
+  - Active state: white bg + shadow + brand-red icon box + check indicator.
+  - Ẩn toàn bộ section nếu chỉ 1 chiều bật.
+
+  **Section 3 — Chọn dịch vụ UPS (6 Service Cards Grid):**
+  - **Category filter tabs** (All / Bưu kiện dưới 70kg / Hàng nặng trên 70kg):
+    - Tabs inline `bg-slate-100 rounded-xl`.
+    - Active tab: `bg-navy-900 text-white`.
+    - Count badge per category.
+  - **6 service cards** grid (`grid-cols-2 sm:grid-cols-3 lg:grid-cols-6`):
+    - Mỗi card gồm: icon (color-coded), service code badge, tên, mô tả, transit time, availability status.
+    - `data-code`, `data-cat` (parcel/freight), `data-doc-split` attributes.
+    - Active state: brand-red border + gradient bg + check badge.
+    - Disabled state: opacity 0.65 + dashed border.
+    - Hover: translateY(-2px) + shadow.
+  - Cụ thể 6 cards:
+    | Code | Name | Category | Icon | Icon BG | has_document_split |
+    |------|------|----------|------|---------|-------------------|
+    | EXW | Express Early | parcel | ph-globe | amber-100 | ✅ |
+    | XPR | Express Plus | parcel | ph-rocket-launch | purple-100 | ✅ |
+    | WXS | Express Saver | parcel | ph-airplane-tilt | amber-500 (filled) | ✅ |
+    | XPD | Expedited | parcel | ph-truck | indigo-100 | ❌ |
+    | WXP | Express Freight | freight | ph-lightning | rose-100 | ❌ |
+    | WFM | Freight Midday | freight | ph-crane | emerald-100 | ❌ |
+
+  - **Shipment type toggle** (chỉ hiện cho EXW, XPR, WXS khi `data-doc-split="true"`):
+    - 2 card options: "Hàng hóa thông thường (Non-doc)" và "Tài liệu & Chứng từ (Document dưới 5kg)".
+    - Info banner: "Dịch vụ X có cước ưu đãi cho chứng từ ≤ 5kg".
+    - Active state: brand-red border + pink bg + check icon.
+
+  **Section 4 — Tuyến vận chuyển:**
+  - Origin province dropdown (tuỳ chọn, 63 tỉnh VN).
+  - Destination country combobox (searchable, bắt buộc).
+  - Destination address block (tuỳ chọn — hỗ trợ DAS):
+    - Bang/Tỉnh: dropdown → adaptive label (State/Province/Prefecture...).
+    - Thành phố: dropdown → lọc theo Bang.
+    - Zipcode: text input.
+    - Địa chỉ cụ thể: text input.
+
+  **Section 5 — Thông tin kiện hàng:**
+  - Pieces table (desktop grid `70px 1fr 1fr 1fr 1fr 44px`, mobile compact).
+  - Mobile mini header row.
+  - Add piece button (max 20).
+  - Delete piece button.
+  - **Volumetric summary bar** (real-time): Tổng kiện, Cân thực, Thể tích, Cân tính cước (brand-red).
+  - Inline error area.
+  - CTA: "Tính cước ngay" button (gradient brand-red, loading spinner, shine animation).
+
+  **Section 6 — Kết quả tính cước (Result Section):**
+  - Header: badge "Kết quả báo giá tự động", H2 "So Sánh Bảng Giá Các Gói Dịch Vụ".
+  - **Route summary ribbon card**: direction label, service label, route title (A ➔ B), weight badge (clickable → opens pieces modal), destination detail tags, zone badge, shipment type badge.
+  - **Mobile view toggle**: "So sánh gọn (1 màn hình)" / "Thẻ chi tiết".
+  - **Mobile compact comparison list** (`md:hidden`): radio-style rows cho tất cả 6 services, mỗi row gồm icon + tên + transit + badge + giá.
+  - **Desktop service cards grid** (`md:grid-cols-2 lg:grid-cols-3`): full detail cards cho mỗi service:
+    - Tag: "GIÁ TỐT NHẤT" (brand-red) / "SÁNG SỚM" / "ƯU TIÊN" / "PHỔ BIẾN" / "HỎA TỐC NẶNG" / "TIẾT KIỆM NẶNG" / "LIÊN HỆ".
+    - Icon + service name + code + transit.
+    - Detail rows: Zone, Cân tính cước, Nước đến.
+    - Price section: giá formatted VND, per_kg breakdown nếu áp dụng, warning nếu có.
+    - "Xem bảng kê N kiện" button → opens pieces modal.
+    - CTA button: "Liên hệ đặt dịch vụ" / "Yêu cầu báo giá riêng".
+  - **Important notice box** (amber): lưu ý giá tạm tính, chưa bao gồm VAT/FSC/Surge...
+  - **Action toolbar**: In/Lưu PDF, Tính lại, Liên hệ tư vấn.
+
+  **Section 7 — Mobile sticky bottom action bar:**
+  - Fixed bottom bar, hiện sau khi có kết quả.
+  - Hiển thị: service name + giá của service đang chọn + "Đặt dịch vụ này" button.
+
+  **Section 8 — Modals:**
+  - **Pieces detail modal**: Bảng quy đổi trọng lượng kiện hàng chi tiết:
+    - Table: Kiện # / SL / Kích thước (DxRxC) / Cân thực / Thể tích (DIM) / Tính cước/Kiện / Tổng dòng.
+    - KPI footnote: Tổng số kiện, Tổng cân thực, Tổng thể tích, Cân tính cước (brand-red highlight).
+    - Footer: DIM 5500 note + Đóng button.
+  - **Booking modal**: Yêu cầu tư vấn & đặt dịch vụ:
+    - Route summary section (dynamic: from/to/direction/service/weight).
+    - Form fields: Họ tên, SĐT/Zalo, Ghi chú.
+    - Submit button với loading state.
+    - Inline success message (không dùng alert popup).
 
 🧪 **Tests Step 4.3**:
 - [ ] HTML validates (no broken tags).
+- [ ] All 6 service cards render.
+- [ ] Category filter tabs filter services correctly.
+- [ ] Shipment type toggle shows/hides based on `data-doc-split`.
 - [ ] All ARIA attributes present.
 - [ ] All form labels linked to inputs.
 
@@ -968,25 +1098,102 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 📖 **Docs**:
 - `10-frontend-tech-spec.md` § 2-7 — API contract, components, animations, error handling
 - `13-destination-address-dropdown-research.md` § 5 — Implementation plan for address fields
+- `service-selection-section-v4.html` — **Reference JS implementation**
 
 **Tasks**:
 - [ ] Tạo `public/assets/js/quote-form.js` với modules:
-  - DirectionSelector
-  - ServiceTabs (dynamic)
-  - CountryCombobox
-  - DestinationAddress (Giải pháp A - static JSON)
-  - PieceManager
-  - LiveMetricsEngine
-  - QuoteComparisonEngine
-  - BookingModalManager
-  - MobileStickyCTA
+
+  **A. SERVICE_REGISTRY (Client-side constant)**:
+  ```javascript
+  const SERVICE_REGISTRY = {
+    EXW: { name: 'Express Early', cat: 'parcel', has_document_split: true, icon: 'ph-globe', iconBg: '#FEF3C7', iconColor: '#D97706' },
+    XPR: { name: 'Express Plus', cat: 'parcel', has_document_split: true, icon: 'ph-rocket-launch', iconBg: '#EDE9FE', iconColor: '#7C3AED' },
+    WXS: { name: 'Express Saver', cat: 'parcel', has_document_split: true, icon: 'ph-airplane-tilt', iconBg: '#FEF3C7', iconColor: '#D97706' },
+    XPD: { name: 'Expedited', cat: 'parcel', has_document_split: false, icon: 'ph-truck', iconBg: '#E0E7FF', iconColor: '#4338CA' },
+    WXP: { name: 'Express Freight', cat: 'freight', has_document_split: false, icon: 'ph-lightning', iconBg: '#FEE2E2', iconColor: '#DC2626' },
+    WFM: { name: 'Freight Midday', cat: 'freight', has_document_split: false, icon: 'ph-crane', iconBg: '#ECFDF5', iconColor: '#059669' }
+  };
+  ```
+
+  **B. DirectionSelector:**
+  - Load directions từ API `/directions`.
+  - Ẩn selector nếu chỉ 1 chiều bật.
+  - On change: reload service tabs, cập nhật origin/dest labels, update hero badge.
+
+  **C. ServiceTabsManager:**
+  - Render 6 service cards từ `SERVICE_REGISTRY`.
+  - Category filter tabs (all/parcel/freight) — filter bằng `data-cat`.
+  - Active/disabled/unavailable states.
+  - On service change: toggle shipment type section (`data-doc-split`), update service count notice.
+
+  **D. ShipmentTypeManager:**
+  - Show/hide toggle cho services có `has_document_split` (EXW, XPR, WXS).
+  - Default: "Hàng hóa thông thường" (nondocument).
+  - Update info banner với tên dịch vụ hiện tại.
+
+  **E. CountryCombobox:**
+  - Searchable dropdown: tìm theo tên tiếng Việt + IATA + English.
+  - Popular countries pinned trên cùng: US, JP, KR, AU, CA, DE, GB, FR, SG, TW.
+  - Zone display per service khi country selected.
+
+  **F. DestinationAddress (Giải pháp A — static JSON):**
+  - Load `STATES_BY_COUNTRY` data.
+  - Adaptive labels per country (State, Province, Prefecture, Bundesland...).
+  - State dropdown → City dropdown cascade.
+  - Zipcode + Address text inputs.
+
+  **G. PieceManager:**
+  - Dynamic add/remove rows (min 1, max 20).
+  - Desktop grid layout (`70px 1fr 1fr 1fr 1fr 44px`).
+  - Mobile compact grid (`48px 1fr 1fr 1fr 1fr 36px`).
+  - Delete button: hover `bg-red-50 text-brand-red`.
+
+  **H. LiveMetricsEngine:**
+  - Real-time recalculate on any piece input change.
+  - Update volumetric summary bar: Tổng kiện, Cân thực, Thể tích, Cân tính cước.
+  - `ceilToHalf(v)` utility function.
+
+  **I. QuoteComparisonEngine (MỚI — V4):**
+  - Tính cước cho **tất cả 6 services đồng thời** khi bấm "Tính cước ngay".
+  - Services chưa có bảng giá riêng sử dụng hệ số nhân:
+    - EXW = WXS × 1.25 (phụ phí phát sáng sớm Early 8:30 AM).
+    - XPR = WXS × 1.15 (phụ phí phát ưu tiên Plus 10:30 AM).
+    - WXP = WFM × 1.22 (hỏa tốc hàng nặng).
+  - Xác định "Giá tốt nhất" (lowest price) trong danh sách.
+  - Render 2 views:
+    - Mobile compact comparison list (radio-style rows, all services fit 1 screen).
+    - Desktop full service cards (2-3 columns grid).
+  - Route summary ribbon update.
+  - Mobile view toggle: compact ↔ cards.
+
+  **J. BookingModalManager:**
+  - Open modal với route summary tự động (from/to/direction/service/weight/address).
+  - Form submit → loading state → inline success (không alert popup).
+
+  **K. PiecesDetailModal (MỚI — V4):**
+  - Open khi click weight badge trong route ribbon hoặc "Xem bảng kê N kiện" trong result card.
+  - Render table chi tiết từng kiện: Kiện #, SL, DxRxC, Cân thực, DIM, Tính cước/kiện, Tổng dòng.
+  - KPI footer: 4 metrics cards.
+  - Highlight kiện nào dùng dim weight (bold dim column khi dim > actual).
+
+  **L. MobileStickyActionBar (MỚI — V4):**
+  - Fixed bottom bar, hiện khi result section visible (class `is-active`).
+  - Cập nhật khi user chọn service khác trong mobile compact list.
+  - Hiển thị: service name + price + "Đặt dịch vụ này" CTA.
 
 🧪 **Tests Step 4.4**:
 - [ ] No JS errors in console.
 - [ ] Country search: tiếng Việt + IATA + English.
 - [ ] Piece add/remove: metrics recalculate real-time.
-- [ ] API call: spinner → result → comparison cards.
-- [ ] Booking modal: open → fill → submit → inline success.
+- [ ] Category filter tabs filter 6 service cards correctly.
+- [ ] Selecting service with `has_document_split` → shows shipment type toggle.
+- [ ] Selecting service without `has_document_split` → hides shipment type toggle.
+- [ ] Calculate → 6 services comparison rendered simultaneously.
+- [ ] "Giá tốt nhất" badge appears on cheapest service.
+- [ ] Services unavailable show "Liên hệ" / error message.
+- [ ] Mobile compact view: all 6 rows visible, select → updates sticky bar.
+- [ ] Pieces detail modal: correct breakdown per piece, KPI correct.
+- [ ] Booking modal: full address summary, submit → inline success.
 
 ---
 
@@ -1007,12 +1214,33 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 **Tasks**:
 - [ ] Tạo `public/assets/css/quote-form.css`.
 - [ ] Color tokens, typography, shadows, responsive layouts, print styles.
+- [ ] **V4-specific CSS classes** (từ mockup):
+  - `.direction-pill-btn` — Direction selector card (active: white bg, shadow, brand-red icon box).
+  - `.cat-filter-tab` — Category filter tab (active: navy-900 bg, white text).
+  - `.service-card-item` — Service selection card (hover: translateY(-2px), active: brand-red border + gradient bg + check badge).
+  - `.type-card-opt` — Shipment type option card (active: brand-red border + pink bg).
+  - `.mobile-comp-row` — Mobile compact comparison row (active: brand-red border + pink bg + radio dot).
+  - `.card-check-badge` — Service card check badge (hidden default, flex when parent `.active`).
+  - `.btn-calculate` — CTA button (gradient + shine animation + loading spinner).
+  - `.modal-backdrop` — Modal overlay (hidden default, flex when `.open`).
+  - `.result-section` — Result section (hidden default, opacity 0 → animate in).
+  - `.card-breakdown` — Collapsible breakdown content (max-height transition).
+  - `.piece-row` — Piece grid row (responsive columns).
+  - `.cell-input` — Piece input cell (focus: brand-red border + shadow).
+  - `.btn-delete-piece` — Delete piece button (hover: red tint).
+  - `.custom-scrollbar` — Thin scrollbar styling.
+  - `.spinner` — Loading spinner animation.
+  - `.inline-error` — Form error display.
+  - `#mobileStickyActionBar` — Sticky bottom bar (hidden default, `.is-active` on mobile).
+- [ ] Mobile responsive: `max-width: 768px` breakpoints for piece grid, headers, buttons.
+- [ ] Print styles.
 
 🧪 **Tests Step 4.5**:
 - [ ] Brand colors match theme (#CE2027).
 - [ ] Mobile 375px → no overflow.
 - [ ] Print → clean layout, no buttons/forms.
 - [ ] Color contrast ≥ 4.5:1.
+- [ ] All V4 CSS classes render correctly.
 
 ---
 
@@ -1024,19 +1252,28 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 |---|-------|--------|
 | 1 | REST API `/calculate` với `direction` param returns correct JSON | ☐ |
 | 2 | REST API `/countries` returns 249 countries | ☐ |
-| 3 | REST API `/services?direction=export` returns dynamic services | ☐ |
+| 3 | REST API `/services?direction=export` returns **6 services** with full V4 metadata | ☐ |
 | 4 | REST API `/directions` returns available directions | ☐ |
 | 5 | Form renders correctly on "Báo giá UPS" page | ☐ |
 | 6 | Direction selector: ẩn khi chỉ 1 chiều, dynamic switch | ☐ |
-| 7 | Service tabs dynamic từ API, có enabled/disabled states | ☐ |
-| 8 | has_document_split: Document/Non-doc toggle cho WXS/EXW/XPR | ☐ |
-| 9 | Country combobox: search tiếng Việt + IATA | ☐ |
-| 10 | Address fields: State dropdown → City dropdown adaptive | ☐ |
-| 11 | Piece table: add/remove + live metrics | ☐ |
-| 12 | Calculate: comparison cards display | ☐ |
-| 13 | Booking modal: submit + inline success | ☐ |
-| 14 | Mobile 375px responsive: no overflow | ☐ |
-| 15 | No JS console errors | ☐ |
+| 7 | **6 service cards** hiển thị đúng grid layout (2/3/6 cols responsive) | ☐ |
+| 8 | **Category filter tabs** (All/Parcel/Freight) filter cards correctly | ☐ |
+| 9 | has_document_split: Document/Non-doc toggle cho WXS/EXW/XPR | ☐ |
+| 10 | Country combobox: search tiếng Việt + IATA + popular pinned | ☐ |
+| 11 | Address fields: State dropdown → City dropdown adaptive | ☐ |
+| 12 | Piece table: add/remove + live metrics + mobile compact layout | ☐ |
+| 13 | Calculate: **6-service comparison** cards display (mobile compact + desktop full) | ☐ |
+| 14 | "Giá tốt nhất" badge on cheapest service | ☐ |
+| 15 | EXW=WXS×1.25, XPR=WXS×1.15, WXP=WFM×1.22 derived pricing correct | ☐ |
+| 16 | Mobile compact comparison list: radio selection → sticky bar update | ☐ |
+| 17 | Mobile view toggle: compact ↔ cards | ☐ |
+| 18 | Pieces detail modal: correct weight breakdown table + KPI | ☐ |
+| 19 | Booking modal: full address summary + submit + inline success | ☐ |
+| 20 | Mobile sticky bottom action bar: shows after result, updates on service change | ☐ |
+| 21 | Route summary ribbon: direction, service, route, weight, zone, type badges | ☐ |
+| 22 | Anime.js animations: result fade-in, form interactions | ☐ |
+| 23 | Mobile 375px responsive: no overflow | ☐ |
+| 24 | No JS console errors | ☐ |
 
 ---
 
@@ -1336,6 +1573,8 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - [ ] Quantity = 0 → skip.
 - [ ] 20 pieces → handles correctly.
 - [ ] Large file import → PHP memory OK.
+- [ ] **V4 specific**: EXW/XPR/WXP derived pricing khi base service (WXS/WFM) zone = 0 → "Không hỗ trợ".
+- [ ] **V4 specific**: Category filter "Freight" khi không có freight service enabled → empty state.
 
 🧪 **Tests Step 6.3**:
 - [ ] Each edge case tested and handled gracefully.
@@ -1357,6 +1596,8 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - [ ] `role="alert"` for errors.
 - [ ] `aria-live="polite"` for results.
 - [ ] Color contrast ≥ 4.5:1.
+- [ ] **V4 specific**: Service cards keyboard selectable (role="radio"/"radiogroup").
+- [ ] **V4 specific**: Modal focus trap (Escape to close, Tab cycling within modal).
 
 🧪 **Tests Step 6.4**:
 - [ ] Tab through entire form → logical order.
@@ -1374,6 +1615,9 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 **Tasks**:
 - [ ] Chrome, Firefox, Safari, Edge.
 - [ ] Mobile 320px-768px, Tablet 768px-1024px, Desktop 1024px+.
+- [ ] **V4 specific**: 6 service cards grid collapses correctly (6 cols → 3 cols → 2 cols).
+- [ ] **V4 specific**: Mobile compact comparison list readable at 320px.
+- [ ] **V4 specific**: Mobile sticky bar không overlap content.
 
 🧪 **Tests Step 6.5**:
 - [ ] No layout breaks on any target device/browser.
@@ -1399,6 +1643,9 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - [ ] **Case multi-piece 1.3+2.1** → chargeable 4.0kg.
 - [ ] **Case WFM unavailable destination** → LANE_NOT_AVAILABLE.
 - [ ] **Case import new rate card** → old archived, new active.
+- [ ] **V4 Case: 6-service comparison US 6kg** → all 6 services render, EXW=WXS×1.25, XPR=WXS×1.15, "Giá tốt nhất" badge correct.
+- [ ] **V4 Case: Mobile compact → select XPD** → sticky bar updates to XPD price.
+- [ ] **V4 Case: Category filter "Freight"** → chỉ hiển thị WXP + WFM cards.
 
 ---
 
@@ -1416,7 +1663,7 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 | 6 | Mobile/Tablet/Desktop responsive OK | ☐ |
 | 7 | Chrome/Firefox/Safari/Edge OK | ☐ |
 | 8 | WCAG accessibility pass | ☐ |
-| 9 | 7/7 integration test cases pass | ☐ |
+| 9 | 10/10 integration test cases pass (bao gồm V4 cases) | ☐ |
 
 ---
 
@@ -1453,6 +1700,7 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - [ ] Hook/filter reference.
 - [ ] REST API reference.
 - [ ] Shortcode reference.
+- [ ] **V4 UI architecture**: SERVICE_REGISTRY, QuoteComparisonEngine, derived pricing logic.
 
 ---
 
@@ -1480,9 +1728,9 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 ## Backlog: Phase 2 (Tương lai)
 
 - [ ] Import bảng giá chiều Import (data, không cần sửa code — bật direction trong Rate Card detail).
-- [ ] Import bảng giá cho `EXW`, `XPR`, `WXP` (template rate group đã sẵn — chỉ cần import data + bật toggle).
+- [ ] Import bảng giá riêng cho `EXW`, `XPR`, `WXP` (thay thế hệ số nhân bằng actual rates khi có data).
 - [ ] Tích hợp nguồn FSC/Surge/VAT tự động.
-- [ ] Remote/Extended area detection.
+- [ ] Remote/Extended area detection (dùng zipcode + DAS surcharge API).
 - [ ] Tích hợp tạo shipment UPS API.
 - [ ] WooCommerce shipping method.
 - [ ] Multi-origin (không chỉ VN).
@@ -1504,6 +1752,10 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - [ ] Page "Báo giá UPS" tồn tại sau activate.
 - [ ] Multiple rate cards hoạt động.
 - [ ] Export CSV/Excel hoạt động.
+- [ ] **V4: 6-service comparison hiển thị đúng.**
+- [ ] **V4: Derived pricing EXW/XPR/WXP chính xác.**
+- [ ] **V4: Mobile compact comparison + sticky bar hoạt động.**
+- [ ] **V4: Pieces detail modal đúng data.**
 
 ---
 
@@ -1515,7 +1767,7 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 | **1: Data Layer** | `php-pro`, `clean-code`, `backend-security-coder`, `uncle-bob-craft` |
 | **2: Importers** | `php-pro`, `clean-code`, `systematic-debugging`, `backend-security-coder`, `software-architecture` |
 | **3: Calculator** | `php-pro`, `clean-code`, `uncle-bob-craft`, `software-architecture` |
-| **4: API + Frontend** | `wp-rest-api`, `javascript-pro`, `modern-javascript-patterns`, `frontend-design`, `frontend-developer`, `ui-ux-designer`, `fixing-accessibility`, `form-cro`, `web-design-guidelines` |
+| **4: API + Frontend** | `wp-rest-api`, `javascript-pro`, `modern-javascript-patterns`, `frontend-design`, `frontend-developer`, `ui-ux-designer`, `fixing-accessibility`, `form-cro`, `web-design-guidelines`, `animejs-animation` |
 | **5: Admin UI** | `wp-plugin-development`, `frontend-developer`, `javascript-pro`, `backend-security-coder` |
 | **6: QA + Security** | `007`, `backend-security-coder`, `frontend-security-coder`, `wordpress-penetration-testing`, `web-performance-optimization`, `wp-performance`, `systematic-debugging`, `bug-hunter`, `fixing-accessibility`, `wcag-audit-patterns`, `code-review-checklist` |
 | **7: Docs** | `documentation-templates`, `readme` |

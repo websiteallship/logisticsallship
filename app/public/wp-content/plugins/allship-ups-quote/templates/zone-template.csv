@@ -1,0 +1,16 @@
+iata_code,country_name,direction,wxs,xpd,wfm,exw,xpr,wxp
+US,United States*,export,5,5,5,5,5,5
+CA,Canada*,export,5,5,5,5,5,5
+MX,Mexico*,export,5,5,5,5,5,5
+JP,Japan,export,3,3,3,3,3,3
+SG,Singapore,export,1,1,1,1,1,1
+KR,Korea (South),export,3,3,3,3,3,3
+AU,Australia*,export,4,4,4,4,4,4
+DE,Germany*,export,7,7,7,7,7,7
+GB,United Kingdom*,export,7,7,7,7,7,7
+FR,France*,export,7,7,7,7,7,7
+AF,Afghanistan,export,9,9,0,0,0,0
+US,United States*,import,5,5,0,5,5,5
+CA,Canada*,import,5,5,0,5,5,5
+JP,Japan,import,3,3,0,3,3,3
+AF,Afghanistan,import,10,0,0,0,10,0

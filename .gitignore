@@ -6,11 +6,16 @@
 !app/
 !app/public/
 !app/public/.agents/
+!app/public/.agents/rules/
 !app/public/.agents/rules/**
+!app/public/docs/
 !app/public/docs/**
+!app/public/docs_plugin_quote/
 !app/public/docs_plugin_quote/**
 !app/public/wp-content/
 !app/public/wp-content/plugins/
 !app/public/wp-content/plugins/ff-frontend-entries/**
 !app/public/wp-content/themes/
 !app/public/wp-content/themes/allship-logistics/**
+!app/public/wp-content/plugins/allship-ups-quote/
+!app/public/wp-content/plugins/allship-ups-quote/**
