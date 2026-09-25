@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo Giá Cước Vận Chuyển Quốc Tế (UPS) | Allship Logistics</title>
+
+  <!-- Google Font: Manrope (Inherited from Theme) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Phosphor Icons (Theme standard) -->
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+
+  <!-- Anime.js 3.2.2 CDN for High-performance Physics & Orchestration -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+
+  <style>
+    :root {
+      --color-brand-red: #CE2027;
+      --color-brand-red-hover: #9F090E;
+      --color-brand-red-light: #FEE2E2;
+      --color-brand-gold: #F59E0B;
+      --color-brand-gold-hover: #D97706;
+      --color-navy-950: #050B14;
+      --color-navy-900: #0A1628;
+      --color-navy-800: #0F2240;
+      --color-slate-50: #F8FAFC;
+      --color-slate-100: #F1F5F9;
+      --color-slate-200: #E2E8F0;
+      --color-slate-300: #CBD5E1;
+      --color-slate-400: #94A3B8;
+      --color-slate-500: #64748B;
+      --color-slate-600: #475569;
+      --color-slate-700: #334155;
+      --color-slate-800: #1E293B;
+      --color-slate-900: #0F172A;
+      --color-emerald-600: #059669;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 25px -3px rgba(10, 22, 40, 0.08), 0 4px 6px -4px rgba(10, 22, 40, 0.04);
+      --shadow-xl: 0 20px 40px -6px rgba(10, 22, 40, 0.12), 0 8px 16px -6px rgba(10, 22, 40, 0.06);
+      --shadow-brand: 0 4px 20px color-mix(in srgb, var(--color-brand-red) 28%, transparent);
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-2xl: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+      background: #F4F6F9;
+      color: var(--color-navy-900);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Global Header */
+    .site-nav {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-slate-200);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .site-nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .logo-badge {
+      display: flex;
+      flex-direction: column;
+    }
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--color-navy-900);
+      letter-spacing: -0.02em;
+    }
+    .brand-title span {
+      color: var(--color-brand-red);
+    }
+    .brand-subtitle {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-slate-500);
+    }
+    .nav-meta {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .nav-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #EFF6FF;
+      color: #1D4ED8;
+      border: 1px solid #DBEAFE;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .hotline-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--color-brand-red);
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: var(--radius-md);
+      background: rgba(206, 32, 39, 0.06);
+      transition: all 0.2s ease;
+    }
+    .hotline-link:hover {
+      background: rgba(206, 32, 39, 0.12);
+    }
+
+    /* Main Container */
+    .calculator-wrapper {
+      max-width: 1200px;
+      margin: 32px auto 60px;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    /* Hero / Intro */
+    .calculator-hero {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #EFF6FF;
+      color: #2563EB;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+      letter-spacing: 0.02em;
+    }
+    .hero-heading {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--color-navy-900);
+      letter-spacing: -0.025em;
+      margin-bottom: 8px;
+    }
+    .hero-sub {
+      font-size: 15px;
+      color: var(--color-slate-600);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Quick Presets Bar */
+    .presets-container {
+      background: #FFFFFF;
+      border: 1px solid var(--color-slate-200);
+      border-radius: var(--radius-xl);
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+    }
+    .presets-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-slate-700);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .presets-list {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: nowrap;
+    }
+    .preset-pill {
+      background: var(--color-slate-100);
+      border: 1px solid var(--color-slate-200);
+      border-radius: 9999px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-slate-700);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .preset-pill:hover {
+      background: #FFFFFF;
+      border-color: var(--color-brand-red);
+      color: var(--color-brand-red);
+      box-shadow: 0 2px 8px rgba(206, 32, 39, 0.15);
+      transform: translateY(-1px);
+    }
+
+    /* Main Form Card - Mimicking & Elevating Reference Image 1 */
+    .form-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      padding: 36px 40px;
+      position: relative;
+      margin-bottom: 36px;
+    }
+    .form-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .form-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--color-navy-900);
+      margin-bottom: 6px;
+    }
+    .form-desc {
+      font-size: 14px;
+      color: var(--color-slate-500);
+    }
+
+    .section-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-navy-900);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Form Fields Grid */
+    .field-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .field-grid-4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .input-group {
+      position: relative;
+    }
+    .input-control {
+      width: 100%;
+      height: 48px;
+      background: #F1F4F9;
+      border: 1.5px solid transparent;
+      border-radius: var(--radius-lg);
+      padding: 0 16px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-navy-900);
+      transition: all 0.2s ease;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .input-control:focus {
+      outline: none;
+      background: #FFFFFF;
+      border-color: var(--color-brand-red);
+      box-shadow: 0 0 0 3px rgba(206, 32, 39, 0.12);
+    }
+    .input-control::placeholder {
+      color: var(--color-slate-400);
+      font-weight: 500;
+    }
+    .select-chevron {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--color-slate-500);
+      font-size: 16px;
+    }
+
+    /* Shipment Type Segmented Control */
+    .shipment-type-toggle {
+      display: inline-flex;
+      background: #F1F4F9;
+      padding: 4px;
+      border-radius: var(--radius-lg);
+      gap: 4px;
+    }
+    .type-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 18px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-slate-600);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .type-btn.active {
+      background: #FFFFFF;
+      color: var(--color-brand-red);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Searchable Country Select */
+    .country-combobox {
+      position: relative;
+    }
+    .combobox-input-wrap {
+      position: relative;
+      cursor: pointer;
+    }
+    .combobox-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: #FFFFFF;
+      border: 1px solid var(--color-slate-200);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      max-height: 320px;
+      overflow-y: auto;
+      z-index: 100;
+      display: none;
+    }
+    .combobox-dropdown.open {
+      display: block;
+    }
+    .combobox-search-box {
+      padding: 10px 12px;
+      position: sticky;
+      top: 0;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--color-slate-200);
+      z-index: 2;
+    }
+    .combobox-search-input {
+      width: 100%;
+      height: 38px;
+      background: var(--color-slate-50);
+      border: 1px solid var(--color-slate-200);
+      border-radius: var(--radius-md);
+      padding: 0 12px 0 34px;
+      font-size: 13px;
+      font-family: inherit;
+    }
+    .combobox-search-icon {
+      position: absolute;
+      left: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-slate-400);
+    }
+    .country-option {
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.12s ease;
+      border-bottom: 1px solid var(--color-slate-100);
+    }
+    .country-option:hover, .country-option.selected {
+      background: #F8FAFC;
+    }
+    .country-option-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .country-flag {
+      font-size: 18px;
+    }
+    .country-iata-badge {
+      background: var(--color-slate-100);
+      color: var(--color-slate-700);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .country-zone-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #2563EB;
+      background: #EFF6FF;
+      padding: 2px 8px;
+      border-radius: 9999px;
+    }
+
+    /* Package Pieces Table / Rows - Matching Reference Image 1 */
+    .pieces-section {
+      margin-bottom: 28px;
+    }
+    .pieces-header-row {
+      display: grid;
+      grid-template-columns: 140px 140px 1fr 1fr 1fr 1fr 48px;
+      gap: 12px;
+      margin-bottom: 8px;
+      padding: 0 4px;
+    }
+    .col-header {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-slate-500);
+    }
+    .piece-row {
+      display: grid;
+      grid-template-columns: 140px 140px 1fr 1fr 1fr 1fr 48px;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 14px;
+      transition: all 0.2s ease;
+    }
+    .piece-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .cell-input {
+      height: 48px;
+      background: #F1F4F9;
+      border: 1.5px solid transparent;
+      border-radius: var(--radius-lg);
+      padding: 0 14px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-navy-900);
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+    .cell-input:focus {
+      outline: none;
+      background: #FFFFFF;
+      border-color: var(--color-brand-red);
+      box-shadow: 0 0 0 3px rgba(206, 32, 39, 0.12);
+    }
+    .cell-unit-convert {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748B;
+      background: #F1F5F9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-align: center;
+      white-space: nowrap;
+      display: inline-block;
+    }
+    .btn-delete-piece {
+      width: 48px;
+      height: 48px;
+      background: #EF4444;
+      border: none;
+      border-radius: var(--radius-lg);
+      color: #FFFFFF;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .btn-delete-piece:hover {
+      background: #DC2626;
+      transform: scale(0.96);
+    }
+
+    /* Action Buttons */
+    .btn-add-piece {
+      width: 100%;
+      height: 46px;
+      background: #EDF3FC;
+      border: 1px dashed #BFDBFE;
+      border-radius: var(--radius-lg);
+      color: #1D4ED8;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .btn-add-piece:hover {
+      background: #DBEAFE;
+      border-color: #60A5FA;
+      color: #1E40AF;
+    }
+
+    /* Live Summary Quotient Bar */
+    .volumetric-bar {
+      background: #F8FAFC;
+      border: 1px solid var(--color-slate-200);
+      border-radius: var(--radius-lg);
+      padding: 12px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .vol-metric {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+    .vol-label {
+      color: var(--color-slate-500);
+      font-weight: 500;
+    }
+    .vol-val {
+      font-weight: 800;
+      color: var(--color-navy-900);
+    }
+    .vol-val.highlight {
+      color: var(--color-brand-red);
+      font-size: 15px;
+    }
+
+    /* Primary CTA Button (Magic UI Shimmer & Pulsing Shadow) */
+    .btn-calculate {
+      width: 100%;
+      height: 54px;
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      border: none;
+      border-radius: var(--radius-lg);
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 16px rgba(217, 119, 6, 0.28);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-calculate::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transform: skewX(-25deg);
+      transition: 0.75s;
+    }
+    .btn-calculate:hover::before {
+      left: 150%;
+    }
+    .btn-calculate:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(217, 119, 6, 0.36);
+    }
+    .btn-calculate:active {
+      transform: translateY(0);
+    }
+
+    /* Theme Option Red Toggle for Brand Harmony */
+    .btn-calculate.btn-brand-red {
+      background: linear-gradient(135deg, var(--color-brand-red) 0%, var(--color-brand-red-hover) 100%);
+      box-shadow: var(--shadow-brand);
+    }
+
+    /* =========================================================
+       RESULT SECTION - MIMICKING & ELEVATING REFERENCE IMAGE 2
+       ========================================================= */
+    .result-section {
+      display: none;
+      opacity: 0;
+      margin-top: 48px;
+    }
+    .result-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #EFF6FF;
+      color: #2563EB;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+    }
+    .result-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--color-navy-900);
+      margin-bottom: 8px;
+    }
+    .result-sub {
+      font-size: 14px;
+      color: var(--color-slate-500);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* Active Route Info Ribbon */
+    .route-ribbon {
+      background: #FFFFFF;
+      border: 1px solid var(--color-slate-200);
+      border-radius: var(--radius-xl);
+      padding: 16px 24px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .route-path {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-navy-900);
+    }
+    .route-arrow {
+      color: var(--color-brand-red);
+      font-size: 18px;
+    }
+    .route-meta-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .meta-pill {
+      background: var(--color-slate-100);
+      color: var(--color-slate-700);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .meta-pill.highlight {
+      background: rgba(206, 32, 39, 0.08);
+      color: var(--color-brand-red);
+      font-weight: 700;
+    }
+
+    /* Service Comparison Cards Grid */
+    .service-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      margin-bottom: 36px;
+    }
+    .service-card {
+      background: #FFFFFF;
+      border-radius: 18px;
+      border: 1.5px solid var(--color-slate-200);
+      box-shadow: var(--shadow-md);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: #CBD5E1;
+    }
+    .service-card.recommended {
+      border-color: #F59E0B;
+      box-shadow: 0 12px 32px rgba(245, 158, 11, 0.12);
+    }
+    .service-card.recommended::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #F59E0B, #EF4444);
+    }
+    .card-top-tag {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .tag-fast {
+      background: #FEF3C7;
+      color: #B45309;
+    }
+    .tag-saving {
+      background: #E0E7FF;
+      color: #3730A3;
+    }
+    .tag-freight {
+      background: #ECFDF5;
+      color: #065F46;
+    }
+
+    .carrier-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .carrier-logo-box {
+      width: 48px;
+      height: 48px;
+      background: #F8FAFC;
+      border: 1px solid var(--color-slate-200);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--color-brand-red);
+    }
+    .carrier-info {
+      flex: 1;
+    }
+    .carrier-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--color-navy-900);
+      line-height: 1.3;
+    }
+    .service-code {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-slate-500);
+    }
+
+    .card-meta-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 16px 0;
+      border-top: 1px solid var(--color-slate-100);
+      border-bottom: 1px solid var(--color-slate-100);
+      margin-bottom: 20px;
+    }
+    .meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+    .meta-lbl {
+      color: var(--color-slate-500);
+      font-weight: 500;
+    }
+    .meta-val {
+      color: var(--color-navy-900);
+      font-weight: 700;
+    }
+
+    .price-box {
+      margin-bottom: 20px;
+    }
+    .price-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-slate-500);
+      margin-bottom: 2px;
+    }
+    .price-amount {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--color-navy-900);
+      letter-spacing: -0.02em;
+    }
+    .price-amount.highlight {
+      color: var(--color-brand-red);
+    }
+    .price-currency {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-slate-600);
+      margin-left: 2px;
+    }
+    .price-notes {
+      font-size: 11px;
+      color: var(--color-slate-400);
+      margin-top: 4px;
+    }
+
+    .btn-card-action {
+      width: 100%;
+      height: 46px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .btn-action-gold {
+      background: #F59E0B;
+      color: #FFFFFF;
+    }
+    .btn-action-gold:hover {
+      background: #D97706;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.28);
+    }
+    .btn-action-outline {
+      background: #FFFFFF;
+      border: 1.5px solid var(--color-slate-300);
+      color: var(--color-slate-700);
+    }
+    .btn-action-outline:hover {
+      border-color: var(--color-navy-900);
+      color: var(--color-navy-900);
+    }
+
+    /* Notice & Policy Box */
+    .notice-box {
+      background: #FFFBEB;
+      border: 1px solid #FEF3C7;
+      border-radius: var(--radius-lg);
+      padding: 18px 24px;
+      margin-bottom: 32px;
+      display: flex;
+      gap: 14px;
+    }
+    .notice-icon {
+      color: #D97706;
+      font-size: 22px;
+      shrink: 0;
+      margin-top: 2px;
+    }
+    .notice-content {
+      font-size: 13px;
+      color: #92400E;
+      line-height: 1.6;
+    }
+    .notice-content ul {
+      margin-top: 6px;
+      padding-left: 20px;
+    }
+
+    /* Action Toolbar */
+    .action-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn-secondary-action {
+      height: 44px;
+      padding: 0 20px;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-secondary-white {
+      background: #FFFFFF;
+      border: 1.5px solid var(--color-slate-200);
+      color: var(--color-slate-700);
+    }
+    .btn-secondary-white:hover {
+      border-color: var(--color-slate-400);
+      background: var(--color-slate-50);
+    }
+    .btn-secondary-red {
+      background: var(--color-brand-red);
+      border: 1.5px solid var(--color-brand-red);
+      color: #FFFFFF;
+      box-shadow: var(--shadow-brand);
+    }
+    .btn-secondary-red:hover {
+      background: var(--color-brand-red-hover);
+    }
+
+    /* Modal / Popup */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 22, 40, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal-content {
+      background: #FFFFFF;
+      border-radius: 20px;
+      max-width: 600px;
+      width: 100%;
+      padding: 32px;
+      box-shadow: var(--shadow-xl);
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 36px;
+      height: 36px;
+      background: var(--color-slate-100);
+      border: none;
+      border-radius: 50%;
+      color: var(--color-slate-600);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .modal-close:hover {
+      background: var(--color-slate-200);
+      color: var(--color-navy-900);
+    }
+
+    /* Footer */
+    .site-footer {
+      margin-top: auto;
+      background: #FFFFFF;
+      border-top: 1px solid var(--color-slate-200);
+      padding: 24px 0;
+      text-align: center;
+      font-size: 13px;
+      color: var(--color-slate-500);
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .pieces-header-row {
+        display: none;
+      }
+      .piece-row {
+        grid-template-columns: 1fr 1fr;
+        background: #F8FAFC;
+        padding: 16px;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--color-slate-200);
+      }
+      .btn-delete-piece {
+        grid-column: span 2;
+        width: 100%;
+      }
+      .field-grid-4 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .form-card {
+        padding: 24px 20px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .field-grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .field-grid-4 {
+        grid-template-columns: 1fr;
+      }
+      .piece-row {
+        grid-template-columns: 1fr;
+      }
+      .btn-delete-piece {
+        grid-column: span 1;
+      }
+      .service-cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Nav -->
+  <header class="site-nav">
+    <div class="site-nav-inner">
+      <a href="#" class="brand-logo">
+        <div class="carrier-logo-box" style="width: 40px; height: 40px; background: #CE2027; color: #fff;">
+          <i class="ph-bold ph-airplane-tilt"></i>
+        </div>
+        <div class="logo-badge">
+          <span class="brand-title">ALLSHIP <span>LOGISTICS</span></span>
+          <span class="brand-subtitle">UPS Authorized Partner Network</span>
+        </div>
+      </a>
+
+      <div class="nav-meta">
+        <div class="nav-badge">
+          <i class="ph-bold ph-shield-check"></i> Biểu cước Q3-2026 Active
+        </div>
+        <a href="tel:1900252338" class="hotline-link">
+          <i class="ph-bold ph-phone-call"></i> 1900 252 338
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="calculator-wrapper">
+    
+    <!-- Hero / Intro -->
+    <div class="calculator-hero">
+      <div class="hero-badge">
+        <i class="ph-fill ph-lightning"></i> Tính Cước Tức Thì &amp; Chính Xác 100%
+      </div>
+      <h1 class="hero-heading">Báo Giá Vận Chuyển Quốc Tế</h1>
+      <p class="hero-sub">
+        Tra cứu biểu cước hàng không trả trước (Prepaid Net Rates) theo hợp đồng UPS Vietnam. Tự động quy đổi trọng lượng thể tích IATA (DIM divisor 5500).
+      </p>
+    </div>
+
+    <!-- Quick Presets Bar -->
+    <div class="presets-container">
+      <div class="presets-label">
+        <i class="ph-bold ph-sparkle" style="color: #F59E0B;"></i> Mẫu kiện thường gửi:
+      </div>
+      <div class="presets-list">
+        <button type="button" class="preset-pill" onclick="applyPreset('doc_envelope')">
+          📄 Thư / Hồ sơ du học (0.5kg)
+        </button>
+        <button type="button" class="preset-pill" onclick="applyPreset('small_box')">
+          📦 Quà tặng / Hộp nhỏ (2kg - 25x20x15cm)
+        </button>
+        <button type="button" class="preset-pill" onclick="applyPreset('carton_us')">
+          🇺🇸 Thùng hàng gửi Mỹ (6kg - 35x25x20cm)
+        </button>
+        <button type="button" class="preset-pill" onclick="applyPreset('export_sample')">
+          📦 Kiện hàng mẫu xuất khẩu (15kg - 50x40x30cm)
+        </button>
+        <button type="button" class="preset-pill" onclick="applyPreset('pallet_freight')">
+          🏗️ Kiện nặng Pallet (85kg - 100x80x80cm)
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= FORM CARD (IMAGE 1 REFERENCE) ================= -->
+    <section class="form-card" id="quoteFormCard">
+      <div class="form-header">
+        <h2 class="form-title">Thông tin lô hàng</h2>
+        <p class="form-desc">Điền thông tin để nhận báo giá dự kiến tức thì</p>
+      </div>
+
+      <!-- Row 1: Gửi từ & Ngày gửi -->
+      <div class="section-label">
+        <span>Gửi từ</span>
+        <div class="shipment-type-toggle">
+          <button type="button" class="type-btn active" id="btnTypeNondoc" onclick="setShipmentType('nondocument')">
+            <i class="ph ph-package"></i> Hàng hóa (Non-doc)
+          </button>
+          <button type="button" class="type-btn" id="btnTypeDoc" onclick="setShipmentType('document')">
+            <i class="ph ph-file-text"></i> Tài liệu (≤5kg)
+          </button>
+        </div>
+      </div>
+      <div class="field-grid-2">
+        <div class="input-group">
+          <select id="originCity" class="input-control">
+            <option value="SGN" selected>Hồ Chí Minh (SGN) - Trụ sở chính</option>
+            <option value="HAN">Hà Nội (HAN) - Chi nhánh miền Bắc</option>
+            <option value="DAD">Đà Nẵng (DAD) - Chi nhánh miền Trung</option>
+            <option value="HPH">Hải Phòng (HPH) - Văn phòng cảng</option>
+          </select>
+          <i class="ph-bold ph-caret-down select-chevron"></i>
+        </div>
+        <div class="input-group">
+          <input type="date" id="shipDate" class="input-control">
+        </div>
+      </div>
+
+      <!-- Row 2: Nước đến -->
+      <div class="section-label">Nước đến</div>
+      <div class="field-grid-4">
+        <!-- Searchable Select -->
+        <div class="input-group country-combobox" id="countryCombobox">
+          <div class="combobox-input-wrap" onclick="toggleCountryDropdown(true)">
+            <input type="text" id="destCountryDisplay" class="input-control" placeholder="Chọn Quốc gia" readonly>
+            <i class="ph-bold ph-caret-down select-chevron"></i>
+          </div>
+
+          <div class="combobox-dropdown" id="countryDropdown">
+            <div class="combobox-search-box">
+              <i class="ph ph-magnifying-glass combobox-search-icon"></i>
+              <input type="text" id="countrySearchInput" class="combobox-search-input" placeholder="Tìm tên quốc gia hoặc mã IATA (US, JP, AU...)" oninput="filterCountries(this.value)">
+            </div>
+            <div id="countryOptionsList">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input type="text" id="destState" class="input-control" placeholder="Chọn Bang / Tỉnh">
+        </div>
+
+        <div class="input-group">
+          <input type="text" id="destCity" class="input-control" placeholder="Chọn Thành phố">
+        </div>
+
+        <div class="input-group">
+          <input type="text" id="destZip" class="input-control" placeholder="Mã bưu chính (Zip code)">
+        </div>
+      </div>
+
+      <!-- Row 3: Thông tin kiện hàng -->
+      <div class="pieces-section">
+        <div class="section-label">Thông tin kiện hàng</div>
+
+        <div class="pieces-header-row">
+          <div class="col-header">Số kiện hàng</div>
+          <div class="col-header">Type</div>
+          <div class="col-header">Dài (cm)</div>
+          <div class="col-header">Rộng (cm)</div>
+          <div class="col-header">Cao (cm)</div>
+          <div class="col-header">Nặng (kg)</div>
+          <div class="col-header"></div>
+        </div>
+
+        <div id="piecesContainer">
+          <!-- Piece Rows dynamically populated -->
+        </div>
+
+        <button type="button" class="btn-add-piece" onclick="addNewPiece()">
+          <i class="ph-bold ph-plus-circle"></i> + Thêm Kiện Hàng
+        </button>
+
+        <!-- Volumetric live preview bar -->
+        <div class="volumetric-bar">
+          <div class="vol-metric">
+            <span class="vol-label"><i class="ph ph-stack"></i> Tổng kiện:</span>
+            <span class="vol-val" id="totalPiecesVal">1 kiện</span>
+          </div>
+          <div class="vol-metric">
+            <span class="vol-label"><i class="ph ph-scales"></i> Cân thực tế:</span>
+            <span class="vol-val" id="totalActualWeightVal">5.40 kg</span>
+          </div>
+          <div class="vol-metric">
+            <span class="vol-label"><i class="ph ph-cube"></i> Cân quy đổi (DIM / 5500):</span>
+            <span class="vol-val" id="totalDimWeightVal">2.64 kg</span>
+          </div>
+          <div class="vol-metric">
+            <span class="vol-label"><i class="ph-bold ph-check-circle"></i> Cân tính cước:</span>
+            <span class="vol-val highlight" id="chargeableWeightVal">6.00 kg</span>
+          </div>
+        </div>
+
+        <!-- Primary Submit CTA -->
+        <button type="button" class="btn-calculate" id="btnCalculate" onclick="performCalculation()">
+          <span>Tính cước phí</span>
+          <i class="ph-bold ph-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= RESULT SECTION (IMAGE 2 REFERENCE) ================= -->
+    <section class="result-section" id="resultSection">
+      <div class="result-header">
+        <div class="result-badge">
+          <i class="ph-fill ph-tag"></i> Kết quả cước phí
+        </div>
+        <h2 class="result-title">Bảng giá dự kiến cho lô hàng</h2>
+        <p class="result-sub">
+          Giá hiển thị theo cân tính cước đã làm tròn 0.5kg. Allship Logistics sẽ xác nhận lại sau khi kiểm tra hàng thực tế.
+        </p>
+      </div>
+
+      <!-- Route Info Summary Ribbon -->
+      <div class="route-ribbon" id="routeRibbon">
+        <div class="route-path">
+          <span id="ribbonOrigin">TP. Hồ Chí Minh (SGN)</span>
+          <i class="ph-bold ph-airplane-in-flight route-arrow"></i>
+          <span id="ribbonDest">United States (US)</span>
+        </div>
+
+        <div class="route-meta-pills">
+          <span class="meta-pill" id="ribbonTypePill"><i class="ph ph-package"></i> Hàng hóa</span>
+          <span class="meta-pill" id="ribbonZonePill"><i class="ph ph-map-pin"></i> Cột giá US5</span>
+          <span class="meta-pill highlight" id="ribbonWeightPill"><i class="ph-bold ph-scales"></i> Tính cước: 6.0 kg</span>
+        </div>
+      </div>
+
+      <!-- Service Cards Grid -->
+      <div class="service-cards-grid" id="serviceCardsGrid">
+        <!-- Dynamic Cards rendered by JS -->
+      </div>
+
+      <!-- Notice Box -->
+      <div class="notice-box">
+        <i class="ph-bold ph-info notice-icon"></i>
+        <div class="notice-content">
+          <strong>Lưu ý bảng giá &amp; phụ phí:</strong>
+          <ul>
+            <li>Giá hiển thị là cước Net trả trước (Prepaid Net Rates) theo hợp đồng UPS Vietnam, có hiệu lực từ 20/08/2026.</li>
+            <li>Báo giá chưa bao gồm: Thuế GTGT (VAT), Phụ phí xăng dầu hàng không (FSC), Phụ phí mùa cao điểm (Surge fee), Phí thủ tục hải quan 10.000đ/AWB và phụ phí vùng xa (nếu địa chỉ phát thuộc vùng Extended/Remote Area).</li>
+            <li>Trọng lượng tính cước tuân thủ quy chuẩn IATA: Làm tròn lên mốc 0.5kg kế tiếp.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Secondary Toolbar -->
+      <div class="action-toolbar">
+        <button type="button" class="btn-secondary-action btn-secondary-white" onclick="window.print()">
+          <i class="ph-bold ph-printer"></i> In / Lưu PDF
+        </button>
+        <button type="button" class="btn-secondary-action btn-secondary-white" onclick="openBreakdownModal()">
+          <i class="ph-bold ph-list-magnifying-glass"></i> Xem chi tiết từng kiện
+        </button>
+        <button type="button" class="btn-secondary-action btn-secondary-red" onclick="openBookingModal()">
+          <i class="ph-bold ph-chat-centered-dots"></i> Đặt dịch vụ &amp; Gặp tư vấn viên
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Detailed Breakdown Modal -->
+  <div class="modal-backdrop" id="breakdownModal">
+    <div class="modal-content">
+      <button type="button" class="modal-close" onclick="closeModals()">&times;</button>
+      <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 8px;">Chi tiết phân bổ kiện hàng</h3>
+      <p style="font-size: 13px; color: #64748B; margin-bottom: 20px;">Công thức tính: Dài x Rộng x Cao (cm) / 5500 = Cân thể tích (kg)</p>
+      
+      <div id="breakdownList" style="display: flex; flex-direction: column; gap: 12px;">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; font-weight: 800;">
+        <span>Tổng trọng lượng tính cước sau làm tròn:</span>
+        <span id="modalTotalChargeable" style="color: #CE2027; font-size: 18px;">6.0 kg</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking / Contact Modal -->
+  <div class="modal-backdrop" id="bookingModal">
+    <div class="modal-content">
+      <button type="button" class="modal-close" onclick="closeModals()">&times;</button>
+      <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 8px;">Yêu Cầu Tư Vấn &amp; Đặt Dịch Vụ</h3>
+      <p style="font-size: 13px; color: #64748B; margin-bottom: 20px;">Chuyên viên Allship Logistics sẽ gọi lại trong 5 - 10 phút để xác nhận thông tin hàng và báo giá trọn gói.</p>
+      
+      <form onsubmit="handleBookingSubmit(event)">
+        <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px;">
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">Họ và tên *</label>
+            <input type="text" class="input-control" required placeholder="Ví dụ: Nguyễn Văn An">
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">Số điện thoại / Zalo *</label>
+            <input type="tel" class="input-control" required placeholder="Ví dụ: 090 123 4567">
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">Ghi chú đặc biệt (Tên hàng, yêu cầu đóng gỗ...)</label>
+            <textarea class="input-control" style="height: 80px; padding: 10px 14px;" placeholder="Mô tả loại hàng hóa hoặc thời gian cần lấy hàng..."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-calculate btn-brand-red" style="height: 48px; font-size: 15px;">
+          <i class="ph-bold ph-paper-plane-tilt"></i> Gửi Yêu Cầu Báo Giá
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+      <p>© 2026 Allship Logistics - Hệ thống tính cước chuyển phát nhanh quốc tế UPS Vietnam.</p>
+      <p style="margin-top: 4px; font-size: 12px; color: #94A3B8;">Tòa nhà Allship Building, TP. Hồ Chí Minh | Hotline: 1900 252 338 | Email: contact@allship.vn</p>
+    </div>
+  </footer>
+
+  <!-- ================= INLINE DATA & APPLICATION LOGIC ================= -->
+  <script>
+    // Rates & Countries Data
+    const RATE_TABLES = {"doc_rates":[{"weight_label":"UPS Envelope","rates":{"1":696035,"2":753389,"3":775448,"4":832803,"5":1030818,"6":980990,"7":1106597,"8":1207810,"9":1328747,"10":632712,"US5":1043793}},{"weight_label":"0.5","rates":{"1":696035,"2":753389,"3":775448,"4":832803,"5":1030818,"6":980990,"7":1106597,"8":1207810,"9":1328747,"10":632712,"US5":1043793}},{"weight_label":"1","rates":{"1":779601,"2":835658,"3":918185,"4":965677,"5":1258417,"6":1197170,"7":1384285,"8":1476933,"9":1608771,"10":734185,"US5":1274248}},{"weight_label":"1.5","rates":{"1":857717,"2":919742,"3":1063776,"4":1106857,"5":1487834,"6":1413611,"7":1655744,"8":1736195,"9":1890092,"10":812300,"US5":1506519}},{"weight_label":"2","rates":{"1":945694,"2":1000713,"3":1206513,"4":1231687,"5":1718289,"6":1629792,"7":1930318,"8":1999610,"9":2172970,"10":878738,"US5":1739828}},{"weight_label":"2.5","rates":{"1":1026665,"2":1089988,"3":1349250,"4":1375721,"5":1947445,"6":1842859,"7":2209302,"8":2264840,"9":2455847,"10":953740,"US5":1971841}},{"weight_label":"3","rates":{"1":1113085,"2":1183156,"3":1538700,"4":1572437,"5":2184389,"6":2080061,"7":2446505,"8":2509828,"9":2737168,"10":1029520,"US5":2211898}},{"weight_label":"3.5","rates":{"1":1198208,"2":1277881,"3":1675987,"4":1734638,"5":2414844,"6":2313371,"7":2683188,"8":2765196,"9":3020566,"10":1115941,"US5":2445207}},{"weight_label":"4","rates":{"1":1279179,"2":1375201,"3":1810419,"4":1875818,"5":2646336,"6":2548497,"7":2917795,"8":3019268,"9":3303184,"10":1196651,"US5":2679814}},{"weight_label":"4.5","rates":{"1":1365859,"2":1471225,"3":1946408,"4":2020111,"5":2878347,"6":2785439,"7":3154997,"8":3269965,"9":3586062,"10":1280476,"US5":2914681}},{"weight_label":"5","rates":{"1":1446311,"2":1528838,"3":2077985,"4":2162848,"5":3108802,"6":3021084,"7":3398947,"8":3522220,"9":3865047,"10":1364561,"US5":3147990}}],"nondoc_rates":[{"weight_label":"0.5","rates":{"1":760396,"2":830467,"3":918185,"4":959968,"5":609355,"6":589372,"7":656328,"8":1259196,"9":1398039,"10":749237,"US5":617141}},{"weight_label":"1","rates":{"1":843962,"2":916888,"3":1060922,"4":1093103,"5":738856,"6":722506,"7":808926,"8":1536624,"9":1715434,"10":833062,"US5":748199}},{"weight_label":"1.5","rates":{"1":927528,"2":1000713,"3":1203659,"4":1225977,"5":867578,"6":859533,"7":959708,"8":1816388,"9":2034385,"10":936092,"US5":878738}},{"weight_label":"2","rates":{"1":1008758,"2":1089988,"3":1346655,"4":1359111,"5":994225,"6":992408,"7":1113864,"8":2100822,"9":2357489,"10":1023811,"US5":1006682}},{"weight_label":"2.5","rates":{"1":1099590,"2":1173553,"3":1491987,"4":1492505,"5":1124245,"6":1123466,"7":1266462,"8":2381105,"9":2675403,"10":1115941,"US5":1138518}},{"weight_label":"3","rates":{"1":1165249,"2":1249075,"3":1637318,"4":1630830,"5":1248036,"6":1237655,"7":1417504,"8":2658533,"9":2953609,"10":1202101,"US5":1263867}},{"weight_label":"3.5","rates":{"1":1247518,"2":1324595,"3":1777459,"4":1769414,"5":1370789,"6":1341464,"7":1571660,"8":2938557,"9":3233892,"10":1288781,"US5":1388178}},{"weight_label":"4","rates":{"1":1316290,"2":1401413,"3":1917341,"4":1905144,"5":1494322,"6":1455394,"7":1724258,"8":3221435,"9":3513915,"10":1376759,"US5":1513008}},{"weight_label":"4.5","rates":{"1":1388956,"2":1474338,"3":2062933,"4":2057483,"5":1618114,"6":1569583,"7":1876856,"8":3498862,"9":3795496,"10":1465775,"US5":1638356}},{"weight_label":"5","rates":{"1":1461881,"2":1552455,"3":2205669,"4":2190617,"5":1741386,"6":1684550,"7":2031012,"8":3778886,"9":4070069,"10":1549860,"US5":1763445}},{"weight_label":"5.5","rates":{"1":1522091,"2":1603061,"3":2337506,"4":2323491,"5":1847530,"6":1795367,"7":2163627,"8":4016088,"9":4332185,"10":1622265,"US5":1870887}},{"weight_label":"6","rates":{"1":1581261,"2":1662232,"3":2471938,"4":2466228,"5":1952636,"6":1902808,"7":2296761,"8":4261336,"9":4594301,"10":1691039,"US5":1977290}},{"weight_label":"6.5","rates":{"1":1636020,"2":1722701,"3":2602477,"4":2610262,"5":2058780,"6":2012066,"7":2426781,"8":4498538,"9":4856158,"10":1763705,"US5":2084732}},{"weight_label":"7","rates":{"1":1691039,"2":1777459,"3":2736650,"4":2754297,"5":2163627,"6":2122363,"7":2558617,"8":4741191,"9":5112824,"10":1829364,"US5":2190876}},{"weight_label":"7.5","rates":{"1":1748652,"2":1830920,"3":2871081,"4":2897293,"5":2270030,"6":2230324,"7":2688638,"8":4981247,"9":5374941,"10":1902289,"US5":2298578}},{"weight_label":"8","rates":{"1":1795367,"2":1892687,"3":3007329,"4":3028611,"5":2366572,"6":2323752,"7":2809834,"8":5223899,"9":5637316,"10":1972360,"US5":2396417}},{"weight_label":"8.5","rates":{"1":1839226,"2":1947706,"3":3136312,"4":3161745,"5":2461557,"6":2402646,"7":2930771,"8":5463956,"9":5896318,"10":2041133,"US5":2492699}},{"weight_label":"9","rates":{"1":1884642,"2":2005059,"3":3269446,"4":3298513,"5":2525139,"6":2509569,"7":3053265,"8":5703754,"9":6156099,"10":2108349,"US5":2557061}},{"weight_label":"9.5","rates":{"1":1925646,"2":2060337,"3":3403878,"4":3434761,"5":2591836,"6":2592096,"7":3172645,"8":5943551,"9":6422108,"10":2179458,"US5":2624536}},{"weight_label":"10","rates":{"1":1962497,"2":2117951,"3":3538569,"4":3563483,"5":2656716,"6":2674104,"7":3294619,"8":6186203,"9":6681370,"10":2246933,"US5":2690195}},{"weight_label":"10.5","rates":{"1":1995457,"2":2178159,"3":3605267,"4":3661842,"5":2698240,"6":2749625,"7":3418411,"8":6428856,"9":6917274,"10":2333354,"US5":2732238}},{"weight_label":"11","rates":{"1":2029973,"2":2236034,"3":3678451,"4":3757605,"5":2743657,"6":2810354,"7":3528707,"8":6664760,"9":7162522,"10":2375915,"US5":2778173}},{"weight_label":"11.5","rates":{"1":2058780,"2":2293387,"3":3738660,"4":3852849,"5":2788554,"6":2874714,"7":3637707,"8":6907413,"9":7398426,"10":2416919,"US5":2823848}},{"weight_label":"12","rates":{"1":2094594,"2":2348406,"3":3808731,"4":3954062,"5":2831375,"6":2936740,"7":3749041,"8":7149805,"9":7638483,"10":2463633,"US5":2866929}},{"weight_label":"12.5","rates":{"1":2123142,"2":2406279,"3":3875946,"4":4047231,"5":2875493,"6":2997727,"7":3830531,"8":7387007,"9":7879578,"10":2503600,"US5":2911826}},{"weight_label":"13","rates":{"1":2151949,"2":2461038,"3":3935118,"4":4137025,"5":2896514,"6":3050929,"7":3914616,"8":7584243,"9":8079410,"10":2547459,"US5":2933107}},{"weight_label":"13.5","rates":{"1":2178159,"2":2521506,"3":3995327,"4":4217217,"5":2918314,"6":3101017,"7":3995327,"8":7783815,"9":8277684,"10":2589760,"US5":2954907}},{"weight_label":"14","rates":{"1":2206707,"2":2573410,"3":4050345,"4":4304675,"5":2940632,"6":3154738,"7":4076297,"8":7976640,"9":8480110,"10":2636734,"US5":2977745}},{"weight_label":"14.5","rates":{"1":2233178,"2":2621422,"3":4109257,"4":4373968,"5":2961394,"6":3205344,"7":4159344,"8":8176211,"9":8678644,"10":2680593,"US5":2998766}},{"weight_label":"15","rates":{"1":2259390,"2":2670991,"3":4171281,"4":4440665,"5":2983454,"6":3257249,"7":4241872,"8":8370592,"9":8871208,"10":2720299,"US5":3021084}},{"weight_label":"15.5","rates":{"1":2285342,"2":2710697,"3":4210729,"4":4475181,"5":3004216,"6":3289948,"7":4292738,"8":8554852,"9":9076489,"10":2767273,"US5":3042105}},{"weight_label":"16","rates":{"1":2314149,"2":2757411,"3":4254848,"4":4509697,"5":3026794,"6":3319274,"7":4343604,"8":8742226,"9":9274764,"10":2806720,"US5":3064943}},{"weight_label":"16.5","rates":{"1":2337506,"2":2801530,"3":4304416,"4":4544214,"5":3048334,"6":3350676,"7":4394729,"8":8930898,"9":9474335,"10":2853434,"US5":3086743}},{"weight_label":"17","rates":{"1":2366053,"2":2846686,"3":4345420,"4":4581584,"5":3070912,"6":3382078,"7":4446893,"8":9115159,"9":9670015,"10":2894438,"US5":3109581}},{"weight_label":"17.5","rates":{"1":2392265,"2":2893400,"3":4392134,"4":4616620,"5":3092453,"6":3412182,"7":4499057,"8":9299678,"9":9870884,"10":2939854,"US5":3131381}},{"weight_label":"18","rates":{"1":2412767,"2":2925062,"3":4426391,"4":4653991,"5":3115291,"6":3433982,"7":4529421,"8":9470183,"9":10001423,"10":2952312,"US5":3154478}},{"weight_label":"18.5","rates":{"1":2430934,"2":2964768,"3":4467395,"4":4685393,"5":3137350,"6":3453187,"7":4557708,"8":9638093,"9":10131702,"10":3000322,"US5":3177056}},{"weight_label":"19","rates":{"1":2444428,"2":3000322,"3":4499057,"4":4725878,"5":3159409,"6":3475506,"7":4590408,"8":9808339,"9":10266135,"10":3044441,"US5":3199116}},{"weight_label":"19.5","rates":{"1":2465190,"2":3031985,"3":4534871,"4":4760394,"5":3178614,"6":3496008,"7":4621551,"8":9973395,"9":10393818,"10":3093750,"US5":3218579}},{"weight_label":"20","rates":{"1":2483097,"2":3068837,"3":4573539,"4":4797766,"5":3202490,"6":3516770,"7":4651915,"8":10144419,"9":10522541,"10":3136312,"US5":3242975}},{"weight_label":"21-44","rates":{"1":112891,"2":141439,"3":204502,"4":210731,"5":153636,"6":150003,"7":155194,"8":485304,"9":499318,"10":130279,"US5":150003}},{"weight_label":"45-70","rates":{"1":107182,"2":138584,"3":192046,"4":199571,"5":153636,"6":150003,"7":155194,"8":482709,"9":489716,"10":125088,"US5":150003}},{"weight_label":"71-99","rates":{"1":98877,"2":130279,"3":180886,"4":178809,"5":153636,"6":150003,"7":155194,"8":464542,"9":472847,"10":104326,"US5":150003}},{"weight_label":"100-299","rates":{"1":98877,"2":126387,"3":178550,"4":175955,"5":153636,"6":150003,"7":155194,"8":459092,"9":467397,"10":104326,"US5":150003}},{"weight_label":"300-499","rates":{"1":96022,"2":123531,"3":171543,"4":173359,"5":153636,"6":150003,"7":155194,"8":450788,"9":454680,"10":101472,"US5":150003}},{"weight_label":"500-999","rates":{"1":96022,"2":123531,"3":171543,"4":173359,"5":153636,"6":150003,"7":155194,"8":450788,"9":454680,"10":101472,"US5":150003}},{"weight_label":">1000","rates":{"1":96022,"2":123531,"3":171543,"4":173359,"5":153636,"6":150003,"7":155194,"8":450788,"9":454680,"10":101472,"US5":150003}}],"xpd_rates":[{"weight_label":"1","rates":{"1":641535,"2":751832,"3":891195,"4":918185,"5":625965,"6":643352,"7":702004,"8":1229092,"9":1406604,"10":641535,"US5":625965}},{"weight_label":"2","rates":{"1":766625,"2":893790,"3":1130993,"4":1141633,"5":842145,"6":883669,"7":966975,"8":1680917,"9":1933431,"10":788425,"US5":842145}},{"weight_label":"3","rates":{"1":885745,"2":1024070,"3":1375201,"4":1369752,"5":1057028,"6":1101666,"7":1230389,"8":2126775,"9":2422110,"10":925971,"US5":1057028}},{"weight_label":"4","rates":{"1":1000453,"2":1149159,"3":1610587,"4":1600466,"5":1265424,"6":1296048,"7":1496398,"8":2577044,"9":2881721,"10":1059884,"US5":1265424}},{"weight_label":"5","rates":{"1":1111009,"2":1272951,"3":1852720,"4":1839744,"5":1474858,"6":1499512,"7":1762666,"8":3023160,"9":3337441,"10":1193278,"US5":1474858}},{"weight_label":"6","rates":{"1":1201582,"2":1362744,"3":2076427,"4":2071497,"5":1653408,"6":1693894,"7":1993381,"8":3409328,"9":3767467,"10":1302017,"US5":1653408}},{"weight_label":"7","rates":{"1":1284888,"2":1457470,"3":2298837,"4":2313630,"5":1832478,"6":1889572,"7":2220981,"8":3792900,"9":4192563,"10":1408940,"US5":1832478}},{"weight_label":"8","rates":{"1":1364561,"2":1552195,"3":2525918,"4":2544085,"5":2004281,"6":2068641,"7":2438979,"8":4179326,"9":4622589,"10":1518717,"US5":2004281}},{"weight_label":"9","rates":{"1":1432037,"2":1644325,"3":2746252,"4":2770906,"5":2138453,"6":2234216,"7":2650229,"8":4562899,"9":5047684,"10":1623303,"US5":2138453}},{"weight_label":"10","rates":{"1":1491726,"2":1736715,"3":2972035,"4":2993575,"5":2250307,"6":2380586,"7":2859662,"8":4949067,"9":5478749,"10":1729967,"US5":2250307}},{"weight_label":"11","rates":{"1":1543112,"2":1833516,"3":3089858,"4":3156035,"5":2323491,"6":2501783,"7":3062607,"8":5331860,"9":5873221,"10":1829364,"US5":2323491}},{"weight_label":"12","rates":{"1":1591642,"2":1925646,"3":3199376,"4":3321351,"5":2397974,"6":2614415,"7":3253875,"8":5720103,"9":6263281,"10":1897099,"US5":2397974}},{"weight_label":"13","rates":{"1":1635761,"2":2018036,"3":3305260,"4":3474987,"5":2453252,"6":2715628,"7":3397909,"8":6067342,"9":6625054,"10":1961460,"US5":2453252}},{"weight_label":"14","rates":{"1":1677543,"2":2110165,"3":3402321,"4":3615907,"5":2490623,"6":2808537,"7":3538310,"8":6381364,"9":6953867,"10":2030233,"US5":2490623}},{"weight_label":"15","rates":{"1":1717251,"2":2190357,"3":3503535,"4":3730096,"5":2526697,"6":2899888,"7":3681825,"8":6696422,"9":7274375,"10":2094594,"US5":2526697}},{"weight_label":"16","rates":{"1":1758774,"2":2261206,"3":3574124,"4":3787969,"5":2563289,"6":2954907,"7":3770063,"8":6993573,"9":7605524,"10":2161032,"US5":2563289}},{"weight_label":"17","rates":{"1":1798480,"2":2334132,"3":3650164,"4":3848438,"5":2600660,"6":3010703,"7":3859856,"8":7292542,"9":7929146,"10":2229027,"US5":2600660}},{"weight_label":"18","rates":{"1":1833776,"2":2398234,"3":3718158,"4":3909425,"5":2638290,"6":3057158,"7":3931224,"8":7576198,"9":8201125,"10":2273404,"US5":2638290}},{"weight_label":"19","rates":{"1":1857652,"2":2460519,"3":3779405,"4":3969634,"5":2675662,"6":3094009,"7":3984426,"8":7846619,"9":8418345,"10":2343994,"US5":2675662}},{"weight_label":"20","rates":{"1":1886977,"2":2516576,"3":3841430,"4":4030362,"5":2712514,"6":3130602,"7":4037888,"8":8115224,"9":8628816,"10":2415103,"US5":2712514}},{"weight_label":"21-44","rates":{"1":85382,"2":115746,"3":172062,"4":176992,"5":148705,"6":140660,"7":146110,"8":388503,"9":409264,"10":100434,"US5":141698}},{"weight_label":"45-70","rates":{"1":81489,"2":113929,"3":161422,"4":167650,"5":148705,"6":140660,"7":146110,"8":385908,"9":401479,"10":96022,"US5":141698}},{"weight_label":"71-99","rates":{"1":75001,"2":106923,"3":152079,"4":150003,"5":148705,"6":140660,"7":146110,"8":371633,"9":387983,"10":80451,"US5":141698}},{"weight_label":"100-299","rates":{"1":75001,"2":103549,"3":150003,"4":147667,"5":148705,"6":140660,"7":146110,"8":367482,"9":383312,"10":80451,"US5":141698}},{"weight_label":"300-499","rates":{"1":72925,"2":101213,"3":144034,"4":145591,"5":148705,"6":140660,"7":146110,"8":360475,"9":372672,"10":78116,"US5":141698}},{"weight_label":"500-999","rates":{"1":72925,"2":101213,"3":144034,"4":145591,"5":148705,"6":140660,"7":146110,"8":360475,"9":372672,"10":78116,"US5":141698}},{"weight_label":">1000","rates":{"1":72925,"2":101213,"3":144034,"4":145591,"5":148705,"6":140660,"7":146110,"8":360475,"9":372672,"10":78116,"US5":141698}}],"wfm_rates":[{"weight_label":"(kg)","rates":{"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9,"10":10,"US5":0}},{"weight_label":"Minimum","rates":{"1":8424405,"2":11099839,"3":15411549,"4":15234581,"5":13089824,"6":12780281,"7":13222551,"8":39579093,"9":40286587,"10":8888644,"US5":12780281}},{"weight_label":"71-99","rates":{"1":118653,"2":156335,"3":217064,"4":214571,"5":184363,"6":180003,"7":186233,"8":557452,"9":567416,"10":125192,"US5":180003}},{"weight_label":"100-299","rates":{"1":118653,"2":151664,"3":214261,"4":211146,"5":184363,"6":180003,"7":186233,"8":550911,"9":560877,"10":125192,"US5":180003}},{"weight_label":"300-499","rates":{"1":115227,"2":148238,"3":205852,"4":208031,"5":184363,"6":180003,"7":186233,"8":540945,"9":545616,"10":121767,"US5":180003}},{"weight_label":"500-999","rates":{"1":115227,"2":148238,"3":205852,"4":208031,"5":184363,"6":180003,"7":186233,"8":540945,"9":545616,"10":121767,"US5":180003}},{"weight_label":">1000","rates":{"1":115227,"2":148238,"3":205852,"4":208031,"5":184363,"6":180003,"7":186233,"8":540945,"9":545616,"10":121767,"US5":180003}}]};
+    const COUNTRIES = [{"iata":"AF","name":"Afghanistan","wxs":9,"xpd":9,"wfm":0},{"iata":"AX","name":"Aland Island (Finland)*","wxs":6,"xpd":6,"wfm":0},{"iata":"AL","name":"Albania","wxs":9,"xpd":9,"wfm":0},{"iata":"DZ","name":"Algeria","wxs":9,"xpd":9,"wfm":0},{"iata":"AS","name":"American Samoa","wxs":9,"xpd":9,"wfm":0},{"iata":"AD","name":"Andorra","wxs":7,"xpd":7,"wfm":0},{"iata":"AO","name":"Angola","wxs":8,"xpd":8,"wfm":0},{"iata":"AI","name":"Anguilla","wxs":8,"xpd":8,"wfm":0},{"iata":"AG","name":"Antigua and Barbuda","wxs":8,"xpd":8,"wfm":0},{"iata":"AR","name":"Argentina*","wxs":8,"xpd":8,"wfm":0},{"iata":"AM","name":"Armenia","wxs":9,"xpd":9,"wfm":0},{"iata":"AW","name":"Aruba","wxs":8,"xpd":8,"wfm":0},{"iata":"AU","name":"Australia*#","wxs":3,"xpd":3,"wfm":3},{"iata":"AT","name":"Austria*","wxs":6,"xpd":6,"wfm":6},{"iata":"AZ","name":"Azerbaijan","wxs":7,"xpd":7,"wfm":0},{"iata":"A2","name":"Azores (Portugal)*","wxs":7,"xpd":7,"wfm":0},{"iata":"BS","name":"Bahamas*","wxs":8,"xpd":8,"wfm":0},{"iata":"BH","name":"Bahrain","wxs":7,"xpd":7,"wfm":0},{"iata":"BD","name":"Bangladesh","wxs":4,"xpd":4,"wfm":0},{"iata":"BB","name":"Barbados","wxs":8,"xpd":8,"wfm":0},{"iata":"BY","name":"Belarus*","wxs":7,"xpd":7,"wfm":0},{"iata":"BE","name":"Belgium","wxs":6,"xpd":6,"wfm":6},{"iata":"BZ","name":"Belize","wxs":8,"xpd":8,"wfm":0},{"iata":"BJ","name":"Benin","wxs":9,"xpd":9,"wfm":0},{"iata":"BM","name":"Bermuda","wxs":9,"xpd":9,"wfm":0},{"iata":"BT","name":"Bhutan","wxs":0,"xpd":0,"wfm":0},{"iata":"BO","name":"Bolivia","wxs":8,"xpd":8,"wfm":0},{"iata":"BQ","name":"Bonaire, St. Eustatius, Saba","wxs":8,"xpd":8,"wfm":0},{"iata":"BA","name":"Bosnia and Herzegovina","wxs":7,"xpd":7,"wfm":0},{"iata":"BW","name":"Botswana","wxs":9,"xpd":9,"wfm":0},{"iata":"BR","name":"Brazil*","wxs":8,"xpd":8,"wfm":0},{"iata":"VG","name":"British Virgin Islands","wxs":8,"xpd":8,"wfm":0},{"iata":"BN","name":"Brunei*","wxs":2,"xpd":2,"wfm":0},{"iata":"B1","name":"Buesingen (Germany)*","wxs":6,"xpd":6,"wfm":0},{"iata":"BG","name":"Bulgaria","wxs":7,"xpd":7,"wfm":0},{"iata":"BF","name":"Burkina Faso","wxs":9,"xpd":9,"wfm":0},{"iata":"BI","name":"Burundi","wxs":9,"xpd":9,"wfm":0},{"iata":"KH","name":"Cambodia*","wxs":3,"xpd":3,"wfm":0},{"iata":"CM","name":"Cameroon","wxs":9,"xpd":9,"wfm":0},{"iata":"C3","name":"Campione/ Lake Lugano (Italy)*","wxs":6,"xpd":6,"wfm":0},{"iata":"CA","name":"Canada*","wxs":5,"xpd":5,"wfm":5},{"iata":"IC","name":"Canary Islands (Spain)*","wxs":6,"xpd":6,"wfm":0},{"iata":"CV","name":"Cape Verde","wxs":9,"xpd":9,"wfm":0},{"iata":"KY","name":"Cayman Islands","wxs":8,"xpd":8,"wfm":0},{"iata":"CF","name":"Central African Republic","wxs":9,"xpd":9,"wfm":0},{"iata":"C2","name":"Ceuta (Spain)*","wxs":6,"xpd":6,"wfm":0},{"iata":"TD","name":"Chad","wxs":9,"xpd":9,"wfm":0},{"iata":"CL","name":"Chile*","wxs":8,"xpd":8,"wfm":8},{"iata":"CNN","name":"China Mainland (Excluding Southern China Mainland)*#","wxs":3,"xpd":3,"wfm":0},{"iata":"CO","name":"Colombia*","wxs":8,"xpd":8,"wfm":0},{"iata":"KM","name":"Comoros","wxs":9,"xpd":9,"wfm":0},{"iata":"CD","name":"Congo, Democratic Republic of","wxs":9,"xpd":9,"wfm":0},{"iata":"CG","name":"Congo, Republic of","wxs":9,"xpd":9,"wfm":0},{"iata":"CK","name":"Cook Islands","wxs":0,"xpd":0,"wfm":0},{"iata":"CR","name":"Costa Rica*","wxs":8,"xpd":8,"wfm":8},{"iata":"CI","name":"Cote d'Ivoire (Ivory Coast)","wxs":9,"xpd":9,"wfm":0},{"iata":"HR","name":"Croatia*","wxs":7,"xpd":7,"wfm":0},{"iata":"CU","name":"Cuba","wxs":0,"xpd":0,"wfm":0},{"iata":"CW","name":"Curacao","wxs":8,"xpd":8,"wfm":0},{"iata":"CY","name":"Cyprus","wxs":7,"xpd":7,"wfm":0},{"iata":"CZ","name":"Czech Republic*","wxs":7,"xpd":7,"wfm":7},{"iata":"DK","name":"Denmark*","wxs":6,"xpd":6,"wfm":6},{"iata":"DJ","name":"Djibouti","wxs":9,"xpd":9,"wfm":0},{"iata":"DM","name":"Dominica","wxs":8,"xpd":8,"wfm":0},{"iata":"DO","name":"Dominican Republic*","wxs":8,"xpd":8,"wfm":0},{"iata":"EC","name":"Ecuador*","wxs":8,"xpd":8,"wfm":0},{"iata":"EG","name":"Egypt","wxs":7,"xpd":7,"wfm":0},{"iata":"SV","name":"El Salvador*","wxs":8,"xpd":8,"wfm":0},{"iata":"EN","name":"England (United Kingdom)*","wxs":6,"xpd":6,"wfm":0},{"iata":"GQ","name":"Equatorial Guinea","wxs":0,"xpd":0,"wfm":0},{"iata":"ER","name":"Eritrea","wxs":9,"xpd":9,"wfm":0},{"iata":"EE","name":"Estonia","wxs":7,"xpd":7,"wfm":0},{"iata":"ET","name":"Ethiopia","wxs":9,"xpd":9,"wfm":0},{"iata":"FO","name":"Faroe Islands","wxs":9,"xpd":9,"wfm":0},{"iata":"FJ","name":"Fiji","wxs":0,"xpd":0,"wfm":0},{"iata":"FI","name":"Finland*","wxs":6,"xpd":6,"wfm":6},{"iata":"FR","name":"France*","wxs":6,"xpd":6,"wfm":6},{"iata":"GF","name":"French Guiana","wxs":8,"xpd":8,"wfm":0},{"iata":"PF","name":"French Polynesia","wxs":0,"xpd":0,"wfm":0},{"iata":"GA","name":"Gabon","wxs":9,"xpd":9,"wfm":0},{"iata":"GM","name":"Gambia","wxs":9,"xpd":9,"wfm":0},{"iata":"GE","name":"Georgia*","wxs":9,"xpd":9,"wfm":0},{"iata":"DE","name":"Germany*","wxs":6,"xpd":6,"wfm":6},{"iata":"GH","name":"Ghana","wxs":9,"xpd":9,"wfm":0},{"iata":"GI","name":"Gibraltar","wxs":7,"xpd":7,"wfm":0},{"iata":"GR","name":"Greece*","wxs":7,"xpd":7,"wfm":7},{"iata":"GL","name":"Greenland","wxs":9,"xpd":9,"wfm":0},{"iata":"GD","name":"Grenada","wxs":8,"xpd":8,"wfm":0},{"iata":"GP","name":"Guadeloupe*","wxs":8,"xpd":8,"wfm":0},{"iata":"GU","name":"Guam","wxs":7,"xpd":7,"wfm":0},{"iata":"GT","name":"Guatemala*","wxs":8,"xpd":8,"wfm":0},{"iata":"GG","name":"Guernsey (Channel Islands)","wxs":7,"xpd":7,"wfm":0},{"iata":"GN","name":"Guinea","wxs":9,"xpd":9,"wfm":0},{"iata":"GW","name":"Guinea-Bissau","wxs":9,"xpd":9,"wfm":0},{"iata":"GY","name":"Guyana*","wxs":8,"xpd":8,"wfm":0},{"iata":"HT","name":"Haiti*","wxs":8,"xpd":8,"wfm":0},{"iata":"H1","name":"Heligoland (Germany)*","wxs":6,"xpd":6,"wfm":0},{"iata":"HN","name":"Honduras*","wxs":8,"xpd":8,"wfm":0},{"iata":"HK","name":"Hong Kong SAR, China#","wxs":1,"xpd":1,"wfm":1},{"iata":"HU","name":"Hungary*","wxs":7,"xpd":7,"wfm":7},{"iata":"IS","name":"Iceland","wxs":8,"xpd":8,"wfm":0},{"iata":"IN","name":"India*","wxs":4,"xpd":4,"wfm":4},{"iata":"ID","name":"Indonesia*#","wxs":2,"xpd":2,"wfm":0},{"iata":"IQ","name":"Iraq","wxs":9,"xpd":9,"wfm":0},{"iata":"IE","name":"Ireland","wxs":6,"xpd":6,"wfm":6},{"iata":"IL","name":"Israel","wxs":9,"xpd":9,"wfm":9},{"iata":"IT","name":"Italy*","wxs":6,"xpd":6,"wfm":6},{"iata":"JM","name":"Jamaica*","wxs":8,"xpd":8,"wfm":0},{"iata":"JP","name":"Japan*#","wxs":3,"xpd":3,"wfm":3},{"iata":"JE","name":"Jersey (Channel Islands)","wxs":7,"xpd":7,"wfm":0},{"iata":"JO","name":"Jordan","wxs":9,"xpd":9,"wfm":0},{"iata":"KZ","name":"Kazakhstan*","wxs":9,"xpd":9,"wfm":0},{"iata":"KE","name":"Kenya","wxs":9,"xpd":9,"wfm":0},{"iata":"KI","name":"Kiribati","wxs":0,"xpd":0,"wfm":0},{"iata":"KR","name":"Korea, South#","wxs":3,"xpd":3,"wfm":3},{"iata":"KV","name":"Kosovo","wxs":9,"xpd":9,"wfm":0},{"iata":"KO","name":"Kosrae (Micronesia, Federated States of)","wxs":0,"xpd":0,"wfm":0},{"iata":"KW","name":"Kuwait","wxs":7,"xpd":7,"wfm":7},{"iata":"KG","name":"Kyrgyzstan","wxs":9,"xpd":9,"wfm":0},{"iata":"LA","name":"Laos","wxs":3,"xpd":3,"wfm":0},{"iata":"LV","name":"Latvia","wxs":7,"xpd":7,"wfm":0},{"iata":"LB","name":"Lebanon","wxs":9,"xpd":9,"wfm":0},{"iata":"LS","name":"Lesotho","wxs":9,"xpd":9,"wfm":0},{"iata":"LR","name":"Liberia","wxs":9,"xpd":9,"wfm":0},{"iata":"LY","name":"Libyan Arab Jamahiriya","wxs":0,"xpd":0,"wfm":0},{"iata":"LI","name":"Liechtenstein*","wxs":6,"xpd":6,"wfm":0},{"iata":"LT","name":"Lithuania","wxs":7,"xpd":7,"wfm":0},{"iata":"L1","name":"Livigno (Italy)*","wxs":6,"xpd":6,"wfm":0},{"iata":"LU","name":"Luxembourg","wxs":6,"xpd":6,"wfm":0},{"iata":"MO","name":"Macau SAR, China#","wxs":2,"xpd":2,"wfm":0},{"iata":"MG","name":"Madagascar","wxs":9,"xpd":9,"wfm":0},{"iata":"M3","name":"Madeira (Portugal)*","wxs":7,"xpd":7,"wfm":0},{"iata":"MW","name":"Malawi","wxs":9,"xpd":9,"wfm":0},{"iata":"MY","name":"Malaysia*#","wxs":2,"xpd":2,"wfm":2},{"iata":"MV","name":"Maldives","wxs":4,"xpd":4,"wfm":0},{"iata":"ML","name":"Mali","wxs":9,"xpd":9,"wfm":0},{"iata":"MT","name":"Malta","wxs":7,"xpd":7,"wfm":0},{"iata":"MH","name":"Marshall Islands","wxs":0,"xpd":0,"wfm":0},{"iata":"MQ","name":"Martinique","wxs":8,"xpd":8,"wfm":0},{"iata":"MR","name":"Mauritania","wxs":9,"xpd":9,"wfm":0},{"iata":"MU","name":"Mauritius","wxs":9,"xpd":9,"wfm":0},{"iata":"YT","name":"Mayotte","wxs":9,"xpd":9,"wfm":0},{"iata":"M1","name":"Melilla (Spain)*","wxs":6,"xpd":6,"wfm":0},{"iata":"MX","name":"Mexico*","wxs":5,"xpd":5,"wfm":5},{"iata":"FM","name":"Micronesia, Federated States of","wxs":0,"xpd":0,"wfm":0},{"iata":"MD","name":"Moldova*","wxs":9,"xpd":9,"wfm":0},{"iata":"MC","name":"Monaco*","wxs":6,"xpd":6,"wfm":0},{"iata":"MN","name":"Mongolia","wxs":9,"xpd":9,"wfm":0},{"iata":"ME","name":"Montenegro","wxs":9,"xpd":9,"wfm":0},{"iata":"MS","name":"Montserrat","wxs":8,"xpd":8,"wfm":0},{"iata":"MA","name":"Morocco","wxs":9,"xpd":9,"wfm":0},{"iata":"M2","name":"Mount Athos (Greece)*","wxs":7,"xpd":7,"wfm":0},{"iata":"MZ","name":"Mozambique","wxs":9,"xpd":9,"wfm":0},{"iata":"MM","name":"Myanmar","wxs":3,"xpd":3,"wfm":0},{"iata":"NA","name":"Namibia","wxs":9,"xpd":9,"wfm":0},{"iata":"NP","name":"Nepal*","wxs":9,"xpd":9,"wfm":0},{"iata":"NL","name":"Netherlands (Holland)*","wxs":6,"xpd":6,"wfm":6},{"iata":"NC","name":"New Caledonia","wxs":9,"xpd":9,"wfm":0},{"iata":"NZ","name":"New Zealand*","wxs":3,"xpd":3,"wfm":0},{"iata":"NI","name":"Nicaragua","wxs":8,"xpd":8,"wfm":0},{"iata":"NE","name":"Niger","wxs":9,"xpd":9,"wfm":0},{"iata":"NG","name":"Nigeria*","wxs":9,"xpd":9,"wfm":0},{"iata":"NF","name":"Norfolk Island (Australia)*","wxs":3,"xpd":3,"wfm":0},{"iata":"MK","name":"North Macedonia","wxs":9,"xpd":9,"wfm":0},{"iata":"NB","name":"Northern Ireland (United Kingdom)*","wxs":6,"xpd":6,"wfm":0},{"iata":"MP","name":"Northern Mariana Islands*","wxs":9,"xpd":9,"wfm":0},{"iata":"NO","name":"Norway*","wxs":6,"xpd":6,"wfm":0},{"iata":"OM","name":"Oman","wxs":7,"xpd":7,"wfm":0},{"iata":"PK","name":"Pakistan*","wxs":4,"xpd":4,"wfm":0},{"iata":"PW","name":"Palau","wxs":0,"xpd":0,"wfm":0},{"iata":"PA","name":"Panama*","wxs":8,"xpd":8,"wfm":0},{"iata":"PG","name":"Papua New Guinea","wxs":0,"xpd":0,"wfm":0},{"iata":"PY","name":"Paraguay","wxs":8,"xpd":8,"wfm":0},{"iata":"PE","name":"Peru*","wxs":8,"xpd":8,"wfm":0},{"iata":"PH","name":"Philippines*#","wxs":2,"xpd":2,"wfm":0},{"iata":"PL","name":"Poland*","wxs":7,"xpd":7,"wfm":7},{"iata":"PO","name":"Ponape (Micronesia, Federated States of)","wxs":0,"xpd":0,"wfm":0},{"iata":"PT","name":"Portugal*","wxs":7,"xpd":7,"wfm":7},{"iata":"PR","name":"Puerto Rico*","wxs":5,"xpd":5,"wfm":5},{"iata":"QA","name":"Qatar","wxs":7,"xpd":7,"wfm":0},{"iata":"RE","name":"Reunion","wxs":9,"xpd":9,"wfm":0},{"iata":"RO","name":"Romania","wxs":7,"xpd":7,"wfm":0},{"iata":"RT","name":"Rota (Northern Mariana Islands)*","wxs":9,"xpd":9,"wfm":0},{"iata":"RU","name":"Russia*","wxs":7,"xpd":7,"wfm":0},{"iata":"RW","name":"Rwanda","wxs":9,"xpd":9,"wfm":0},{"iata":"SP","name":"Saipan (Northern Mariana Islands)*","wxs":9,"xpd":9,"wfm":0},{"iata":"WS","name":"Samoa","wxs":9,"xpd":9,"wfm":0},{"iata":"SM","name":"San Marino","wxs":6,"xpd":6,"wfm":0},{"iata":"ST","name":"Sao Tome and Principe","wxs":0,"xpd":0,"wfm":0},{"iata":"SA","name":"Saudi Arabia","wxs":7,"xpd":7,"wfm":0},{"iata":"SF","name":"Scotland (United Kingdom)*","wxs":6,"xpd":6,"wfm":0},{"iata":"SN","name":"Senegal","wxs":9,"xpd":9,"wfm":0},{"iata":"RS","name":"Serbia","wxs":9,"xpd":9,"wfm":0},{"iata":"SC","name":"Seychelles","wxs":9,"xpd":9,"wfm":0},{"iata":"SL","name":"Sierra Leone","wxs":9,"xpd":9,"wfm":0},{"iata":"SG","name":"Singapore#","wxs":1,"xpd":1,"wfm":0},{"iata":"SK","name":"Slovakia","wxs":7,"xpd":7,"wfm":0},{"iata":"SI","name":"Slovenia","wxs":7,"xpd":7,"wfm":7},{"iata":"SB","name":"Solomon Islands","wxs":0,"xpd":0,"wfm":0},{"iata":"ZA","name":"South Africa*","wxs":9,"xpd":9,"wfm":0},{"iata":"CNS","name":"Southern China Mainland+*#","wxs":10,"xpd":10,"wfm":0},{"iata":"ES","name":"Spain*","wxs":6,"xpd":6,"wfm":6},{"iata":"LK","name":"Sri Lanka*","wxs":4,"xpd":4,"wfm":0},{"iata":"BL","name":"St. Barthelemy","wxs":8,"xpd":8,"wfm":0},{"iata":"SW","name":"St. Christopher (St. Kitts)","wxs":8,"xpd":8,"wfm":0},{"iata":"UV","name":"St. John (U.S. Virgin Islands)","wxs":8,"xpd":8,"wfm":0},{"iata":"KN","name":"St. Kitts and Nevis","wxs":8,"xpd":8,"wfm":0},{"iata":"LC","name":"St. Lucia","wxs":8,"xpd":8,"wfm":0},{"iata":"SX","name":"St. Maarten, St. Martin","wxs":9,"xpd":9,"wfm":0},{"iata":"VL","name":"St. Thomas (U.S. Virgin Islands)","wxs":8,"xpd":8,"wfm":0},{"iata":"VC","name":"St. Vincent & the Grenadines","wxs":8,"xpd":8,"wfm":0},{"iata":"SR","name":"Suriname","wxs":8,"xpd":8,"wfm":0},{"iata":"SZ","name":"Swaziland","wxs":9,"xpd":9,"wfm":0},{"iata":"SE","name":"Sweden*","wxs":6,"xpd":6,"wfm":6},{"iata":"CH","name":"Switzerland*","wxs":6,"xpd":6,"wfm":6},{"iata":"TA","name":"Tahiti (French Polynesia)","wxs":0,"xpd":0,"wfm":0},{"iata":"TW","name":"Taiwan, China*#","wxs":3,"xpd":3,"wfm":3},{"iata":"TJ","name":"Tajikistan","wxs":0,"xpd":0,"wfm":0},{"iata":"TZ","name":"Tanzania","wxs":9,"xpd":9,"wfm":0},{"iata":"TH","name":"Thailand*#","wxs":1,"xpd":1,"wfm":0},{"iata":"TL","name":"Timor-Leste","wxs":0,"xpd":0,"wfm":0},{"iata":"TI","name":"Tinian (Northern Mariana Islands)*","wxs":9,"xpd":9,"wfm":0},{"iata":"TG","name":"Togo","wxs":9,"xpd":9,"wfm":0},{"iata":"TO","name":"Tonga","wxs":0,"xpd":0,"wfm":0},{"iata":"TT","name":"Trinidad & Tobago*","wxs":8,"xpd":8,"wfm":0},{"iata":"TU","name":"Truk (Micronesia, Federated States of)","wxs":0,"xpd":0,"wfm":0},{"iata":"TN","name":"Tunisia","wxs":9,"xpd":9,"wfm":0},{"iata":"TR","name":"Turkey","wxs":7,"xpd":7,"wfm":7},{"iata":"TM","name":"Turkmenistan","wxs":9,"xpd":0,"wfm":0},{"iata":"TC","name":"Turks & Caicos Islands","wxs":8,"xpd":8,"wfm":0},{"iata":"TV","name":"Tuvalu","wxs":0,"xpd":0,"wfm":0},{"iata":"VI","name":"U.S. Virgin Islands","wxs":8,"xpd":8,"wfm":0},{"iata":"UG","name":"Uganda","wxs":9,"xpd":9,"wfm":0},{"iata":"UA","name":"Ukraine*","wxs":7,"xpd":7,"wfm":0},{"iata":"UI","name":"Union Islands (St. Vincent & the Grenadines)","wxs":8,"xpd":8,"wfm":0},{"iata":"AE","name":"United Arab Emirates","wxs":7,"xpd":7,"wfm":7},{"iata":"GB","name":"United Kingdom*","wxs":6,"xpd":6,"wfm":6},{"iata":"US","name":"United States*","wxs":5,"xpd":5,"wfm":5},{"iata":"UY","name":"Uruguay","wxs":8,"xpd":8,"wfm":0},{"iata":"UZ","name":"Uzbekistan","wxs":9,"xpd":9,"wfm":0},{"iata":"VU","name":"Vanuatu","wxs":0,"xpd":0,"wfm":0},{"iata":"VA","name":"Vatican City (Italy)*","wxs":6,"xpd":6,"wfm":0},{"iata":"VE","name":"Venezuela*","wxs":8,"xpd":8,"wfm":0},{"iata":"WL","name":"Wales (United Kingdom)*","wxs":6,"xpd":6,"wfm":0},{"iata":"WF","name":"Wallis & Futuna Islands","wxs":0,"xpd":0,"wfm":0},{"iata":"YA","name":"Yap (Micronesia, Federated States of)","wxs":0,"xpd":0,"wfm":0},{"iata":"YE","name":"Yemen, Republic of","wxs":0,"xpd":0,"wfm":0},{"iata":"ZM","name":"Zambia","wxs":9,"xpd":9,"wfm":0},{"iata":"ZW","name":"Zimbabwe","wxs":9,"xpd":9,"wfm":0}];
+
+    // State
+    let currentShipmentType = 'nondocument';
+    let selectedCountry = COUNTRIES.find(c => c.iata === 'US') || COUNTRIES[0];
+    let pieceIdCounter = 1;
+    let pieces = [];
+
+    // Initialize Default State
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set Date to today
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('shipDate').value = today;
+
+      // Render Country Options in Dropdown
+      renderCountryOptions(COUNTRIES);
+
+      // Select default country US
+      selectCountry(selectedCountry.iata);
+
+      // Initial piece matching sample test case (30x20x15cm, 3.2kg + 25x20x10cm, 1.1kg qty 2 -> 5.4kg actual, 6.0kg chargeable)
+      pieces = [
+        { id: pieceIdCounter++, qty: 1, type: 'Carton', len: 30, wid: 20, hei: 15, weight: 3.2 },
+        { id: pieceIdCounter++, qty: 2, type: 'Carton', len: 25, wid: 20, hei: 10, weight: 1.1 }
+      ];
+      renderPieces();
+      recalculateMetrics();
+
+      // Close dropdowns on outside click
+      document.addEventListener('click', (e) => {
+        const combobox = document.getElementById('countryCombobox');
+        if (!combobox.contains(e.target)) {
+          toggleCountryDropdown(false);
+        }
+      });
+    });
+
+    // Preset handler
+    function applyPreset(presetKey) {
+      if (presetKey === 'doc_envelope') {
+        setShipmentType('document');
+        pieces = [{ id: pieceIdCounter++, qty: 1, type: 'Envelope', len: 32, wid: 24, hei: 1, weight: 0.5 }];
+        selectCountry('US');
+      } else if (presetKey === 'small_box') {
+        setShipmentType('nondocument');
+        pieces = [{ id: pieceIdCounter++, qty: 1, type: 'Carton', len: 25, wid: 20, hei: 15, weight: 2.0 }];
+        selectCountry('JP');
+      } else if (presetKey === 'carton_us') {
+        setShipmentType('nondocument');
+        pieces = [{ id: pieceIdCounter++, qty: 1, type: 'Carton', len: 35, wid: 25, hei: 20, weight: 6.0 }];
+        selectCountry('US');
+      } else if (presetKey === 'export_sample') {
+        setShipmentType('nondocument');
+        pieces = [{ id: pieceIdCounter++, qty: 1, type: 'Carton', len: 50, wid: 40, hei: 30, weight: 15.0 }];
+        selectCountry('DE');
+      } else if (presetKey === 'pallet_freight') {
+        setShipmentType('nondocument');
+        pieces = [{ id: pieceIdCounter++, qty: 1, type: 'Pallet', len: 100, wid: 80, hei: 80, weight: 85.0 }];
+        selectCountry('AU');
+      }
+
+      renderPieces();
+      recalculateMetrics();
+
+      // Anime.js feedback on form
+      if (window.anime) {
+        anime({
+          targets: '#quoteFormCard',
+          scale: [0.99, 1],
+          duration: 350,
+          easing: 'easeOutQuad'
+        });
+      }
+    }
+
+    // Toggle Shipment Type
+    function setShipmentType(type) {
+      currentShipmentType = type;
+      document.getElementById('btnTypeNondoc').classList.toggle('active', type === 'nondocument');
+      document.getElementById('btnTypeDoc').classList.toggle('active', type === 'document');
+      recalculateMetrics();
+    }
+
+    // Country Combobox Dropdown
+    function toggleCountryDropdown(isOpen) {
+      const dd = document.getElementById('countryDropdown');
+      if (isOpen) {
+        dd.classList.add('open');
+        document.getElementById('countrySearchInput').focus();
+      } else {
+        dd.classList.remove('open');
+      }
+    }
+
+    function filterCountries(searchTerm) {
+      const term = searchTerm.toLowerCase().trim();
+      const filtered = COUNTRIES.filter(c => 
+        c.name.toLowerCase().includes(term) || 
+        c.iata.toLowerCase().includes(term)
+      );
+      renderCountryOptions(filtered);
+    }
+
+    function renderCountryOptions(list) {
+      const container = document.getElementById('countryOptionsList');
+      if (list.length === 0) {
+        container.innerHTML = '<div style="padding: 16px; text-align: center; color: #94A3B8; font-size: 13px;">Không tìm thấy quốc gia phù hợp</div>';
+        return;
+      }
+      container.innerHTML = list.map(c => `
+        <div class="country-option ${selectedCountry && selectedCountry.iata === c.iata ? 'selected' : ''}" onclick="selectCountry('${c.iata}')">
+          <div class="country-option-left">
+            <span class="country-flag">${getFlagEmoji(c.iata)}</span>
+            <span style="font-weight: 600;">${c.name}</span>
+            <span class="country-iata-badge">${c.iata}</span>
+          </div>
+          <span class="country-zone-badge">${c.iata === 'US' ? 'Cột US5' : 'Zone ' + (c.wxs || c.xpd || 0)}</span>
+        </div>
+      `).join('');
+    }
+
+    function selectCountry(iata) {
+      const country = COUNTRIES.find(c => c.iata === iata);
+      if (!country) return;
+      selectedCountry = country;
+      document.getElementById('destCountryDisplay').value = `${getFlagEmoji(country.iata)} ${country.name} (${country.iata})`;
+      toggleCountryDropdown(false);
+      recalculateMetrics();
+    }
+
+    function getFlagEmoji(iata) {
+      if (!iata || iata.length !== 2) return '🌐';
+      const codePoints = iata
+        .toUpperCase()
+        .split('')
+        .map(char => 127397 + char.charCodeAt(0));
+      return String.fromCodePoint(...codePoints);
+    }
+
+    // Render Pieces
+    function renderPieces() {
+      const container = document.getElementById('piecesContainer');
+      container.innerHTML = pieces.map((p, index) => {
+        const inLen = (p.len * 0.393701).toFixed(2);
+        const inWid = (p.wid * 0.393701).toFixed(2);
+        const inHei = (p.hei * 0.393701).toFixed(2);
+        const lbWeight = (p.weight * 2.20462).toFixed(2);
+
+        return `
+          <div class="piece-row" id="pieceRow_${p.id}">
+            <div class="piece-cell">
+              <input type="number" min="1" max="99" class="cell-input" value="${p.qty}" oninput="updatePieceField(${p.id}, 'qty', this.value)" placeholder="SL">
+            </div>
+
+            <div class="piece-cell">
+              <select class="cell-input" onchange="updatePieceField(${p.id}, 'type', this.value)">
+                <option value="Carton" ${p.type === 'Carton' ? 'selected' : ''}>Carton</option>
+                <option value="Thùng gỗ" ${p.type === 'Thùng gỗ' ? 'selected' : ''}>Thùng gỗ</option>
+                <option value="Pallet" ${p.type === 'Pallet' ? 'selected' : ''}>Pallet</option>
+                <option value="Envelope" ${p.type === 'Envelope' ? 'selected' : ''}>Envelope</option>
+              </select>
+            </div>
+
+            <div class="piece-cell">
+              <input type="number" step="0.5" min="1" class="cell-input" value="${p.len}" placeholder="Dài" oninput="updatePieceField(${p.id}, 'len', this.value)">
+              <span class="cell-unit-convert">= ${inLen} in</span>
+            </div>
+
+            <div class="piece-cell">
+              <input type="number" step="0.5" min="1" class="cell-input" value="${p.wid}" placeholder="Rộng" oninput="updatePieceField(${p.id}, 'wid', this.value)">
+              <span class="cell-unit-convert">= ${inWid} in</span>
+            </div>
+
+            <div class="piece-cell">
+              <input type="number" step="0.5" min="1" class="cell-input" value="${p.hei}" placeholder="Cao" oninput="updatePieceField(${p.id}, 'hei', this.value)">
+              <span class="cell-unit-convert">= ${inHei} in</span>
+            </div>
+
+            <div class="piece-cell">
+              <input type="number" step="0.1" min="0.1" class="cell-input" value="${p.weight}" placeholder="Nặng" oninput="updatePieceField(${p.id}, 'weight', this.value)">
+              <span class="cell-unit-convert">= ${lbWeight} lb</span>
+            </div>
+
+            <div class="piece-cell">
+              <button type="button" class="btn-delete-piece" onclick="removePiece(${p.id})" title="Xóa kiện">
+                <i class="ph-bold ph-x"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function addNewPiece() {
+      const newPiece = {
+        id: pieceIdCounter++,
+        qty: 1,
+        type: 'Carton',
+        len: 30,
+        wid: 20,
+        hei: 15,
+        weight: 2.0
+      };
+      pieces.push(newPiece);
+      renderPieces();
+      recalculateMetrics();
+
+      // Anime.js spring addition
+      if (window.anime) {
+        anime({
+          targets: `#pieceRow_${newPiece.id}`,
+          opacity: [0, 1],
+          translateY: [20, 0],
+          duration: 400,
+          easing: 'spring(1, 80, 10, 0)'
+        });
+      }
+    }
+
+    function removePiece(id) {
+      if (pieces.length <= 1) {
+        alert('Lô hàng phải có tối thiểu 1 kiện.');
+        return;
+      }
+      pieces = pieces.filter(p => p.id !== id);
+      renderPieces();
+      recalculateMetrics();
+    }
+
+    function updatePieceField(id, field, value) {
+      const p = pieces.find(x => x.id === id);
+      if (!p) return;
+      if (field === 'type') {
+        p.type = value;
+      } else {
+        p[field] = parseFloat(value) || 0;
+      }
+      renderPieces();
+      recalculateMetrics();
+    }
+
+    // Calculation Engine
+    function recalculateMetrics() {
+      let totalPieces = 0;
+      let totalActual = 0;
+      let totalDim = 0;
+
+      pieces.forEach(p => {
+        const qty = p.qty || 1;
+        totalPieces += qty;
+        totalActual += (p.weight || 0) * qty;
+        const dimPerPiece = ((p.len || 0) * (p.wid || 0) * (p.hei || 0)) / 5500;
+        totalDim += dimPerPiece * qty;
+      });
+
+      const unroundedChargeable = Math.max(totalActual, totalDim);
+      let chargeable = Math.ceil(unroundedChargeable / 0.5) * 0.5;
+      if (chargeable < 0.5) chargeable = 0.5;
+
+      document.getElementById('totalPiecesVal').innerText = `${totalPieces} kiện`;
+      document.getElementById('totalActualWeightVal').innerText = `${totalActual.toFixed(2)} kg`;
+      document.getElementById('totalDimWeightVal').innerText = `${totalDim.toFixed(2)} kg`;
+      document.getElementById('chargeableWeightVal').innerText = `${chargeable.toFixed(2)} kg`;
+
+      return {
+        totalPieces,
+        totalActual,
+        totalDim,
+        chargeable
+      };
+    }
+
+    // Tra cứu cước theo biểu giá Excel
+    function lookupRate(serviceCode, shipmentType, weight, zoneVal) {
+      const zoneKey = selectedCountry.iata === 'US' ? 'US5' : String(zoneVal);
+
+      if (serviceCode === 'WXS') {
+        if (shipmentType === 'document') {
+          if (weight > 5.0) return { price: null, error: 'Tài liệu chỉ áp dụng đến 5.0kg' };
+          for (let r of RATE_TABLES.doc_rates) {
+            const lbl = r.weight_label;
+            if (lbl === 'UPS Envelope' && weight <= 0.5) {
+              return { price: r.rates[zoneKey], unit: 'flat' };
+            }
+            if (parseFloat(lbl) === weight || (weight <= 0.5 && lbl === '0.5')) {
+              return { price: r.rates[zoneKey], unit: 'flat' };
+            }
+          }
+        } else {
+          // Non-document
+          if (weight <= 20.0) {
+            for (let r of RATE_TABLES.nondoc_rates) {
+              if (parseFloat(r.weight_label) === weight) {
+                return { price: r.rates[zoneKey], unit: 'flat' };
+              }
+            }
+          } else {
+            // Bracket
+            for (let r of RATE_TABLES.nondoc_rates) {
+              const lbl = r.weight_label;
+              if (lbl.includes('-')) {
+                const [minW, maxW] = lbl.split('-').map(Number);
+                if (weight >= minW && weight <= maxW) {
+                  return { price: r.rates[zoneKey] * weight, unit: 'per_kg', ratePerKg: r.rates[zoneKey] };
+                }
+              } else if (lbl.startsWith('>') && weight >= 1000) {
+                return { price: r.rates[zoneKey] * weight, unit: 'per_kg', ratePerKg: r.rates[zoneKey] };
+              }
+            }
+          }
+        }
+      } else if (serviceCode === 'XPD') {
+        if (weight <= 20.0) {
+          for (let r of RATE_TABLES.xpd_rates) {
+            if (parseFloat(r.weight_label) === weight) {
+              return { price: r.rates[zoneKey], unit: 'flat' };
+            }
+          }
+        } else {
+          for (let r of RATE_TABLES.xpd_rates) {
+            const lbl = r.weight_label;
+            if (lbl.includes('-')) {
+              const [minW, maxW] = lbl.split('-').map(Number);
+              if (weight >= minW && weight <= maxW) {
+                return { price: r.rates[zoneKey] * weight, unit: 'per_kg', ratePerKg: r.rates[zoneKey] };
+              }
+            } else if (lbl.startsWith('>') && weight >= 1000) {
+              return { price: r.rates[zoneKey] * weight, unit: 'per_kg', ratePerKg: r.rates[zoneKey] };
+            }
+          }
+        }
+      } else if (serviceCode === 'WFM') {
+        const minRow = RATE_TABLES.wfm_rates.find(r => r.weight_label === 'Minimum');
+        const minPrice = minRow ? minRow.rates[zoneKey] : 0;
+        
+        for (let r of RATE_TABLES.wfm_rates) {
+          const lbl = r.weight_label;
+          if (lbl.includes('-')) {
+            const [minW, maxW] = lbl.split('-').map(Number);
+            if (weight >= minW && weight <= maxW) {
+              const calcP = r.rates[zoneKey] * weight;
+              return { price: Math.max(minPrice, calcP), unit: 'per_kg', ratePerKg: r.rates[zoneKey] };
+            }
+          } else if (lbl.startsWith('>') && weight >= 1000) {
+            return { price: Math.max(minPrice, r.rates[zoneKey] * weight), unit: 'per_kg', ratePerKg: r.rates[zoneKey] };
+          }
+        }
+        return { price: minPrice, unit: 'minimum' };
+      }
+
+      return { price: null, error: 'Tuyến đường không hỗ trợ dịch vụ này' };
+    }
+
+    // Calculation Execution
+    function performCalculation() {
+      const metrics = recalculateMetrics();
+      const weight = metrics.chargeable;
+      const c = selectedCountry;
+
+      // Update Ribbon
+      const originSelect = document.getElementById('originCity');
+      const originName = originSelect.options[originSelect.selectedIndex].text;
+      document.getElementById('ribbonOrigin').innerText = originName;
+      document.getElementById('ribbonDest').innerText = `${getFlagEmoji(c.iata)} ${c.name} (${c.iata})`;
+      document.getElementById('ribbonTypePill').innerHTML = currentShipmentType === 'document' ? '<i class="ph ph-file-text"></i> Tài liệu (Document)' : '<i class="ph ph-package"></i> Hàng hóa (Non-doc)';
+      document.getElementById('ribbonZonePill').innerHTML = `<i class="ph ph-map-pin"></i> ${c.iata === 'US' ? 'Cột giá riêng US5' : 'Zone ' + (c.wxs || c.xpd || 1)}`;
+      document.getElementById('ribbonWeightPill').innerHTML = `<i class="ph-bold ph-scales"></i> Tính cước: ${weight.toFixed(1)} kg`;
+
+      // Calculate each service
+      const services = [
+        {
+          code: 'WXS',
+          name: 'Worldwide Express Saver',
+          badge: 'Giao siêu tốc 1 - 3 ngày',
+          tagClass: 'tag-fast',
+          isRecommended: true,
+          zone: c.wxs,
+          transitDays: '1 - 3 ngày làm việc',
+          icon: 'ph-airplane-tilt',
+          calc: lookupRate('WXS', currentShipmentType, weight, c.wxs)
+        },
+        {
+          code: 'XPD',
+          name: 'Expedited',
+          badge: 'Tiết kiệm chi phí 3 - 5 ngày',
+          tagClass: 'tag-saving',
+          isRecommended: false,
+          zone: c.xpd,
+          transitDays: '3 - 5 ngày làm việc',
+          icon: 'ph-truck',
+          calc: lookupRate('XPD', currentShipmentType, weight, c.xpd)
+        },
+        {
+          code: 'WFM',
+          name: 'Worldwide Express Freight',
+          badge: 'Hàng nặng & Pallet (>70kg)',
+          tagClass: 'tag-freight',
+          isRecommended: false,
+          zone: c.wfm,
+          transitDays: '1 - 3 ngày làm việc',
+          icon: 'ph-forklift',
+          calc: lookupRate('WFM', currentShipmentType, weight, c.wfm)
+        }
+      ];
+
+      // Render Cards
+      const cardsGrid = document.getElementById('serviceCardsGrid');
+      cardsGrid.innerHTML = services.map(s => {
+        const hasRate = s.zone > 0 && s.calc.price !== null;
+        const formattedPrice = hasRate ? new Intl.NumberFormat('vi-VN').format(s.calc.price) : 'Liên hệ';
+        const priceDisplayClass = hasRate ? 'highlight' : '';
+
+        return `
+          <div class="service-card ${s.isRecommended ? 'recommended' : ''}">
+            <span class="card-top-tag ${s.tagClass}">${s.badge}</span>
+
+            <div>
+              <div class="carrier-header">
+                <div class="carrier-logo-box">
+                  <i class="ph-bold ${s.icon}"></i>
+                </div>
+                <div class="carrier-info">
+                  <div class="carrier-name">${s.name}</div>
+                  <div class="service-code">UPS ${s.code} · Điểm đến: ${c.name}</div>
+                </div>
+              </div>
+
+              <div class="card-meta-list">
+                <div class="meta-row">
+                  <span class="meta-lbl">Thời gian dự kiến</span>
+                  <span class="meta-val">${s.transitDays}</span>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-lbl">Cân nặng</span>
+                  <span class="meta-val">${weight.toFixed(2)} kg</span>
+                </div>
+                <div class="meta-row">
+                  <span class="meta-lbl">Nước đến</span>
+                  <span class="meta-val">${c.name}</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="price-box">
+                <div class="price-label">Tạm tính:</div>
+                <div class="price-amount ${priceDisplayClass}" id="priceAmount_${s.code}">
+                  ${formattedPrice} ${hasRate ? '<span class="price-currency">VND</span>' : ''}
+                </div>
+                <div class="price-notes">Giá chưa gồm VAT &amp; Phụ phí nhiên liệu FSC</div>
+              </div>
+
+              <button type="button" class="btn-card-action ${s.isRecommended ? 'btn-action-gold' : 'btn-action-outline'}" onclick="openBookingModal('${s.name}')">
+                LIÊN HỆ
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Show Result Section with Anime.js
+      const resultSec = document.getElementById('resultSection');
+      resultSec.style.display = 'block';
+
+      if (window.anime) {
+        anime({
+          targets: resultSec,
+          opacity: [0, 1],
+          translateY: [30, 0],
+          duration: 600,
+          easing: 'easeOutCubic'
+        });
+
+        anime({
+          targets: '.service-card',
+          opacity: [0, 1],
+          translateY: [20, 0],
+          delay: anime.stagger(120),
+          duration: 500,
+          easing: 'easeOutQuad'
+        });
+      } else {
+        resultSec.style.opacity = '1';
+      }
+
+      // Scroll to results smoothly
+      resultSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Modals Handling
+    function openBreakdownModal() {
+      const metrics = recalculateMetrics();
+      const list = document.getElementById('breakdownList');
+      list.innerHTML = pieces.map((p, idx) => {
+        const dimKg = ((p.len * p.wid * p.hei) / 5500) * p.qty;
+        const actKg = p.weight * p.qty;
+        return `
+          <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-weight: 700; color: #0F172A;">Kiện #${idx + 1}: ${p.qty} x ${p.type} (${p.len} x ${p.wid} x ${p.hei} cm)</div>
+              <div style="font-size: 12px; color: #64748B;">Cân thực: ${actKg.toFixed(2)} kg | Cân thể tích: ${dimKg.toFixed(2)} kg</div>
+            </div>
+            <div style="font-weight: 800; color: #CE2027;">
+              ${Math.max(actKg, dimKg).toFixed(2)} kg
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('modalTotalChargeable').innerText = `${metrics.chargeable.toFixed(1)} kg`;
+      document.getElementById('breakdownModal').classList.add('open');
+    }
+
+    function openBookingModal(serviceName = '') {
+      document.getElementById('bookingModal').classList.add('open');
+    }
+
+    function closeModals() {
+      document.getElementById('breakdownModal').classList.remove('open');
+      document.getElementById('bookingModal').classList.remove('open');
+    }
+
+    function handleBookingSubmit(e) {
+      e.preventDefault();
+      alert('Cảm ơn bạn! Chuyên viên Allship Logistics đã nhận thông tin và sẽ liên hệ ngay.');
+      closeModals();
+    }
+  </script>
+</body>
+</html>

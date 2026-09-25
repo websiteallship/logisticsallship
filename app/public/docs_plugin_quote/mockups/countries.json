@@ -1,0 +1,1745 @@
+[
+  {
+    "iata": "AF",
+    "name": "Afghanistan",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "AX",
+    "name": "Aland Island (Finland)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "AL",
+    "name": "Albania",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "DZ",
+    "name": "Algeria",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "AS",
+    "name": "American Samoa",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "AD",
+    "name": "Andorra",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "AO",
+    "name": "Angola",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "AI",
+    "name": "Anguilla",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "AG",
+    "name": "Antigua and Barbuda",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "AR",
+    "name": "Argentina*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "AM",
+    "name": "Armenia",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "AW",
+    "name": "Aruba",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "AU",
+    "name": "Australia*#",
+    "wxs": 3,
+    "xpd": 3,
+    "wfm": 3
+  },
+  {
+    "iata": "AT",
+    "name": "Austria*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 6
+  },
+  {
+    "iata": "AZ",
+    "name": "Azerbaijan",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "A2",
+    "name": "Azores (Portugal)*",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "BS",
+    "name": "Bahamas*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "BH",
+    "name": "Bahrain",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "BD",
+    "name": "Bangladesh",
+    "wxs": 4,
+    "xpd": 4,
+    "wfm": 0
+  },
+  {
+    "iata": "BB",
+    "name": "Barbados",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "BY",
+    "name": "Belarus*",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "BE",
+    "name": "Belgium",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 6
+  },
+  {
+    "iata": "BZ",
+    "name": "Belize",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "BJ",
+    "name": "Benin",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "BM",
+    "name": "Bermuda",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "BT",
+    "name": "Bhutan",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "BO",
+    "name": "Bolivia",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "BQ",
+    "name": "Bonaire, St. Eustatius, Saba",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "BA",
+    "name": "Bosnia and Herzegovina",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "BW",
+    "name": "Botswana",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "BR",
+    "name": "Brazil*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "VG",
+    "name": "British Virgin Islands",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "BN",
+    "name": "Brunei*",
+    "wxs": 2,
+    "xpd": 2,
+    "wfm": 0
+  },
+  {
+    "iata": "B1",
+    "name": "Buesingen (Germany)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "BG",
+    "name": "Bulgaria",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "BF",
+    "name": "Burkina Faso",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "BI",
+    "name": "Burundi",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "KH",
+    "name": "Cambodia*",
+    "wxs": 3,
+    "xpd": 3,
+    "wfm": 0
+  },
+  {
+    "iata": "CM",
+    "name": "Cameroon",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "C3",
+    "name": "Campione/ Lake Lugano (Italy)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "CA",
+    "name": "Canada*",
+    "wxs": 5,
+    "xpd": 5,
+    "wfm": 5
+  },
+  {
+    "iata": "IC",
+    "name": "Canary Islands (Spain)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "CV",
+    "name": "Cape Verde",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "KY",
+    "name": "Cayman Islands",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "CF",
+    "name": "Central African Republic",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "C2",
+    "name": "Ceuta (Spain)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "TD",
+    "name": "Chad",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "CL",
+    "name": "Chile*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 8
+  },
+  {
+    "iata": "CNN",
+    "name": "China Mainland (Excluding Southern China Mainland)*#",
+    "wxs": 3,
+    "xpd": 3,
+    "wfm": 0
+  },
+  {
+    "iata": "CO",
+    "name": "Colombia*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "KM",
+    "name": "Comoros",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "CD",
+    "name": "Congo, Democratic Republic of",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "CG",
+    "name": "Congo, Republic of",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "CK",
+    "name": "Cook Islands",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "CR",
+    "name": "Costa Rica*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 8
+  },
+  {
+    "iata": "CI",
+    "name": "Cote d'Ivoire (Ivory Coast)",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "HR",
+    "name": "Croatia*",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "CU",
+    "name": "Cuba",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "CW",
+    "name": "Curacao",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "CY",
+    "name": "Cyprus",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "CZ",
+    "name": "Czech Republic*",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 7
+  },
+  {
+    "iata": "DK",
+    "name": "Denmark*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 6
+  },
+  {
+    "iata": "DJ",
+    "name": "Djibouti",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "DM",
+    "name": "Dominica",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "DO",
+    "name": "Dominican Republic*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "EC",
+    "name": "Ecuador*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "EG",
+    "name": "Egypt",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "SV",
+    "name": "El Salvador*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "EN",
+    "name": "England (United Kingdom)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "GQ",
+    "name": "Equatorial Guinea",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "ER",
+    "name": "Eritrea",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "EE",
+    "name": "Estonia",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "ET",
+    "name": "Ethiopia",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "FO",
+    "name": "Faroe Islands",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "FJ",
+    "name": "Fiji",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "FI",
+    "name": "Finland*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 6
+  },
+  {
+    "iata": "FR",
+    "name": "France*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 6
+  },
+  {
+    "iata": "GF",
+    "name": "French Guiana",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "PF",
+    "name": "French Polynesia",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "GA",
+    "name": "Gabon",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "GM",
+    "name": "Gambia",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "GE",
+    "name": "Georgia*",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "DE",
+    "name": "Germany*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 6
+  },
+  {
+    "iata": "GH",
+    "name": "Ghana",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "GI",
+    "name": "Gibraltar",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "GR",
+    "name": "Greece*",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 7
+  },
+  {
+    "iata": "GL",
+    "name": "Greenland",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "GD",
+    "name": "Grenada",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "GP",
+    "name": "Guadeloupe*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "GU",
+    "name": "Guam",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "GT",
+    "name": "Guatemala*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "GG",
+    "name": "Guernsey (Channel Islands)",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "GN",
+    "name": "Guinea",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "GW",
+    "name": "Guinea-Bissau",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "GY",
+    "name": "Guyana*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "HT",
+    "name": "Haiti*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "H1",
+    "name": "Heligoland (Germany)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "HN",
+    "name": "Honduras*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "HK",
+    "name": "Hong Kong SAR, China#",
+    "wxs": 1,
+    "xpd": 1,
+    "wfm": 1
+  },
+  {
+    "iata": "HU",
+    "name": "Hungary*",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 7
+  },
+  {
+    "iata": "IS",
+    "name": "Iceland",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "IN",
+    "name": "India*",
+    "wxs": 4,
+    "xpd": 4,
+    "wfm": 4
+  },
+  {
+    "iata": "ID",
+    "name": "Indonesia*#",
+    "wxs": 2,
+    "xpd": 2,
+    "wfm": 0
+  },
+  {
+    "iata": "IQ",
+    "name": "Iraq",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "IE",
+    "name": "Ireland",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 6
+  },
+  {
+    "iata": "IL",
+    "name": "Israel",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 9
+  },
+  {
+    "iata": "IT",
+    "name": "Italy*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 6
+  },
+  {
+    "iata": "JM",
+    "name": "Jamaica*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "JP",
+    "name": "Japan*#",
+    "wxs": 3,
+    "xpd": 3,
+    "wfm": 3
+  },
+  {
+    "iata": "JE",
+    "name": "Jersey (Channel Islands)",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "JO",
+    "name": "Jordan",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "KZ",
+    "name": "Kazakhstan*",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "KE",
+    "name": "Kenya",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "KI",
+    "name": "Kiribati",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "KR",
+    "name": "Korea, South#",
+    "wxs": 3,
+    "xpd": 3,
+    "wfm": 3
+  },
+  {
+    "iata": "KV",
+    "name": "Kosovo",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "KO",
+    "name": "Kosrae (Micronesia, Federated States of)",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "KW",
+    "name": "Kuwait",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 7
+  },
+  {
+    "iata": "KG",
+    "name": "Kyrgyzstan",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "LA",
+    "name": "Laos",
+    "wxs": 3,
+    "xpd": 3,
+    "wfm": 0
+  },
+  {
+    "iata": "LV",
+    "name": "Latvia",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "LB",
+    "name": "Lebanon",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "LS",
+    "name": "Lesotho",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "LR",
+    "name": "Liberia",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "LY",
+    "name": "Libyan Arab Jamahiriya",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "LI",
+    "name": "Liechtenstein*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "LT",
+    "name": "Lithuania",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "L1",
+    "name": "Livigno (Italy)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "LU",
+    "name": "Luxembourg",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "MO",
+    "name": "Macau SAR, China#",
+    "wxs": 2,
+    "xpd": 2,
+    "wfm": 0
+  },
+  {
+    "iata": "MG",
+    "name": "Madagascar",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "M3",
+    "name": "Madeira (Portugal)*",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "MW",
+    "name": "Malawi",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "MY",
+    "name": "Malaysia*#",
+    "wxs": 2,
+    "xpd": 2,
+    "wfm": 2
+  },
+  {
+    "iata": "MV",
+    "name": "Maldives",
+    "wxs": 4,
+    "xpd": 4,
+    "wfm": 0
+  },
+  {
+    "iata": "ML",
+    "name": "Mali",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "MT",
+    "name": "Malta",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "MH",
+    "name": "Marshall Islands",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "MQ",
+    "name": "Martinique",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "MR",
+    "name": "Mauritania",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "MU",
+    "name": "Mauritius",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "YT",
+    "name": "Mayotte",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "M1",
+    "name": "Melilla (Spain)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "MX",
+    "name": "Mexico*",
+    "wxs": 5,
+    "xpd": 5,
+    "wfm": 5
+  },
+  {
+    "iata": "FM",
+    "name": "Micronesia, Federated States of",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "MD",
+    "name": "Moldova*",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "MC",
+    "name": "Monaco*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "MN",
+    "name": "Mongolia",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "ME",
+    "name": "Montenegro",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "MS",
+    "name": "Montserrat",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "MA",
+    "name": "Morocco",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "M2",
+    "name": "Mount Athos (Greece)*",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "MZ",
+    "name": "Mozambique",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "MM",
+    "name": "Myanmar",
+    "wxs": 3,
+    "xpd": 3,
+    "wfm": 0
+  },
+  {
+    "iata": "NA",
+    "name": "Namibia",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "NP",
+    "name": "Nepal*",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "NL",
+    "name": "Netherlands (Holland)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 6
+  },
+  {
+    "iata": "NC",
+    "name": "New Caledonia",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "NZ",
+    "name": "New Zealand*",
+    "wxs": 3,
+    "xpd": 3,
+    "wfm": 0
+  },
+  {
+    "iata": "NI",
+    "name": "Nicaragua",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "NE",
+    "name": "Niger",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "NG",
+    "name": "Nigeria*",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "NF",
+    "name": "Norfolk Island (Australia)*",
+    "wxs": 3,
+    "xpd": 3,
+    "wfm": 0
+  },
+  {
+    "iata": "MK",
+    "name": "North Macedonia",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "NB",
+    "name": "Northern Ireland (United Kingdom)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "MP",
+    "name": "Northern Mariana Islands*",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "NO",
+    "name": "Norway*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "OM",
+    "name": "Oman",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "PK",
+    "name": "Pakistan*",
+    "wxs": 4,
+    "xpd": 4,
+    "wfm": 0
+  },
+  {
+    "iata": "PW",
+    "name": "Palau",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "PA",
+    "name": "Panama*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "PG",
+    "name": "Papua New Guinea",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "PY",
+    "name": "Paraguay",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "PE",
+    "name": "Peru*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "PH",
+    "name": "Philippines*#",
+    "wxs": 2,
+    "xpd": 2,
+    "wfm": 0
+  },
+  {
+    "iata": "PL",
+    "name": "Poland*",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 7
+  },
+  {
+    "iata": "PO",
+    "name": "Ponape (Micronesia, Federated States of)",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "PT",
+    "name": "Portugal*",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 7
+  },
+  {
+    "iata": "PR",
+    "name": "Puerto Rico*",
+    "wxs": 5,
+    "xpd": 5,
+    "wfm": 5
+  },
+  {
+    "iata": "QA",
+    "name": "Qatar",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "RE",
+    "name": "Reunion",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "RO",
+    "name": "Romania",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "RT",
+    "name": "Rota (Northern Mariana Islands)*",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "RU",
+    "name": "Russia*",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "RW",
+    "name": "Rwanda",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "SP",
+    "name": "Saipan (Northern Mariana Islands)*",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "WS",
+    "name": "Samoa",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "SM",
+    "name": "San Marino",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "ST",
+    "name": "Sao Tome and Principe",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "SA",
+    "name": "Saudi Arabia",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "SF",
+    "name": "Scotland (United Kingdom)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "SN",
+    "name": "Senegal",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "RS",
+    "name": "Serbia",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "SC",
+    "name": "Seychelles",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "SL",
+    "name": "Sierra Leone",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "SG",
+    "name": "Singapore#",
+    "wxs": 1,
+    "xpd": 1,
+    "wfm": 0
+  },
+  {
+    "iata": "SK",
+    "name": "Slovakia",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "SI",
+    "name": "Slovenia",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 7
+  },
+  {
+    "iata": "SB",
+    "name": "Solomon Islands",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "ZA",
+    "name": "South Africa*",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "CNS",
+    "name": "Southern China Mainland+*#",
+    "wxs": 10,
+    "xpd": 10,
+    "wfm": 0
+  },
+  {
+    "iata": "ES",
+    "name": "Spain*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 6
+  },
+  {
+    "iata": "LK",
+    "name": "Sri Lanka*",
+    "wxs": 4,
+    "xpd": 4,
+    "wfm": 0
+  },
+  {
+    "iata": "BL",
+    "name": "St. Barthelemy",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "SW",
+    "name": "St. Christopher (St. Kitts)",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "UV",
+    "name": "St. John (U.S. Virgin Islands)",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "KN",
+    "name": "St. Kitts and Nevis",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "LC",
+    "name": "St. Lucia",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "SX",
+    "name": "St. Maarten, St. Martin",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "VL",
+    "name": "St. Thomas (U.S. Virgin Islands)",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "VC",
+    "name": "St. Vincent & the Grenadines",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "SR",
+    "name": "Suriname",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "SZ",
+    "name": "Swaziland",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "SE",
+    "name": "Sweden*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 6
+  },
+  {
+    "iata": "CH",
+    "name": "Switzerland*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 6
+  },
+  {
+    "iata": "TA",
+    "name": "Tahiti (French Polynesia)",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "TW",
+    "name": "Taiwan, China*#",
+    "wxs": 3,
+    "xpd": 3,
+    "wfm": 3
+  },
+  {
+    "iata": "TJ",
+    "name": "Tajikistan",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "TZ",
+    "name": "Tanzania",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "TH",
+    "name": "Thailand*#",
+    "wxs": 1,
+    "xpd": 1,
+    "wfm": 0
+  },
+  {
+    "iata": "TL",
+    "name": "Timor-Leste",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "TI",
+    "name": "Tinian (Northern Mariana Islands)*",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "TG",
+    "name": "Togo",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "TO",
+    "name": "Tonga",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "TT",
+    "name": "Trinidad & Tobago*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "TU",
+    "name": "Truk (Micronesia, Federated States of)",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "TN",
+    "name": "Tunisia",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "TR",
+    "name": "Turkey",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 7
+  },
+  {
+    "iata": "TM",
+    "name": "Turkmenistan",
+    "wxs": 9,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "TC",
+    "name": "Turks & Caicos Islands",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "TV",
+    "name": "Tuvalu",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "VI",
+    "name": "U.S. Virgin Islands",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "UG",
+    "name": "Uganda",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "UA",
+    "name": "Ukraine*",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 0
+  },
+  {
+    "iata": "UI",
+    "name": "Union Islands (St. Vincent & the Grenadines)",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "AE",
+    "name": "United Arab Emirates",
+    "wxs": 7,
+    "xpd": 7,
+    "wfm": 7
+  },
+  {
+    "iata": "GB",
+    "name": "United Kingdom*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 6
+  },
+  {
+    "iata": "US",
+    "name": "United States*",
+    "wxs": 5,
+    "xpd": 5,
+    "wfm": 5
+  },
+  {
+    "iata": "UY",
+    "name": "Uruguay",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "UZ",
+    "name": "Uzbekistan",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "VU",
+    "name": "Vanuatu",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "VA",
+    "name": "Vatican City (Italy)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "VE",
+    "name": "Venezuela*",
+    "wxs": 8,
+    "xpd": 8,
+    "wfm": 0
+  },
+  {
+    "iata": "WL",
+    "name": "Wales (United Kingdom)*",
+    "wxs": 6,
+    "xpd": 6,
+    "wfm": 0
+  },
+  {
+    "iata": "WF",
+    "name": "Wallis & Futuna Islands",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "YA",
+    "name": "Yap (Micronesia, Federated States of)",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "YE",
+    "name": "Yemen, Republic of",
+    "wxs": 0,
+    "xpd": 0,
+    "wfm": 0
+  },
+  {
+    "iata": "ZM",
+    "name": "Zambia",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  },
+  {
+    "iata": "ZW",
+    "name": "Zimbabwe",
+    "wxs": 9,
+    "xpd": 9,
+    "wfm": 0
+  }
+]
