@@ -870,9 +870,9 @@ assert($r->base_price_vnd > 0);
 - `10-frontend-tech-spec.md` § 2 — API contract, request/response samples
 
 **Tasks**:
-- [ ] Tạo `includes/class-rest-controller.php`.
-- [ ] Register routes: `POST /calculate`, `POST /lead`, `GET /countries`, `GET /services`, `GET /directions`.
-- [ ] `/services` nhận query param `direction` (default `export`), trả về **đầy đủ 6 services** với metadata phù hợp V4:
+- [x] Tạo `includes/class-rest-controller.php`.
+- [x] Register routes: `POST /calculate`, `POST /lead`, `GET /countries`, `GET /services`, `GET /directions`.
+- [x] `/services` nhận query param `direction` (default `export`), trả về **đầy đủ 6 services** với metadata phù hợp V4:
   ```json
   {
     "code": "WXS",
@@ -890,12 +890,12 @@ assert($r->base_price_vnd > 0);
     "badge_color": "amber"
   }
   ```
-- [ ] `/directions` trả về chiều vận chuyển khả dụng từ `Service_Availability_Manager`.
-- [ ] `/calculate` nhận field `direction` (default `export`), dùng `resolve_rate_group()` để xác định rate_group.
-- [ ] Input validation với WP REST `args` schema.
-- [ ] `service_code` enum: `['EXW', 'XPR', 'WXS', 'XPD', 'WXP', 'WFM']`.
-- [ ] Sanitize: `sanitize_text_field()`, `absint()`, `floatval()`.
-- [ ] Ghi log vào `ups_quote_logs` kèm đầy đủ address fields.
+- [x] `/directions` trả về chiều vận chuyển khả dụng từ `Service_Availability_Manager`.
+- [x] `/calculate` nhận field `direction` (default `export`), dùng `resolve_rate_group()` để xác định rate_group.
+- [x] Input validation với WP REST `args` schema.
+- [x] `service_code` enum: `['EXW', 'XPR', 'WXS', 'XPD', 'WXP', 'WFM']`.
+- [x] Sanitize: `sanitize_text_field()`, `absint()`, `floatval()`.
+- [x] Ghi log vào `ups_quote_logs` kèm đầy đủ address fields.
 
 🧪 **Tests Step 4.1**:
 ```bash
@@ -936,10 +936,10 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - `12-theme-integration.md` § 5 — Plugin enqueue, dependency
 
 **Tasks**:
-- [ ] Tạo `includes/class-shortcode.php`.
-- [ ] Register `[ups_quote_form]`.
-- [ ] Chỉ enqueue assets khi shortcode xuất hiện.
-- [ ] `wp_localize_script()` inject `upsQuoteConfig`:
+- [x] Tạo `includes/class-shortcode.php`.
+- [x] Register `[ups_quote_form]`.
+- [x] Chỉ enqueue assets khi shortcode xuất hiện.
+- [x] `wp_localize_script()` inject `upsQuoteConfig`:
   ```json
   {
     "apiBase": "...",
@@ -952,15 +952,15 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
     "rounding_step": 0.5
   }
   ```
-- [ ] Enqueue `states_by_country.js` — static JSON cho destination address dropdowns.
-- [ ] Enqueue **Anime.js 3.2** CDN: `https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js`.
+- [x] Enqueue `states_by_country.js` — static JSON cho destination address dropdowns.
+- [x] Enqueue **Anime.js 3.2** CDN: `https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js`.
 
 🧪 **Tests Step 4.2**:
-- [ ] Visit page "Báo giá UPS" → CSS/JS loaded.
-- [ ] Visit homepage → CSS/JS NOT loaded.
-- [ ] `upsQuoteConfig` JS object available in browser console.
-- [ ] `window.anime` available (Anime.js loaded).
-- [ ] `STATES_BY_COUNTRY` global available (address data loaded).
+- [x] Visit page "Báo giá UPS" → CSS/JS loaded.
+- [x] Visit homepage → CSS/JS NOT loaded.
+- [x] `upsQuoteConfig` JS object available in browser console.
+- [x] `window.anime` available (Anime.js loaded).
+- [x] `STATES_BY_COUNTRY` global available (address data loaded).
 
 ---
 
@@ -984,8 +984,8 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - `service-selection-section-v4.html` — **Mockup V4 (nguồn truth cho UI)**
 
 **Tasks**:
-- [ ] Tạo `public/views/quote-form.php` kế thừa 100% từ mockup V4.
-- [ ] **8 sections chính** (theo V4):
+- [x] Tạo `public/views/quote-form.php` kế thừa 100% từ mockup V4.
+- [x] **8 sections chính** (theo V4):
 
   **Section 1 — Hero Header:**
   - Badge "Tính Cước UPS Tức Thì".
@@ -1074,12 +1074,12 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
     - Inline success message (không dùng alert popup).
 
 🧪 **Tests Step 4.3**:
-- [ ] HTML validates (no broken tags).
-- [ ] All 6 service cards render.
-- [ ] Category filter tabs filter services correctly.
-- [ ] Shipment type toggle shows/hides based on `data-doc-split`.
-- [ ] All ARIA attributes present.
-- [ ] All form labels linked to inputs.
+- [x] HTML validates (no broken tags).
+- [x] All 6 service cards render.
+- [x] Category filter tabs filter services correctly.
+- [x] Shipment type toggle shows/hides based on `data-doc-split`.
+- [x] All ARIA attributes present.
+- [x] All form labels linked to inputs.
 
 ---
 
@@ -1101,7 +1101,7 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - `service-selection-section-v4.html` — **Reference JS implementation**
 
 **Tasks**:
-- [ ] Tạo `public/assets/js/quote-form.js` với modules:
+- [x] Tạo `public/assets/js/quote-form.js` với modules:
 
   **A. SERVICE_REGISTRY (Client-side constant)**:
   ```javascript
@@ -1136,10 +1136,12 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
   - Popular countries pinned trên cùng: US, JP, KR, AU, CA, DE, GB, FR, SG, TW.
   - Zone display per service khi country selected.
 
-  **F. DestinationAddress (Giải pháp A — static JSON):**
-  - Load `STATES_BY_COUNTRY` data.
+  **F. DestinationAddress (Phương án 1 — Static JSON + Lazy Load Chunking cho 153.000+ thành phố):**
+  - Load `STATES_BY_COUNTRY` data (`states_by_country.js`).
+  - Phân mảnh dữ liệu 148.000+ thành phố thành 3.432 file JSON tĩnh theo Country-State (`public/assets/data/cities/{country}-{state}.json`).
   - Adaptive labels per country (State, Province, Prefecture, Bundesland...).
-  - State dropdown → City dropdown cascade.
+  - State dropdown → Lazy load chunked City JSON theo nhu cầu với Client-side cache và Instant Fallback cho top quốc gia.
+  - Tự động điền "Khác (nhập địa chỉ cụ thể bên dưới)..." khi không tìm thấy hoặc người dùng gõ tự do.
   - Zipcode + Address text inputs.
 
   **G. PieceManager:**
@@ -1182,18 +1184,18 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
   - Hiển thị: service name + price + "Đặt dịch vụ này" CTA.
 
 🧪 **Tests Step 4.4**:
-- [ ] No JS errors in console.
-- [ ] Country search: tiếng Việt + IATA + English.
-- [ ] Piece add/remove: metrics recalculate real-time.
-- [ ] Category filter tabs filter 6 service cards correctly.
-- [ ] Selecting service with `has_document_split` → shows shipment type toggle.
-- [ ] Selecting service without `has_document_split` → hides shipment type toggle.
-- [ ] Calculate → 6 services comparison rendered simultaneously.
-- [ ] "Giá tốt nhất" badge appears on cheapest service.
-- [ ] Services unavailable show "Liên hệ" / error message.
-- [ ] Mobile compact view: all 6 rows visible, select → updates sticky bar.
-- [ ] Pieces detail modal: correct breakdown per piece, KPI correct.
-- [ ] Booking modal: full address summary, submit → inline success.
+- [x] No JS errors in console.
+- [x] Country search: tiếng Việt + IATA + English.
+- [x] Piece add/remove: metrics recalculate real-time.
+- [x] Category filter tabs filter 6 service cards correctly.
+- [x] Selecting service with `has_document_split` → shows shipment type toggle.
+- [x] Selecting service without `has_document_split` → hides shipment type toggle.
+- [x] Calculate → 6 services comparison rendered simultaneously.
+- [x] "Giá tốt nhất" badge appears on cheapest service.
+- [x] Services unavailable show "Liên hệ" / error message.
+- [x] Mobile compact view: all 6 rows visible, select → updates sticky bar.
+- [x] Pieces detail modal: correct breakdown per piece, KPI correct.
+- [x] Booking modal: full address summary, submit → inline success.
 
 ---
 
@@ -1212,9 +1214,9 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - `12-theme-integration.md` § 2-4 — Design tokens, shapes, JS libraries
 
 **Tasks**:
-- [ ] Tạo `public/assets/css/quote-form.css`.
-- [ ] Color tokens, typography, shadows, responsive layouts, print styles.
-- [ ] **V4-specific CSS classes** (từ mockup):
+- [x] Tạo `public/assets/css/quote-form.css`.
+- [x] Color tokens, typography, shadows, responsive layouts, print styles.
+- [x] **V4-specific CSS classes** (từ mockup):
   - `.direction-pill-btn` — Direction selector card (active: white bg, shadow, brand-red icon box).
   - `.cat-filter-tab` — Category filter tab (active: navy-900 bg, white text).
   - `.service-card-item` — Service selection card (hover: translateY(-2px), active: brand-red border + gradient bg + check badge).
@@ -1232,15 +1234,15 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
   - `.spinner` — Loading spinner animation.
   - `.inline-error` — Form error display.
   - `#mobileStickyActionBar` — Sticky bottom bar (hidden default, `.is-active` on mobile).
-- [ ] Mobile responsive: `max-width: 768px` breakpoints for piece grid, headers, buttons.
-- [ ] Print styles.
+- [x] Mobile responsive: `max-width: 768px` breakpoints for piece grid, headers, buttons.
+- [x] Print styles.
 
 🧪 **Tests Step 4.5**:
-- [ ] Brand colors match theme (#CE2027).
-- [ ] Mobile 375px → no overflow.
-- [ ] Print → clean layout, no buttons/forms.
-- [ ] Color contrast ≥ 4.5:1.
-- [ ] All V4 CSS classes render correctly.
+- [x] Brand colors match theme (#CE2027).
+- [x] Mobile 375px → no overflow.
+- [x] Print → clean layout, no buttons/forms.
+- [x] Color contrast ≥ 4.5:1.
+- [x] All V4 CSS classes render correctly.
 
 ---
 
@@ -1250,30 +1252,30 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 
 | # | Check | Status |
 |---|-------|--------|
-| 1 | REST API `/calculate` với `direction` param returns correct JSON | ☐ |
-| 2 | REST API `/countries` returns 249 countries | ☐ |
-| 3 | REST API `/services?direction=export` returns **6 services** with full V4 metadata | ☐ |
-| 4 | REST API `/directions` returns available directions | ☐ |
-| 5 | Form renders correctly on "Báo giá UPS" page | ☐ |
-| 6 | Direction selector: ẩn khi chỉ 1 chiều, dynamic switch | ☐ |
-| 7 | **6 service cards** hiển thị đúng grid layout (2/3/6 cols responsive) | ☐ |
-| 8 | **Category filter tabs** (All/Parcel/Freight) filter cards correctly | ☐ |
-| 9 | has_document_split: Document/Non-doc toggle cho WXS/EXW/XPR | ☐ |
-| 10 | Country combobox: search tiếng Việt + IATA + popular pinned | ☐ |
-| 11 | Address fields: State dropdown → City dropdown adaptive | ☐ |
-| 12 | Piece table: add/remove + live metrics + mobile compact layout | ☐ |
-| 13 | Calculate: **6-service comparison** cards display (mobile compact + desktop full) | ☐ |
-| 14 | "Giá tốt nhất" badge on cheapest service | ☐ |
-| 15 | EXW=WXS×1.25, XPR=WXS×1.15, WXP=WFM×1.22 derived pricing correct | ☐ |
-| 16 | Mobile compact comparison list: radio selection → sticky bar update | ☐ |
-| 17 | Mobile view toggle: compact ↔ cards | ☐ |
-| 18 | Pieces detail modal: correct weight breakdown table + KPI | ☐ |
-| 19 | Booking modal: full address summary + submit + inline success | ☐ |
-| 20 | Mobile sticky bottom action bar: shows after result, updates on service change | ☐ |
-| 21 | Route summary ribbon: direction, service, route, weight, zone, type badges | ☐ |
-| 22 | Anime.js animations: result fade-in, form interactions | ☐ |
-| 23 | Mobile 375px responsive: no overflow | ☐ |
-| 24 | No JS console errors | ☐ |
+| 1 | REST API `/calculate` với `direction` param returns correct JSON | ☑ |
+| 2 | REST API `/countries` returns 249 countries | ☑ |
+| 3 | REST API `/services?direction=export` returns **6 services** with full V4 metadata | ☑ |
+| 4 | REST API `/directions` returns available directions | ☑ |
+| 5 | Form renders correctly on "Báo giá UPS" page | ☑ |
+| 6 | Direction selector: ẩn khi chỉ 1 chiều, dynamic switch | ☑ |
+| 7 | **6 service cards** hiển thị đúng grid layout (2/3/6 cols responsive) | ☑ |
+| 8 | **Category filter tabs** (All/Parcel/Freight) filter cards correctly | ☑ |
+| 9 | has_document_split: Document/Non-doc toggle cho WXS/EXW/XPR | ☑ |
+| 10 | Country combobox: search tiếng Việt + IATA + popular pinned | ☑ |
+| 11 | Address fields: State dropdown → City dropdown adaptive | ☑ |
+| 12 | Piece table: add/remove + live metrics + mobile compact layout | ☑ |
+| 13 | Calculate: **6-service comparison** cards display (mobile compact + desktop full) | ☑ |
+| 14 | "Giá tốt nhất" badge on cheapest service | ☑ |
+| 15 | EXW=WXS×1.25, XPR=WXS×1.15, WXP=WFM×1.22 derived pricing correct | ☑ |
+| 16 | Mobile compact comparison list: radio selection → sticky bar update | ☑ |
+| 17 | Mobile view toggle: compact ↔ cards | ☑ |
+| 18 | Pieces detail modal: correct weight breakdown table + KPI | ☑ |
+| 19 | Booking modal: full address summary + submit + inline success | ☑ |
+| 20 | Mobile sticky bottom action bar: shows after result, updates on service change | ☑ |
+| 21 | Route summary ribbon: direction, service, route, weight, zone, type badges | ☑ |
+| 22 | Anime.js animations: result fade-in, form interactions | ☑ |
+| 23 | Mobile 375px responsive: no overflow | ☑ |
+| 24 | No JS console errors | ☑ |
 
 ---
 

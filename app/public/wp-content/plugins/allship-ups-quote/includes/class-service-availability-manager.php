@@ -30,7 +30,10 @@ class Allship_UPS_Service_Availability_Manager {
 	 */
 	public function __construct( $rate_card_repo = null ) {
 		if ( null === $rate_card_repo ) {
-			$rate_card_repo = new Allship_UPS_Rate_Card_Repository();
+			if ( ! class_exists( 'Allship_UPS_Rate_Card_Repository' ) && file_exists( dirname( __FILE__ ) . '/class-rate-card-repository.php' ) ) {
+				require_once dirname( __FILE__ ) . '/class-rate-card-repository.php';
+			}
+			$rate_card_repo = class_exists( 'Allship_UPS_Rate_Card_Repository' ) ? new Allship_UPS_Rate_Card_Repository() : null;
 		}
 		$this->rate_card_repo = $rate_card_repo;
 	}
@@ -42,6 +45,10 @@ class Allship_UPS_Service_Availability_Manager {
 	 * @return array Array of direction strings, e.g. ['export', 'import'].
 	 */
 	public function get_available_directions( $rate_card_id = null ) {
+		if ( ! $this->rate_card_repo ) {
+			return [ 'export', 'import' ];
+		}
+
 		$card = $rate_card_id ? $this->rate_card_repo->get( $rate_card_id ) : $this->rate_card_repo->get_active();
 
 		if ( $card && ! empty( $card->enabled_directions_array ) ) {

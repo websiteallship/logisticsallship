@@ -197,3 +197,30 @@ price = max(minimum, rate_per_kg x chargeable_weight)
 ### Revisit trigger
 
 Nếu hợp đồng UPS quy định bracket là flat hoặc có công thức minimum khác.
+
+## ADR-008: Thin Client, On-demand States Chunks và Server-Side Batch Quote Calculation
+
+Status: Accepted
+
+### Context
+
+Trước đây, client nhúng nguyên bundle monolithic `states_by_country.js` (185KB) và dữ liệu localized script `upsQuoteConfig.countries` chứa các trường zone nội bộ của hãng (`wxs`, `xpd`, `wfm`). Điều này vừa làm phình dung lượng tải trang, vừa gây rò rỉ cấu trúc phân vùng nội bộ khi người dùng xem DevTools.
+
+### Decision
+
+1. **Zero-Leakage Data Sanitization**: Loại bỏ 100% các cột zone (`wxs`, `xpd`, `wfm`, `zone`) khỏi dữ liệu trả về cho frontend (`get_active_countries()`). Frontend chỉ nhận `{ iata_code, country_name }`. Mọi logic định tuyến zone được bảo vệ và xử lý tại backend.
+2. **On-Demand States Chunks**: Loại bỏ file monolithic 185KB `states_by_country.js`. Tách thành 196 file JSON độc lập theo quốc gia (`assets/data/states/{iata}.json`, 0.5KB - 1.6KB/file). Client tải on-demand qua `fetch()` khi user chọn quốc gia đích và cache vào memory (`stateChunkCache`).
+3. **Server-Side Batch Calculation**: Endpoint `POST /calculate` hỗ trợ `service_code: "ALL"`, tính toán toàn bộ các dịch vụ khả dụng trong 1 request duy nhất, trả về từ điển `services`.
+4. **Transient Cache Acceleration**: Lưu kết quả tính cước bằng WordPress Transients (`ups_calc_{md5}`) với TTL 3600 giây (1 giờ). Tự động dọn dẹp cache khi kích hoạt bảng giá mới.
+
+### Rationale
+
+- Bảo mật tuyệt đối dữ liệu nội bộ và phân vùng giá cước của hãng vận chuyển.
+- Giảm tải dung lượng trang ban đầu (>180KB JS được cắt giảm).
+- Phản hồi tức thì (<10ms) với các yêu cầu tính giá lặp lại nhờ Transients cache.
+- Giảm thiểu round-trip mạng từ nhiều request riêng lẻ về 1 request duy nhất.
+
+### Trade-offs
+
+- Cần 1 network request nhỏ (<2KB) khi người dùng lần đầu chọn một quốc gia có phân bang (US, CA, AU...). Tuy nhiên request này được cache in-memory ngay lập tức.
+

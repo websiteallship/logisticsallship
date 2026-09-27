@@ -134,24 +134,18 @@ public function calculate(array $input): QuoteResult {
 - Public quote endpoint dùng nonce nếu gọi từ shortcode.
 - Admin import cần capability `manage_options` hoặc capability riêng `manage_ups_rates`.
 - Validate mọi input server-side, không tin dữ liệu từ JS.
+- **Zero-leakage data model**: Tuyệt đối không expose bảng cước hoặc các trường mapping zone nội bộ (`wxs`, `xpd`, `wfm`) ra frontend HTML/JS context (`wp_localize_script`). Server đóng gói toàn bộ logic định tuyến zone và định giá.
 - File upload chỉ cho `.xlsx`, kiểm tra MIME và kích thước.
 - Không lưu file upload public trực tiếp; lưu trong thư mục plugin/private hoặc chỉ lưu hash + metadata.
 - Escape output trong admin và public view theo chuẩn WordPress.
 
-## 8. Hiệu năng
+## 8. Hiệu năng & Tối ưu hóa
 
-Dữ liệu nhỏ, lookup có thể xử lý tốt bằng MySQL custom tables:
-
-- Countries khoảng 250 dòng.
-- Zone map khoảng vài nghìn dòng.
-- Rate rows khoảng vài trăm dòng mỗi rate card.
-- Quote logs tăng theo traffic, cần index `created_at`, `destination_iata`, `service_code`.
-
-Nên cache:
-
-- Active rate card id.
-- Country list cho dropdown.
-- Settings.
+- **Server-Side Batch Calculation**: Endpoint `/calculate` hỗ trợ `service_code: "ALL"`, tính toán toàn bộ 6 dịch vụ cùng lúc trong 1 request duy nhất, giảm thiểu tối đa round-trips giữa client và server.
+- **Calculation Transient Cache**: Kết quả tính giá cước được cache thông qua WordPress Transients (`ups_calc_{md5}`, TTL 3600s), đem lại tốc độ phản hồi < 10ms cho các truy vấn trùng lặp. Tự động xóa cache khi activate rate card mới.
+- **On-Demand Country States Chunks**: Loại bỏ hoàn toàn bundle nguyên khối monolithic 185KB (`states_by_country.js`). Dữ liệu bang/tỉnh được chia nhỏ thành 196 file JSON độc lập theo IATA code (`assets/data/states/{iata}.json`, 0.5KB - 1.6KB/file), chỉ fetch khi người dùng chọn quốc gia đích và cache vào memory client.
+- Countries khoảng 250 dòng, zone map khoảng vài nghìn dòng được tối ưu hóa index MySQL.
+- Cache active rate card ID, country list sanitized và settings.
 
 Không cần microservice hoặc queue trong phase 1.
 

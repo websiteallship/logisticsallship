@@ -331,9 +331,11 @@ function allship_ups_enqueue_public() {
     wp_enqueue_script( 'ups-quote-form', $uri . '/js/quote-form.js', [], $ver, true );
 
     wp_localize_script( 'ups-quote-form', 'upsQuoteConfig', [
-        'apiBase'  => esc_url_raw( rest_url( 'ups-quote/v1' ) ),
-        'nonce'    => wp_create_nonce( 'wp_rest' ),
-        'currency' => 'VND',
+        'apiBase'       => esc_url_raw( rest_url( 'ups-quote/v1' ) ),
+        'nonce'         => wp_create_nonce( 'wp_rest' ),
+        'currency'      => 'VND',
+        'statesBaseUrl' => esc_url_raw( $uri . '/data/states/' ),
+        'countries'     => $active_countries, // [{ iata_code, country_name }] - Zero-leakage: không chứa zone codes
     ] );
 }
 ```
@@ -425,16 +427,20 @@ CSS fallback:
 - Color contrast ratio ≥ 4.5:1.
 - Screen reader: `aria-live="polite"` cho result area.
 
-### 2.4. Xử lý địa chỉ đến (Phase 1: Static JSON + Text Zipcode)
+### 2.4. Xử lý địa chỉ đến (Phase 1: On-Demand Static JSON Chunks + Text Zipcode)
 
-- **Data source**: `states_by_country.json` (~185KB) được load vào client-side (qua script tag `states_by_country.js` hoặc `wp_localize_script`).
-- **Conditional logic**:
-  - Khi user chọn Quốc gia:
-    - Tra cứu danh sách bang từ `STATES_BY_COUNTRY[iata]`.
-    - Cập nhật nhãn thích ứng (US: State/ZIP Code; CA: Province/Postal Code; AU: State/Postcode; JP: Prefecture/Postal Code; DE: Bundesland/PLZ).
-    - Render dropdown Bang/Tỉnh. Nếu quốc gia không phân bang, disable dropdown với thông báo phù hợp.
+- **Data source**: Loại bỏ hoàn toàn bundle monolithic 185KB (`states_by_country.js`). Dữ liệu bang/tỉnh được chia tách thành 196 file JSON nhỏ gọn theo IATA code (`assets/data/states/{iata}.json`, dung lượng 0.5KB - 1.6KB/file).
+- **On-Demand Fetching & In-Memory Cache**:
+  - Khi user chọn Quốc gia (hoặc gọi `updateDestinationAddressFields(iata)`):
+    1. Kiểm tra cache đồng bộ trong memory (`stateChunkCache[iata]` hoặc `window.STATES_BY_COUNTRY[iata]`). Nếu có sẵn, render dropdown ngay lập tức (zero latency).
+    2. Nếu chưa có trong cache, fetch bất đồng bộ từ `${statesBaseUrl}${iata}.json`.
+    3. Lưu dữ liệu nhận được vào `stateChunkCache[iata]` để tái sử dụng ngay cho các lần chọn tiếp theo.
+  - Cập nhật nhãn thích ứng (US: State/ZIP Code; CA: Province/Postal Code; AU: State/Postcode; JP: Prefecture/Postal Code; DE: Bundesland/PLZ).
+  - Render dropdown Bang/Tỉnh. Nếu quốc gia không phân bang, disable dropdown với thông báo phù hợp.
   - Khi user chọn Bang:
-    - Tra cứu danh mục thành phố từ `MAJOR_CITIES_BY_STATE[iata][state]`.
+    - Tra cứu danh mục thành phố từ dữ liệu bang đã tải.
     - Render dropdown Thành phố kèm tuỳ chọn "Khác (nhập địa chỉ cụ thể bên dưới)".
   - Trường Zipcode và Địa chỉ cụ thể: Input text nhập tay tự do.
+- **Bảo mật Zero-Leakage**: Dữ liệu danh sách quốc gia `upsQuoteConfig.countries` chỉ chứa `iata_code` và `country_name`. Cột zone (`wxs`, `xpd`, `wfm`) được bảo vệ 100% tại backend.
+- **Batch Calculation Flow**: Khi user bấm "Tính giá cước", form gửi request `POST /calculate` với `service_code: "ALL"`. Server xử lý và cache toàn bộ dịch vụ, frontend nhận về đối tượng `services` và cập nhật tức thì toàn bộ tabs giá cước.
 - **Booking modal & Results ribbon**: Tự động hiển thị tóm tắt đầy đủ các thành phần địa chỉ đã nhập (ví dụ: `Los Angeles, California (90210) · United States`).

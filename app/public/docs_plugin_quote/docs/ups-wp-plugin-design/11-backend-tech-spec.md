@@ -345,8 +345,8 @@ class Rate_Card_Repository {
 
 ## 5. Caching
 
+### 5.1. Country list cache
 ```php
-// Country list (thay đổi ít)
 function get_countries_cached( $service_code, $direction ) {
     $key = "ups_countries_{$service_code}_{$direction}";
     $cached = get_transient( $key );
@@ -356,18 +356,57 @@ function get_countries_cached( $service_code, $direction ) {
     set_transient( $key, $data, HOUR_IN_SECONDS );
     return $data;
 }
+```
 
-// Invalidate khi import mới
+### 5.2. Quote Calculation Transients Cache
+- Lưu kết quả tính toán dựa trên mã băm MD5 của bộ tham số đầu vào đã chuẩn hóa:
+```php
+$cache_payload = [
+    'rate_card_id'    => $rate_card_id,
+    'direction'       => $direction,
+    'destination'     => $dest_iata,
+    'service_code'    => $service_code,
+    'shipment_type'   => $shipment_type,
+    'pieces'          => $pieces_params,
+];
+$cache_key = 'ups_calc_' . md5( wp_json_encode( $cache_payload ) );
+$cached_result = get_transient( $cache_key );
+if ( false !== $cached_result ) {
+    return rest_ensure_response( $cached_result );
+}
+// Sau khi tính toán thành công:
+set_transient( $cache_key, $response_data, HOUR_IN_SECONDS );
+```
+
+### 5.3. Cache Invalidation
+- Xóa toàn bộ transients tính toán và metadata khi import/activate bảng giá mới:
+```php
 function on_rate_card_activated() {
     global $wpdb;
-    $wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_ups_%'" );
+    $wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_ups_%' OR option_name LIKE '_transient_timeout_ups_%'" );
 }
 ```
 
 ## 6. Security
 
-### 6.1. REST API
+### 6.1. Zero-Leakage Data Sanitization
+- Tuyệt đối không xuất dữ liệu zone nội bộ (`wxs`, `xpd`, `wfm`, `zone`) vào frontend hoặc thẻ script:
+```php
+public function get_active_countries(): array {
+    $countries = $this->country_repo->get_active_countries();
+    $sanitized = [];
+    foreach ( $countries as $c ) {
+        $sanitized[] = [
+            'iata_code'    => $c['iata_code'],
+            'country_name' => $c['country_name'],
+        ];
+    }
+    return $sanitized;
+}
+```
 
+### 6.2. REST API & Batch Calculation
+- Hỗ trợ `service_code: "ALL"` để tính toán cùng lúc tất cả 6 dịch vụ trên server:
 ```php
 register_rest_route( 'ups-quote/v1', '/calculate', [
     'methods'             => 'POST',
@@ -392,7 +431,7 @@ register_rest_route( 'ups-quote/v1', '/calculate', [
         'service_code' => [
             'required' => true,
             'type'     => 'string',
-            'enum'     => ['EXW', 'XPR', 'WXS', 'XPD', 'WXP', 'WFM'],
+            'enum'     => ['EXW', 'XPR', 'WXS', 'XPD', 'WXP', 'WFM', 'ALL'],
         ],
         // ...
     ],

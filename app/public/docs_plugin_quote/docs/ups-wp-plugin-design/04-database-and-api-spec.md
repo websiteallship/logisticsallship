@@ -177,7 +177,7 @@ Endpoint:
 POST /wp-json/ups-quote/v1/calculate
 ```
 
-Request:
+### 8.1. Single Service Request
 
 ```json
 {
@@ -209,7 +209,7 @@ Request:
 }
 ```
 
-Response thành công:
+Response thành công (Single):
 
 ```json
 {
@@ -259,6 +259,100 @@ Response thành công:
 }
 ```
 
+### 8.2. Batch Service Request (`service_code: "ALL"`)
+
+Dùng để tính toàn bộ các dịch vụ khả dụng trong 1 request duy nhất, tối ưu latency:
+
+Request:
+
+```json
+{
+  "direction": "export",
+  "origin_province": "TP. Hồ Chí Minh",
+  "destination_iata": "US",
+  "destination_state": "CA",
+  "destination_city": "Los Angeles",
+  "destination_postal_code": "90210",
+  "destination_address": "123 Main St, Suite 400",
+  "service_code": "ALL",
+  "shipment_type": "nondocument",
+  "pieces": [
+    {
+      "quantity": 1,
+      "actual_weight_kg": 3.2,
+      "length_cm": 30,
+      "width_cm": 20,
+      "height_cm": 15
+    }
+  ]
+}
+```
+
+Response thành công (Batch):
+
+```json
+{
+  "success": true,
+  "data": {
+    "direction": "export",
+    "origin_iata": "VN",
+    "origin_province": "TP. Hồ Chí Minh",
+    "destination_iata": "US",
+    "destination_name": "United States*",
+    "destination_state": "CA",
+    "destination_city": "Los Angeles",
+    "destination_postal_code": "90210",
+    "destination_address": "123 Main St, Suite 400",
+    "actual_weight_kg": 3.2,
+    "dim_weight_kg": 1.636,
+    "chargeable_weight_kg": 3.5,
+    "rounding_step_kg": 0.5,
+    "dim_divisor": 5500,
+    "services": {
+      "WXS": {
+        "service_code": "WXS",
+        "service_name": "Worldwide Express Saver",
+        "zone": "5",
+        "rate_zone": "US5",
+        "chargeable_weight_kg": 3.5,
+        "base_price_vnd": 1391500,
+        "total_price_vnd": 1391500,
+        "status": "available",
+        "error": null
+      },
+      "XPD": {
+        "service_code": "XPD",
+        "service_name": "Expedited",
+        "zone": "5",
+        "rate_zone": "US5",
+        "chargeable_weight_kg": 3.5,
+        "base_price_vnd": 1182500,
+        "total_price_vnd": 1182500,
+        "status": "available",
+        "error": null
+      },
+      "WFM": {
+        "service_code": "WFM",
+        "service_name": "Worldwide Express Freight",
+        "zone": "5",
+        "rate_zone": "US5",
+        "status": "unavailable",
+        "error": {
+          "code": "WEIGHT_BELOW_MINIMUM",
+          "message": "Trọng lượng tối thiểu cho dịch vụ WFM là 71kg."
+        }
+      }
+    },
+    "cached": false
+  }
+}
+```
+
+### 8.3. Transient Caching
+- **Cache Key**: `ups_calc_` + `md5(json_encode(normalized_params))`
+- **TTL**: 3600 giây (1 giờ).
+- **Invalidation**: Xóa toàn bộ transient `_transient_ups_%` khi admin kích hoạt rate card mới hoặc thay đổi cấu hình settings.
+
 Response lỗi:
 
 ```json
@@ -279,7 +373,19 @@ Response lỗi:
 GET /wp-json/ups-quote/v1/countries?direction=export&service_code=WXS
 ```
 
-Trả về danh sách country đang có zone khả dụng cho service.
+Trả về danh sách country đang có zone khả dụng cho service:
+
+```json
+{
+  "success": true,
+  "data": [
+    { "iata_code": "AE", "country_name": "United Arab Emirates" },
+    { "iata_code": "US", "country_name": "United States*" }
+  ]
+}
+```
+
+> **Bảo mật (Zero-Leakage)**: Dữ liệu công khai cho frontend và dropdown tuyệt đối không chứa các thuộc tính zone (`wxs`, `xpd`, `wfm`, `zone`) để ngăn chặn việc rò rỉ cấu trúc vùng giá nội bộ của hãng. Toàn bộ zone mapping được bảo vệ và xử lý tại backend.
 
 ### Directions
 

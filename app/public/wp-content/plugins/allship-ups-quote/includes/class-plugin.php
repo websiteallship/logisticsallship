@@ -105,6 +105,17 @@ class Allship_UPS_Plugin {
 	 */
 	public function register_hooks() {
 		add_action( 'init', [ $this, 'init' ] );
+		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
+	}
+
+	/**
+	 * Register plugin REST routes on 'rest_api_init'.
+	 */
+	public function register_rest_routes() {
+		if ( class_exists( 'Allship_UPS_REST_Controller' ) ) {
+			$controller = new Allship_UPS_REST_Controller();
+			$controller->register_routes();
+		}
 	}
 
 	/**
@@ -120,6 +131,12 @@ class Allship_UPS_Plugin {
 		// Schema migration check.
 		if ( class_exists( 'Allship_UPS_Activator' ) && get_option( 'allship_ups_db_version' ) !== Allship_UPS_Activator::DB_VERSION ) {
 			Allship_UPS_Activator::migrate();
+		}
+
+		// Initialize public shortcode & asset enqueue manager.
+		if ( class_exists( 'Allship_UPS_Shortcode' ) ) {
+			$shortcode = new Allship_UPS_Shortcode();
+			$shortcode->register();
 		}
 
 		do_action( 'allship_ups_quote_init', $this );

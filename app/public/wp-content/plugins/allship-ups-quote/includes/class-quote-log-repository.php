@@ -116,6 +116,85 @@ class Allship_UPS_Quote_Log_Repository {
 	}
 
 	/**
+	 * Retrieve a single quote log by ID.
+	 *
+	 * @param int $id Quote log ID.
+	 * @return object|null
+	 */
+	public function get( $id ) {
+		$id = abs( (int) $id );
+		if ( ! $id || ! $this->wpdb || empty( $this->table ) ) {
+			return null;
+		}
+
+		$row = $this->wpdb->get_row(
+			$this->wpdb->prepare(
+				"SELECT * FROM {$this->table} WHERE id = %d LIMIT 1",
+				$id
+			)
+		);
+
+		return $this->format_row( $row );
+	}
+
+	/**
+	 * Update an existing quote log record.
+	 *
+	 * @param int   $id Quote log ID.
+	 * @param array $data Fields to update.
+	 * @return bool
+	 */
+	public function update( $id, array $data ) {
+		$id = abs( (int) $id );
+		if ( ! $id || empty( $data ) || ! $this->wpdb || empty( $this->table ) ) {
+			return false;
+		}
+
+		$fields  = [];
+		$formats = [];
+		$json_func = function_exists( 'wp_json_encode' ) ? 'wp_json_encode' : 'json_encode';
+
+		if ( isset( $data['service_code'] ) ) {
+			$fields['service_code'] = strtoupper( trim( (string) $data['service_code'] ) );
+			$formats[]              = '%s';
+		}
+		if ( isset( $data['base_price_vnd'] ) ) {
+			$fields['base_price_vnd'] = abs( (int) $data['base_price_vnd'] );
+			$formats[]                = '%d';
+		}
+		if ( isset( $data['total_price_vnd'] ) ) {
+			$fields['total_price_vnd'] = abs( (int) $data['total_price_vnd'] );
+			$formats[]                 = '%d';
+		}
+		if ( isset( $data['pieces_json'] ) ) {
+			$fields['pieces_json'] = is_array( $data['pieces_json'] ) ? $json_func( $data['pieces_json'] ) : (string) $data['pieces_json'];
+			$formats[]             = '%s';
+		}
+		if ( isset( $data['breakdown_json'] ) ) {
+			$fields['breakdown_json'] = is_array( $data['breakdown_json'] ) ? $json_func( $data['breakdown_json'] ) : (string) $data['breakdown_json'];
+			$formats[]                = '%s';
+		}
+		if ( isset( $data['session_id'] ) ) {
+			$fields['session_id'] = sanitize_text_field( $data['session_id'] );
+			$formats[]            = '%s';
+		}
+
+		if ( empty( $fields ) ) {
+			return false;
+		}
+
+		$res = $this->wpdb->update(
+			$this->table,
+			$fields,
+			[ 'id' => $id ],
+			$formats,
+			[ '%d' ]
+		);
+
+		return false !== $res;
+	}
+
+	/**
 	 * Build query conditions from filters.
 	 *
 	 * @param array $filters Query filter keys.

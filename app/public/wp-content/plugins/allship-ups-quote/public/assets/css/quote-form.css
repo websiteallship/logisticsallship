@@ -1,0 +1,297 @@
+/**
+ * Allship UPS Quote Form — Base Styles & Tokens
+ *
+ * @package Allship_UPS_Quote
+ */
+
+.ups-quote-form,
+.ups-quote-app {
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+  --ups-brand: var(--color-brand-red, #CE2027);
+  --ups-brand-hover: var(--color-brand-red-hover, #9F090E);
+  --ups-brand-light: var(--color-brand-red-light, #FEE2E2);
+  --ups-navy: var(--color-navy-900, #0A1628);
+  --ups-navy-light: var(--color-navy-800, #0F2240);
+  --ups-card-bg: #ffffff;
+  --ups-card-border: #e2e8f0;
+  --ups-card-radius: 16px;
+  --ups-input-radius: 8px;
+  --ups-success: #059669;
+  --ups-error: #dc2626;
+  --ups-warning: #d97706;
+}
+
+.select-chevron { 
+  pointer-events: none; 
+  transition: transform 0.2s ease, color 0.2s ease; 
+}
+.combobox-dropdown { display: none; }
+.combobox-dropdown.open { display: block; }
+.combobox-active input[readonly] {
+  background-color: #FFFFFF !important;
+  border-color: #CE2027 !important;
+  box-shadow: 0 0 0 3px rgba(206, 32, 39, 0.12) !important;
+}
+.combobox-active .select-chevron {
+  transform: translateY(-50%) rotate(180deg) !important;
+  color: #CE2027 !important;
+}
+.inline-error { display: none; }
+.inline-error.visible { display: flex; }
+.modal-backdrop { display: none; }
+.modal-backdrop.open { display: flex; }
+.result-section { display: none; opacity: 0; }
+.card-breakdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.card-breakdown.open { max-height: 360px; }
+.custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+.toggle-icon { transition: transform 0.2s ease; }
+.breakdown-toggle.open .toggle-icon { transform: rotate(180deg); }
+
+/* Direction Button Active Pill */
+.direction-pill-btn {
+  position: relative;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.direction-pill-btn.active {
+  background-color: #FFFFFF !important;
+  color: #0A1628 !important;
+  box-shadow: 0 4px 14px -2px rgba(10, 22, 40, 0.12);
+}
+.direction-pill-btn.active .dir-icon-box {
+  background-color: #CE2027 !important;
+  color: #FFFFFF !important;
+}
+
+/* Category Filter Tab */
+.cat-filter-tab {
+  transition: all 0.2s ease;
+}
+.cat-filter-tab.active {
+  background-color: #0A1628;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(10, 22, 40, 0.15);
+}
+
+/* Service Card Polish */
+.service-card-item {
+  border: 1.5px solid #E2E8F0;
+  background: #FFFFFF;
+  transition: all 0.22s ease;
+  position: relative;
+}
+.service-card-item:hover:not(.is-disabled) {
+  border-color: #CBD5E1;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -4px rgba(10, 22, 40, 0.08);
+}
+.service-card-item.active {
+  border-color: #CE2027 !important;
+  background: linear-gradient(180deg, rgba(206, 32, 39, 0.03) 0%, #FFFFFF 100%) !important;
+  box-shadow: 0 0 0 3px rgba(206, 32, 39, 0.12), 0 8px 20px -4px rgba(206, 32, 39, 0.14) !important;
+}
+.service-card-item.is-disabled {
+  opacity: 0.65;
+  background: #F8FAFC;
+  border-style: dashed;
+}
+.service-card-item.is-disabled:hover {
+  opacity: 0.85;
+  border-color: #94A3B8;
+}
+.card-check-badge { 
+  display: none; 
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--ups-brand);
+  color: #fff;
+  font-size: 10px;
+  align-items: center;
+  justify-content: center;
+}
+.service-card-item.active .card-check-badge { display: flex; }
+
+/* Shipment Type Option Card */
+.type-card-opt {
+  border: 1.5px solid #E2E8F0;
+  background-color: #FFFFFF;
+  transition: all 0.2s ease;
+}
+.type-card-opt:hover {
+  border-color: #CBD5E1;
+  background-color: #F8FAFC;
+}
+.type-card-opt.active {
+  border-color: #CE2027 !important;
+  background-color: #FFF8F8 !important;
+  box-shadow: 0 2px 8px rgba(206, 32, 39, 0.08) !important;
+}
+.type-card-opt.active .type-check {
+  opacity: 1 !important;
+  background-color: #CE2027 !important;
+  border-color: #CE2027 !important;
+}
+
+/* Mobile Compact Comparison Rows */
+.mobile-comp-row {
+  border: 1.5px solid #E2E8F0;
+  transition: all 0.2s ease;
+  background: #FFFFFF;
+}
+.mobile-comp-row.active {
+  border-color: #CE2027 !important;
+  background: #FFF5F5 !important;
+  box-shadow: 0 0 0 2px rgba(206, 32, 39, 0.12) !important;
+}
+.mobile-comp-row.active .comp-radio-dot {
+  background-color: #CE2027;
+  border-color: #CE2027;
+}
+
+/* Calculate Button Animation */
+.btn-calculate {
+  position: relative;
+  overflow: hidden;
+}
+.btn-calculate::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  transition: left 0.6s ease;
+}
+.btn-calculate:hover::before { left: 100%; }
+
+.spinner {
+  display: none;
+  width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+.btn-calculate.loading .btn-text { display: none; }
+.btn-calculate.loading .spinner { display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Pieces Grid Desktop & Mobile */
+.piece-row, .pieces-header-desktop {
+  display: grid;
+  grid-template-columns: 70px 1fr 1fr 1fr 1fr 44px;
+  gap: 10px;
+  align-items: center;
+}
+.piece-row {
+  margin-bottom: 10px;
+}
+.cell-input {
+  height: 46px;
+  background: #F1F4F9;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  padding: 0 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0A1628;
+  width: 100%;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+.cell-input:focus {
+  outline: none;
+  background: #FFFFFF;
+  border-color: #CE2027;
+  box-shadow: 0 0 0 3px rgba(206, 32, 39, 0.12);
+}
+.btn-delete-piece {
+  width: 44px;
+  height: 46px;
+  background: #F1F4F9;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  color: #94A3B8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.2s ease;
+}
+.btn-delete-piece:hover {
+  background: #FEE2E2;
+  color: #CE2027;
+  border-color: #FCA5A5;
+}
+
+#mobileStickyActionBar {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  #mobileStickyActionBar.is-active {
+    display: flex !important;
+  }
+  .pieces-header-desktop { display: none !important; }
+  .pieces-mobile-header {
+    display: grid !important;
+    grid-template-columns: 48px 1fr 1fr 1fr 1fr 36px !important;
+    gap: 6px !important;
+    margin-bottom: 4px !important;
+    padding: 0 2px !important;
+  }
+  .pieces-mobile-header span {
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    color: #94A3B8 !important;
+    text-transform: uppercase !important;
+    text-align: center !important;
+  }
+  .piece-row {
+    display: grid !important;
+    grid-template-columns: 48px 1fr 1fr 1fr 1fr 36px !important;
+    gap: 6px !important;
+    margin-bottom: 6px !important;
+    align-items: center !important;
+  }
+  .cell-input {
+    height: 38px !important;
+    font-size: 13px !important;
+    padding: 0 4px !important;
+    border-radius: 8px !important;
+  }
+  .btn-delete-piece {
+    width: 36px !important;
+    height: 38px !important;
+    font-size: 14px !important;
+    border-radius: 8px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .pieces-mobile-header { display: none !important; }
+}
+
+@media print {
+  .ups-quote-form .btn-calculate,
+  .ups-quote-form .btn-delete-piece,
+  .ups-quote-form #mobileStickyActionBar,
+  .ups-quote-form .cat-filter-tab,
+  .ups-quote-form .modal-backdrop,
+  .ups-quote-form .direction-selector-wrapper { display: none !important; }
+  .ups-quote-form {
+    background: #fff;
+    color: #000;
+  }
+  .ups-quote-form * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+}
+

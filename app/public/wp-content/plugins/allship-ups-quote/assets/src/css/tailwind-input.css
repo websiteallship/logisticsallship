@@ -1,0 +1,28 @@
+@import "tailwindcss/theme" layer(theme);
+
+@theme {
+  --color-brand-red: #CE2027;
+  --color-brand-red-hover: #9F090E;
+  --color-brand-red-light: #FEE2E2;
+  --color-navy-900: #0A1628;
+  --color-navy-800: #0F2240;
+  --color-slate-50: #F8FAFC;
+  --color-slate-100: #F1F5F9;
+  --color-slate-200: #E2E8F0;
+  --color-slate-400: #94A3B8;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-900: #0F172A;
+  --shadow-brand: 0 4px 14px color-mix(in srgb, var(--color-brand-red) 25%, transparent);
+  --font-sans: 'Manrope', system-ui, -apple-system, sans-serif;
+}
+
+@layer utilities {
+  .ups-quote-app {
+    @import "tailwindcss/utilities";
+  }
+}
+
+@source "../../public/views/**/*.php";
+@source "../../public/assets/js/**/*.js";
+@source "../../templates/**/*.php";

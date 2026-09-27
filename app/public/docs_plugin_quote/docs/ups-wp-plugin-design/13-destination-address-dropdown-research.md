@@ -134,25 +134,37 @@
 
 ## 3. Khuyến nghị cho Allship Plugin
 
-### Phase 1: **Static JSON + Text Zipcode** (Giải pháp A)
+### Phase 1: **On-Demand Static JSON Chunks + Text Zipcode** (Giải pháp A cải tiến)
 
 ```
 ┌─────────────────────────────────────────────┐
 │  Nước đến *     │ 🇺🇸 United States (US)   ▼│  ← Có sẵn
 ├─────────────────────────────────────────────┤
 │  Bang / Tỉnh    │ California              ▼│  ← Conditional dropdown
-│  (tuỳ chọn)     │   (load từ static JSON)   │     từ static states.json
+│  (tuỳ chọn)     │ (load on-demand JSON <2KB)│    từ assets/data/states/US.json
 ├─────────────────────────────────────────────┤
 │  Zipcode        │ 90210                     │  ← Free text input
 │  (tuỳ chọn)     │   (không validate)        │     placeholder: "VD: 90210"
 └─────────────────────────────────────────────┘
 ```
 
-#### Logic conditional:
+#### Logic conditional & On-Demand Chunk Fetching:
 ```js
 // Khi user chọn country:
-onCountrySelect(iata) → {
-  const states = STATES_DATA[iata]; // từ static JSON
+async function onCountrySelect(iata) {
+  // 1. Kiểm tra fast memory cache:
+  let states = stateChunkCache[iata] || (window.STATES_BY_COUNTRY && window.STATES_BY_COUNTRY[iata]);
+  
+  // 2. Nếu chưa có, tải on-demand chunk:
+  if (!states) {
+    const res = await fetch(`${statesBaseUrl}${iata}.json`);
+    if (res.ok) {
+      states = await res.json();
+      stateChunkCache[iata] = states;
+    }
+  }
+
+  // 3. Render UI:
   if (states && states.length > 0) {
     showStateDropdown(states);       // Hiện dropdown searchable
     showZipcodeInput();              // Hiện text input
@@ -163,33 +175,16 @@ onCountrySelect(iata) → {
 }
 ```
 
-#### Data format cho `states_by_country.json`:
-```json
-{
-  "US": [
-    { "name": "Alabama", "code": "AL" },
-    { "name": "Alaska", "code": "AK" },
-    { "name": "California", "code": "CA" }
-  ],
-  "JP": [
-    { "name": "Tokyo", "code": "13" },
-    { "name": "Osaka", "code": "27" }
-  ],
-  "AU": [
-    { "name": "New South Wales", "code": "NSW" },
-    { "name": "Victoria", "code": "VIC" }
-  ]
-}
-```
-
-#### File size ước tính:
-- Chỉ lấy states cho ~250 countries có zone: **~80-120KB** (gzipped ~20KB)
-- Không cần cities (quá nặng, không ảnh hưởng giá)
+#### Cấu trúc lưu trữ On-Demand Chunks:
+- Thư mục: `public/assets/data/states/`
+- Gồm 196 file JSON độc lập: `US.json`, `CA.json`, `AU.json`, `JP.json`...
+- Dung lượng siêu nhỏ: `US.json` (1.6KB, 50 states), `CA.json` (471B, 13 provinces).
+- Tối ưu tải trang: Tránh tải file gộp monolithic 185KB (`states_by_country.js`), tiết kiệm 99% băng thông ban đầu.
 
 #### UX trên form:
 | Thao tác user | Kết quả |
 |---------------|---------|
-| Chọn country có states | Hiện dropdown "Bang / Tỉnh / Khu vực" (searchable) |
+| Chọn country có states | Tải chunk < 2KB, hiện dropdown "Bang / Tỉnh / Khu vực" |
 | Chọn country không có states | Ẩn dropdown state |
 | Gõ zipcode | Free text, placeholder gợi ý format |
 | Tất cả các trường này | **Tuỳ chọn** — không bắt buộc, không block tính giá |
@@ -204,25 +199,25 @@ onCountrySelect(iata) → {
 
 ## 4. So sánh tổng quan
 
-| Tiêu chí | A: Static JSON | B: CountriesNow | C: Google Places | D: CSC API | E: UPS API |
+| Tiêu chí | A: Static JSON Chunks | B: CountriesNow | C: Google Places | D: CSC API | E: UPS API |
 |----------|:-:|:-:|:-:|:-:|:-:|
 | **Chi phí** | Free | Free | **$17/1K** | $3/mo | Free* |
 | **Uptime** | ♾️ | ⚠️ | ✅ | ✅ | ✅ |
-| **Offline** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Offline/Self-hosted** | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **States** | ✅ | ✅ | ✅ | ✅ | ❌ |
 | **Cities** | ❌ | ✅ | ✅ | ✅ | ❌ |
 | **Zipcode validate** | ❌ | ❌ | ✅ | ❌ | ✅ (US) |
-| **Setup phức tạp** | Thấp | Thấp | Cao | Trung bình | Cao |
+| **Payload tải ban đầu** | **< 2KB (On-Demand)** | 0KB (API) | JS SDK ~100KB | 0KB (API) | 0KB |
 | **Phù hợp Phase 1** | ⭐⭐⭐ | ⭐⭐ | ⭐ | ⭐⭐ | ❌ |
 
 ---
 
 ## 5. Implementation plan
 
-### Bước 1: Tạo `states_by_country.json`
-- Download từ dr5hn, lọc chỉ countries có trong IATA zone list
-- Format: `{ [iso2]: [{ name, code }] }`
-- Estimate: ~100KB
+### Bước 1: Tạo các file on-demand `states/{iata}.json`
+- Tách database thành các file độc lập per-country trong `public/assets/data/states/`
+- Format mỗi file: `[ { "name": "California", "code": "CA" }, ... ]`
+- Loại bỏ hoàn toàn script monolithic 185KB.
 
 ### Bước 2: UI conditional fields
 - Sau country dropdown → hiện state dropdown (searchable, tuỳ chọn)

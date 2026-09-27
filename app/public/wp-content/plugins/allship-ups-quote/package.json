@@ -1,0 +1,14 @@
+{
+  "name": "allship-ups-quote",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Allship UPS Quote - standalone Tailwind CSS build",
+  "scripts": {
+    "build:css": "npx @tailwindcss/cli@4 -i assets/src/css/tailwind-input.css -o public/assets/css/quote-form-tw.css --minify",
+    "watch:css": "npx @tailwindcss/cli@4 -i assets/src/css/tailwind-input.css -o public/assets/css/quote-form-tw.css --watch",
+    "dev": "npm run watch:css"
+  },
+  "dependencies": {
+    "tailwindcss": "^4.3.3"
+  }
+}
