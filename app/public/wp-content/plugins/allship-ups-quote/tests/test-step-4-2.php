@@ -202,10 +202,10 @@ assert( $cfg['nonce'] === 'mock_nonce_wp_rest', "nonce injected" );
 assert( $cfg['currency'] === 'VND', "currency VND" );
 assert( is_array( $cfg['COUNTRIES'] ) && ! empty( $cfg['COUNTRIES'] ), "COUNTRIES array populated" );
 assert( is_array( $cfg['VN_PROVINCES'] ) && count( $cfg['VN_PROVINCES'] ) === 63, "VN_PROVINCES must have 63 provinces, got " . count( $cfg['VN_PROVINCES'] ) );
-assert( $cfg['POPULAR_IATA'] === [ 'US', 'JP', 'KR', 'AU', 'CA', 'DE', 'GB', 'FR', 'SG', 'TW' ], "POPULAR_IATA matches spec" );
+assert( $cfg['POPULAR_IATA'] === [ 'US', 'AU', 'CA', 'JP', 'KR', 'TW', 'SG', 'MY', 'TH', 'GB', 'DE', 'FR', 'HK' ], "POPULAR_IATA matches spec" );
 assert( $cfg['dim_divisor'] === 5500, "dim_divisor = 5500" );
 assert( $cfg['rounding_step'] == 0.5, "rounding_step = 0.5" );
-echo "✓ upsQuoteConfig verified: statesBaseUrl, citiesBaseUrl, apiBase, nonce, currency, COUNTRIES, 63 VN_PROVINCES, 10 POPULAR_IATA\n";
+echo "✓ upsQuoteConfig verified: statesBaseUrl, citiesBaseUrl, apiBase, nonce, currency, COUNTRIES, 63 VN_PROVINCES, 13 POPULAR_IATA\n";
 
 // --- Test 6: On-Demand States Data Integrity ---
 echo "\n--- Test 6: On-Demand States Data Integrity ---\n";

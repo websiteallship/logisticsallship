@@ -36,14 +36,23 @@ class Allship_UPS_Shortcode {
 	private static $assets_enqueued = false;
 
 	/**
+	 * Country repository.
+	 *
+	 * @var Allship_UPS_Country_Repository|null
+	 */
+	private $country_repo;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Allship_UPS_Rate_Card_Repository|null $rate_card_repo Rate card repository.
 	 * @param Allship_UPS_Settings_Manager|null     $settings_mgr Settings manager.
+	 * @param Allship_UPS_Country_Repository|null   $country_repo Country repository.
 	 */
-	public function __construct( $rate_card_repo = null, $settings_mgr = null ) {
+	public function __construct( $rate_card_repo = null, $settings_mgr = null, $country_repo = null ) {
 		$this->rate_card_repo = $rate_card_repo ?: ( class_exists( 'Allship_UPS_Rate_Card_Repository' ) ? new Allship_UPS_Rate_Card_Repository() : null );
 		$this->settings_mgr   = $settings_mgr ?: ( class_exists( 'Allship_UPS_Settings_Manager' ) ? new Allship_UPS_Settings_Manager() : null );
+		$this->country_repo   = $country_repo ?: ( class_exists( 'Allship_UPS_Country_Repository' ) ? new Allship_UPS_Country_Repository() : null );
 	}
 
 	/**
@@ -190,7 +199,7 @@ class Allship_UPS_Shortcode {
 			'currency'      => 'VND',
 			'COUNTRIES'     => $this->get_active_countries(),
 			'VN_PROVINCES'  => $this->get_vn_provinces(),
-			'POPULAR_IATA'  => [ 'US', 'JP', 'KR', 'AU', 'CA', 'DE', 'GB', 'FR', 'SG', 'TW' ],
+			'POPULAR_IATA'  => [ 'US', 'AU', 'CA', 'JP', 'KR', 'TW', 'SG', 'MY', 'TH', 'GB', 'DE', 'FR', 'HK' ],
 			'dim_divisor'   => $dim_divisor,
 			'rounding_step' => $rounding_step,
 		];
@@ -218,6 +227,19 @@ class Allship_UPS_Shortcode {
 	}
 
 	/**
+	 * Clean country name from residual quotes, asterisks, or hash symbols.
+	 *
+	 * @param string $name Raw country name.
+	 * @return string Sanitized display name.
+	 */
+	private function clean_country_name( $name ) {
+		$name = trim( (string) $name );
+		$name = trim( $name, " \t\n\r\0\x0B\"'" );
+		$name = rtrim( $name, '*#' );
+		return trim( $name );
+	}
+
+	/**
 	 * Retrieve active countries with mapped export zones.
 	 *
 	 * @return array
@@ -225,37 +247,16 @@ class Allship_UPS_Shortcode {
 	public function get_active_countries() {
 		global $wpdb;
 
-		$rate_card_id = 1;
-		if ( $this->rate_card_repo ) {
-			$active_card  = $this->rate_card_repo->get_active();
-			$rate_card_id = $active_card ? (int) $active_card->id : 1;
-		}
-
-		if ( $wpdb ) {
-			$table_countries = $wpdb->prefix . 'ups_countries';
-			$table_zones     = $wpdb->prefix . 'ups_zone_maps';
-
-			$sql = "SELECT c.iata_code, c.country_name, c.normalized_name, c.is_us_override, c.has_extended_area_note,
-			               MAX(CASE WHEN zm.service_code = 'WXS' THEN zm.zone ELSE NULL END) as wxs,
-			               MAX(CASE WHEN zm.service_code = 'XPD' THEN zm.zone ELSE NULL END) as xpd,
-			               MAX(CASE WHEN zm.service_code = 'WFM' THEN zm.zone ELSE NULL END) as wfm
-			        FROM {$table_countries} c
-			        LEFT JOIN {$table_zones} zm ON zm.country_id = c.id
-			             AND zm.rate_card_id = %d
-			             AND zm.direction = 'export'
-			        WHERE c.is_active = 1
-			        GROUP BY c.id
-			        ORDER BY c.country_name ASC";
-
-			$rows = $wpdb->get_results( $wpdb->prepare( $sql, $rate_card_id ) );
-
+		if ( $this->country_repo ) {
+			$rows = $this->country_repo->get_all_active();
 			if ( ! empty( $rows ) && is_array( $rows ) ) {
 				$countries = [];
 				foreach ( $rows as $row ) {
+					$clean_name = $this->clean_country_name( $row->country_name );
 					$countries[] = [
 						'iata'                   => $row->iata_code,
-						'name'                   => $row->country_name,
-						'normalized_name'        => $row->normalized_name,
+						'name'                   => $clean_name,
+						'normalized_name'        => ! empty( $row->normalized_name ) ? $this->clean_country_name( $row->normalized_name ) : $clean_name,
 						'is_us_override'         => (int) $row->is_us_override,
 						'has_extended_area_note' => (int) $row->has_extended_area_note,
 					];
@@ -264,7 +265,27 @@ class Allship_UPS_Shortcode {
 			}
 		}
 
-		// Fallback: Load countries from bundled countries.json (stripped of zones)
+		if ( $wpdb ) {
+			$table_countries = $wpdb->prefix . 'ups_countries';
+			$rows            = $wpdb->get_results( "SELECT iata_code, country_name, normalized_name, is_us_override, has_extended_area_note FROM {$table_countries} WHERE is_active = 1 ORDER BY country_name ASC" );
+
+			if ( ! empty( $rows ) && is_array( $rows ) ) {
+				$countries = [];
+				foreach ( $rows as $row ) {
+					$clean_name = $this->clean_country_name( $row->country_name );
+					$countries[] = [
+						'iata'                   => $row->iata_code,
+						'name'                   => $clean_name,
+						'normalized_name'        => ! empty( $row->normalized_name ) ? $this->clean_country_name( $row->normalized_name ) : $clean_name,
+						'is_us_override'         => (int) $row->is_us_override,
+						'has_extended_area_note' => (int) $row->has_extended_area_note,
+					];
+				}
+				return $countries;
+			}
+		}
+
+		// Fallback: Load countries from bundled countries.json
 		$json_path = dirname( __DIR__ ) . '/public/assets/data/countries.json';
 		if ( file_exists( $json_path ) ) {
 			$json_data = json_decode( file_get_contents( $json_path ), true );

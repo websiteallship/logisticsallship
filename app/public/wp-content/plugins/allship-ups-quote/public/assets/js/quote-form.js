@@ -144,6 +144,11 @@
     return str.toLowerCase().trim();
   }
 
+  function cleanCountryName(name) {
+    if (!name) return '';
+    return String(name).replace(/^["'\s]+|["'\s]+$/g, '').replace(/[*#]+$/g, '').trim();
+  }
+
   // ===== DESTINATION ADDRESS DATA =====
   const MAJOR_CITIES_BY_STATE = {
     US: {
@@ -209,6 +214,15 @@
     },
     TW: {
       _all: ['Taipei', 'New Taipei', 'Kaohsiung', 'Taichung', 'Tainan', 'Hsinchu']
+    },
+    MY: {
+      _all: ['Kuala Lumpur', 'George Town', 'Johor Bahru', 'Petaling Jaya', 'Shah Alam', 'Kota Kinabalu', 'Kuching', 'Ipoh']
+    },
+    TH: {
+      _all: ['Bangkok', 'Nonthaburi', 'Chiang Mai', 'Phuket', 'Pattaya', 'Samut Prakan', 'Hat Yai']
+    },
+    HK: {
+      _all: ['Hong Kong Island', 'Kowloon', 'New Territories', 'Tsuen Wan', 'Sha Tin']
     }
   };
 
@@ -591,7 +605,14 @@
     'US-TX': ['Houston', 'Dallas', 'Austin', 'San Antonio', 'Fort Worth', 'El Paso'],
     'US-NY': ['New York', 'Buffalo', 'Rochester', 'Yonkers', 'Syracuse', 'Albany'],
     'US-FL': ['Miami', 'Orlando', 'Tampa', 'Jacksonville', 'Fort Lauderdale'],
-    'US-WA': ['Seattle', 'Spokane', 'Tacoma', 'Vancouver', 'Bellevue']
+    'US-WA': ['Seattle', 'Spokane', 'Tacoma', 'Vancouver', 'Bellevue'],
+    'CA-AB': ['Calgary', 'Edmonton', 'Red Deer', 'Lethbridge'],
+    'CA-BC': ['Vancouver', 'Surrey', 'Burnaby', 'Richmond', 'Victoria'],
+    'CA-ON': ['Toronto', 'Ottawa', 'Mississauga', 'Brampton', 'Hamilton'],
+    'CA-QC': ['Montreal', 'Quebec City', 'Laval', 'Gatineau'],
+    'AU-NSW': ['Sydney', 'Newcastle', 'Central Coast', 'Wollongong'],
+    'AU-VIC': ['Melbourne', 'Geelong', 'Ballarat', 'Bendigo'],
+    'AU-QLD': ['Brisbane', 'Gold Coast', 'Sunshine Coast', 'Cairns']
   };
 
   // ===== ORIGIN PROVINCE COMBOBOX =====
@@ -719,10 +740,14 @@
   function getZoneForService(country) {
     if (!country) return 0;
     const code = state.service;
-    if (code === 'WXS' || code === 'EXW' || code === 'XPR') return country.wxs || 0;
-    if (code === 'XPD') return country.xpd || 0;
-    if (code === 'WFM' || code === 'WXP') return country.wfm || 0;
-    return country.wxs || 0;
+    if (country.wxs !== undefined || country.xpd !== undefined || country.wfm !== undefined) {
+      if (code === 'WXS' || code === 'EXW' || code === 'XPR') return country.wxs || 0;
+      if (code === 'XPD') return country.xpd || 0;
+      if (code === 'WFM' || code === 'WXP') return country.wfm || 0;
+      return country.wxs || 0;
+    }
+    // Zero-Leakage: zones resolved securely on server via /calculate
+    return 1;
   }
 
   function filterCountries(term) {
@@ -736,7 +761,8 @@
     const iataAlias = VN_COUNTRY_ALIASES[normTerm];
 
     const filtered = state.config.COUNTRIES.filter(c => {
-      const normName = removeVietnameseTones(c.name);
+      const cleanName = cleanCountryName(c.name);
+      const normName = removeVietnameseTones(cleanName);
       const matchName = normName.includes(normTerm);
       const matchIata = c.iata.toLowerCase().includes(raw.toLowerCase());
       const matchAlias = iataAlias && c.iata.toUpperCase() === iataAlias.toUpperCase();
@@ -757,8 +783,10 @@
 
     let html = '';
     if (!isSearching) {
-      const popularIatas = state.config.POPULAR_IATA || ['US','JP','KR','AU','CA','DE','GB','FR','SG','TW'];
-      const popular = list.filter(c => popularIatas.includes(c.iata));
+      const popularIatas = state.config.POPULAR_IATA || ['US', 'AU', 'CA', 'JP', 'KR', 'TW', 'SG', 'MY', 'TH', 'GB', 'DE', 'FR', 'HK'];
+      const popular = popularIatas
+        .map(code => list.find(c => c.iata === code))
+        .filter(Boolean);
       if (popular.length > 0) {
         html += '<div class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider px-3.5 py-1.5 bg-slate-50 border-b border-slate-200/60 flex items-center gap-1"><i class="ph ph-star"></i> Tuyến phổ biến</div>';
         html += popular.map(c => renderCountryOption(c)).join('');
@@ -771,14 +799,16 @@
   }
 
   function renderCountryOption(c) {
+    const hasExplicitZones = c.wxs !== undefined || c.xpd !== undefined || c.wfm !== undefined;
     const zone = getZoneForService(c);
-    const isAvailable = zone > 0;
+    const isAvailable = hasExplicitZones ? (zone > 0) : true;
     const isSelected = state.selectedCountry && state.selectedCountry.iata === c.iata;
+    const displayName = cleanCountryName(c.name);
     return `
       <div class="country-option flex items-center justify-between px-3.5 py-2.5 cursor-pointer text-[13px] border-b border-slate-100 last:border-b-0 hover:bg-slate-50 transition-colors ${isSelected ? 'bg-slate-50 font-bold' : ''} ${!isAvailable ? 'opacity-40 pointer-events-none cursor-not-allowed' : ''}"
            onclick="UPSQuote.selectCountry('${c.iata}')" role="option" aria-selected="${isSelected ? 'true' : 'false'}">
         <div class="flex items-center gap-2.5">
-          <span class="${isSelected ? 'font-bold text-navy-900' : 'text-slate-700'}">${c.name}</span>
+          <span class="${isSelected ? 'font-bold text-navy-900' : 'text-slate-700'}">${displayName}</span>
           <span class="text-[10px] font-mono font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded tracking-wide">${c.iata}</span>
         </div>
         ${!isAvailable
@@ -791,16 +821,34 @@
   function selectCountry(iata) {
     const country = state.config.COUNTRIES.find(c => c.iata === iata);
     if (!country) return;
+    const hasExplicitZones = country.wxs !== undefined || country.xpd !== undefined || country.wfm !== undefined;
     const zone = getZoneForService(country);
-    if (zone <= 0) return;
+    if (hasExplicitZones && zone <= 0) return;
 
+    const previousIata = state.selectedCountry ? state.selectedCountry.iata : '';
     state.selectedCountry = country;
     const display = document.getElementById('destCountryDisplay');
     if (display) {
-      display.value = `${country.name} (${country.iata})`;
+      display.value = `${cleanCountryName(country.name)} (${country.iata})`;
     }
 
     toggleCountryDropdown(false);
+
+    // Reset destination address fields if country changed to prevent leftover data
+    if (previousIata && previousIata !== country.iata) {
+      const zipInput = document.getElementById('destZipcode');
+      if (zipInput) zipInput.value = '';
+      const cityInput = document.getElementById('destCity');
+      if (cityInput) cityInput.value = '';
+      const cityDisplay = document.getElementById('destCityDisplay');
+      if (cityDisplay) cityDisplay.value = '';
+      const stateHidden = document.getElementById('destState');
+      if (stateHidden) stateHidden.value = '';
+      const stateDisplay = document.getElementById('destStateDisplay');
+      if (stateDisplay) stateDisplay.value = '';
+      state.selectedState = '';
+    }
+
     updateDestinationAddressFields(country.iata);
     recalculateMetrics();
     hideError();
@@ -852,15 +900,19 @@
         if (stateDisplay.parentElement && stateDisplay.parentElement.classList) {
           stateDisplay.parentElement.classList.remove('opacity-60', 'pointer-events-none');
         }
-        if (iata === 'US') {
-          selectState('CA', 'California');
-        } else {
-          state.selectedState = '';
-          if (stateHidden) stateHidden.value = '';
-          stateDisplay.value = '';
-          stateDisplay.placeholder = '— Chọn Bang / Tỉnh / Khu vực —';
-          renderStateOptions(states);
-          onStateChange('');
+        state.selectedState = '';
+        if (stateHidden) stateHidden.value = '';
+        stateDisplay.value = '';
+        stateDisplay.placeholder = '— Chọn Bang / Tỉnh / Khu vực —';
+        renderStateOptions(states);
+        onStateChange('');
+      }
+      const cityDisplay = document.getElementById('destCityDisplay');
+      if (cityDisplay) {
+        cityDisplay.value = '';
+        cityDisplay.placeholder = '— Chọn Bang / Tỉnh trước —';
+        if (cityDisplay.parentElement && cityDisplay.parentElement.classList) {
+          cityDisplay.parentElement.classList.add('opacity-60', 'pointer-events-none');
         }
       }
     } else {
@@ -877,6 +929,14 @@
         }
       }
       renderStateOptions([]);
+      const cityDisplay = document.getElementById('destCityDisplay');
+      if (cityDisplay) {
+        cityDisplay.value = '';
+        cityDisplay.placeholder = '— Chọn Thành phố —';
+        if (cityDisplay.parentElement && cityDisplay.parentElement.classList) {
+          cityDisplay.parentElement.classList.remove('opacity-60', 'pointer-events-none');
+        }
+      }
       onStateChange('');
     }
   }
@@ -1093,7 +1153,7 @@
     const isOtherSelected = state.selectedCity === 'other';
     html += `
       <div class="city-option flex items-center justify-between px-3.5 py-2.5 cursor-pointer text-[13px] border-t border-dashed border-slate-200 hover:bg-slate-50 text-slate-600 font-medium transition-colors ${isOtherSelected ? 'bg-slate-50 font-bold text-navy-900' : ''}"
-           onclick="UPSQuote.selectCity('other')">
+           data-city="other" onclick="UPSQuote.selectCity('other')">
         <span class="italic text-slate-500 flex items-center gap-1.5">
           <i class="ph-bold ph-pencil-simple text-slate-400 text-xs" aria-hidden="true"></i>
           Khác (nhập địa chỉ cụ thể bên dưới)...
@@ -1109,7 +1169,7 @@
     const isSelected = state.selectedCity === city;
     return `
       <div class="city-option flex items-center justify-between px-3.5 py-2.5 cursor-pointer text-[13px] border-b border-slate-100 last:border-b-0 hover:bg-slate-50 transition-colors ${isSelected ? 'bg-slate-50 font-bold' : ''}"
-           onclick="UPSQuote.selectCity('${escapeHTML(city)}')">
+           data-city="${escapeHTML(city)}" onclick="UPSQuote.selectCity(this.getAttribute('data-city'))">
         <span class="${isSelected ? 'font-bold text-navy-900' : 'text-slate-700'}">${escapeHTML(city)}</span>
         ${isSelected ? '<i class="ph-bold ph-check text-brand-red text-sm" aria-hidden="true"></i>' : ''}
       </div>
@@ -1144,6 +1204,29 @@
     const cityHidden = document.getElementById('destCity');
 
     const iata = state.selectedCountry ? state.selectedCountry.iata : 'US';
+    const hasStates = state.currentStates && state.currentStates.length > 0;
+
+    // If country requires a state and none is selected yet, lock city
+    if (hasStates && !stateVal) {
+      state.currentCities = [];
+      state.selectedCity = '';
+      if (cityHidden) cityHidden.value = '';
+      if (cityDisplay) {
+        cityDisplay.value = '';
+        cityDisplay.placeholder = '— Chọn Bang / Tỉnh trước —';
+        if (cityDisplay.parentElement && cityDisplay.parentElement.classList) {
+          cityDisplay.parentElement.classList.add('opacity-60', 'pointer-events-none');
+        }
+      }
+      renderCityOptions([]);
+      return;
+    }
+
+    // State is selected or country has no state division: unlock city
+    if (cityDisplay && cityDisplay.parentElement && cityDisplay.parentElement.classList) {
+      cityDisplay.parentElement.classList.remove('opacity-60', 'pointer-events-none');
+    }
+
     const fetchKey = stateVal ? `${iata}-${stateVal}` : `${iata}-_all`;
     currentCityFetchKey = fetchKey;
 
@@ -1190,15 +1273,17 @@
 
     state.currentCities = cityList;
 
+    if (cityDisplay && cityDisplay.parentElement && cityDisplay.parentElement.classList) {
+      cityDisplay.parentElement.classList.remove('opacity-60', 'pointer-events-none');
+    }
+
     if (cityHidden) {
       cityHidden.innerHTML = (cityList && cityList.length > 0)
         ? cityList.map(c => `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('')
         : '<option value="other">Khác</option>';
     }
 
-    if (iata === 'US' && stateVal === 'CA') {
-      selectCity('Los Angeles');
-    } else if (cityList && cityList.length > 0) {
+    if (cityList && cityList.length > 0) {
       state.selectedCity = '';
       if (cityHidden) cityHidden.value = '';
       if (cityDisplay) {
@@ -2186,9 +2271,11 @@
       Object.assign(state.config, window.upsQuoteConfig);
     }
 
-    // Default country: US
+    // Leave destination country & address blank for user selection
     const countries = state.config.COUNTRIES || [];
-    state.selectedCountry = countries.find(c => c.iata === 'US') || countries[0] || { iata: 'US', name: 'United States*', wxs: 5, xpd: 5, wfm: 5 };
+    state.selectedCountry = null;
+    state.selectedState = '';
+    state.selectedCity = '';
 
     // Initialize Origin Province
     state.originProvince = 'TP. Hồ Chí Minh';
@@ -2204,10 +2291,36 @@
     renderOriginOptions(state.config.VN_PROVINCES);
 
     renderCountryOptions(countries);
-    if (state.selectedCountry) {
-      selectCountry(state.selectedCountry.iata);
-      updateDestinationAddressFields(state.selectedCountry.iata);
+    const countryDisp = document.getElementById('destCountryDisplay');
+    if (countryDisp) {
+      countryDisp.value = '';
+      countryDisp.placeholder = 'Tìm quốc gia hoặc mã IATA...';
     }
+
+    const stateHidden = document.getElementById('destState');
+    const stateDisplay = document.getElementById('destStateDisplay');
+    if (stateHidden) stateHidden.value = '';
+    if (stateDisplay) {
+      stateDisplay.value = '';
+      stateDisplay.placeholder = '— Chọn quốc gia trước —';
+      if (stateDisplay.parentElement && stateDisplay.parentElement.classList) {
+        stateDisplay.parentElement.classList.add('opacity-60', 'pointer-events-none');
+      }
+    }
+
+    const cityHidden = document.getElementById('destCity');
+    const cityDisplay = document.getElementById('destCityDisplay');
+    if (cityHidden) cityHidden.value = '';
+    if (cityDisplay) {
+      cityDisplay.value = '';
+      cityDisplay.placeholder = '— Chọn quốc gia trước —';
+      if (cityDisplay.parentElement && cityDisplay.parentElement.classList) {
+        cityDisplay.parentElement.classList.add('opacity-60', 'pointer-events-none');
+      }
+    }
+
+    const zipInput = document.getElementById('destZipcode');
+    if (zipInput) zipInput.value = '';
 
     // Initial pieces
     state.pieces = [

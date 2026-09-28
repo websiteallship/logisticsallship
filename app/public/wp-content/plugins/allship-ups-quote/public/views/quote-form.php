@@ -403,14 +403,14 @@ $plugin_version       = defined( 'ALLSHIP_UPS_QUOTE_VERSION' ) ? ALLSHIP_UPS_QUO
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-2.5">
 					<div class="relative" id="stateCombobox">
 						<select id="destState" name="dest_state" class="hidden">
-							<option value="CA">California</option>
+							<option value=""><?php echo esc_html__( '— Chọn Bang / Tỉnh —', 'allship-ups-quote' ); ?></option>
 						</select>
 						<label for="destStateDisplay" id="destStateLabel" class="block text-[11px] md:text-xs font-semibold text-slate-600 mb-1">
 							<?php echo esc_html__( 'Bang / Tỉnh', 'allship-ups-quote' ); ?>
 							<span class="text-[11px] font-medium text-slate-400 normal-case tracking-normal"><?php echo esc_html__( '(tuỳ chọn)', 'allship-ups-quote' ); ?></span>
 						</label>
 						<div class="relative cursor-pointer" onclick="toggleStateDropdown(true)">
-							<input type="text" id="destStateDisplay" class="w-full h-[42px] md:h-[46px] bg-[#F1F4F9] border-[1.5px] border-transparent rounded-xl px-4 pr-9 font-sans text-sm font-semibold text-navy-900 transition-all appearance-none focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] cursor-pointer placeholder:text-slate-400 placeholder:font-medium" placeholder="<?php echo esc_attr__( 'Chọn hoặc tìm Bang / Tỉnh...', 'allship-ups-quote' ); ?>" readonly aria-haspopup="listbox" aria-expanded="false" value="California (CA)">
+							<input type="text" id="destStateDisplay" class="w-full h-[42px] md:h-[46px] bg-[#F1F4F9] border-[1.5px] border-transparent rounded-xl px-4 pr-9 font-sans text-sm font-semibold text-navy-900 transition-all appearance-none focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] cursor-pointer placeholder:text-slate-400 placeholder:font-medium" placeholder="<?php echo esc_attr__( 'Chọn hoặc tìm Bang / Tỉnh...', 'allship-ups-quote' ); ?>" readonly aria-haspopup="listbox" aria-expanded="false" value="">
 							<i class="ph-bold ph-caret-down select-chevron absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-base" aria-hidden="true"></i>
 						</div>
 						<div class="combobox-dropdown custom-scrollbar absolute top-[calc(100%+6px)] left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-xl max-h-[340px] overflow-y-auto z-[100]" id="stateDropdown" role="listbox">
@@ -423,14 +423,14 @@ $plugin_version       = defined( 'ALLSHIP_UPS_QUOTE_VERSION' ) ? ALLSHIP_UPS_QUO
 					</div>
 					<div class="relative" id="cityCombobox">
 						<select id="destCity" name="dest_city" class="hidden">
-							<option value="Los Angeles">Los Angeles</option>
+							<option value=""><?php echo esc_html__( '— Chọn Thành phố —', 'allship-ups-quote' ); ?></option>
 						</select>
 						<label for="destCityDisplay" id="destCityLabel" class="block text-[11px] md:text-xs font-semibold text-slate-600 mb-1">
 							<?php echo esc_html__( 'Thành phố', 'allship-ups-quote' ); ?>
 							<span class="text-[11px] font-medium text-slate-400 normal-case tracking-normal"><?php echo esc_html__( '(tuỳ chọn)', 'allship-ups-quote' ); ?></span>
 						</label>
 						<div class="relative cursor-pointer" onclick="toggleCityDropdown(true)">
-							<input type="text" id="destCityDisplay" class="w-full h-[42px] md:h-[46px] bg-[#F1F4F9] border-[1.5px] border-transparent rounded-xl px-4 pr-9 font-sans text-sm font-semibold text-navy-900 transition-all appearance-none focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] cursor-pointer placeholder:text-slate-400 placeholder:font-medium" placeholder="<?php echo esc_attr__( 'Chọn hoặc tìm Thành phố...', 'allship-ups-quote' ); ?>" readonly aria-haspopup="listbox" aria-expanded="false" value="Los Angeles">
+							<input type="text" id="destCityDisplay" class="w-full h-[42px] md:h-[46px] bg-[#F1F4F9] border-[1.5px] border-transparent rounded-xl px-4 pr-9 font-sans text-sm font-semibold text-navy-900 transition-all appearance-none focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] cursor-pointer placeholder:text-slate-400 placeholder:font-medium" placeholder="<?php echo esc_attr__( 'Chọn hoặc tìm Thành phố...', 'allship-ups-quote' ); ?>" readonly aria-haspopup="listbox" aria-expanded="false" value="">
 							<i class="ph-bold ph-caret-down select-chevron absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-base" aria-hidden="true"></i>
 						</div>
 						<div class="combobox-dropdown custom-scrollbar absolute top-[calc(100%+6px)] left-0 right-0 bg-white border border-slate-200 rounded-xl shadow-xl max-h-[340px] overflow-y-auto z-[100]" id="cityDropdown" role="listbox">
