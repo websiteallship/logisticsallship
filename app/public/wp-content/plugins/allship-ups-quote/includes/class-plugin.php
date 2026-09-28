@@ -50,6 +50,7 @@ class Allship_UPS_Plugin {
 			'config/service-registry.php',
 			// Repositories
 			'class-settings-manager.php',
+			'class-zone-set-repository.php',
 			'class-rate-card-repository.php',
 			'class-country-repository.php',
 			'class-zone-repository.php',
@@ -106,6 +107,34 @@ class Allship_UPS_Plugin {
 	public function register_hooks() {
 		add_action( 'init', [ $this, 'init' ] );
 		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
+
+		// Register Admin Menu and AJAX handlers in admin context
+		if ( is_admin() ) {
+			if ( class_exists( 'Allship_UPS_Admin_Menu' ) ) {
+				$admin_menu = new Allship_UPS_Admin_Menu();
+				$admin_menu->register();
+			}
+			if ( class_exists( 'Allship_UPS_Admin_Rate_Cards' ) ) {
+				$admin_rate_cards = new Allship_UPS_Admin_Rate_Cards();
+				$admin_rate_cards->register_hooks();
+			}
+			if ( class_exists( 'Allship_UPS_Admin_Import' ) ) {
+				$admin_import = new Allship_UPS_Admin_Import();
+				$admin_import->register_hooks();
+			}
+			if ( class_exists( 'Allship_UPS_Admin_Rates' ) ) {
+				$admin_rates = new Allship_UPS_Admin_Rates();
+				$admin_rates->register_hooks();
+			}
+			if ( class_exists( 'Allship_UPS_Admin_Zones' ) ) {
+				$admin_zones = new Allship_UPS_Admin_Zones();
+				$admin_zones->register_hooks();
+			}
+			if ( class_exists( 'Allship_UPS_Admin_Countries' ) ) {
+				$admin_countries = new Allship_UPS_Admin_Countries();
+				$admin_countries->register_hooks();
+			}
+		}
 	}
 
 	/**

@@ -129,14 +129,12 @@ class Allship_UPS_Rate_Repository {
 				   AND rate_group = %s
 				   AND zone = %s
 				   AND billing_unit = 'per_kg'
-				   AND weight_from <= %f
 				   AND ( weight_to >= %f OR weight_to IS NULL )
-				 ORDER BY weight_from DESC
+				 ORDER BY (weight_to IS NULL) ASC, weight_to ASC
 				 LIMIT 1",
 				$rate_card_id,
 				$rate_group,
 				$zone,
-				$chargeable_weight,
 				$chargeable_weight
 			)
 		);

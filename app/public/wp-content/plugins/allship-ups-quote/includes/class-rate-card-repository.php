@@ -70,6 +70,7 @@ class Allship_UPS_Rate_Card_Repository {
 		}
 
 		$name                 = isset( $data['name'] ) ? $this->sanitize_text( $data['name'] ) : 'Untitled Rate Card';
+		$zone_set_id          = ! empty( $data['zone_set_id'] ) ? $this->abs_int( $data['zone_set_id'] ) : null;
 		$market_code          = isset( $data['market_code'] ) ? $this->sanitize_text( $data['market_code'] ) : 'VN';
 		$valid_from           = ! empty( $data['valid_from'] ) ? $this->sanitize_text( $data['valid_from'] ) : null;
 		$source_file_name     = ! empty( $data['source_file_name'] ) ? $this->sanitize_text( $data['source_file_name'] ) : null;
@@ -90,22 +91,30 @@ class Allship_UPS_Rate_Card_Repository {
 			);
 		}
 
+		$fields = [
+			'name'                 => $name,
+			'market_code'          => $market_code,
+			'valid_from'           => $valid_from,
+			'source_file_name'     => $source_file_name,
+			'source_file_hash'     => $source_file_hash,
+			'status'               => $status,
+			'enabled_directions'   => $enabled_directions,
+			'disabled_rate_groups' => $disabled_rate_groups,
+			'imported_at'          => $imported_at,
+			'activated_at'         => ( 'active' === $status ) ? $imported_at : null,
+			'created_by'           => $created_by,
+		];
+		$formats = [ '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d' ];
+
+		if ( null !== $zone_set_id ) {
+			$fields['zone_set_id'] = $zone_set_id;
+			$formats[]             = '%d';
+		}
+
 		$inserted = $this->wpdb->insert(
 			$this->table,
-			[
-				'name'                 => $name,
-				'market_code'          => $market_code,
-				'valid_from'           => $valid_from,
-				'source_file_name'     => $source_file_name,
-				'source_file_hash'     => $source_file_hash,
-				'status'               => $status,
-				'enabled_directions'   => $enabled_directions,
-				'disabled_rate_groups' => $disabled_rate_groups,
-				'imported_at'          => $imported_at,
-				'activated_at'         => ( 'active' === $status ) ? $imported_at : null,
-				'created_by'           => $created_by,
-			],
-			[ '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d' ]
+			$fields,
+			$formats
 		);
 
 		if ( false === $inserted ) {
@@ -376,6 +385,7 @@ class Allship_UPS_Rate_Card_Repository {
 		}
 
 		$row->id = (int) $row->id;
+		$row->zone_set_id = isset( $row->zone_set_id ) && null !== $row->zone_set_id ? (int) $row->zone_set_id : null;
 		if ( isset( $row->created_by ) && null !== $row->created_by ) {
 			$row->created_by = (int) $row->created_by;
 		}
@@ -391,5 +401,15 @@ class Allship_UPS_Rate_Card_Repository {
 		}
 
 		return $row;
+	}
+
+	/**
+	 * Find rate card by ID (alias for get).
+	 *
+	 * @param int $id Rate card ID.
+	 * @return object|null
+	 */
+	public function find_by_id( $id ) {
+		return $this->get( $id );
 	}
 }

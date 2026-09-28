@@ -112,7 +112,7 @@ class Allship_UPS_Zone_Importer {
 			}
 
 			$headers_lower = array_map( function( $h ) {
-				return strtolower( trim( (string) $h ) );
+				return strtolower( trim( preg_replace( '/^\xEF\xBB\xBF/', '', (string) $h ) ) );
 			}, $header );
 
 			if ( in_array( 'sn', $headers_lower, true ) && in_array( 'cty', $headers_lower, true ) && in_array( 'mvn', $headers_lower, true ) ) {
@@ -132,16 +132,18 @@ class Allship_UPS_Zone_Importer {
 				throw new Exception( 'Empty XLSX workbook.' );
 			}
 
-			$header = array_map( function( $h ) {
-				return strtolower( trim( (string) $h ) );
-			}, $rows[0] );
+			foreach ( array_slice( $rows, 0, 5 ) as $candidate_row ) {
+				$candidate_header = array_map( function( $h ) {
+					return strtolower( trim( preg_replace( '/^\xEF\xBB\xBF/', '', (string) $h ) ) );
+				}, $candidate_row );
 
-			if ( in_array( 'sn', $header, true ) && in_array( 'cty', $header, true ) && in_array( 'mvn', $header, true ) ) {
-				return 'flat_xlsx';
-			}
+				if ( in_array( 'sn', $candidate_header, true ) && in_array( 'cty', $candidate_header, true ) && in_array( 'mvn', $candidate_header, true ) ) {
+					return 'flat_xlsx';
+				}
 
-			if ( in_array( 'iata_code', $header, true ) || in_array( 'iata', $header, true ) ) {
-				return 'pivot_template';
+				if ( in_array( 'iata_code', $candidate_header, true ) || in_array( 'iata', $candidate_header, true ) ) {
+					return 'pivot_template';
+				}
 			}
 
 			throw new Exception( 'Unrecognized XLSX zone format.' );
@@ -167,10 +169,24 @@ class Allship_UPS_Zone_Importer {
 			];
 		}
 
-		$header_row = array_shift( $rows );
+		// Locate header row index (in case of title or banner row)
+		$header_idx = 0;
+		foreach ( array_slice( $rows, 0, 5, true ) as $idx => $r ) {
+			$candidate_lower = array_map( function( $h ) {
+				return strtolower( trim( preg_replace( '/^\xEF\xBB\xBF/', '', (string) $h ) ) );
+			}, $r );
+			if ( in_array( 'sn', $candidate_lower, true ) && in_array( 'mvn', $candidate_lower, true ) ) {
+				$header_idx = $idx;
+				break;
+			}
+		}
+
+		$header_row = $rows[ $header_idx ];
+		$rows       = array_slice( $rows, $header_idx + 1 );
+
 		$col_indices = [];
 		foreach ( $header_row as $idx => $name ) {
-			$col_indices[ strtolower( trim( (string) $name ) ) ] = $idx;
+			$col_indices[ strtolower( trim( preg_replace( '/^\xEF\xBB\xBF/', '', (string) $name ) ) ) ] = $idx;
 		}
 
 		$iata_idx     = isset( $col_indices['iata'] ) ? $col_indices['iata'] : 2;
@@ -499,21 +515,22 @@ class Allship_UPS_Zone_Importer {
 	}
 
 	/**
-	 * Import countries and zone mappings into database.
+	 * Import countries and zone mappings into database for a specific zone_set_id.
 	 *
 	 * 1. Upserts all countries into ups_countries.
 	 * 2. Fetches country IDs.
-	 * 3. Bulk inserts zone mappings into ups_zone_maps for the specified rate_card_id.
+	 * 3. Bulk inserts zone mappings into ups_zone_maps for the specified zone_set_id.
+	 * 4. Syncs record_count on ups_zone_sets.
 	 *
 	 * @param string $file_path Path to uploaded zone file.
-	 * @param int    $rate_card_id Target rate card ID.
+	 * @param int    $zone_set_id Target zone set ID (or rate card ID for compatibility).
 	 * @return array Import result summary.
 	 * @throws Exception If validation fails or DB insert fails.
 	 */
-	public function import( $file_path, $rate_card_id ) {
-		$rate_card_id = abs( (int) $rate_card_id );
-		if ( ! $rate_card_id ) {
-			throw new Exception( 'A valid rate_card_id is required for zone import.' );
+	public function import( $file_path, $zone_set_id ) {
+		$zone_set_id = abs( (int) $zone_set_id );
+		if ( ! $zone_set_id ) {
+			throw new Exception( 'A valid zone_set_id is required for zone import.' );
 		}
 
 		$parsed_data = $this->parse_file( $file_path );
@@ -533,7 +550,7 @@ class Allship_UPS_Zone_Importer {
 			$iata_to_id[ $c->iata_code ] = $c->id;
 		}
 
-		// 3. Assemble zone records with country_id and rate_card_id
+		// 3. Assemble zone records with country_id and zone_set_id
 		$zone_rows = [];
 		foreach ( $parsed_data['zones'] as $z ) {
 			$iata = $z['iata_code'];
@@ -542,7 +559,8 @@ class Allship_UPS_Zone_Importer {
 			}
 
 			$zone_rows[] = [
-				'rate_card_id' => $rate_card_id,
+				'zone_set_id'  => $zone_set_id,
+				'rate_card_id' => $zone_set_id, // backward compatibility
 				'country_id'   => $iata_to_id[ $iata ],
 				'direction'    => $z['direction'],
 				'service_code' => $z['service_code'],
@@ -555,14 +573,21 @@ class Allship_UPS_Zone_Importer {
 		// 4. Bulk insert zone mappings
 		$zones_inserted = $this->zone_repo->bulk_insert( $zone_rows );
 
+		// 5. Update record count in ups_zone_sets
+		if ( class_exists( 'Allship_UPS_Zone_Set_Repository' ) ) {
+			$zs_repo = new Allship_UPS_Zone_Set_Repository();
+			$zs_repo->update_record_count( $zone_set_id );
+		}
+
 		return [
-			'status'              => 'success',
-			'countries_processed' => count( $parsed_data['countries'] ),
-			'countries_upserted'  => $countries_upserted,
-			'zones_processed'     => count( $zone_rows ),
-			'zones_inserted'      => $zones_inserted,
-			'rate_card_id'        => $rate_card_id,
-			'services_summary'    => $validation['services_summary'],
+			'status'               => 'success',
+			'countries_processed'  => count( $parsed_data['countries'] ),
+			'countries_upserted'   => $countries_upserted,
+			'zones_processed'      => count( $zone_rows ),
+			'total_zones_imported' => $zones_inserted,
+			'zone_set_id'          => $zone_set_id,
+			'rate_card_id'         => $zone_set_id,
+			'services_summary'     => $validation['services_summary'],
 		];
 	}
 }

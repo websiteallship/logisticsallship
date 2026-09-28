@@ -1,0 +1,2838 @@
+﻿SN,Cty,IATA,Rate Guide Country Name,Svc Type,Mvn,XPR,XPD,WXS,WXP,WFM,EXW
+20735,VN,AF,Afghanistan,Package,Export,0,0,0,0,0,0
+20736,VN,AF,Afghanistan,Package,Export,0,0,9,0,0,0
+20737,VN,AF,Afghanistan,Package,Export,0,9,0,0,0,0
+20738,VN,AF,Afghanistan,Package,Import,10,0,0,0,0,0
+20739,VN,AF,Afghanistan,Package,Import,0,0,10,0,0,0
+20740,VN,AF,Afghanistan,Package,Import,0,0,0,0,0,0
+20741,VN,AX,Aland Island (Finland)*,Package,Export,0,0,0,0,0,0
+20742,VN,AX,Aland Island (Finland)*,Package,Export,0,0,6,0,0,0
+20743,VN,AX,Aland Island (Finland)*,Package,Export,0,6,0,0,0,0
+20744,VN,AX,Aland Island (Finland)*,Package,Import,6,0,0,0,0,0
+20745,VN,AX,Aland Island (Finland)*,Package,Import,0,0,6,0,0,0
+20746,VN,AX,Aland Island (Finland)*,Package,Import,0,0,0,0,0,0
+20747,VN,AL,Albania,Package,Export,9,0,0,0,0,0
+20748,VN,AL,Albania,Package,Export,0,0,9,0,0,0
+20749,VN,AL,Albania,Package,Export,0,9,0,0,0,0
+20750,VN,AL,Albania,Package,Import,10,0,0,0,0,0
+20751,VN,AL,Albania,Package,Import,0,0,10,0,0,0
+20752,VN,AL,Albania,Package,Import,0,0,0,0,0,0
+20753,VN,DZ,Algeria,Package,Export,9,0,0,0,0,0
+20754,VN,DZ,Algeria,Package,Export,0,0,9,0,0,0
+20755,VN,DZ,Algeria,Package,Export,0,9,0,0,0,0
+20756,VN,DZ,Algeria,Package,Import,10,0,0,0,0,0
+20757,VN,DZ,Algeria,Package,Import,0,0,10,0,0,0
+20758,VN,DZ,Algeria,Package,Import,0,0,0,0,0,0
+20759,VN,AS,American Samoa,Package,Export,9,0,0,0,0,0
+20760,VN,AS,American Samoa,Package,Export,0,0,9,0,0,0
+20761,VN,AS,American Samoa,Package,Export,0,9,0,0,0,0
+20762,VN,AS,American Samoa,Package,Import,10,0,0,0,0,0
+20763,VN,AS,American Samoa,Package,Import,0,0,10,0,0,0
+20764,VN,AS,American Samoa,Package,Import,0,0,0,0,0,0
+20765,VN,AD,Andorra,Package,Export,7,0,0,0,0,0
+20766,VN,AD,Andorra,Package,Export,0,0,7,0,0,0
+20767,VN,AD,Andorra,Package,Export,0,7,0,0,0,0
+20768,VN,AD,Andorra,Package,Import,0,0,0,0,0,0
+20769,VN,AD,Andorra,Package,Import,0,0,0,0,0,0
+20770,VN,AD,Andorra,Package,Import,0,0,0,0,0,0
+20771,VN,AO,Angola,Package,Export,0,0,0,0,0,0
+20772,VN,AO,Angola,Package,Export,0,0,8,0,0,0
+20773,VN,AO,Angola,Package,Export,0,8,0,0,0,0
+20774,VN,AO,Angola,Package,Import,10,0,0,0,0,0
+20775,VN,AO,Angola,Package,Import,0,0,10,0,0,0
+20776,VN,AO,Angola,Package,Import,0,0,0,0,0,0
+20777,VN,AI,Anguilla,Package,Export,0,0,0,0,0,0
+20778,VN,AI,Anguilla,Package,Export,0,0,8,0,0,0
+20779,VN,AI,Anguilla,Package,Export,0,8,0,0,0,0
+20780,VN,AI,Anguilla,Package,Import,9,0,0,0,0,0
+20781,VN,AI,Anguilla,Package,Import,0,0,9,0,0,0
+20782,VN,AI,Anguilla,Package,Import,0,0,0,0,0,0
+20783,VN,AG,Antigua and Barbuda,Package,Export,0,0,0,0,0,0
+20784,VN,AG,Antigua and Barbuda,Package,Export,0,0,8,0,0,0
+20785,VN,AG,Antigua and Barbuda,Package,Export,0,8,0,0,0,0
+20786,VN,AG,Antigua and Barbuda,Package,Import,9,0,0,0,0,0
+20787,VN,AG,Antigua and Barbuda,Package,Import,0,0,9,0,0,0
+20788,VN,AG,Antigua and Barbuda,Package,Import,0,0,0,0,0,0
+20789,VN,AR,Argentina*,Package,Export,8,0,0,0,0,0
+20790,VN,AR,Argentina*,Package,Export,0,0,8,0,0,0
+20791,VN,AR,Argentina*,Package,Export,0,8,0,0,0,0
+20792,VN,AR,Argentina*,Package,Import,9,0,0,0,0,0
+20793,VN,AR,Argentina*,Package,Import,0,0,9,0,0,0
+20794,VN,AR,Argentina*,Package,Import,0,9,0,0,0,0
+20795,VN,AM,Armenia,Package,Export,9,0,0,0,0,0
+20796,VN,AM,Armenia,Package,Export,0,0,9,0,0,0
+20797,VN,AM,Armenia,Package,Export,0,9,0,0,0,0
+20798,VN,AM,Armenia,Package,Import,10,0,0,0,0,0
+20799,VN,AM,Armenia,Package,Import,0,0,10,0,0,0
+20800,VN,AM,Armenia,Package,Import,0,0,0,0,0,0
+20801,VN,AW,Aruba,Package,Export,8,0,0,0,0,0
+20802,VN,AW,Aruba,Package,Export,0,0,8,0,0,0
+20803,VN,AW,Aruba,Package,Export,0,8,0,0,0,0
+20804,VN,AW,Aruba,Package,Import,9,0,0,0,0,0
+20805,VN,AW,Aruba,Package,Import,0,0,9,0,0,0
+20806,VN,AW,Aruba,Package,Import,0,0,0,0,0,0
+20807,VN,AU,Australia*#,Package,Export,3,0,0,0,0,0
+20808,VN,AU,Australia*#,Package,Export,0,0,3,0,0,0
+20809,VN,AU,Australia*#,Package,Export,0,3,0,0,0,0
+20810,VN,AU,Australia*#,Package,Import,3,0,0,0,0,0
+20811,VN,AU,Australia*#,Package,Import,0,0,3,0,0,0
+20812,VN,AU,Australia*#,Package,Import,0,3,0,0,0,0
+20813,VN,AT,Austria*,Package,Export,6,0,0,0,0,0
+20814,VN,AT,Austria*,Package,Export,0,0,6,0,0,0
+20815,VN,AT,Austria*,Package,Export,0,6,0,0,0,0
+20816,VN,AT,Austria*,Package,Import,6,0,0,0,0,0
+20817,VN,AT,Austria*,Package,Import,0,0,6,0,0,0
+20818,VN,AT,Austria*,Package,Import,0,6,0,0,0,0
+20819,VN,AZ,Azerbaijan,Package,Export,0,0,0,0,0,0
+20820,VN,AZ,Azerbaijan,Package,Export,0,0,7,0,0,0
+20821,VN,AZ,Azerbaijan,Package,Export,0,7,0,0,0,0
+20822,VN,AZ,Azerbaijan,Package,Import,10,0,0,0,0,0
+20823,VN,AZ,Azerbaijan,Package,Import,0,0,10,0,0,0
+20824,VN,AZ,Azerbaijan,Package,Import,0,0,0,0,0,0
+20825,VN,A2,Azores (Portugal)*,Package,Export,0,0,0,0,0,0
+20826,VN,A2,Azores (Portugal)*,Package,Export,0,0,7,0,0,0
+20827,VN,A2,Azores (Portugal)*,Package,Export,0,7,0,0,0,0
+20828,VN,A2,Azores (Portugal)*,Package,Import,7,0,0,0,0,0
+20829,VN,A2,Azores (Portugal)*,Package,Import,0,0,7,0,0,0
+20830,VN,A2,Azores (Portugal)*,Package,Import,0,0,0,0,0,0
+20831,VN,BS,Bahamas*,Package,Export,8,0,0,0,0,0
+20832,VN,BS,Bahamas*,Package,Export,0,0,8,0,0,0
+20833,VN,BS,Bahamas*,Package,Export,0,8,0,0,0,0
+20834,VN,BS,Bahamas*,Package,Import,9,0,0,0,0,0
+20835,VN,BS,Bahamas*,Package,Import,0,0,9,0,0,0
+20836,VN,BS,Bahamas*,Package,Import,0,0,0,0,0,0
+20837,VN,BH,Bahrain,Package,Export,7,0,0,0,0,0
+20838,VN,BH,Bahrain,Package,Export,0,0,7,0,0,0
+20839,VN,BH,Bahrain,Package,Export,0,7,0,0,0,0
+20840,VN,BH,Bahrain,Package,Import,10,0,0,0,0,0
+20841,VN,BH,Bahrain,Package,Import,0,0,10,0,0,0
+20842,VN,BH,Bahrain,Package,Import,0,10,0,0,0,0
+20843,VN,BD,Bangladesh,Package,Export,4,0,0,0,0,0
+20844,VN,BD,Bangladesh,Package,Export,0,0,4,0,0,0
+20845,VN,BD,Bangladesh,Package,Export,0,4,0,0,0,0
+20846,VN,BD,Bangladesh,Package,Import,4,0,0,0,0,0
+20847,VN,BD,Bangladesh,Package,Import,0,0,4,0,0,0
+20848,VN,BD,Bangladesh,Package,Import,0,0,0,0,0,0
+20849,VN,BB,Barbados,Package,Export,8,0,0,0,0,0
+20850,VN,BB,Barbados,Package,Export,0,0,8,0,0,0
+20851,VN,BB,Barbados,Package,Export,0,8,0,0,0,0
+20852,VN,BB,Barbados,Package,Import,9,0,0,0,0,0
+20853,VN,BB,Barbados,Package,Import,0,0,9,0,0,0
+20854,VN,BB,Barbados,Package,Import,0,0,0,0,0,0
+20855,VN,BY,Belarus*,Package,Export,7,0,0,0,0,0
+20856,VN,BY,Belarus*,Package,Export,0,0,7,0,0,0
+20857,VN,BY,Belarus*,Package,Export,0,7,0,0,0,0
+20858,VN,BY,Belarus*,Package,Import,10,0,0,0,0,0
+20859,VN,BY,Belarus*,Package,Import,0,0,10,0,0,0
+20860,VN,BY,Belarus*,Package,Import,0,0,0,0,0,0
+20861,VN,BE,Belgium,Package,Export,6,0,0,0,0,0
+20862,VN,BE,Belgium,Package,Export,0,0,6,0,0,0
+20863,VN,BE,Belgium,Package,Export,0,6,0,0,0,0
+20864,VN,BE,Belgium,Package,Import,6,0,0,0,0,0
+20865,VN,BE,Belgium,Package,Import,0,0,6,0,0,0
+20866,VN,BE,Belgium,Package,Import,0,6,0,0,0,0
+20867,VN,BZ,Belize,Package,Export,0,0,0,0,0,0
+20868,VN,BZ,Belize,Package,Export,0,0,8,0,0,0
+20869,VN,BZ,Belize,Package,Export,0,8,0,0,0,0
+20870,VN,BZ,Belize,Package,Import,0,0,0,0,0,0
+20871,VN,BZ,Belize,Package,Import,0,0,0,0,0,0
+20872,VN,BZ,Belize,Package,Import,0,0,0,0,0,0
+20873,VN,BJ,Benin,Package,Export,0,0,0,0,0,0
+20874,VN,BJ,Benin,Package,Export,0,0,9,0,0,0
+20875,VN,BJ,Benin,Package,Export,0,9,0,0,0,0
+20876,VN,BJ,Benin,Package,Import,10,0,0,0,0,0
+20877,VN,BJ,Benin,Package,Import,0,0,10,0,0,0
+20878,VN,BJ,Benin,Package,Import,0,0,0,0,0,0
+20879,VN,BM,Bermuda,Package,Export,9,0,0,0,0,0
+20880,VN,BM,Bermuda,Package,Export,0,0,9,0,0,0
+20881,VN,BM,Bermuda,Package,Export,0,9,0,0,0,0
+20882,VN,BM,Bermuda,Package,Import,10,0,0,0,0,0
+20883,VN,BM,Bermuda,Package,Import,0,0,10,0,0,0
+20884,VN,BM,Bermuda,Package,Import,0,0,0,0,0,0
+20885,VN,BT,Bhutan,Package,Export,0,0,0,0,0,0
+20886,VN,BT,Bhutan,Package,Export,0,0,0,0,0,0
+20887,VN,BT,Bhutan,Package,Export,0,0,0,0,0,0
+20888,VN,BT,Bhutan,Package,Import,0,0,0,0,0,0
+20889,VN,BT,Bhutan,Package,Import,0,0,0,0,0,0
+20890,VN,BT,Bhutan,Package,Import,0,0,0,0,0,0
+20891,VN,BO,Bolivia,Package,Export,8,0,0,0,0,0
+20892,VN,BO,Bolivia,Package,Export,0,0,8,0,0,0
+20893,VN,BO,Bolivia,Package,Export,0,8,0,0,0,0
+20894,VN,BO,Bolivia,Package,Import,9,0,0,0,0,0
+20895,VN,BO,Bolivia,Package,Import,0,0,9,0,0,0
+20896,VN,BO,Bolivia,Package,Import,0,0,0,0,0,0
+20897,VN,BQ,"Bonaire, St. Eustatius, Saba",Package,Export,0,0,0,0,0,0
+20898,VN,BQ,"Bonaire, St. Eustatius, Saba",Package,Export,0,0,8,0,0,0
+20899,VN,BQ,"Bonaire, St. Eustatius, Saba",Package,Export,0,8,0,0,0,0
+20900,VN,BQ,"Bonaire, St. Eustatius, Saba",Package,Import,9,0,0,0,0,0
+20901,VN,BQ,"Bonaire, St. Eustatius, Saba",Package,Import,0,0,9,0,0,0
+20902,VN,BQ,"Bonaire, St. Eustatius, Saba",Package,Import,0,0,0,0,0,0
+20903,VN,BA,Bosnia and Herzegovina,Package,Export,7,0,0,0,0,0
+20904,VN,BA,Bosnia and Herzegovina,Package,Export,0,0,7,0,0,0
+20905,VN,BA,Bosnia and Herzegovina,Package,Export,0,7,0,0,0,0
+20906,VN,BA,Bosnia and Herzegovina,Package,Import,10,0,0,0,0,0
+20907,VN,BA,Bosnia and Herzegovina,Package,Import,0,0,10,0,0,0
+20908,VN,BA,Bosnia and Herzegovina,Package,Import,0,0,0,0,0,0
+20909,VN,BW,Botswana,Package,Export,0,0,0,0,0,0
+20910,VN,BW,Botswana,Package,Export,0,0,9,0,0,0
+20911,VN,BW,Botswana,Package,Export,0,9,0,0,0,0
+20912,VN,BW,Botswana,Package,Import,10,0,0,0,0,0
+20913,VN,BW,Botswana,Package,Import,0,0,10,0,0,0
+20914,VN,BW,Botswana,Package,Import,0,0,0,0,0,0
+20915,VN,BR,Brazil*,Package,Export,8,0,0,0,0,0
+20916,VN,BR,Brazil*,Package,Export,0,0,8,0,0,0
+20917,VN,BR,Brazil*,Package,Export,0,8,0,0,0,0
+20918,VN,BR,Brazil*,Package,Import,9,0,0,0,0,0
+20919,VN,BR,Brazil*,Package,Import,0,0,9,0,0,0
+20920,VN,BR,Brazil*,Package,Import,0,9,0,0,0,0
+20921,VN,VG,British Virgin Islands,Package,Export,0,0,0,0,0,0
+20922,VN,VG,British Virgin Islands,Package,Export,0,0,8,0,0,0
+20923,VN,VG,British Virgin Islands,Package,Export,0,8,0,0,0,0
+20924,VN,VG,British Virgin Islands,Package,Import,9,0,0,0,0,0
+20925,VN,VG,British Virgin Islands,Package,Import,0,0,9,0,0,0
+20926,VN,VG,British Virgin Islands,Package,Import,0,0,0,0,0,0
+20927,VN,BN,Brunei*,Package,Export,2,0,0,0,0,0
+20928,VN,BN,Brunei*,Package,Export,0,0,2,0,0,0
+20929,VN,BN,Brunei*,Package,Export,0,2,0,0,0,0
+20930,VN,BN,Brunei*,Package,Import,4,0,0,0,0,0
+20931,VN,BN,Brunei*,Package,Import,0,0,4,0,0,0
+20932,VN,BN,Brunei*,Package,Import,0,0,0,0,0,0
+20933,VN,B1,Buesingen (Germany)*,Package,Export,0,0,0,0,0,0
+20934,VN,B1,Buesingen (Germany)*,Package,Export,0,0,6,0,0,0
+20935,VN,B1,Buesingen (Germany)*,Package,Export,0,6,0,0,0,0
+20936,VN,B1,Buesingen (Germany)*,Package,Import,0,0,0,0,0,0
+20937,VN,B1,Buesingen (Germany)*,Package,Import,0,0,0,0,0,0
+20938,VN,B1,Buesingen (Germany)*,Package,Import,0,0,0,0,0,0
+20939,VN,BG,Bulgaria,Package,Export,7,0,0,0,0,0
+20940,VN,BG,Bulgaria,Package,Export,0,0,7,0,0,0
+20941,VN,BG,Bulgaria,Package,Export,0,7,0,0,0,0
+20942,VN,BG,Bulgaria,Package,Import,10,0,0,0,0,0
+20943,VN,BG,Bulgaria,Package,Import,0,0,10,0,0,0
+20944,VN,BG,Bulgaria,Package,Import,0,10,0,0,0,0
+20945,VN,BF,Burkina Faso,Package,Export,0,0,0,0,0,0
+20946,VN,BF,Burkina Faso,Package,Export,0,0,9,0,0,0
+20947,VN,BF,Burkina Faso,Package,Export,0,9,0,0,0,0
+20948,VN,BF,Burkina Faso,Package,Import,10,0,0,0,0,0
+20949,VN,BF,Burkina Faso,Package,Import,0,0,10,0,0,0
+20950,VN,BF,Burkina Faso,Package,Import,0,0,0,0,0,0
+20951,VN,BI,Burundi,Package,Export,0,0,0,0,0,0
+20952,VN,BI,Burundi,Package,Export,0,0,9,0,0,0
+20953,VN,BI,Burundi,Package,Export,0,9,0,0,0,0
+20954,VN,BI,Burundi,Package,Import,9,0,0,0,0,0
+20955,VN,BI,Burundi,Package,Import,0,0,9,0,0,0
+20956,VN,BI,Burundi,Package,Import,0,0,0,0,0,0
+20957,VN,KH,Cambodia*,Package,Export,3,0,0,0,0,0
+20958,VN,KH,Cambodia*,Package,Export,0,0,3,0,0,0
+20959,VN,KH,Cambodia*,Package,Export,0,3,0,0,0,0
+20960,VN,KH,Cambodia*,Package,Import,4,0,0,0,0,0
+20961,VN,KH,Cambodia*,Package,Import,0,0,4,0,0,0
+20962,VN,KH,Cambodia*,Package,Import,0,0,0,0,0,0
+20963,VN,CM,Cameroon,Package,Export,0,0,0,0,0,0
+20964,VN,CM,Cameroon,Package,Export,0,0,9,0,0,0
+20965,VN,CM,Cameroon,Package,Export,0,9,0,0,0,0
+20966,VN,CM,Cameroon,Package,Import,10,0,0,0,0,0
+20967,VN,CM,Cameroon,Package,Import,0,0,10,0,0,0
+20968,VN,CM,Cameroon,Package,Import,0,0,0,0,0,0
+20969,VN,C3,Campione/ Lake Lugano (Italy)*,Package,Export,0,0,0,0,0,0
+20970,VN,C3,Campione/ Lake Lugano (Italy)*,Package,Export,0,0,6,0,0,0
+20971,VN,C3,Campione/ Lake Lugano (Italy)*,Package,Export,0,6,0,0,0,0
+20972,VN,C3,Campione/ Lake Lugano (Italy)*,Package,Import,6,0,0,0,0,0
+20973,VN,C3,Campione/ Lake Lugano (Italy)*,Package,Import,0,0,6,0,0,0
+20974,VN,C3,Campione/ Lake Lugano (Italy)*,Package,Import,0,0,0,0,0,0
+20975,VN,CA,Canada*,Package,Export,5,0,0,0,0,0
+20976,VN,CA,Canada*,Package,Export,0,0,5,0,0,0
+20977,VN,CA,Canada*,Package,Export,0,5,0,0,0,0
+20978,VN,CA,Canada*,Package,Import,5,0,0,0,0,0
+20979,VN,CA,Canada*,Package,Import,0,0,5,0,0,0
+20980,VN,CA,Canada*,Package,Import,0,5,0,0,0,0
+20981,VN,IC,Canary Islands (Spain)*,Package,Export,0,0,0,0,0,0
+20982,VN,IC,Canary Islands (Spain)*,Package,Export,0,0,6,0,0,0
+20983,VN,IC,Canary Islands (Spain)*,Package,Export,0,6,0,0,0,0
+20984,VN,IC,Canary Islands (Spain)*,Package,Import,6,0,0,0,0,0
+20985,VN,IC,Canary Islands (Spain)*,Package,Import,0,0,6,0,0,0
+20986,VN,IC,Canary Islands (Spain)*,Package,Import,0,0,0,0,0,0
+20987,VN,CV,Cape Verde,Package,Export,0,0,0,0,0,0
+20988,VN,CV,Cape Verde,Package,Export,0,0,9,0,0,0
+20989,VN,CV,Cape Verde,Package,Export,0,9,0,0,0,0
+20990,VN,CV,Cape Verde,Package,Import,10,0,0,0,0,0
+20991,VN,CV,Cape Verde,Package,Import,0,0,10,0,0,0
+20992,VN,CV,Cape Verde,Package,Import,0,0,0,0,0,0
+20993,VN,KY,Cayman Islands,Package,Export,0,0,0,0,0,0
+20994,VN,KY,Cayman Islands,Package,Export,0,0,8,0,0,0
+20995,VN,KY,Cayman Islands,Package,Export,0,8,0,0,0,0
+20996,VN,KY,Cayman Islands,Package,Import,9,0,0,0,0,0
+20997,VN,KY,Cayman Islands,Package,Import,0,0,9,0,0,0
+20998,VN,KY,Cayman Islands,Package,Import,0,0,0,0,0,0
+20999,VN,CF,Central African Republic,Package,Export,0,0,0,0,0,0
+21000,VN,CF,Central African Republic,Package,Export,0,0,9,0,0,0
+21001,VN,CF,Central African Republic,Package,Export,0,9,0,0,0,0
+21002,VN,CF,Central African Republic,Package,Import,0,0,0,0,0,0
+21003,VN,CF,Central African Republic,Package,Import,0,0,0,0,0,0
+21004,VN,CF,Central African Republic,Package,Import,0,0,0,0,0,0
+21005,VN,C2,Ceuta (Spain)*,Package,Export,0,0,0,0,0,0
+21006,VN,C2,Ceuta (Spain)*,Package,Export,0,0,6,0,0,0
+21007,VN,C2,Ceuta (Spain)*,Package,Export,0,6,0,0,0,0
+21008,VN,C2,Ceuta (Spain)*,Package,Import,0,0,0,0,0,0
+21009,VN,C2,Ceuta (Spain)*,Package,Import,0,0,0,0,0,0
+21010,VN,C2,Ceuta (Spain)*,Package,Import,0,0,0,0,0,0
+21011,VN,TD,Chad,Package,Export,0,0,0,0,0,0
+21012,VN,TD,Chad,Package,Export,0,0,9,0,0,0
+21013,VN,TD,Chad,Package,Export,0,9,0,0,0,0
+21014,VN,TD,Chad,Package,Import,10,0,0,0,0,0
+21015,VN,TD,Chad,Package,Import,0,0,10,0,0,0
+21016,VN,TD,Chad,Package,Import,0,0,0,0,0,0
+21017,VN,CL,Chile*,Package,Export,8,0,0,0,0,0
+21018,VN,CL,Chile*,Package,Export,0,0,8,0,0,0
+21019,VN,CL,Chile*,Package,Export,0,8,0,0,0,0
+21020,VN,CL,Chile*,Package,Import,9,0,0,0,0,0
+21021,VN,CL,Chile*,Package,Import,0,0,9,0,0,0
+21022,VN,CL,Chile*,Package,Import,0,9,0,0,0,0
+21023,VN,CNN,China Mainland (Excluding Southern China Mainland)*#,Package,Export,3,0,0,0,0,0
+21024,VN,CNN,China Mainland (Excluding Southern China Mainland)*#,Package,Export,0,0,3,0,0,0
+21025,VN,CNN,China Mainland (Excluding Southern China Mainland)*#,Package,Export,0,3,0,0,0,0
+21026,VN,CNN,China Mainland (Excluding Southern China Mainland)*#,Package,Import,3,0,0,0,0,0
+21027,VN,CNN,China Mainland (Excluding Southern China Mainland)*#,Package,Import,0,0,3,0,0,0
+21028,VN,CNN,China Mainland (Excluding Southern China Mainland)*#,Package,Import,0,3,0,0,0,0
+21029,VN,CNS,Southern China Mainland+*#,Package,Export,10,0,0,0,0,0
+21030,VN,CNS,Southern China Mainland+*#,Package,Export,0,0,10,0,0,0
+21031,VN,CNS,Southern China Mainland+*#,Package,Export,0,10,0,0,0,0
+21032,VN,CNS,Southern China Mainland+*#,Package,Import,11,0,0,0,0,0
+21033,VN,CNS,Southern China Mainland+*#,Package,Import,0,0,11,0,0,0
+21034,VN,CNS,Southern China Mainland+*#,Package,Import,0,11,0,0,0,0
+21035,VN,CO,Colombia*,Package,Export,8,0,0,0,0,0
+21036,VN,CO,Colombia*,Package,Export,0,0,8,0,0,0
+21037,VN,CO,Colombia*,Package,Export,0,8,0,0,0,0
+21038,VN,CO,Colombia*,Package,Import,9,0,0,0,0,0
+21039,VN,CO,Colombia*,Package,Import,0,0,9,0,0,0
+21040,VN,CO,Colombia*,Package,Import,0,9,0,0,0,0
+21041,VN,KM,Comoros,Package,Export,0,0,0,0,0,0
+21042,VN,KM,Comoros,Package,Export,0,0,9,0,0,0
+21043,VN,KM,Comoros,Package,Export,0,9,0,0,0,0
+21044,VN,KM,Comoros,Package,Import,10,0,0,0,0,0
+21045,VN,KM,Comoros,Package,Import,0,0,10,0,0,0
+21046,VN,KM,Comoros,Package,Import,0,0,0,0,0,0
+21047,VN,CG,"Congo, Republic of",Package,Export,0,0,0,0,0,0
+21048,VN,CG,"Congo, Republic of",Package,Export,0,0,9,0,0,0
+21049,VN,CG,"Congo, Republic of",Package,Export,0,9,0,0,0,0
+21050,VN,CG,"Congo, Republic of",Package,Import,10,0,0,0,0,0
+21051,VN,CG,"Congo, Republic of",Package,Import,0,0,10,0,0,0
+21052,VN,CG,"Congo, Republic of",Package,Import,0,0,0,0,0,0
+21053,VN,CD,"Congo, Democratic Republic of",Package,Export,0,0,0,0,0,0
+21054,VN,CD,"Congo, Democratic Republic of",Package,Export,0,0,9,0,0,0
+21055,VN,CD,"Congo, Democratic Republic of",Package,Export,0,9,0,0,0,0
+21056,VN,CD,"Congo, Democratic Republic of",Package,Import,10,0,0,0,0,0
+21057,VN,CD,"Congo, Democratic Republic of",Package,Import,0,0,10,0,0,0
+21058,VN,CD,"Congo, Democratic Republic of",Package,Import,0,0,0,0,0,0
+21059,VN,CK,Cook Islands,Package,Export,0,0,0,0,0,0
+21060,VN,CK,Cook Islands,Package,Export,0,0,0,0,0,0
+21061,VN,CK,Cook Islands,Package,Export,0,0,0,0,0,0
+21062,VN,CK,Cook Islands,Package,Import,0,0,0,0,0,0
+21063,VN,CK,Cook Islands,Package,Import,0,0,0,0,0,0
+21064,VN,CK,Cook Islands,Package,Import,0,0,0,0,0,0
+21065,VN,CR,Costa Rica*,Package,Export,0,0,0,0,0,0
+21066,VN,CR,Costa Rica*,Package,Export,0,0,8,0,0,0
+21067,VN,CR,Costa Rica*,Package,Export,0,8,0,0,0,0
+21068,VN,CR,Costa Rica*,Package,Import,6,0,0,0,0,0
+21069,VN,CR,Costa Rica*,Package,Import,0,0,6,0,0,0
+21070,VN,CR,Costa Rica*,Package,Import,0,6,0,0,0,0
+21071,VN,CI,Cote d'Ivoire (Ivory Coast),Package,Export,0,0,0,0,0,0
+21072,VN,CI,Cote d'Ivoire (Ivory Coast),Package,Export,0,0,9,0,0,0
+21073,VN,CI,Cote d'Ivoire (Ivory Coast),Package,Export,0,9,0,0,0,0
+21074,VN,CI,Cote d'Ivoire (Ivory Coast),Package,Import,10,0,0,0,0,0
+21075,VN,CI,Cote d'Ivoire (Ivory Coast),Package,Import,0,0,10,0,0,0
+21076,VN,CI,Cote d'Ivoire (Ivory Coast),Package,Import,0,0,0,0,0,0
+21077,VN,HR,Croatia*,Package,Export,7,0,0,0,0,0
+21078,VN,HR,Croatia*,Package,Export,0,0,7,0,0,0
+21079,VN,HR,Croatia*,Package,Export,0,7,0,0,0,0
+21080,VN,HR,Croatia*,Package,Import,10,0,0,0,0,0
+21081,VN,HR,Croatia*,Package,Import,0,0,10,0,0,0
+21082,VN,HR,Croatia*,Package,Import,0,10,0,0,0,0
+21083,VN,CW,Curacao,Package,Export,8,0,0,0,0,0
+21084,VN,CW,Curacao,Package,Export,0,0,8,0,0,0
+21085,VN,CW,Curacao,Package,Export,0,8,0,0,0,0
+21086,VN,CW,Curacao,Package,Import,9,0,0,0,0,0
+21087,VN,CW,Curacao,Package,Import,0,0,9,0,0,0
+21088,VN,CW,Curacao,Package,Import,0,0,0,0,0,0
+21089,VN,CY,Cyprus,Package,Export,7,0,0,0,0,0
+21090,VN,CY,Cyprus,Package,Export,0,0,7,0,0,0
+21091,VN,CY,Cyprus,Package,Export,0,7,0,0,0,0
+21092,VN,CY,Cyprus,Package,Import,10,0,0,0,0,0
+21093,VN,CY,Cyprus,Package,Import,0,0,10,0,0,0
+21094,VN,CY,Cyprus,Package,Import,0,0,0,0,0,0
+21095,VN,CZ,Czech Republic*,Package,Export,7,0,0,0,0,0
+21096,VN,CZ,Czech Republic*,Package,Export,0,0,7,0,0,0
+21097,VN,CZ,Czech Republic*,Package,Export,0,7,0,0,0,0
+21098,VN,CZ,Czech Republic*,Package,Import,7,0,0,0,0,0
+21099,VN,CZ,Czech Republic*,Package,Import,0,0,7,0,0,0
+21100,VN,CZ,Czech Republic*,Package,Import,0,7,0,0,0,0
+21101,VN,DK,Denmark*,Package,Export,6,0,0,0,0,0
+21102,VN,DK,Denmark*,Package,Export,0,0,6,0,0,0
+21103,VN,DK,Denmark*,Package,Export,0,6,0,0,0,0
+21104,VN,DK,Denmark*,Package,Import,6,0,0,0,0,0
+21105,VN,DK,Denmark*,Package,Import,0,0,6,0,0,0
+21106,VN,DK,Denmark*,Package,Import,0,6,0,0,0,0
+21107,VN,DJ,Djibouti,Package,Export,0,0,0,0,0,0
+21108,VN,DJ,Djibouti,Package,Export,0,0,9,0,0,0
+21109,VN,DJ,Djibouti,Package,Export,0,9,0,0,0,0
+21110,VN,DJ,Djibouti,Package,Import,10,0,0,0,0,0
+21111,VN,DJ,Djibouti,Package,Import,0,0,10,0,0,0
+21112,VN,DJ,Djibouti,Package,Import,0,0,0,0,0,0
+21113,VN,DM,Dominica,Package,Export,0,0,0,0,0,0
+21114,VN,DM,Dominica,Package,Export,0,0,8,0,0,0
+21115,VN,DM,Dominica,Package,Export,0,8,0,0,0,0
+21116,VN,DM,Dominica,Package,Import,9,0,0,0,0,0
+21117,VN,DM,Dominica,Package,Import,0,0,9,0,0,0
+21118,VN,DM,Dominica,Package,Import,0,0,0,0,0,0
+21119,VN,DO,Dominican Republic*,Package,Export,8,0,0,0,0,0
+21120,VN,DO,Dominican Republic*,Package,Export,0,0,8,0,0,0
+21121,VN,DO,Dominican Republic*,Package,Export,0,8,0,0,0,0
+21122,VN,DO,Dominican Republic*,Package,Import,9,0,0,0,0,0
+21123,VN,DO,Dominican Republic*,Package,Import,0,0,9,0,0,0
+21124,VN,DO,Dominican Republic*,Package,Import,0,9,0,0,0,0
+21125,VN,EC,Ecuador*,Package,Export,8,0,0,0,0,0
+21126,VN,EC,Ecuador*,Package,Export,0,0,8,0,0,0
+21127,VN,EC,Ecuador*,Package,Export,0,8,0,0,0,0
+21128,VN,EC,Ecuador*,Package,Import,9,0,0,0,0,0
+21129,VN,EC,Ecuador*,Package,Import,0,0,9,0,0,0
+21130,VN,EC,Ecuador*,Package,Import,0,9,0,0,0,0
+21131,VN,EG,Egypt,Package,Export,7,0,0,0,0,0
+21132,VN,EG,Egypt,Package,Export,0,0,7,0,0,0
+21133,VN,EG,Egypt,Package,Export,0,7,0,0,0,0
+21134,VN,EG,Egypt,Package,Import,10,0,0,0,0,0
+21135,VN,EG,Egypt,Package,Import,0,0,10,0,0,0
+21136,VN,EG,Egypt,Package,Import,0,10,0,0,0,0
+21137,VN,SV,El Salvador*,Package,Export,0,0,0,0,0,0
+21138,VN,SV,El Salvador*,Package,Export,0,0,8,0,0,0
+21139,VN,SV,El Salvador*,Package,Export,0,8,0,0,0,0
+21140,VN,SV,El Salvador*,Package,Import,9,0,0,0,0,0
+21141,VN,SV,El Salvador*,Package,Import,0,0,9,0,0,0
+21142,VN,SV,El Salvador*,Package,Import,0,9,0,0,0,0
+21143,VN,EN,England (United Kingdom)*,Package,Export,6,0,0,0,0,0
+21144,VN,EN,England (United Kingdom)*,Package,Export,0,0,6,0,0,0
+21145,VN,EN,England (United Kingdom)*,Package,Export,0,6,0,0,0,0
+21146,VN,EN,England (United Kingdom)*,Package,Import,6,0,0,0,0,0
+21147,VN,EN,England (United Kingdom)*,Package,Import,0,0,6,0,0,0
+21148,VN,EN,England (United Kingdom)*,Package,Import,0,0,0,0,0,0
+21149,VN,GQ,Equatorial Guinea,Package,Export,0,0,0,0,0,0
+21150,VN,GQ,Equatorial Guinea,Package,Export,0,0,0,0,0,0
+21151,VN,GQ,Equatorial Guinea,Package,Export,0,0,0,0,0,0
+21152,VN,GQ,Equatorial Guinea,Package,Import,0,0,0,0,0,0
+21153,VN,GQ,Equatorial Guinea,Package,Import,0,0,0,0,0,0
+21154,VN,GQ,Equatorial Guinea,Package,Import,0,0,0,0,0,0
+21155,VN,ER,Eritrea,Package,Export,0,0,0,0,0,0
+21156,VN,ER,Eritrea,Package,Export,0,0,9,0,0,0
+21157,VN,ER,Eritrea,Package,Export,0,9,0,0,0,0
+21158,VN,ER,Eritrea,Package,Import,10,0,0,0,0,0
+21159,VN,ER,Eritrea,Package,Import,0,0,10,0,0,0
+21160,VN,ER,Eritrea,Package,Import,0,0,0,0,0,0
+21161,VN,EE,Estonia,Package,Export,7,0,0,0,0,0
+21162,VN,EE,Estonia,Package,Export,0,0,7,0,0,0
+21163,VN,EE,Estonia,Package,Export,0,7,0,0,0,0
+21164,VN,EE,Estonia,Package,Import,10,0,0,0,0,0
+21165,VN,EE,Estonia,Package,Import,0,0,10,0,0,0
+21166,VN,EE,Estonia,Package,Import,0,10,0,0,0,0
+21167,VN,ET,Ethiopia,Package,Export,0,0,0,0,0,0
+21168,VN,ET,Ethiopia,Package,Export,0,0,9,0,0,0
+21169,VN,ET,Ethiopia,Package,Export,0,9,0,0,0,0
+21170,VN,ET,Ethiopia,Package,Import,10,0,0,0,0,0
+21171,VN,ET,Ethiopia,Package,Import,0,0,10,0,0,0
+21172,VN,ET,Ethiopia,Package,Import,0,0,0,0,0,0
+21173,VN,FO,Faroe Islands,Package,Export,0,0,0,0,0,0
+21174,VN,FO,Faroe Islands,Package,Export,0,0,9,0,0,0
+21175,VN,FO,Faroe Islands,Package,Export,0,9,0,0,0,0
+21176,VN,FO,Faroe Islands,Package,Import,0,0,0,0,0,0
+21177,VN,FO,Faroe Islands,Package,Import,0,0,0,0,0,0
+21178,VN,FO,Faroe Islands,Package,Import,0,0,0,0,0,0
+21179,VN,FJ,Fiji,Package,Export,0,0,0,0,0,0
+21180,VN,FJ,Fiji,Package,Export,0,0,0,0,0,0
+21181,VN,FJ,Fiji,Package,Export,0,0,0,0,0,0
+21182,VN,FJ,Fiji,Package,Import,0,0,0,0,0,0
+21183,VN,FJ,Fiji,Package,Import,0,0,0,0,0,0
+21184,VN,FJ,Fiji,Package,Import,0,0,0,0,0,0
+21185,VN,FI,Finland*,Package,Export,6,0,0,0,0,0
+21186,VN,FI,Finland*,Package,Export,0,0,6,0,0,0
+21187,VN,FI,Finland*,Package,Export,0,6,0,0,0,0
+21188,VN,FI,Finland*,Package,Import,6,0,0,0,0,0
+21189,VN,FI,Finland*,Package,Import,0,0,6,0,0,0
+21190,VN,FI,Finland*,Package,Import,0,6,0,0,0,0
+21191,VN,FR,France*,Package,Export,6,0,0,0,0,0
+21192,VN,FR,France*,Package,Export,0,0,6,0,0,0
+21193,VN,FR,France*,Package,Export,0,6,0,0,0,0
+21194,VN,FR,France*,Package,Import,6,0,0,0,0,0
+21195,VN,FR,France*,Package,Import,0,0,6,0,0,0
+21196,VN,FR,France*,Package,Import,0,6,0,0,0,0
+21197,VN,GF,French Guiana,Package,Export,8,0,0,0,0,0
+21198,VN,GF,French Guiana,Package,Export,0,0,8,0,0,0
+21199,VN,GF,French Guiana,Package,Export,0,8,0,0,0,0
+21200,VN,GF,French Guiana,Package,Import,0,0,0,0,0,0
+21201,VN,GF,French Guiana,Package,Import,0,0,0,0,0,0
+21202,VN,GF,French Guiana,Package,Import,0,0,0,0,0,0
+21203,VN,PF,French Polynesia,Package,Export,0,0,0,0,0,0
+21204,VN,PF,French Polynesia,Package,Export,0,0,0,0,0,0
+21205,VN,PF,French Polynesia,Package,Export,0,0,0,0,0,0
+21206,VN,PF,French Polynesia,Package,Import,0,0,0,0,0,0
+21207,VN,PF,French Polynesia,Package,Import,0,0,0,0,0,0
+21208,VN,PF,French Polynesia,Package,Import,0,0,0,0,0,0
+21209,VN,GA,Gabon,Package,Export,0,0,0,0,0,0
+21210,VN,GA,Gabon,Package,Export,0,0,9,0,0,0
+21211,VN,GA,Gabon,Package,Export,0,9,0,0,0,0
+21212,VN,GA,Gabon,Package,Import,10,0,0,0,0,0
+21213,VN,GA,Gabon,Package,Import,0,0,10,0,0,0
+21214,VN,GA,Gabon,Package,Import,0,0,0,0,0,0
+21215,VN,GM,Gambia,Package,Export,9,0,0,0,0,0
+21216,VN,GM,Gambia,Package,Export,0,0,9,0,0,0
+21217,VN,GM,Gambia,Package,Export,0,9,0,0,0,0
+21218,VN,GM,Gambia,Package,Import,10,0,0,0,0,0
+21219,VN,GM,Gambia,Package,Import,0,0,10,0,0,0
+21220,VN,GM,Gambia,Package,Import,0,0,0,0,0,0
+21221,VN,GE,Georgia*,Package,Export,9,0,0,0,0,0
+21222,VN,GE,Georgia*,Package,Export,0,0,9,0,0,0
+21223,VN,GE,Georgia*,Package,Export,0,9,0,0,0,0
+21224,VN,GE,Georgia*,Package,Import,10,0,0,0,0,0
+21225,VN,GE,Georgia*,Package,Import,0,0,10,0,0,0
+21226,VN,GE,Georgia*,Package,Import,0,0,0,0,0,0
+21227,VN,DE,Germany*,Package,Export,6,0,0,0,0,0
+21228,VN,DE,Germany*,Package,Export,0,0,6,0,0,0
+21229,VN,DE,Germany*,Package,Export,0,6,0,0,0,0
+21230,VN,DE,Germany*,Package,Import,6,0,0,0,0,0
+21231,VN,DE,Germany*,Package,Import,0,0,6,0,0,0
+21232,VN,DE,Germany*,Package,Import,0,6,0,0,0,0
+21233,VN,GH,Ghana,Package,Export,0,0,0,0,0,0
+21234,VN,GH,Ghana,Package,Export,0,0,9,0,0,0
+21235,VN,GH,Ghana,Package,Export,0,9,0,0,0,0
+21236,VN,GH,Ghana,Package,Import,10,0,0,0,0,0
+21237,VN,GH,Ghana,Package,Import,0,0,10,0,0,0
+21238,VN,GH,Ghana,Package,Import,0,0,0,0,0,0
+21239,VN,GI,Gibraltar,Package,Export,0,0,0,0,0,0
+21240,VN,GI,Gibraltar,Package,Export,0,0,7,0,0,0
+21241,VN,GI,Gibraltar,Package,Export,0,7,0,0,0,0
+21242,VN,GI,Gibraltar,Package,Import,7,0,0,0,0,0
+21243,VN,GI,Gibraltar,Package,Import,0,0,7,0,0,0
+21244,VN,GI,Gibraltar,Package,Import,0,0,0,0,0,0
+21245,VN,GR,Greece*,Package,Export,7,0,0,0,0,0
+21246,VN,GR,Greece*,Package,Export,0,0,7,0,0,0
+21247,VN,GR,Greece*,Package,Export,0,7,0,0,0,0
+21248,VN,GR,Greece*,Package,Import,6,0,0,0,0,0
+21249,VN,GR,Greece*,Package,Import,0,0,6,0,0,0
+21250,VN,GR,Greece*,Package,Import,0,6,0,0,0,0
+21251,VN,GL,Greenland,Package,Export,0,0,0,0,0,0
+21252,VN,GL,Greenland,Package,Export,0,0,9,0,0,0
+21253,VN,GL,Greenland,Package,Export,0,9,0,0,0,0
+21254,VN,GL,Greenland,Package,Import,0,0,0,0,0,0
+21255,VN,GL,Greenland,Package,Import,0,0,0,0,0,0
+21256,VN,GL,Greenland,Package,Import,0,0,0,0,0,0
+21257,VN,GD,Grenada,Package,Export,0,0,0,0,0,0
+21258,VN,GD,Grenada,Package,Export,0,0,8,0,0,0
+21259,VN,GD,Grenada,Package,Export,0,8,0,0,0,0
+21260,VN,GD,Grenada,Package,Import,9,0,0,0,0,0
+21261,VN,GD,Grenada,Package,Import,0,0,9,0,0,0
+21262,VN,GD,Grenada,Package,Import,0,0,0,0,0,0
+21263,VN,GP,Guadeloupe*,Package,Export,8,0,0,0,0,0
+21264,VN,GP,Guadeloupe*,Package,Export,0,0,8,0,0,0
+21265,VN,GP,Guadeloupe*,Package,Export,0,8,0,0,0,0
+21266,VN,GP,Guadeloupe*,Package,Import,9,0,0,0,0,0
+21267,VN,GP,Guadeloupe*,Package,Import,0,0,9,0,0,0
+21268,VN,GP,Guadeloupe*,Package,Import,0,0,0,0,0,0
+21269,VN,GU,Guam,Package,Export,7,0,0,0,0,0
+21270,VN,GU,Guam,Package,Export,0,0,7,0,0,0
+21271,VN,GU,Guam,Package,Export,0,7,0,0,0,0
+21272,VN,GU,Guam,Package,Import,4,0,0,0,0,0
+21273,VN,GU,Guam,Package,Import,0,0,4,0,0,0
+21274,VN,GU,Guam,Package,Import,0,0,0,0,0,0
+21275,VN,GT,Guatemala*,Package,Export,8,0,0,0,0,0
+21276,VN,GT,Guatemala*,Package,Export,0,0,8,0,0,0
+21277,VN,GT,Guatemala*,Package,Export,0,8,0,0,0,0
+21278,VN,GT,Guatemala*,Package,Import,9,0,0,0,0,0
+21279,VN,GT,Guatemala*,Package,Import,0,0,9,0,0,0
+21280,VN,GT,Guatemala*,Package,Import,0,9,0,0,0,0
+21281,VN,GG,Guernsey (Channel Islands),Package,Export,7,0,0,0,0,0
+21282,VN,GG,Guernsey (Channel Islands),Package,Export,0,0,7,0,0,0
+21283,VN,GG,Guernsey (Channel Islands),Package,Export,0,7,0,0,0,0
+21284,VN,GG,Guernsey (Channel Islands),Package,Import,10,0,0,0,0,0
+21285,VN,GG,Guernsey (Channel Islands),Package,Import,0,0,10,0,0,0
+21286,VN,GG,Guernsey (Channel Islands),Package,Import,0,10,0,0,0,0
+21287,VN,GN,Guinea,Package,Export,0,0,0,0,0,0
+21288,VN,GN,Guinea,Package,Export,0,0,9,0,0,0
+21289,VN,GN,Guinea,Package,Export,0,9,0,0,0,0
+21290,VN,GN,Guinea,Package,Import,10,0,0,0,0,0
+21291,VN,GN,Guinea,Package,Import,0,0,10,0,0,0
+21292,VN,GN,Guinea,Package,Import,0,0,0,0,0,0
+21293,VN,GW,Guinea-Bissau,Package,Export,0,0,0,0,0,0
+21294,VN,GW,Guinea-Bissau,Package,Export,0,0,9,0,0,0
+21295,VN,GW,Guinea-Bissau,Package,Export,0,9,0,0,0,0
+21296,VN,GW,Guinea-Bissau,Package,Import,10,0,0,0,0,0
+21297,VN,GW,Guinea-Bissau,Package,Import,0,0,10,0,0,0
+21298,VN,GW,Guinea-Bissau,Package,Import,0,0,0,0,0,0
+21299,VN,GY,Guyana*,Package,Export,0,0,0,0,0,0
+21300,VN,GY,Guyana*,Package,Export,0,0,8,0,0,0
+21301,VN,GY,Guyana*,Package,Export,0,8,0,0,0,0
+21302,VN,GY,Guyana*,Package,Import,9,0,0,0,0,0
+21303,VN,GY,Guyana*,Package,Import,0,0,9,0,0,0
+21304,VN,GY,Guyana*,Package,Import,0,0,0,0,0,0
+21305,VN,HT,Haiti*,Package,Export,0,0,0,0,0,0
+21306,VN,HT,Haiti*,Package,Export,0,0,8,0,0,0
+21307,VN,HT,Haiti*,Package,Export,0,8,0,0,0,0
+21308,VN,HT,Haiti*,Package,Import,9,0,0,0,0,0
+21309,VN,HT,Haiti*,Package,Import,0,0,9,0,0,0
+21310,VN,HT,Haiti*,Package,Import,0,9,0,0,0,0
+21311,VN,H1,Heligoland (Germany)*,Package,Export,0,0,0,0,0,0
+21312,VN,H1,Heligoland (Germany)*,Package,Export,0,0,6,0,0,0
+21313,VN,H1,Heligoland (Germany)*,Package,Export,0,6,0,0,0,0
+21314,VN,H1,Heligoland (Germany)*,Package,Import,6,0,0,0,0,0
+21315,VN,H1,Heligoland (Germany)*,Package,Import,0,0,6,0,0,0
+21316,VN,H1,Heligoland (Germany)*,Package,Import,0,0,0,0,0,0
+21317,VN,HN,Honduras*,Package,Export,8,0,0,0,0,0
+21318,VN,HN,Honduras*,Package,Export,0,0,8,0,0,0
+21319,VN,HN,Honduras*,Package,Export,0,8,0,0,0,0
+21320,VN,HN,Honduras*,Package,Import,9,0,0,0,0,0
+21321,VN,HN,Honduras*,Package,Import,0,0,9,0,0,0
+21322,VN,HN,Honduras*,Package,Import,0,9,0,0,0,0
+21323,VN,HK,"Hong Kong SAR, China#",Package,Export,1,0,0,0,0,0
+21324,VN,HK,"Hong Kong SAR, China#",Package,Export,0,0,1,0,0,0
+21325,VN,HK,"Hong Kong SAR, China#",Package,Export,0,1,0,0,0,0
+21326,VN,HK,"Hong Kong SAR, China#",Package,Import,0,0,0,0,0,0
+21327,VN,HK,"Hong Kong SAR, China#",Package,Import,0,0,2,0,0,0
+21328,VN,HK,"Hong Kong SAR, China#",Package,Import,0,2,0,0,0,0
+21329,VN,HU,Hungary*,Package,Export,7,0,0,0,0,0
+21330,VN,HU,Hungary*,Package,Export,0,0,7,0,0,0
+21331,VN,HU,Hungary*,Package,Export,0,7,0,0,0,0
+21332,VN,HU,Hungary*,Package,Import,7,0,0,0,0,0
+21333,VN,HU,Hungary*,Package,Import,0,0,7,0,0,0
+21334,VN,HU,Hungary*,Package,Import,0,7,0,0,0,0
+21335,VN,IS,Iceland,Package,Export,8,0,0,0,0,0
+21336,VN,IS,Iceland,Package,Export,0,0,8,0,0,0
+21337,VN,IS,Iceland,Package,Export,0,8,0,0,0,0
+21338,VN,IS,Iceland,Package,Import,9,0,0,0,0,0
+21339,VN,IS,Iceland,Package,Import,0,0,9,0,0,0
+21340,VN,IS,Iceland,Package,Import,0,0,0,0,0,0
+21341,VN,IN,India*,Package,Export,4,0,0,0,0,0
+21342,VN,IN,India*,Package,Export,0,0,4,0,0,0
+21343,VN,IN,India*,Package,Export,0,4,0,0,0,0
+21344,VN,IN,India*,Package,Import,2,0,0,0,0,0
+21345,VN,IN,India*,Package,Import,0,0,2,0,0,0
+21346,VN,IN,India*,Package,Import,0,2,0,0,0,0
+21347,VN,ID,Indonesia*#,Package,Export,2,0,0,0,0,0
+21348,VN,ID,Indonesia*#,Package,Export,0,0,2,0,0,0
+21349,VN,ID,Indonesia*#,Package,Export,0,2,0,0,0,0
+21350,VN,ID,Indonesia*#,Package,Import,2,0,0,0,0,0
+21351,VN,ID,Indonesia*#,Package,Import,0,0,2,0,0,0
+21352,VN,ID,Indonesia*#,Package,Import,0,2,0,0,0,0
+21353,VN,IQ,Iraq,Package,Export,0,0,0,0,0,0
+21354,VN,IQ,Iraq,Package,Export,0,0,9,0,0,0
+21355,VN,IQ,Iraq,Package,Export,0,9,0,0,0,0
+21356,VN,IQ,Iraq,Package,Import,0,0,0,0,0,0
+21357,VN,IQ,Iraq,Package,Import,0,0,0,0,0,0
+21358,VN,IQ,Iraq,Package,Import,0,0,0,0,0,0
+21359,VN,IE,Ireland,Package,Export,6,0,0,0,0,0
+21360,VN,IE,Ireland,Package,Export,0,0,6,0,0,0
+21361,VN,IE,Ireland,Package,Export,0,6,0,0,0,0
+21362,VN,IE,Ireland,Package,Import,6,0,0,0,0,0
+21363,VN,IE,Ireland,Package,Import,0,0,6,0,0,0
+21364,VN,IE,Ireland,Package,Import,0,6,0,0,0,0
+21365,VN,IL,Israel,Package,Export,9,0,0,0,0,0
+21366,VN,IL,Israel,Package,Export,0,0,9,0,0,0
+21367,VN,IL,Israel,Package,Export,0,9,0,0,0,0
+21368,VN,IL,Israel,Package,Import,10,0,0,0,0,0
+21369,VN,IL,Israel,Package,Import,0,0,10,0,0,0
+21370,VN,IL,Israel,Package,Import,0,10,0,0,0,0
+21371,VN,IT,Italy*,Package,Export,6,0,0,0,0,0
+21372,VN,IT,Italy*,Package,Export,0,0,6,0,0,0
+21373,VN,IT,Italy*,Package,Export,0,6,0,0,0,0
+21374,VN,IT,Italy*,Package,Import,6,0,0,0,0,0
+21375,VN,IT,Italy*,Package,Import,0,0,6,0,0,0
+21376,VN,IT,Italy*,Package,Import,0,6,0,0,0,0
+21377,VN,JM,Jamaica*,Package,Export,8,0,0,0,0,0
+21378,VN,JM,Jamaica*,Package,Export,0,0,8,0,0,0
+21379,VN,JM,Jamaica*,Package,Export,0,8,0,0,0,0
+21380,VN,JM,Jamaica*,Package,Import,9,0,0,0,0,0
+21381,VN,JM,Jamaica*,Package,Import,0,0,9,0,0,0
+21382,VN,JM,Jamaica*,Package,Import,0,0,0,0,0,0
+21383,VN,JP,Japan*#,Package,Export,3,0,0,0,0,0
+21384,VN,JP,Japan*#,Package,Export,0,0,3,0,0,0
+21385,VN,JP,Japan*#,Package,Export,0,3,0,0,0,0
+21386,VN,JP,Japan*#,Package,Import,3,0,0,0,0,0
+21387,VN,JP,Japan*#,Package,Import,0,0,3,0,0,0
+21388,VN,JP,Japan*#,Package,Import,0,3,0,0,0,0
+21389,VN,JE,Jersey (Channel Islands),Package,Export,7,0,0,0,0,0
+21390,VN,JE,Jersey (Channel Islands),Package,Export,0,0,7,0,0,0
+21391,VN,JE,Jersey (Channel Islands),Package,Export,0,7,0,0,0,0
+21392,VN,JE,Jersey (Channel Islands),Package,Import,10,0,0,0,0,0
+21393,VN,JE,Jersey (Channel Islands),Package,Import,0,0,10,0,0,0
+21394,VN,JE,Jersey (Channel Islands),Package,Import,0,10,0,0,0,0
+21395,VN,JO,Jordan,Package,Export,9,0,0,0,0,0
+21396,VN,JO,Jordan,Package,Export,0,0,9,0,0,0
+21397,VN,JO,Jordan,Package,Export,0,9,0,0,0,0
+21398,VN,JO,Jordan,Package,Import,10,0,0,0,0,0
+21399,VN,JO,Jordan,Package,Import,0,0,10,0,0,0
+21400,VN,JO,Jordan,Package,Import,0,0,0,0,0,0
+21401,VN,KZ,Kazakhstan*,Package,Export,9,0,0,0,0,0
+21402,VN,KZ,Kazakhstan*,Package,Export,0,0,9,0,0,0
+21403,VN,KZ,Kazakhstan*,Package,Export,0,9,0,0,0,0
+21404,VN,KZ,Kazakhstan*,Package,Import,10,0,0,0,0,0
+21405,VN,KZ,Kazakhstan*,Package,Import,0,0,10,0,0,0
+21406,VN,KZ,Kazakhstan*,Package,Import,0,10,0,0,0,0
+21407,VN,KE,Kenya,Package,Export,9,0,0,0,0,0
+21408,VN,KE,Kenya,Package,Export,0,0,9,0,0,0
+21409,VN,KE,Kenya,Package,Export,0,9,0,0,0,0
+21410,VN,KE,Kenya,Package,Import,10,0,0,0,0,0
+21411,VN,KE,Kenya,Package,Import,0,0,10,0,0,0
+21412,VN,KE,Kenya,Package,Import,0,10,0,0,0,0
+21413,VN,KG,Kyrgyzstan,Package,Export,9,0,0,0,0,0
+21414,VN,KG,Kyrgyzstan,Package,Export,0,0,9,0,0,0
+21415,VN,KG,Kyrgyzstan,Package,Export,0,9,0,0,0,0
+21416,VN,KG,Kyrgyzstan,Package,Import,10,0,0,0,0,0
+21417,VN,KG,Kyrgyzstan,Package,Import,0,0,10,0,0,0
+21418,VN,KG,Kyrgyzstan,Package,Import,0,0,0,0,0,0
+21419,VN,KI,Kiribati,Package,Export,0,0,0,0,0,0
+21420,VN,KI,Kiribati,Package,Export,0,0,0,0,0,0
+21421,VN,KI,Kiribati,Package,Export,0,0,0,0,0,0
+21422,VN,KI,Kiribati,Package,Import,0,0,0,0,0,0
+21423,VN,KI,Kiribati,Package,Import,0,0,0,0,0,0
+21424,VN,KI,Kiribati,Package,Import,0,0,0,0,0,0
+21425,VN,KR,"Korea, South#",Package,Export,3,0,0,0,0,0
+21426,VN,KR,"Korea, South#",Package,Export,0,0,3,0,0,0
+21427,VN,KR,"Korea, South#",Package,Export,0,3,0,0,0,0
+21428,VN,KR,"Korea, South#",Package,Import,1,0,0,0,0,0
+21429,VN,KR,"Korea, South#",Package,Import,0,0,1,0,0,0
+21430,VN,KR,"Korea, South#",Package,Import,0,1,0,0,0,0
+21431,VN,KV,Kosovo,Package,Export,9,0,0,0,0,0
+21432,VN,KV,Kosovo,Package,Export,0,0,9,0,0,0
+21433,VN,KV,Kosovo,Package,Export,0,9,0,0,0,0
+21434,VN,KV,Kosovo,Package,Import,10,0,0,0,0,0
+21435,VN,KV,Kosovo,Package,Import,0,0,10,0,0,0
+21436,VN,KV,Kosovo,Package,Import,0,0,0,0,0,0
+21437,VN,KO,"Kosrae (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+21438,VN,KO,"Kosrae (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+21439,VN,KO,"Kosrae (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+21440,VN,KO,"Kosrae (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+21441,VN,KO,"Kosrae (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+21442,VN,KO,"Kosrae (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+21443,VN,KW,Kuwait,Package,Export,7,0,0,0,0,0
+21444,VN,KW,Kuwait,Package,Export,0,0,7,0,0,0
+21445,VN,KW,Kuwait,Package,Export,0,7,0,0,0,0
+21446,VN,KW,Kuwait,Package,Import,10,0,0,0,0,0
+21447,VN,KW,Kuwait,Package,Import,0,0,10,0,0,0
+21448,VN,KW,Kuwait,Package,Import,0,10,0,0,0,0
+21449,VN,LA,Laos,Package,Export,3,0,0,0,0,0
+21450,VN,LA,Laos,Package,Export,0,0,3,0,0,0
+21451,VN,LA,Laos,Package,Export,0,3,0,0,0,0
+21452,VN,LA,Laos,Package,Import,4,0,0,0,0,0
+21453,VN,LA,Laos,Package,Import,0,0,4,0,0,0
+21454,VN,LA,Laos,Package,Import,0,0,0,0,0,0
+21455,VN,LV,Latvia,Package,Export,7,0,0,0,0,0
+21456,VN,LV,Latvia,Package,Export,0,0,7,0,0,0
+21457,VN,LV,Latvia,Package,Export,0,7,0,0,0,0
+21458,VN,LV,Latvia,Package,Import,10,0,0,0,0,0
+21459,VN,LV,Latvia,Package,Import,0,0,10,0,0,0
+21460,VN,LV,Latvia,Package,Import,0,10,0,0,0,0
+21461,VN,LB,Lebanon,Package,Export,9,0,0,0,0,0
+21462,VN,LB,Lebanon,Package,Export,0,0,9,0,0,0
+21463,VN,LB,Lebanon,Package,Export,0,9,0,0,0,0
+21464,VN,LB,Lebanon,Package,Import,10,0,0,0,0,0
+21465,VN,LB,Lebanon,Package,Import,0,0,10,0,0,0
+21466,VN,LB,Lebanon,Package,Import,0,0,0,0,0,0
+21467,VN,LS,Lesotho,Package,Export,0,0,0,0,0,0
+21468,VN,LS,Lesotho,Package,Export,0,0,9,0,0,0
+21469,VN,LS,Lesotho,Package,Export,0,9,0,0,0,0
+21470,VN,LS,Lesotho,Package,Import,9,0,0,0,0,0
+21471,VN,LS,Lesotho,Package,Import,0,0,9,0,0,0
+21472,VN,LS,Lesotho,Package,Import,0,0,0,0,0,0
+21473,VN,LR,Liberia,Package,Export,0,0,0,0,0,0
+21474,VN,LR,Liberia,Package,Export,0,0,9,0,0,0
+21475,VN,LR,Liberia,Package,Export,0,9,0,0,0,0
+21476,VN,LR,Liberia,Package,Import,10,0,0,0,0,0
+21477,VN,LR,Liberia,Package,Import,0,0,10,0,0,0
+21478,VN,LR,Liberia,Package,Import,0,0,0,0,0,0
+21479,VN,LY,Libyan Arab Jamahiriya,Package,Export,0,0,0,0,0,0
+21480,VN,LY,Libyan Arab Jamahiriya,Package,Export,0,0,0,0,0,0
+21481,VN,LY,Libyan Arab Jamahiriya,Package,Export,0,0,0,0,0,0
+21482,VN,LY,Libyan Arab Jamahiriya,Package,Import,0,0,0,0,0,0
+21483,VN,LY,Libyan Arab Jamahiriya,Package,Import,0,0,0,0,0,0
+21484,VN,LY,Libyan Arab Jamahiriya,Package,Import,0,0,0,0,0,0
+21485,VN,LI,Liechtenstein*,Package,Export,6,0,0,0,0,0
+21486,VN,LI,Liechtenstein*,Package,Export,0,0,6,0,0,0
+21487,VN,LI,Liechtenstein*,Package,Export,0,6,0,0,0,0
+21488,VN,LI,Liechtenstein*,Package,Import,6,0,0,0,0,0
+21489,VN,LI,Liechtenstein*,Package,Import,0,0,6,0,0,0
+21490,VN,LI,Liechtenstein*,Package,Import,0,0,0,0,0,0
+21491,VN,LT,Lithuania,Package,Export,7,0,0,0,0,0
+21492,VN,LT,Lithuania,Package,Export,0,0,7,0,0,0
+21493,VN,LT,Lithuania,Package,Export,0,7,0,0,0,0
+21494,VN,LT,Lithuania,Package,Import,10,0,0,0,0,0
+21495,VN,LT,Lithuania,Package,Import,0,0,10,0,0,0
+21496,VN,LT,Lithuania,Package,Import,0,10,0,0,0,0
+21497,VN,L1,Livigno (Italy)*,Package,Export,0,0,0,0,0,0
+21498,VN,L1,Livigno (Italy)*,Package,Export,0,0,6,0,0,0
+21499,VN,L1,Livigno (Italy)*,Package,Export,0,6,0,0,0,0
+21500,VN,L1,Livigno (Italy)*,Package,Import,6,0,0,0,0,0
+21501,VN,L1,Livigno (Italy)*,Package,Import,0,0,6,0,0,0
+21502,VN,L1,Livigno (Italy)*,Package,Import,0,0,0,0,0,0
+21503,VN,LU,Luxembourg,Package,Export,6,0,0,0,0,0
+21504,VN,LU,Luxembourg,Package,Export,0,0,6,0,0,0
+21505,VN,LU,Luxembourg,Package,Export,0,6,0,0,0,0
+21506,VN,LU,Luxembourg,Package,Import,6,0,0,0,0,0
+21507,VN,LU,Luxembourg,Package,Import,0,0,6,0,0,0
+21508,VN,LU,Luxembourg,Package,Import,0,6,0,0,0,0
+21509,VN,MO,"Macau SAR, China#",Package,Export,2,0,0,0,0,0
+21510,VN,MO,"Macau SAR, China#",Package,Export,0,0,2,0,0,0
+21511,VN,MO,"Macau SAR, China#",Package,Export,0,2,0,0,0,0
+21512,VN,MO,"Macau SAR, China#",Package,Import,0,0,0,0,0,0
+21513,VN,MO,"Macau SAR, China#",Package,Import,0,0,2,0,0,0
+21514,VN,MO,"Macau SAR, China#",Package,Import,0,2,0,0,0,0
+21515,VN,MK,North Macedonia,Package,Export,9,0,0,0,0,0
+21516,VN,MK,North Macedonia,Package,Export,0,0,9,0,0,0
+21517,VN,MK,North Macedonia,Package,Export,0,9,0,0,0,0
+21518,VN,MK,North Macedonia,Package,Import,10,0,0,0,0,0
+21519,VN,MK,North Macedonia,Package,Import,0,0,10,0,0,0
+21520,VN,MK,North Macedonia,Package,Import,0,0,0,0,0,0
+21521,VN,MG,Madagascar,Package,Export,9,0,0,0,0,0
+21522,VN,MG,Madagascar,Package,Export,0,0,9,0,0,0
+21523,VN,MG,Madagascar,Package,Export,0,9,0,0,0,0
+21524,VN,MG,Madagascar,Package,Import,10,0,0,0,0,0
+21525,VN,MG,Madagascar,Package,Import,0,0,10,0,0,0
+21526,VN,MG,Madagascar,Package,Import,0,0,0,0,0,0
+21527,VN,M3,Madeira (Portugal)*,Package,Export,0,0,0,0,0,0
+21528,VN,M3,Madeira (Portugal)*,Package,Export,0,0,7,0,0,0
+21529,VN,M3,Madeira (Portugal)*,Package,Export,0,7,0,0,0,0
+21530,VN,M3,Madeira (Portugal)*,Package,Import,7,0,0,0,0,0
+21531,VN,M3,Madeira (Portugal)*,Package,Import,0,0,7,0,0,0
+21532,VN,M3,Madeira (Portugal)*,Package,Import,0,0,0,0,0,0
+21533,VN,MW,Malawi,Package,Export,9,0,0,0,0,0
+21534,VN,MW,Malawi,Package,Export,0,0,9,0,0,0
+21535,VN,MW,Malawi,Package,Export,0,9,0,0,0,0
+21536,VN,MW,Malawi,Package,Import,10,0,0,0,0,0
+21537,VN,MW,Malawi,Package,Import,0,0,10,0,0,0
+21538,VN,MW,Malawi,Package,Import,0,0,0,0,0,0
+21539,VN,MY,Malaysia*#,Package,Export,2,0,0,0,0,0
+21540,VN,MY,Malaysia*#,Package,Export,0,0,2,0,0,0
+21541,VN,MY,Malaysia*#,Package,Export,0,2,0,0,0,0
+21542,VN,MY,Malaysia*#,Package,Import,2,0,0,0,0,0
+21543,VN,MY,Malaysia*#,Package,Import,0,0,2,0,0,0
+21544,VN,MY,Malaysia*#,Package,Import,0,2,0,0,0,0
+21545,VN,MV,Maldives,Package,Export,4,0,0,0,0,0
+21546,VN,MV,Maldives,Package,Export,0,0,4,0,0,0
+21547,VN,MV,Maldives,Package,Export,0,4,0,0,0,0
+21548,VN,MV,Maldives,Package,Import,0,0,0,0,0,0
+21549,VN,MV,Maldives,Package,Import,0,0,10,0,0,0
+21550,VN,MV,Maldives,Package,Import,0,10,0,0,0,0
+21551,VN,ML,Mali,Package,Export,0,0,0,0,0,0
+21552,VN,ML,Mali,Package,Export,0,0,9,0,0,0
+21553,VN,ML,Mali,Package,Export,0,9,0,0,0,0
+21554,VN,ML,Mali,Package,Import,10,0,0,0,0,0
+21555,VN,ML,Mali,Package,Import,0,0,10,0,0,0
+21556,VN,ML,Mali,Package,Import,0,0,0,0,0,0
+21557,VN,MT,Malta,Package,Export,7,0,0,0,0,0
+21558,VN,MT,Malta,Package,Export,0,0,7,0,0,0
+21559,VN,MT,Malta,Package,Export,0,7,0,0,0,0
+21560,VN,MT,Malta,Package,Import,10,0,0,0,0,0
+21561,VN,MT,Malta,Package,Import,0,0,10,0,0,0
+21562,VN,MT,Malta,Package,Import,0,0,0,0,0,0
+21563,VN,MH,Marshall Islands,Package,Export,0,0,0,0,0,0
+21564,VN,MH,Marshall Islands,Package,Export,0,0,0,0,0,0
+21565,VN,MH,Marshall Islands,Package,Export,0,0,0,0,0,0
+21566,VN,MH,Marshall Islands,Package,Import,0,0,0,0,0,0
+21567,VN,MH,Marshall Islands,Package,Import,0,0,0,0,0,0
+21568,VN,MH,Marshall Islands,Package,Import,0,0,0,0,0,0
+21569,VN,MQ,Martinique,Package,Export,0,0,0,0,0,0
+21570,VN,MQ,Martinique,Package,Export,0,0,8,0,0,0
+21571,VN,MQ,Martinique,Package,Export,0,8,0,0,0,0
+21572,VN,MQ,Martinique,Package,Import,9,0,0,0,0,0
+21573,VN,MQ,Martinique,Package,Import,0,0,9,0,0,0
+21574,VN,MQ,Martinique,Package,Import,0,0,0,0,0,0
+21575,VN,MR,Mauritania,Package,Export,9,0,0,0,0,0
+21576,VN,MR,Mauritania,Package,Export,0,0,9,0,0,0
+21577,VN,MR,Mauritania,Package,Export,0,9,0,0,0,0
+21578,VN,MR,Mauritania,Package,Import,10,0,0,0,0,0
+21579,VN,MR,Mauritania,Package,Import,0,0,10,0,0,0
+21580,VN,MR,Mauritania,Package,Import,0,0,0,0,0,0
+21581,VN,MU,Mauritius,Package,Export,9,0,0,0,0,0
+21582,VN,MU,Mauritius,Package,Export,0,0,9,0,0,0
+21583,VN,MU,Mauritius,Package,Export,0,9,0,0,0,0
+21584,VN,MU,Mauritius,Package,Import,10,0,0,0,0,0
+21585,VN,MU,Mauritius,Package,Import,0,0,10,0,0,0
+21586,VN,MU,Mauritius,Package,Import,0,0,0,0,0,0
+21587,VN,YT,Mayotte,Package,Export,0,0,0,0,0,0
+21588,VN,YT,Mayotte,Package,Export,0,0,9,0,0,0
+21589,VN,YT,Mayotte,Package,Export,0,9,0,0,0,0
+21590,VN,YT,Mayotte,Package,Import,10,0,0,0,0,0
+21591,VN,YT,Mayotte,Package,Import,0,0,10,0,0,0
+21592,VN,YT,Mayotte,Package,Import,0,0,0,0,0,0
+21593,VN,M1,Melilla (Spain)*,Package,Export,0,0,0,0,0,0
+21594,VN,M1,Melilla (Spain)*,Package,Export,0,0,6,0,0,0
+21595,VN,M1,Melilla (Spain)*,Package,Export,0,6,0,0,0,0
+21596,VN,M1,Melilla (Spain)*,Package,Import,0,0,0,0,0,0
+21597,VN,M1,Melilla (Spain)*,Package,Import,0,0,0,0,0,0
+21598,VN,M1,Melilla (Spain)*,Package,Import,0,0,0,0,0,0
+21599,VN,MX,Mexico*,Package,Export,5,0,0,0,0,0
+21600,VN,MX,Mexico*,Package,Export,0,0,5,0,0,0
+21601,VN,MX,Mexico*,Package,Export,0,5,0,0,0,0
+21602,VN,MX,Mexico*,Package,Import,5,0,0,0,0,0
+21603,VN,MX,Mexico*,Package,Import,0,0,5,0,0,0
+21604,VN,MX,Mexico*,Package,Import,0,5,0,0,0,0
+21605,VN,FM,"Micronesia, Federated States of",Package,Export,0,0,0,0,0,0
+21606,VN,FM,"Micronesia, Federated States of",Package,Export,0,0,0,0,0,0
+21607,VN,FM,"Micronesia, Federated States of",Package,Export,0,0,0,0,0,0
+21608,VN,FM,"Micronesia, Federated States of",Package,Import,0,0,0,0,0,0
+21609,VN,FM,"Micronesia, Federated States of",Package,Import,0,0,0,0,0,0
+21610,VN,FM,"Micronesia, Federated States of",Package,Import,0,0,0,0,0,0
+21611,VN,MD,Moldova*,Package,Export,9,0,0,0,0,0
+21612,VN,MD,Moldova*,Package,Export,0,0,9,0,0,0
+21613,VN,MD,Moldova*,Package,Export,0,9,0,0,0,0
+21614,VN,MD,Moldova*,Package,Import,10,0,0,0,0,0
+21615,VN,MD,Moldova*,Package,Import,0,0,10,0,0,0
+21616,VN,MD,Moldova*,Package,Import,0,0,0,0,0,0
+21617,VN,MC,Monaco*,Package,Export,6,0,0,0,0,0
+21618,VN,MC,Monaco*,Package,Export,0,0,6,0,0,0
+21619,VN,MC,Monaco*,Package,Export,0,6,0,0,0,0
+21620,VN,MC,Monaco*,Package,Import,6,0,0,0,0,0
+21621,VN,MC,Monaco*,Package,Import,0,0,6,0,0,0
+21622,VN,MC,Monaco*,Package,Import,0,0,0,0,0,0
+21623,VN,MN,Mongolia,Package,Export,0,0,0,0,0,0
+21624,VN,MN,Mongolia,Package,Export,0,0,9,0,0,0
+21625,VN,MN,Mongolia,Package,Export,0,9,0,0,0,0
+21626,VN,MN,Mongolia,Package,Import,10,0,0,0,0,0
+21627,VN,MN,Mongolia,Package,Import,0,0,10,0,0,0
+21628,VN,MN,Mongolia,Package,Import,0,0,0,0,0,0
+21629,VN,ME,Montenegro,Package,Export,9,0,0,0,0,0
+21630,VN,ME,Montenegro,Package,Export,0,0,9,0,0,0
+21631,VN,ME,Montenegro,Package,Export,0,9,0,0,0,0
+21632,VN,ME,Montenegro,Package,Import,10,0,0,0,0,0
+21633,VN,ME,Montenegro,Package,Import,0,0,10,0,0,0
+21634,VN,ME,Montenegro,Package,Import,0,0,0,0,0,0
+21635,VN,MS,Montserrat,Package,Export,0,0,0,0,0,0
+21636,VN,MS,Montserrat,Package,Export,0,0,8,0,0,0
+21637,VN,MS,Montserrat,Package,Export,0,8,0,0,0,0
+21638,VN,MS,Montserrat,Package,Import,9,0,0,0,0,0
+21639,VN,MS,Montserrat,Package,Import,0,0,9,0,0,0
+21640,VN,MS,Montserrat,Package,Import,0,0,0,0,0,0
+21641,VN,MA,Morocco,Package,Export,9,0,0,0,0,0
+21642,VN,MA,Morocco,Package,Export,0,0,9,0,0,0
+21643,VN,MA,Morocco,Package,Export,0,9,0,0,0,0
+21644,VN,MA,Morocco,Package,Import,10,0,0,0,0,0
+21645,VN,MA,Morocco,Package,Import,0,0,10,0,0,0
+21646,VN,MA,Morocco,Package,Import,0,10,0,0,0,0
+21647,VN,M2,Mount Athos (Greece)*,Package,Export,0,0,0,0,0,0
+21648,VN,M2,Mount Athos (Greece)*,Package,Export,0,0,7,0,0,0
+21649,VN,M2,Mount Athos (Greece)*,Package,Export,0,7,0,0,0,0
+21650,VN,M2,Mount Athos (Greece)*,Package,Import,6,0,0,0,0,0
+21651,VN,M2,Mount Athos (Greece)*,Package,Import,0,0,6,0,0,0
+21652,VN,M2,Mount Athos (Greece)*,Package,Import,0,0,0,0,0,0
+21653,VN,MZ,Mozambique,Package,Export,0,0,0,0,0,0
+21654,VN,MZ,Mozambique,Package,Export,0,0,9,0,0,0
+21655,VN,MZ,Mozambique,Package,Export,0,9,0,0,0,0
+21656,VN,MZ,Mozambique,Package,Import,9,0,0,0,0,0
+21657,VN,MZ,Mozambique,Package,Import,0,0,9,0,0,0
+21658,VN,MZ,Mozambique,Package,Import,0,0,0,0,0,0
+21659,VN,MM,Myanmar,Package,Export,3,0,0,0,0,0
+21660,VN,MM,Myanmar,Package,Export,0,0,3,0,0,0
+21661,VN,MM,Myanmar,Package,Export,0,3,0,0,0,0
+21662,VN,MM,Myanmar,Package,Import,4,0,0,0,0,0
+21663,VN,MM,Myanmar,Package,Import,0,0,4,0,0,0
+21664,VN,MM,Myanmar,Package,Import,0,4,0,0,0,0
+21665,VN,NA,Namibia,Package,Export,9,0,0,0,0,0
+21666,VN,NA,Namibia,Package,Export,0,0,9,0,0,0
+21667,VN,NA,Namibia,Package,Export,0,9,0,0,0,0
+21668,VN,NA,Namibia,Package,Import,10,0,0,0,0,0
+21669,VN,NA,Namibia,Package,Import,0,0,10,0,0,0
+21670,VN,NA,Namibia,Package,Import,0,0,0,0,0,0
+21671,VN,NP,Nepal*,Package,Export,9,0,0,0,0,0
+21672,VN,NP,Nepal*,Package,Export,0,0,9,0,0,0
+21673,VN,NP,Nepal*,Package,Export,0,9,0,0,0,0
+21674,VN,NP,Nepal*,Package,Import,0,0,0,0,0,0
+21675,VN,NP,Nepal*,Package,Import,0,0,10,0,0,0
+21676,VN,NP,Nepal*,Package,Import,0,0,0,0,0,0
+21677,VN,NL,Netherlands (Holland)*,Package,Export,6,0,0,0,0,0
+21678,VN,NL,Netherlands (Holland)*,Package,Export,0,0,6,0,0,0
+21679,VN,NL,Netherlands (Holland)*,Package,Export,0,6,0,0,0,0
+21680,VN,NL,Netherlands (Holland)*,Package,Import,6,0,0,0,0,0
+21681,VN,NL,Netherlands (Holland)*,Package,Import,0,0,6,0,0,0
+21682,VN,NL,Netherlands (Holland)*,Package,Import,0,6,0,0,0,0
+21683,VN,NC,New Caledonia,Package,Export,9,0,0,0,0,0
+21684,VN,NC,New Caledonia,Package,Export,0,0,9,0,0,0
+21685,VN,NC,New Caledonia,Package,Export,0,9,0,0,0,0
+21686,VN,NC,New Caledonia,Package,Import,10,0,0,0,0,0
+21687,VN,NC,New Caledonia,Package,Import,0,0,10,0,0,0
+21688,VN,NC,New Caledonia,Package,Import,0,0,0,0,0,0
+21689,VN,NZ,New Zealand*,Package,Export,3,0,0,0,0,0
+21690,VN,NZ,New Zealand*,Package,Export,0,0,3,0,0,0
+21691,VN,NZ,New Zealand*,Package,Export,0,3,0,0,0,0
+21692,VN,NZ,New Zealand*,Package,Import,3,0,0,0,0,0
+21693,VN,NZ,New Zealand*,Package,Import,0,0,3,0,0,0
+21694,VN,NZ,New Zealand*,Package,Import,0,3,0,0,0,0
+21695,VN,NI,Nicaragua,Package,Export,0,0,0,0,0,0
+21696,VN,NI,Nicaragua,Package,Export,0,0,8,0,0,0
+21697,VN,NI,Nicaragua,Package,Export,0,8,0,0,0,0
+21698,VN,NI,Nicaragua,Package,Import,9,0,0,0,0,0
+21699,VN,NI,Nicaragua,Package,Import,0,0,9,0,0,0
+21700,VN,NI,Nicaragua,Package,Import,0,9,0,0,0,0
+21701,VN,NE,Niger,Package,Export,9,0,0,0,0,0
+21702,VN,NE,Niger,Package,Export,0,0,9,0,0,0
+21703,VN,NE,Niger,Package,Export,0,9,0,0,0,0
+21704,VN,NE,Niger,Package,Import,10,0,0,0,0,0
+21705,VN,NE,Niger,Package,Import,0,0,10,0,0,0
+21706,VN,NE,Niger,Package,Import,0,0,0,0,0,0
+21707,VN,NG,Nigeria*,Package,Export,9,0,0,0,0,0
+21708,VN,NG,Nigeria*,Package,Export,0,0,9,0,0,0
+21709,VN,NG,Nigeria*,Package,Export,0,9,0,0,0,0
+21710,VN,NG,Nigeria*,Package,Import,10,0,0,0,0,0
+21711,VN,NG,Nigeria*,Package,Import,0,0,10,0,0,0
+21712,VN,NG,Nigeria*,Package,Import,0,10,0,0,0,0
+21713,VN,NF,Norfolk Island (Australia)*,Package,Export,0,0,0,0,0,0
+21714,VN,NF,Norfolk Island (Australia)*,Package,Export,0,0,3,0,0,0
+21715,VN,NF,Norfolk Island (Australia)*,Package,Export,0,3,0,0,0,0
+21716,VN,NF,Norfolk Island (Australia)*,Package,Import,0,0,0,0,0,0
+21717,VN,NF,Norfolk Island (Australia)*,Package,Import,0,0,0,0,0,0
+21718,VN,NF,Norfolk Island (Australia)*,Package,Import,0,0,0,0,0,0
+21719,VN,NB,Northern Ireland (United Kingdom)*,Package,Export,6,0,0,0,0,0
+21720,VN,NB,Northern Ireland (United Kingdom)*,Package,Export,0,0,6,0,0,0
+21721,VN,NB,Northern Ireland (United Kingdom)*,Package,Export,0,6,0,0,0,0
+21722,VN,NB,Northern Ireland (United Kingdom)*,Package,Import,6,0,0,0,0,0
+21723,VN,NB,Northern Ireland (United Kingdom)*,Package,Import,0,0,6,0,0,0
+21724,VN,NB,Northern Ireland (United Kingdom)*,Package,Import,0,0,0,0,0,0
+21725,VN,MP,Northern Mariana Islands*,Package,Export,0,0,0,0,0,0
+21726,VN,MP,Northern Mariana Islands*,Package,Export,0,0,9,0,0,0
+21727,VN,MP,Northern Mariana Islands*,Package,Export,0,9,0,0,0,0
+21728,VN,MP,Northern Mariana Islands*,Package,Import,10,0,0,0,0,0
+21729,VN,MP,Northern Mariana Islands*,Package,Import,0,0,10,0,0,0
+21730,VN,MP,Northern Mariana Islands*,Package,Import,0,0,0,0,0,0
+21731,VN,NO,Norway*,Package,Export,6,0,0,0,0,0
+21732,VN,NO,Norway*,Package,Export,0,0,6,0,0,0
+21733,VN,NO,Norway*,Package,Export,0,6,0,0,0,0
+21734,VN,NO,Norway*,Package,Import,6,0,0,0,0,0
+21735,VN,NO,Norway*,Package,Import,0,0,6,0,0,0
+21736,VN,NO,Norway*,Package,Import,0,6,0,0,0,0
+21737,VN,OM,Oman,Package,Export,7,0,0,0,0,0
+21738,VN,OM,Oman,Package,Export,0,0,7,0,0,0
+21739,VN,OM,Oman,Package,Export,0,7,0,0,0,0
+21740,VN,OM,Oman,Package,Import,10,0,0,0,0,0
+21741,VN,OM,Oman,Package,Import,0,0,10,0,0,0
+21742,VN,OM,Oman,Package,Import,0,10,0,0,0,0
+21743,VN,PK,Pakistan*,Package,Export,4,0,0,0,0,0
+21744,VN,PK,Pakistan*,Package,Export,0,0,4,0,0,0
+21745,VN,PK,Pakistan*,Package,Export,0,4,0,0,0,0
+21746,VN,PK,Pakistan*,Package,Import,10,0,0,0,0,0
+21747,VN,PK,Pakistan*,Package,Import,0,0,10,0,0,0
+21748,VN,PK,Pakistan*,Package,Import,0,10,0,0,0,0
+21749,VN,PW,Palau,Package,Export,0,0,0,0,0,0
+21750,VN,PW,Palau,Package,Export,0,0,0,0,0,0
+21751,VN,PW,Palau,Package,Export,0,0,0,0,0,0
+21752,VN,PW,Palau,Package,Import,0,0,0,0,0,0
+21753,VN,PW,Palau,Package,Import,0,0,0,0,0,0
+21754,VN,PW,Palau,Package,Import,0,0,0,0,0,0
+21755,VN,PA,Panama*,Package,Export,8,0,0,0,0,0
+21756,VN,PA,Panama*,Package,Export,0,0,8,0,0,0
+21757,VN,PA,Panama*,Package,Export,0,8,0,0,0,0
+21758,VN,PA,Panama*,Package,Import,9,0,0,0,0,0
+21759,VN,PA,Panama*,Package,Import,0,0,9,0,0,0
+21760,VN,PA,Panama*,Package,Import,0,9,0,0,0,0
+21761,VN,PG,Papua New Guinea,Package,Export,0,0,0,0,0,0
+21762,VN,PG,Papua New Guinea,Package,Export,0,0,0,0,0,0
+21763,VN,PG,Papua New Guinea,Package,Export,0,0,0,0,0,0
+21764,VN,PG,Papua New Guinea,Package,Import,0,0,0,0,0,0
+21765,VN,PG,Papua New Guinea,Package,Import,0,0,0,0,0,0
+21766,VN,PG,Papua New Guinea,Package,Import,0,0,0,0,0,0
+21767,VN,PY,Paraguay,Package,Export,0,0,0,0,0,0
+21768,VN,PY,Paraguay,Package,Export,0,0,8,0,0,0
+21769,VN,PY,Paraguay,Package,Export,0,8,0,0,0,0
+21770,VN,PY,Paraguay,Package,Import,9,0,0,0,0,0
+21771,VN,PY,Paraguay,Package,Import,0,0,9,0,0,0
+21772,VN,PY,Paraguay,Package,Import,0,0,0,0,0,0
+21773,VN,PE,Peru*,Package,Export,0,0,0,0,0,0
+21774,VN,PE,Peru*,Package,Export,0,0,8,0,0,0
+21775,VN,PE,Peru*,Package,Export,0,8,0,0,0,0
+21776,VN,PE,Peru*,Package,Import,9,0,0,0,0,0
+21777,VN,PE,Peru*,Package,Import,0,0,9,0,0,0
+21778,VN,PE,Peru*,Package,Import,0,9,0,0,0,0
+21779,VN,PH,Philippines*#,Package,Export,0,0,0,0,0,0
+21780,VN,PH,Philippines*#,Package,Export,0,0,2,0,0,0
+21781,VN,PH,Philippines*#,Package,Export,0,2,0,0,0,0
+21782,VN,PH,Philippines*#,Package,Import,2,0,0,0,0,0
+21783,VN,PH,Philippines*#,Package,Import,0,0,2,0,0,0
+21784,VN,PH,Philippines*#,Package,Import,0,2,0,0,0,0
+21785,VN,PL,Poland*,Package,Export,7,0,0,0,0,0
+21786,VN,PL,Poland*,Package,Export,0,0,7,0,0,0
+21787,VN,PL,Poland*,Package,Export,0,7,0,0,0,0
+21788,VN,PL,Poland*,Package,Import,10,0,0,0,0,0
+21789,VN,PL,Poland*,Package,Import,0,0,10,0,0,0
+21790,VN,PL,Poland*,Package,Import,0,10,0,0,0,0
+21791,VN,PO,"Ponape (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+21792,VN,PO,"Ponape (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+21793,VN,PO,"Ponape (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+21794,VN,PO,"Ponape (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+21795,VN,PO,"Ponape (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+21796,VN,PO,"Ponape (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+21797,VN,PT,Portugal*,Package,Export,7,0,0,0,0,0
+21798,VN,PT,Portugal*,Package,Export,0,0,7,0,0,0
+21799,VN,PT,Portugal*,Package,Export,0,7,0,0,0,0
+21800,VN,PT,Portugal*,Package,Import,7,0,0,0,0,0
+21801,VN,PT,Portugal*,Package,Import,0,0,7,0,0,0
+21802,VN,PT,Portugal*,Package,Import,0,7,0,0,0,0
+21803,VN,PR,Puerto Rico*,Package,Export,5,0,0,0,0,0
+21804,VN,PR,Puerto Rico*,Package,Export,0,0,5,0,0,0
+21805,VN,PR,Puerto Rico*,Package,Export,0,5,0,0,0,0
+21806,VN,PR,Puerto Rico*,Package,Import,5,0,0,0,0,0
+21807,VN,PR,Puerto Rico*,Package,Import,0,0,5,0,0,0
+21808,VN,PR,Puerto Rico*,Package,Import,0,5,0,0,0,0
+21809,VN,QA,Qatar,Package,Export,7,0,0,0,0,0
+21810,VN,QA,Qatar,Package,Export,0,0,7,0,0,0
+21811,VN,QA,Qatar,Package,Export,0,7,0,0,0,0
+21812,VN,QA,Qatar,Package,Import,10,0,0,0,0,0
+21813,VN,QA,Qatar,Package,Import,0,0,10,0,0,0
+21814,VN,QA,Qatar,Package,Import,0,10,0,0,0,0
+21815,VN,RE,Reunion,Package,Export,9,0,0,0,0,0
+21816,VN,RE,Reunion,Package,Export,0,0,9,0,0,0
+21817,VN,RE,Reunion,Package,Export,0,9,0,0,0,0
+21818,VN,RE,Reunion,Package,Import,10,0,0,0,0,0
+21819,VN,RE,Reunion,Package,Import,0,0,10,0,0,0
+21820,VN,RE,Reunion,Package,Import,0,0,0,0,0,0
+21821,VN,RO,Romania,Package,Export,7,0,0,0,0,0
+21822,VN,RO,Romania,Package,Export,0,0,7,0,0,0
+21823,VN,RO,Romania,Package,Export,0,7,0,0,0,0
+21824,VN,RO,Romania,Package,Import,10,0,0,0,0,0
+21825,VN,RO,Romania,Package,Import,0,0,10,0,0,0
+21826,VN,RO,Romania,Package,Import,0,10,0,0,0,0
+21827,VN,RT,Rota (Northern Mariana Islands)*,Package,Export,0,0,0,0,0,0
+21828,VN,RT,Rota (Northern Mariana Islands)*,Package,Export,0,0,9,0,0,0
+21829,VN,RT,Rota (Northern Mariana Islands)*,Package,Export,0,9,0,0,0,0
+21830,VN,RT,Rota (Northern Mariana Islands)*,Package,Import,10,0,0,0,0,0
+21831,VN,RT,Rota (Northern Mariana Islands)*,Package,Import,0,0,10,0,0,0
+21832,VN,RT,Rota (Northern Mariana Islands)*,Package,Import,0,0,0,0,0,0
+21833,VN,RU,Russia*,Package,Export,7,0,0,0,0,0
+21834,VN,RU,Russia*,Package,Export,0,0,7,0,0,0
+21835,VN,RU,Russia*,Package,Export,0,7,0,0,0,0
+21836,VN,RU,Russia*,Package,Import,10,0,0,0,0,0
+21837,VN,RU,Russia*,Package,Import,0,0,10,0,0,0
+21838,VN,RU,Russia*,Package,Import,0,10,0,0,0,0
+21839,VN,RW,Rwanda,Package,Export,0,0,0,0,0,0
+21840,VN,RW,Rwanda,Package,Export,0,0,9,0,0,0
+21841,VN,RW,Rwanda,Package,Export,0,9,0,0,0,0
+21842,VN,RW,Rwanda,Package,Import,9,0,0,0,0,0
+21843,VN,RW,Rwanda,Package,Import,0,0,9,0,0,0
+21844,VN,RW,Rwanda,Package,Import,0,0,0,0,0,0
+21845,VN,SP,Saipan (Northern Mariana Islands)*,Package,Export,9,0,0,0,0,0
+21846,VN,SP,Saipan (Northern Mariana Islands)*,Package,Export,0,0,9,0,0,0
+21847,VN,SP,Saipan (Northern Mariana Islands)*,Package,Export,0,9,0,0,0,0
+21848,VN,SP,Saipan (Northern Mariana Islands)*,Package,Import,10,0,0,0,0,0
+21849,VN,SP,Saipan (Northern Mariana Islands)*,Package,Import,0,0,10,0,0,0
+21850,VN,SP,Saipan (Northern Mariana Islands)*,Package,Import,0,0,0,0,0,0
+21851,VN,WS,Samoa,Package,Export,9,0,0,0,0,0
+21852,VN,WS,Samoa,Package,Export,0,0,9,0,0,0
+21853,VN,WS,Samoa,Package,Export,0,9,0,0,0,0
+21854,VN,WS,Samoa,Package,Import,10,0,0,0,0,0
+21855,VN,WS,Samoa,Package,Import,0,0,10,0,0,0
+21856,VN,WS,Samoa,Package,Import,0,0,0,0,0,0
+21857,VN,SM,San Marino,Package,Export,0,0,0,0,0,0
+21858,VN,SM,San Marino,Package,Export,0,0,6,0,0,0
+21859,VN,SM,San Marino,Package,Export,0,6,0,0,0,0
+21860,VN,SM,San Marino,Package,Import,6,0,0,0,0,0
+21861,VN,SM,San Marino,Package,Import,0,0,6,0,0,0
+21862,VN,SM,San Marino,Package,Import,0,6,0,0,0,0
+21863,VN,SA,Saudi Arabia,Package,Export,7,0,0,0,0,0
+21864,VN,SA,Saudi Arabia,Package,Export,0,0,7,0,0,0
+21865,VN,SA,Saudi Arabia,Package,Export,0,7,0,0,0,0
+21866,VN,SA,Saudi Arabia,Package,Import,10,0,0,0,0,0
+21867,VN,SA,Saudi Arabia,Package,Import,0,0,10,0,0,0
+21868,VN,SA,Saudi Arabia,Package,Import,0,10,0,0,0,0
+21869,VN,SF,Scotland (United Kingdom)*,Package,Export,6,0,0,0,0,0
+21870,VN,SF,Scotland (United Kingdom)*,Package,Export,0,0,6,0,0,0
+21871,VN,SF,Scotland (United Kingdom)*,Package,Export,0,6,0,0,0,0
+21872,VN,SF,Scotland (United Kingdom)*,Package,Import,6,0,0,0,0,0
+21873,VN,SF,Scotland (United Kingdom)*,Package,Import,0,0,6,0,0,0
+21874,VN,SF,Scotland (United Kingdom)*,Package,Import,0,0,0,0,0,0
+21875,VN,SN,Senegal,Package,Export,9,0,0,0,0,0
+21876,VN,SN,Senegal,Package,Export,0,0,9,0,0,0
+21877,VN,SN,Senegal,Package,Export,0,9,0,0,0,0
+21878,VN,SN,Senegal,Package,Import,10,0,0,0,0,0
+21879,VN,SN,Senegal,Package,Import,0,0,10,0,0,0
+21880,VN,SN,Senegal,Package,Import,0,0,0,0,0,0
+21881,VN,RS,Serbia,Package,Export,9,0,0,0,0,0
+21882,VN,RS,Serbia,Package,Export,0,0,9,0,0,0
+21883,VN,RS,Serbia,Package,Export,0,9,0,0,0,0
+21884,VN,RS,Serbia,Package,Import,10,0,0,0,0,0
+21885,VN,RS,Serbia,Package,Import,0,0,10,0,0,0
+21886,VN,RS,Serbia,Package,Import,0,0,0,0,0,0
+21887,VN,SC,Seychelles,Package,Export,0,0,0,0,0,0
+21888,VN,SC,Seychelles,Package,Export,0,0,9,0,0,0
+21889,VN,SC,Seychelles,Package,Export,0,9,0,0,0,0
+21890,VN,SC,Seychelles,Package,Import,10,0,0,0,0,0
+21891,VN,SC,Seychelles,Package,Import,0,0,10,0,0,0
+21892,VN,SC,Seychelles,Package,Import,0,0,0,0,0,0
+21893,VN,SL,Sierra Leone,Package,Export,0,0,0,0,0,0
+21894,VN,SL,Sierra Leone,Package,Export,0,0,9,0,0,0
+21895,VN,SL,Sierra Leone,Package,Export,0,9,0,0,0,0
+21896,VN,SL,Sierra Leone,Package,Import,10,0,0,0,0,0
+21897,VN,SL,Sierra Leone,Package,Import,0,0,10,0,0,0
+21898,VN,SL,Sierra Leone,Package,Import,0,0,0,0,0,0
+21899,VN,SG,Singapore#,Package,Export,1,0,0,0,0,0
+21900,VN,SG,Singapore#,Package,Export,0,0,1,0,0,0
+21901,VN,SG,Singapore#,Package,Export,0,1,0,0,0,0
+21902,VN,SG,Singapore#,Package,Import,2,0,0,0,0,0
+21903,VN,SG,Singapore#,Package,Import,0,0,2,0,0,0
+21904,VN,SG,Singapore#,Package,Import,0,2,0,0,0,0
+21905,VN,SK,Slovakia,Package,Export,7,0,0,0,0,0
+21906,VN,SK,Slovakia,Package,Export,0,0,7,0,0,0
+21907,VN,SK,Slovakia,Package,Export,0,7,0,0,0,0
+21908,VN,SK,Slovakia,Package,Import,10,0,0,0,0,0
+21909,VN,SK,Slovakia,Package,Import,0,0,10,0,0,0
+21910,VN,SK,Slovakia,Package,Import,0,10,0,0,0,0
+21911,VN,SI,Slovenia,Package,Export,7,0,0,0,0,0
+21912,VN,SI,Slovenia,Package,Export,0,0,7,0,0,0
+21913,VN,SI,Slovenia,Package,Export,0,7,0,0,0,0
+21914,VN,SI,Slovenia,Package,Import,10,0,0,0,0,0
+21915,VN,SI,Slovenia,Package,Import,0,0,10,0,0,0
+21916,VN,SI,Slovenia,Package,Import,0,10,0,0,0,0
+21917,VN,SB,Solomon Islands,Package,Export,0,0,0,0,0,0
+21918,VN,SB,Solomon Islands,Package,Export,0,0,0,0,0,0
+21919,VN,SB,Solomon Islands,Package,Export,0,0,0,0,0,0
+21920,VN,SB,Solomon Islands,Package,Import,0,0,0,0,0,0
+21921,VN,SB,Solomon Islands,Package,Import,0,0,0,0,0,0
+21922,VN,SB,Solomon Islands,Package,Import,0,0,0,0,0,0
+21923,VN,ZA,South Africa*,Package,Export,9,0,0,0,0,0
+21924,VN,ZA,South Africa*,Package,Export,0,0,9,0,0,0
+21925,VN,ZA,South Africa*,Package,Export,0,9,0,0,0,0
+21926,VN,ZA,South Africa*,Package,Import,9,0,0,0,0,0
+21927,VN,ZA,South Africa*,Package,Import,0,0,9,0,0,0
+21928,VN,ZA,South Africa*,Package,Import,0,9,0,0,0,0
+21929,VN,ES,Spain*,Package,Export,6,0,0,0,0,0
+21930,VN,ES,Spain*,Package,Export,0,0,6,0,0,0
+21931,VN,ES,Spain*,Package,Export,0,6,0,0,0,0
+21932,VN,ES,Spain*,Package,Import,6,0,0,0,0,0
+21933,VN,ES,Spain*,Package,Import,0,0,6,0,0,0
+21934,VN,ES,Spain*,Package,Import,0,6,0,0,0,0
+21935,VN,LK,Sri Lanka*,Package,Export,4,0,0,0,0,0
+21936,VN,LK,Sri Lanka*,Package,Export,0,0,4,0,0,0
+21937,VN,LK,Sri Lanka*,Package,Export,0,4,0,0,0,0
+21938,VN,LK,Sri Lanka*,Package,Import,3,0,0,0,0,0
+21939,VN,LK,Sri Lanka*,Package,Import,0,0,3,0,0,0
+21940,VN,LK,Sri Lanka*,Package,Import,0,0,0,0,0,0
+21941,VN,BL,St. Barthelemy,Package,Export,0,0,0,0,0,0
+21942,VN,BL,St. Barthelemy,Package,Export,0,0,8,0,0,0
+21943,VN,BL,St. Barthelemy,Package,Export,0,8,0,0,0,0
+21944,VN,BL,St. Barthelemy,Package,Import,9,0,0,0,0,0
+21945,VN,BL,St. Barthelemy,Package,Import,0,0,9,0,0,0
+21946,VN,BL,St. Barthelemy,Package,Import,0,0,0,0,0,0
+21947,VN,SW,St. Christopher (St. Kitts),Package,Export,0,0,0,0,0,0
+21948,VN,SW,St. Christopher (St. Kitts),Package,Export,0,0,8,0,0,0
+21949,VN,SW,St. Christopher (St. Kitts),Package,Export,0,8,0,0,0,0
+21950,VN,SW,St. Christopher (St. Kitts),Package,Import,9,0,0,0,0,0
+21951,VN,SW,St. Christopher (St. Kitts),Package,Import,0,0,9,0,0,0
+21952,VN,SW,St. Christopher (St. Kitts),Package,Import,0,0,0,0,0,0
+21953,VN,UV,St. John (U.S. Virgin Islands),Package,Export,0,0,0,0,0,0
+21954,VN,UV,St. John (U.S. Virgin Islands),Package,Export,0,0,8,0,0,0
+21955,VN,UV,St. John (U.S. Virgin Islands),Package,Export,0,8,0,0,0,0
+21956,VN,UV,St. John (U.S. Virgin Islands),Package,Import,9,0,0,0,0,0
+21957,VN,UV,St. John (U.S. Virgin Islands),Package,Import,0,0,9,0,0,0
+21958,VN,UV,St. John (U.S. Virgin Islands),Package,Import,0,0,0,0,0,0
+21959,VN,KN,St. Kitts and Nevis,Package,Export,8,0,0,0,0,0
+21960,VN,KN,St. Kitts and Nevis,Package,Export,0,0,8,0,0,0
+21961,VN,KN,St. Kitts and Nevis,Package,Export,0,8,0,0,0,0
+21962,VN,KN,St. Kitts and Nevis,Package,Import,9,0,0,0,0,0
+21963,VN,KN,St. Kitts and Nevis,Package,Import,0,0,9,0,0,0
+21964,VN,KN,St. Kitts and Nevis,Package,Import,0,9,0,0,0,0
+21965,VN,LC,St. Lucia,Package,Export,8,0,0,0,0,0
+21966,VN,LC,St. Lucia,Package,Export,0,0,8,0,0,0
+21967,VN,LC,St. Lucia,Package,Export,0,8,0,0,0,0
+21968,VN,LC,St. Lucia,Package,Import,9,0,0,0,0,0
+21969,VN,LC,St. Lucia,Package,Import,0,0,9,0,0,0
+21970,VN,LC,St. Lucia,Package,Import,0,9,0,0,0,0
+21971,VN,SX,"St. Maarten, St. Martin",Package,Export,0,0,0,0,0,0
+21972,VN,SX,"St. Maarten, St. Martin",Package,Export,0,0,9,0,0,0
+21973,VN,SX,"St. Maarten, St. Martin",Package,Export,0,9,0,0,0,0
+21974,VN,SX,"St. Maarten, St. Martin",Package,Import,9,0,0,0,0,0
+21975,VN,SX,"St. Maarten, St. Martin",Package,Import,0,0,9,0,0,0
+21976,VN,SX,"St. Maarten, St. Martin",Package,Import,0,0,0,0,0,0
+21977,VN,VL,St. Thomas (U.S. Virgin Islands),Package,Export,0,0,0,0,0,0
+21978,VN,VL,St. Thomas (U.S. Virgin Islands),Package,Export,0,0,8,0,0,0
+21979,VN,VL,St. Thomas (U.S. Virgin Islands),Package,Export,0,8,0,0,0,0
+21980,VN,VL,St. Thomas (U.S. Virgin Islands),Package,Import,9,0,0,0,0,0
+21981,VN,VL,St. Thomas (U.S. Virgin Islands),Package,Import,0,0,9,0,0,0
+21982,VN,VL,St. Thomas (U.S. Virgin Islands),Package,Import,0,0,0,0,0,0
+21983,VN,VC,St. Vincent & the Grenadines,Package,Export,0,0,0,0,0,0
+21984,VN,VC,St. Vincent & the Grenadines,Package,Export,0,0,8,0,0,0
+21985,VN,VC,St. Vincent & the Grenadines,Package,Export,0,8,0,0,0,0
+21986,VN,VC,St. Vincent & the Grenadines,Package,Import,9,0,0,0,0,0
+21987,VN,VC,St. Vincent & the Grenadines,Package,Import,0,0,9,0,0,0
+21988,VN,VC,St. Vincent & the Grenadines,Package,Import,0,0,0,0,0,0
+21989,VN,SR,Suriname,Package,Export,8,0,0,0,0,0
+21990,VN,SR,Suriname,Package,Export,0,0,8,0,0,0
+21991,VN,SR,Suriname,Package,Export,0,8,0,0,0,0
+21992,VN,SR,Suriname,Package,Import,9,0,0,0,0,0
+21993,VN,SR,Suriname,Package,Import,0,0,9,0,0,0
+21994,VN,SR,Suriname,Package,Import,0,0,0,0,0,0
+21995,VN,SZ,Swaziland,Package,Export,0,0,0,0,0,0
+21996,VN,SZ,Swaziland,Package,Export,0,0,9,0,0,0
+21997,VN,SZ,Swaziland,Package,Export,0,9,0,0,0,0
+21998,VN,SZ,Swaziland,Package,Import,9,0,0,0,0,0
+21999,VN,SZ,Swaziland,Package,Import,0,0,9,0,0,0
+22000,VN,SZ,Swaziland,Package,Import,0,0,0,0,0,0
+22001,VN,SE,Sweden*,Package,Export,6,0,0,0,0,0
+22002,VN,SE,Sweden*,Package,Export,0,0,6,0,0,0
+22003,VN,SE,Sweden*,Package,Export,0,6,0,0,0,0
+22004,VN,SE,Sweden*,Package,Import,6,0,0,0,0,0
+22005,VN,SE,Sweden*,Package,Import,0,0,6,0,0,0
+22006,VN,SE,Sweden*,Package,Import,0,6,0,0,0,0
+22007,VN,CH,Switzerland*,Package,Export,6,0,0,0,0,0
+22008,VN,CH,Switzerland*,Package,Export,0,0,6,0,0,0
+22009,VN,CH,Switzerland*,Package,Export,0,6,0,0,0,0
+22010,VN,CH,Switzerland*,Package,Import,6,0,0,0,0,0
+22011,VN,CH,Switzerland*,Package,Import,0,0,6,0,0,0
+22012,VN,CH,Switzerland*,Package,Import,0,6,0,0,0,0
+22013,VN,TA,Tahiti (French Polynesia),Package,Export,0,0,0,0,0,0
+22014,VN,TA,Tahiti (French Polynesia),Package,Export,0,0,0,0,0,0
+22015,VN,TA,Tahiti (French Polynesia),Package,Export,0,0,0,0,0,0
+22016,VN,TA,Tahiti (French Polynesia),Package,Import,0,0,0,0,0,0
+22017,VN,TA,Tahiti (French Polynesia),Package,Import,0,0,0,0,0,0
+22018,VN,TA,Tahiti (French Polynesia),Package,Import,0,0,0,0,0,0
+22019,VN,TW,"Taiwan, China*#",Package,Export,3,0,0,0,0,0
+22020,VN,TW,"Taiwan, China*#",Package,Export,0,0,3,0,0,0
+22021,VN,TW,"Taiwan, China*#",Package,Export,0,3,0,0,0,0
+22022,VN,TW,"Taiwan, China*#",Package,Import,1,0,0,0,0,0
+22023,VN,TW,"Taiwan, China*#",Package,Import,0,0,1,0,0,0
+22024,VN,TW,"Taiwan, China*#",Package,Import,0,1,0,0,0,0
+22025,VN,TZ,Tanzania,Package,Export,0,0,0,0,0,0
+22026,VN,TZ,Tanzania,Package,Export,0,0,9,0,0,0
+22027,VN,TZ,Tanzania,Package,Export,0,9,0,0,0,0
+22028,VN,TZ,Tanzania,Package,Import,10,0,0,0,0,0
+22029,VN,TZ,Tanzania,Package,Import,0,0,10,0,0,0
+22030,VN,TZ,Tanzania,Package,Import,0,0,0,0,0,0
+22031,VN,TH,Thailand*#,Package,Export,1,0,0,0,0,0
+22032,VN,TH,Thailand*#,Package,Export,0,0,1,0,0,0
+22033,VN,TH,Thailand*#,Package,Export,0,1,0,0,0,0
+22034,VN,TH,Thailand*#,Package,Import,1,0,0,0,0,0
+22035,VN,TH,Thailand*#,Package,Import,0,0,1,0,0,0
+22036,VN,TH,Thailand*#,Package,Import,0,1,0,0,0,0
+22037,VN,TL,Timor-Leste,Package,Export,0,0,0,0,0,0
+22038,VN,TL,Timor-Leste,Package,Export,0,0,0,0,0,0
+22039,VN,TL,Timor-Leste,Package,Export,0,0,0,0,0,0
+22040,VN,TL,Timor-Leste,Package,Import,0,0,0,0,0,0
+22041,VN,TL,Timor-Leste,Package,Import,0,0,0,0,0,0
+22042,VN,TL,Timor-Leste,Package,Import,0,0,0,0,0,0
+22043,VN,TI,Tinian (Northern Mariana Islands)*,Package,Export,0,0,0,0,0,0
+22044,VN,TI,Tinian (Northern Mariana Islands)*,Package,Export,0,0,9,0,0,0
+22045,VN,TI,Tinian (Northern Mariana Islands)*,Package,Export,0,9,0,0,0,0
+22046,VN,TI,Tinian (Northern Mariana Islands)*,Package,Import,10,0,0,0,0,0
+22047,VN,TI,Tinian (Northern Mariana Islands)*,Package,Import,0,0,10,0,0,0
+22048,VN,TI,Tinian (Northern Mariana Islands)*,Package,Import,0,0,0,0,0,0
+22049,VN,TG,Togo,Package,Export,0,0,0,0,0,0
+22050,VN,TG,Togo,Package,Export,0,0,9,0,0,0
+22051,VN,TG,Togo,Package,Export,0,9,0,0,0,0
+22052,VN,TG,Togo,Package,Import,10,0,0,0,0,0
+22053,VN,TG,Togo,Package,Import,0,0,10,0,0,0
+22054,VN,TG,Togo,Package,Import,0,0,0,0,0,0
+22055,VN,TO,Tonga,Package,Export,0,0,0,0,0,0
+22056,VN,TO,Tonga,Package,Export,0,0,0,0,0,0
+22057,VN,TO,Tonga,Package,Export,0,0,0,0,0,0
+22058,VN,TO,Tonga,Package,Import,0,0,0,0,0,0
+22059,VN,TO,Tonga,Package,Import,0,0,0,0,0,0
+22060,VN,TO,Tonga,Package,Import,0,0,0,0,0,0
+22061,VN,ZZ,Tortola (British Virgin Islands),Package,Export,0,0,0,0,0,0
+22062,VN,ZZ,Tortola (British Virgin Islands),Package,Export,0,0,8,0,0,0
+22063,VN,ZZ,Tortola (British Virgin Islands),Package,Export,0,8,0,0,0,0
+22064,VN,ZZ,Tortola (British Virgin Islands),Package,Import,9,0,0,0,0,0
+22065,VN,ZZ,Tortola (British Virgin Islands),Package,Import,0,0,9,0,0,0
+22066,VN,ZZ,Tortola (British Virgin Islands),Package,Import,0,0,0,0,0,0
+22067,VN,TT,Trinidad & Tobago*,Package,Export,8,0,0,0,0,0
+22068,VN,TT,Trinidad & Tobago*,Package,Export,0,0,8,0,0,0
+22069,VN,TT,Trinidad & Tobago*,Package,Export,0,8,0,0,0,0
+22070,VN,TT,Trinidad & Tobago*,Package,Import,9,0,0,0,0,0
+22071,VN,TT,Trinidad & Tobago*,Package,Import,0,0,9,0,0,0
+22072,VN,TT,Trinidad & Tobago*,Package,Import,0,0,0,0,0,0
+22073,VN,TU,"Truk (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+22074,VN,TU,"Truk (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+22075,VN,TU,"Truk (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+22076,VN,TU,"Truk (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+22077,VN,TU,"Truk (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+22078,VN,TU,"Truk (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+22079,VN,TN,Tunisia,Package,Export,9,0,0,0,0,0
+22080,VN,TN,Tunisia,Package,Export,0,0,9,0,0,0
+22081,VN,TN,Tunisia,Package,Export,0,9,0,0,0,0
+22082,VN,TN,Tunisia,Package,Import,10,0,0,0,0,0
+22083,VN,TN,Tunisia,Package,Import,0,0,10,0,0,0
+22084,VN,TN,Tunisia,Package,Import,0,0,0,0,0,0
+22085,VN,TR,Turkey,Package,Export,7,0,0,0,0,0
+22086,VN,TR,Turkey,Package,Export,0,0,7,0,0,0
+22087,VN,TR,Turkey,Package,Export,0,7,0,0,0,0
+22088,VN,TR,Turkey,Package,Import,6,0,0,0,0,0
+22089,VN,TR,Turkey,Package,Import,0,0,6,0,0,0
+22090,VN,TR,Turkey,Package,Import,0,6,0,0,0,0
+22091,VN,TM,Turkmenistan,Package,Export,0,0,0,0,0,0
+22092,VN,TM,Turkmenistan,Package,Export,0,0,9,0,0,0
+22093,VN,TM,Turkmenistan,Package,Export,0,0,0,0,0,0
+22094,VN,TM,Turkmenistan,Package,Import,0,0,0,0,0,0
+22095,VN,TM,Turkmenistan,Package,Import,0,0,10,0,0,0
+22096,VN,TM,Turkmenistan,Package,Import,0,0,0,0,0,0
+22097,VN,TC,Turks & Caicos Islands,Package,Export,0,0,0,0,0,0
+22098,VN,TC,Turks & Caicos Islands,Package,Export,0,0,8,0,0,0
+22099,VN,TC,Turks & Caicos Islands,Package,Export,0,8,0,0,0,0
+22100,VN,TC,Turks & Caicos Islands,Package,Import,0,0,0,0,0,0
+22101,VN,TC,Turks & Caicos Islands,Package,Import,0,0,0,0,0,0
+22102,VN,TC,Turks & Caicos Islands,Package,Import,0,0,0,0,0,0
+22103,VN,TV,Tuvalu,Package,Export,0,0,0,0,0,0
+22104,VN,TV,Tuvalu,Package,Export,0,0,0,0,0,0
+22105,VN,TV,Tuvalu,Package,Export,0,0,0,0,0,0
+22106,VN,TV,Tuvalu,Package,Import,0,0,0,0,0,0
+22107,VN,TV,Tuvalu,Package,Import,0,0,0,0,0,0
+22108,VN,TV,Tuvalu,Package,Import,0,0,0,0,0,0
+22109,VN,VI,U.S. Virgin Islands,Package,Export,0,0,0,0,0,0
+22110,VN,VI,U.S. Virgin Islands,Package,Export,0,0,8,0,0,0
+22111,VN,VI,U.S. Virgin Islands,Package,Export,0,8,0,0,0,0
+22112,VN,VI,U.S. Virgin Islands,Package,Import,9,0,0,0,0,0
+22113,VN,VI,U.S. Virgin Islands,Package,Import,0,0,9,0,0,0
+22114,VN,VI,U.S. Virgin Islands,Package,Import,0,0,0,0,0,0
+22115,VN,UG,Uganda,Package,Export,0,0,0,0,0,0
+22116,VN,UG,Uganda,Package,Export,0,0,9,0,0,0
+22117,VN,UG,Uganda,Package,Export,0,9,0,0,0,0
+22118,VN,UG,Uganda,Package,Import,10,0,0,0,0,0
+22119,VN,UG,Uganda,Package,Import,0,0,10,0,0,0
+22120,VN,UG,Uganda,Package,Import,0,0,0,0,0,0
+22121,VN,UA,Ukraine*,Package,Export,7,0,0,0,0,0
+22122,VN,UA,Ukraine*,Package,Export,0,0,7,0,0,0
+22123,VN,UA,Ukraine*,Package,Export,0,7,0,0,0,0
+22124,VN,UA,Ukraine*,Package,Import,10,0,0,0,0,0
+22125,VN,UA,Ukraine*,Package,Import,0,0,10,0,0,0
+22126,VN,UA,Ukraine*,Package,Import,0,0,0,0,0,0
+22127,VN,UI,Union Islands (St. Vincent & the Grenadines),Package,Export,0,0,0,0,0,0
+22128,VN,UI,Union Islands (St. Vincent & the Grenadines),Package,Export,0,0,8,0,0,0
+22129,VN,UI,Union Islands (St. Vincent & the Grenadines),Package,Export,0,8,0,0,0,0
+22130,VN,UI,Union Islands (St. Vincent & the Grenadines),Package,Import,9,0,0,0,0,0
+22131,VN,UI,Union Islands (St. Vincent & the Grenadines),Package,Import,0,0,9,0,0,0
+22132,VN,UI,Union Islands (St. Vincent & the Grenadines),Package,Import,0,0,0,0,0,0
+22133,VN,AE,United Arab Emirates,Package,Export,7,0,0,0,0,0
+22134,VN,AE,United Arab Emirates,Package,Export,0,0,7,0,0,0
+22135,VN,AE,United Arab Emirates,Package,Export,0,7,0,0,0,0
+22136,VN,AE,United Arab Emirates,Package,Import,7,0,0,0,0,0
+22137,VN,AE,United Arab Emirates,Package,Import,0,0,7,0,0,0
+22138,VN,AE,United Arab Emirates,Package,Import,0,7,0,0,0,0
+22139,VN,GB,United Kingdom*,Package,Export,6,0,0,0,0,0
+22140,VN,GB,United Kingdom*,Package,Export,0,0,6,0,0,0
+22141,VN,GB,United Kingdom*,Package,Export,0,6,0,0,0,0
+22142,VN,GB,United Kingdom*,Package,Import,6,0,0,0,0,0
+22143,VN,GB,United Kingdom*,Package,Import,0,0,6,0,0,0
+22144,VN,GB,United Kingdom*,Package,Import,0,6,0,0,0,0
+22145,VN,US,United States*,Package,Export,5,0,0,0,0,0
+22146,VN,US,United States*,Package,Export,0,0,5,0,0,0
+22147,VN,US,United States*,Package,Export,0,5,0,0,0,0
+22148,VN,US,United States*,Package,Import,5,0,0,0,0,0
+22149,VN,US,United States*,Package,Import,0,0,5,0,0,0
+22150,VN,US,United States*,Package,Import,0,5,0,0,0,0
+22151,VN,UY,Uruguay,Package,Export,0,0,0,0,0,0
+22152,VN,UY,Uruguay,Package,Export,0,0,8,0,0,0
+22153,VN,UY,Uruguay,Package,Export,0,8,0,0,0,0
+22154,VN,UY,Uruguay,Package,Import,9,0,0,0,0,0
+22155,VN,UY,Uruguay,Package,Import,0,0,9,0,0,0
+22156,VN,UY,Uruguay,Package,Import,0,0,0,0,0,0
+22157,VN,UZ,Uzbekistan,Package,Export,0,0,0,0,0,0
+22158,VN,UZ,Uzbekistan,Package,Export,0,0,9,0,0,0
+22159,VN,UZ,Uzbekistan,Package,Export,0,9,0,0,0,0
+22160,VN,UZ,Uzbekistan,Package,Import,10,0,0,0,0,0
+22161,VN,UZ,Uzbekistan,Package,Import,0,0,10,0,0,0
+22162,VN,UZ,Uzbekistan,Package,Import,0,0,0,0,0,0
+22163,VN,VU,Vanuatu,Package,Export,0,0,0,0,0,0
+22164,VN,VU,Vanuatu,Package,Export,0,0,0,0,0,0
+22165,VN,VU,Vanuatu,Package,Export,0,0,0,0,0,0
+22166,VN,VU,Vanuatu,Package,Import,0,0,0,0,0,0
+22167,VN,VU,Vanuatu,Package,Import,0,0,0,0,0,0
+22168,VN,VU,Vanuatu,Package,Import,0,0,0,0,0,0
+22169,VN,VA,Vatican City (Italy)*,Package,Export,6,0,0,0,0,0
+22170,VN,VA,Vatican City (Italy)*,Package,Export,0,0,6,0,0,0
+22171,VN,VA,Vatican City (Italy)*,Package,Export,0,6,0,0,0,0
+22172,VN,VA,Vatican City (Italy)*,Package,Import,6,0,0,0,0,0
+22173,VN,VA,Vatican City (Italy)*,Package,Import,0,0,6,0,0,0
+22174,VN,VA,Vatican City (Italy)*,Package,Import,0,0,0,0,0,0
+22175,VN,VE,Venezuela*,Package,Export,0,0,0,0,0,0
+22176,VN,VE,Venezuela*,Package,Export,0,0,8,0,0,0
+22177,VN,VE,Venezuela*,Package,Export,0,8,0,0,0,0
+22178,VN,VE,Venezuela*,Package,Import,9,0,0,0,0,0
+22179,VN,VE,Venezuela*,Package,Import,0,0,9,0,0,0
+22180,VN,VE,Venezuela*,Package,Import,0,9,0,0,0,0
+22181,VN,WL,Wales (United Kingdom)*,Package,Export,6,0,0,0,0,0
+22182,VN,WL,Wales (United Kingdom)*,Package,Export,0,0,6,0,0,0
+22183,VN,WL,Wales (United Kingdom)*,Package,Export,0,6,0,0,0,0
+22184,VN,WL,Wales (United Kingdom)*,Package,Import,6,0,0,0,0,0
+22185,VN,WL,Wales (United Kingdom)*,Package,Import,0,0,6,0,0,0
+22186,VN,WL,Wales (United Kingdom)*,Package,Import,0,0,0,0,0,0
+22187,VN,WF,Wallis & Futuna Islands,Package,Export,0,0,0,0,0,0
+22188,VN,WF,Wallis & Futuna Islands,Package,Export,0,0,0,0,0,0
+22189,VN,WF,Wallis & Futuna Islands,Package,Export,0,0,0,0,0,0
+22190,VN,WF,Wallis & Futuna Islands,Package,Import,0,0,0,0,0,0
+22191,VN,WF,Wallis & Futuna Islands,Package,Import,0,0,0,0,0,0
+22192,VN,WF,Wallis & Futuna Islands,Package,Import,0,0,0,0,0,0
+22193,VN,YA,"Yap (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+22194,VN,YA,"Yap (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+22195,VN,YA,"Yap (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+22196,VN,YA,"Yap (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+22197,VN,YA,"Yap (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+22198,VN,YA,"Yap (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+22199,VN,YE,"Yemen, Republic of",Package,Export,0,0,0,0,0,0
+22200,VN,YE,"Yemen, Republic of",Package,Export,0,0,0,0,0,0
+22201,VN,YE,"Yemen, Republic of",Package,Export,0,0,0,0,0,0
+22202,VN,YE,"Yemen, Republic of",Package,Import,0,0,0,0,0,0
+22203,VN,YE,"Yemen, Republic of",Package,Import,0,0,0,0,0,0
+22204,VN,YE,"Yemen, Republic of",Package,Import,0,0,0,0,0,0
+22205,VN,ZM,Zambia,Package,Export,0,0,0,0,0,0
+22206,VN,ZM,Zambia,Package,Export,0,0,9,0,0,0
+22207,VN,ZM,Zambia,Package,Export,0,9,0,0,0,0
+22208,VN,ZM,Zambia,Package,Import,10,0,0,0,0,0
+22209,VN,ZM,Zambia,Package,Import,0,0,10,0,0,0
+22210,VN,ZM,Zambia,Package,Import,0,0,0,0,0,0
+22211,VN,ZW,Zimbabwe,Package,Export,0,0,0,0,0,0
+22212,VN,ZW,Zimbabwe,Package,Export,0,0,9,0,0,0
+22213,VN,ZW,Zimbabwe,Package,Export,0,9,0,0,0,0
+22214,VN,ZW,Zimbabwe,Package,Import,10,0,0,0,0,0
+22215,VN,ZW,Zimbabwe,Package,Import,0,0,10,0,0,0
+22216,VN,ZW,Zimbabwe,Package,Import,0,0,0,0,0,0
+25737,VN,AR,Argentina*,Freight,Export,0,0,0,8,0,0
+25738,VN,AR,Argentina*,Freight,Export,0,0,0,0,0,0
+25739,VN,AR,Argentina*,Freight,Import,0,0,0,9,0,0
+25740,VN,AR,Argentina*,Freight,Import,0,0,0,0,0,0
+25741,VN,AU,Australia*#,Freight,Export,0,0,0,3,0,0
+25742,VN,AU,Australia*#,Freight,Export,0,0,0,0,3,0
+25743,VN,AU,Australia*#,Freight,Import,0,0,0,3,0,0
+25744,VN,AU,Australia*#,Freight,Import,0,0,0,0,0,0
+25745,VN,AT,Austria*,Freight,Export,0,0,0,6,0,0
+25746,VN,AT,Austria*,Freight,Export,0,0,0,0,6,0
+25747,VN,AT,Austria*,Freight,Import,0,0,0,6,0,0
+25748,VN,AT,Austria*,Freight,Import,0,0,0,0,0,0
+25749,VN,BH,Bahrain,Freight,Export,0,0,0,7,0,0
+25750,VN,BH,Bahrain,Freight,Export,0,0,0,0,0,0
+25751,VN,BH,Bahrain,Freight,Import,0,0,0,10,0,0
+25752,VN,BH,Bahrain,Freight,Import,0,0,0,0,0,0
+25753,VN,BD,Bangladesh,Freight,Export,0,0,0,4,0,0
+25754,VN,BD,Bangladesh,Freight,Export,0,0,0,0,0,0
+25755,VN,BD,Bangladesh,Freight,Import,0,0,0,4,0,0
+25756,VN,BD,Bangladesh,Freight,Import,0,0,0,0,0,0
+25757,VN,BE,Belgium,Freight,Export,0,0,0,6,0,0
+25758,VN,BE,Belgium,Freight,Export,0,0,0,0,6,0
+25759,VN,BE,Belgium,Freight,Import,0,0,0,6,0,0
+25760,VN,BE,Belgium,Freight,Import,0,0,0,0,0,0
+25761,VN,BR,Brazil*,Freight,Export,0,0,0,8,0,0
+25762,VN,BR,Brazil*,Freight,Export,0,0,0,0,0,0
+25763,VN,BR,Brazil*,Freight,Import,0,0,0,9,0,0
+25764,VN,BR,Brazil*,Freight,Import,0,0,0,0,0,0
+25765,VN,BG,Bulgaria,Freight,Export,0,0,0,0,0,0
+25766,VN,BG,Bulgaria,Freight,Export,0,0,0,0,0,0
+25767,VN,BG,Bulgaria,Freight,Import,0,0,0,10,0,0
+25768,VN,BG,Bulgaria,Freight,Import,0,0,0,0,0,0
+25769,VN,CA,Canada*,Freight,Export,0,0,0,5,0,0
+25770,VN,CA,Canada*,Freight,Export,0,0,0,0,5,0
+25771,VN,CA,Canada*,Freight,Import,0,0,0,5,0,0
+25772,VN,CA,Canada*,Freight,Import,0,0,0,0,0,0
+25773,VN,CL,Chile*,Freight,Export,0,0,0,8,0,0
+25774,VN,CL,Chile*,Freight,Export,0,0,0,0,8,0
+25775,VN,CL,Chile*,Freight,Import,0,0,0,9,0,0
+25776,VN,CL,Chile*,Freight,Import,0,0,0,0,0,0
+25777,VN,CNN,China Mainland (Excluding Southern China Mainland)*#,Freight,Export,0,0,0,3,0,0
+25778,VN,CNN,China Mainland (Excluding Southern China Mainland)*#,Freight,Export,0,0,0,0,0,0
+25779,VN,CNN,China Mainland (Excluding Southern China Mainland)*#,Freight,Import,0,0,0,3,0,0
+25780,VN,CNN,China Mainland (Excluding Southern China Mainland)*#,Freight,Import,0,0,0,0,0,0
+25781,VN,CNS,Southern China Mainland+*#,Freight,Export,0,0,0,10,0,0
+25782,VN,CNS,Southern China Mainland+*#,Freight,Export,0,0,0,0,0,0
+25783,VN,CNS,Southern China Mainland+*#,Freight,Import,0,0,0,11,0,0
+25784,VN,CNS,Southern China Mainland+*#,Freight,Import,0,0,0,0,0,0
+25785,VN,CO,Colombia*,Freight,Export,0,0,0,8,0,0
+25786,VN,CO,Colombia*,Freight,Export,0,0,0,0,0,0
+25787,VN,CO,Colombia*,Freight,Import,0,0,0,9,0,0
+25788,VN,CO,Colombia*,Freight,Import,0,0,0,0,0,0
+25789,VN,CR,Costa Rica*,Freight,Export,0,0,0,8,0,0
+25790,VN,CR,Costa Rica*,Freight,Export,0,0,0,0,8,0
+25791,VN,CR,Costa Rica*,Freight,Import,0,0,0,6,0,0
+25792,VN,CR,Costa Rica*,Freight,Import,0,0,0,0,0,0
+25793,VN,HR,Croatia*,Freight,Export,0,0,0,0,0,0
+25794,VN,HR,Croatia*,Freight,Export,0,0,0,0,0,0
+25795,VN,HR,Croatia*,Freight,Import,0,0,0,0,0,0
+25796,VN,HR,Croatia*,Freight,Import,0,0,0,0,0,0
+25797,VN,CZ,Czech Republic*,Freight,Export,0,0,0,7,0,0
+25798,VN,CZ,Czech Republic*,Freight,Export,0,0,0,0,7,0
+25799,VN,CZ,Czech Republic*,Freight,Import,0,0,0,7,0,0
+25800,VN,CZ,Czech Republic*,Freight,Import,0,0,0,0,0,0
+25801,VN,DK,Denmark*,Freight,Export,0,0,0,6,0,0
+25802,VN,DK,Denmark*,Freight,Export,0,0,0,0,6,0
+25803,VN,DK,Denmark*,Freight,Import,0,0,0,6,0,0
+25804,VN,DK,Denmark*,Freight,Import,0,0,0,0,0,0
+25805,VN,DO,Dominican Republic*,Freight,Export,0,0,0,8,0,0
+25806,VN,DO,Dominican Republic*,Freight,Export,0,0,0,0,0,0
+25807,VN,DO,Dominican Republic*,Freight,Import,0,0,0,9,0,0
+25808,VN,DO,Dominican Republic*,Freight,Import,0,0,0,0,0,0
+25809,VN,EC,Ecuador*,Freight,Export,0,0,0,8,0,0
+25810,VN,EC,Ecuador*,Freight,Export,0,0,0,0,0,0
+25811,VN,EC,Ecuador*,Freight,Import,0,0,0,9,0,0
+25812,VN,EC,Ecuador*,Freight,Import,0,0,0,0,0,0
+25813,VN,SV,El Salvador*,Freight,Export,0,0,0,8,0,0
+25814,VN,SV,El Salvador*,Freight,Export,0,0,0,0,0,0
+25815,VN,SV,El Salvador*,Freight,Import,0,0,0,9,0,0
+25816,VN,SV,El Salvador*,Freight,Import,0,0,0,0,0,0
+25817,VN,FI,Finland*,Freight,Export,0,0,0,6,0,0
+25818,VN,FI,Finland*,Freight,Export,0,0,0,0,6,0
+25819,VN,FI,Finland*,Freight,Import,0,0,0,6,0,0
+25820,VN,FI,Finland*,Freight,Import,0,0,0,0,0,0
+25821,VN,FR,France*,Freight,Export,0,0,0,6,0,0
+25822,VN,FR,France*,Freight,Export,0,0,0,0,6,0
+25823,VN,FR,France*,Freight,Import,0,0,0,6,0,0
+25824,VN,FR,France*,Freight,Import,0,0,0,0,0,0
+25825,VN,DE,Germany*,Freight,Export,0,0,0,6,0,0
+25826,VN,DE,Germany*,Freight,Export,0,0,0,0,6,0
+25827,VN,DE,Germany*,Freight,Import,0,0,0,6,0,0
+25828,VN,DE,Germany*,Freight,Import,0,0,0,0,0,0
+25829,VN,GR,Greece*,Freight,Export,0,0,0,7,0,0
+25830,VN,GR,Greece*,Freight,Export,0,0,0,0,7,0
+25831,VN,GR,Greece*,Freight,Import,0,0,0,6,0,0
+25832,VN,GR,Greece*,Freight,Import,0,0,0,0,0,0
+25833,VN,GT,Guatemala*,Freight,Export,0,0,0,8,0,0
+25834,VN,GT,Guatemala*,Freight,Export,0,0,0,0,0,0
+25835,VN,GT,Guatemala*,Freight,Import,0,0,0,9,0,0
+25836,VN,GT,Guatemala*,Freight,Import,0,0,0,0,0,0
+25837,VN,HN,Honduras*,Freight,Export,0,0,0,8,0,0
+25838,VN,HN,Honduras*,Freight,Export,0,0,0,0,0,0
+25839,VN,HN,Honduras*,Freight,Import,0,0,0,9,0,0
+25840,VN,HN,Honduras*,Freight,Import,0,0,0,0,0,0
+25841,VN,HK,"Hong Kong SAR, China#",Freight,Export,0,0,0,1,0,0
+25842,VN,HK,"Hong Kong SAR, China#",Freight,Export,0,0,0,0,1,0
+25843,VN,HK,"Hong Kong SAR, China#",Freight,Import,0,0,0,2,0,0
+25844,VN,HK,"Hong Kong SAR, China#",Freight,Import,0,0,0,0,0,0
+25845,VN,HU,Hungary*,Freight,Export,0,0,0,7,0,0
+25846,VN,HU,Hungary*,Freight,Export,0,0,0,0,7,0
+25847,VN,HU,Hungary*,Freight,Import,0,0,0,7,0,0
+25848,VN,HU,Hungary*,Freight,Import,0,0,0,0,0,0
+25849,VN,IN,India*,Freight,Export,0,0,0,4,0,0
+25850,VN,IN,India*,Freight,Export,0,0,0,0,4,0
+25851,VN,IN,India*,Freight,Import,0,0,0,2,0,0
+25852,VN,IN,India*,Freight,Import,0,0,0,0,0,0
+25853,VN,ID,Indonesia*#,Freight,Export,0,0,0,2,0,0
+25854,VN,ID,Indonesia*#,Freight,Export,0,0,0,0,0,0
+25855,VN,ID,Indonesia*#,Freight,Import,0,0,0,2,0,0
+25856,VN,ID,Indonesia*#,Freight,Import,0,0,0,0,0,0
+25857,VN,IE,Ireland,Freight,Export,0,0,0,6,0,0
+25858,VN,IE,Ireland,Freight,Export,0,0,0,0,6,0
+25859,VN,IE,Ireland,Freight,Import,0,0,0,6,0,0
+25860,VN,IE,Ireland,Freight,Import,0,0,0,0,0,0
+25861,VN,IL,Israel,Freight,Export,0,0,0,9,0,0
+25862,VN,IL,Israel,Freight,Export,0,0,0,0,9,0
+25863,VN,IL,Israel,Freight,Import,0,0,0,10,0,0
+25864,VN,IL,Israel,Freight,Import,0,0,0,0,0,0
+25865,VN,IT,Italy*,Freight,Export,0,0,0,6,0,0
+25866,VN,IT,Italy*,Freight,Export,0,0,0,0,6,0
+25867,VN,IT,Italy*,Freight,Import,0,0,0,6,0,0
+25868,VN,IT,Italy*,Freight,Import,0,0,0,0,0,0
+25869,VN,JP,Japan*#,Freight,Export,0,0,0,3,0,0
+25870,VN,JP,Japan*#,Freight,Export,0,0,0,0,3,0
+25871,VN,JP,Japan*#,Freight,Import,0,0,0,3,0,0
+25872,VN,JP,Japan*#,Freight,Import,0,0,0,0,0,0
+25873,VN,KR,"Korea, South#",Freight,Export,0,0,0,3,0,0
+25874,VN,KR,"Korea, South#",Freight,Export,0,0,0,0,3,0
+25875,VN,KR,"Korea, South#",Freight,Import,0,0,0,1,0,0
+25876,VN,KR,"Korea, South#",Freight,Import,0,0,0,0,0,0
+25877,VN,KW,Kuwait,Freight,Export,0,0,0,7,0,0
+25878,VN,KW,Kuwait,Freight,Export,0,0,0,0,7,0
+25879,VN,KW,Kuwait,Freight,Import,0,0,0,10,0,0
+25880,VN,KW,Kuwait,Freight,Import,0,0,0,0,0,0
+25881,VN,LB,Lebanon,Freight,Export,0,0,0,9,0,0
+25882,VN,LB,Lebanon,Freight,Export,0,0,0,0,0,0
+25883,VN,LB,Lebanon,Freight,Import,0,0,0,10,0,0
+25884,VN,LB,Lebanon,Freight,Import,0,0,0,0,0,0
+25885,VN,LI,Liechtenstein*,Freight,Export,0,0,0,6,0,0
+25886,VN,LI,Liechtenstein*,Freight,Export,0,0,0,0,0,0
+25887,VN,LI,Liechtenstein*,Freight,Import,0,0,0,6,0,0
+25888,VN,LI,Liechtenstein*,Freight,Import,0,0,0,0,0,0
+25889,VN,LU,Luxembourg,Freight,Export,0,0,0,6,0,0
+25890,VN,LU,Luxembourg,Freight,Export,0,0,0,0,0,0
+25891,VN,LU,Luxembourg,Freight,Import,0,0,0,6,0,0
+25892,VN,LU,Luxembourg,Freight,Import,0,0,0,0,0,0
+25893,VN,MY,Malaysia*#,Freight,Export,0,0,0,2,0,0
+25894,VN,MY,Malaysia*#,Freight,Export,0,0,0,0,2,0
+25895,VN,MY,Malaysia*#,Freight,Import,0,0,0,2,0,0
+25896,VN,MY,Malaysia*#,Freight,Import,0,0,0,0,0,0
+25897,VN,MT,Malta,Freight,Export,0,0,0,7,0,0
+25898,VN,MT,Malta,Freight,Export,0,0,0,0,0,0
+25899,VN,MT,Malta,Freight,Import,0,0,0,10,0,0
+25900,VN,MT,Malta,Freight,Import,0,0,0,0,0,0
+25901,VN,MX,Mexico*,Freight,Export,0,0,0,5,0,0
+25902,VN,MX,Mexico*,Freight,Export,0,0,0,0,5,0
+25903,VN,MX,Mexico*,Freight,Import,0,0,0,5,0,0
+25904,VN,MX,Mexico*,Freight,Import,0,0,0,0,0,0
+25905,VN,MA,Morocco,Freight,Export,0,0,0,9,0,0
+25906,VN,MA,Morocco,Freight,Export,0,0,0,0,0,0
+25907,VN,MA,Morocco,Freight,Import,0,0,0,10,0,0
+25908,VN,MA,Morocco,Freight,Import,0,0,0,0,0,0
+25909,VN,NL,Netherlands (Holland)*,Freight,Export,0,0,0,6,0,0
+25910,VN,NL,Netherlands (Holland)*,Freight,Export,0,0,0,0,6,0
+25911,VN,NL,Netherlands (Holland)*,Freight,Import,0,0,0,6,0,0
+25912,VN,NL,Netherlands (Holland)*,Freight,Import,0,0,0,0,0,0
+25913,VN,NZ,New Zealand*,Freight,Export,0,0,0,3,0,0
+25914,VN,NZ,New Zealand*,Freight,Export,0,0,0,0,0,0
+25915,VN,NZ,New Zealand*,Freight,Import,0,0,0,3,0,0
+25916,VN,NZ,New Zealand*,Freight,Import,0,0,0,0,0,0
+25917,VN,NI,Nicaragua,Freight,Export,0,0,0,8,0,0
+25918,VN,NI,Nicaragua,Freight,Export,0,0,0,0,0,0
+25919,VN,NI,Nicaragua,Freight,Import,0,0,0,9,0,0
+25920,VN,NI,Nicaragua,Freight,Import,0,0,0,0,0,0
+25921,VN,NG,Nigeria*,Freight,Export,0,0,0,9,0,0
+25922,VN,NG,Nigeria*,Freight,Export,0,0,0,0,0,0
+25923,VN,NG,Nigeria*,Freight,Import,0,0,0,10,0,0
+25924,VN,NG,Nigeria*,Freight,Import,0,0,0,0,0,0
+25925,VN,NO,Norway*,Freight,Export,0,0,0,6,0,0
+25926,VN,NO,Norway*,Freight,Export,0,0,0,0,0,0
+25927,VN,NO,Norway*,Freight,Import,0,0,0,6,0,0
+25928,VN,NO,Norway*,Freight,Import,0,0,0,0,0,0
+25929,VN,OM,Oman,Freight,Export,0,0,0,7,0,0
+25930,VN,OM,Oman,Freight,Export,0,0,0,0,0,0
+25931,VN,OM,Oman,Freight,Import,0,0,0,10,0,0
+25932,VN,OM,Oman,Freight,Import,0,0,0,0,0,0
+25933,VN,PK,Pakistan*,Freight,Export,0,0,0,4,0,0
+25934,VN,PK,Pakistan*,Freight,Export,0,0,0,0,0,0
+25935,VN,PK,Pakistan*,Freight,Import,0,0,0,10,0,0
+25936,VN,PK,Pakistan*,Freight,Import,0,0,0,0,0,0
+25937,VN,PA,Panama*,Freight,Export,0,0,0,8,0,0
+25938,VN,PA,Panama*,Freight,Export,0,0,0,0,0,0
+25939,VN,PA,Panama*,Freight,Import,0,0,0,9,0,0
+25940,VN,PA,Panama*,Freight,Import,0,0,0,0,0,0
+25941,VN,PH,Philippines*#,Freight,Export,0,0,0,2,0,0
+25942,VN,PH,Philippines*#,Freight,Export,0,0,0,0,0,0
+25943,VN,PH,Philippines*#,Freight,Import,0,0,0,2,0,0
+25944,VN,PH,Philippines*#,Freight,Import,0,0,0,0,0,0
+25945,VN,PL,Poland*,Freight,Export,0,0,0,7,0,0
+25946,VN,PL,Poland*,Freight,Export,0,0,0,0,7,0
+25947,VN,PL,Poland*,Freight,Import,0,0,0,10,0,0
+25948,VN,PL,Poland*,Freight,Import,0,0,0,0,0,0
+25949,VN,PT,Portugal*,Freight,Export,0,0,0,7,0,0
+25950,VN,PT,Portugal*,Freight,Export,0,0,0,0,7,0
+25951,VN,PT,Portugal*,Freight,Import,0,0,0,7,0,0
+25952,VN,PT,Portugal*,Freight,Import,0,0,0,0,0,0
+25953,VN,PR,Puerto Rico*,Freight,Export,0,0,0,5,0,0
+25954,VN,PR,Puerto Rico*,Freight,Export,0,0,0,0,5,0
+25955,VN,PR,Puerto Rico*,Freight,Import,0,0,0,5,0,0
+25956,VN,PR,Puerto Rico*,Freight,Import,0,0,0,0,0,0
+25957,VN,QA,Qatar,Freight,Export,0,0,0,7,0,0
+25958,VN,QA,Qatar,Freight,Export,0,0,0,0,0,0
+25959,VN,QA,Qatar,Freight,Import,0,0,0,10,0,0
+25960,VN,QA,Qatar,Freight,Import,0,0,0,0,0,0
+25961,VN,RO,Romania,Freight,Export,0,0,0,0,0,0
+25962,VN,RO,Romania,Freight,Export,0,0,0,0,0,0
+25963,VN,RO,Romania,Freight,Import,0,0,0,10,0,0
+25964,VN,RO,Romania,Freight,Import,0,0,0,0,0,0
+25965,VN,SA,Saudi Arabia,Freight,Export,0,0,0,7,0,0
+25966,VN,SA,Saudi Arabia,Freight,Export,0,0,0,0,0,0
+25967,VN,SA,Saudi Arabia,Freight,Import,0,0,0,10,0,0
+25968,VN,SA,Saudi Arabia,Freight,Import,0,0,0,0,0,0
+25969,VN,RS,Serbia,Freight,Export,0,0,0,0,0,0
+25970,VN,RS,Serbia,Freight,Export,0,0,0,0,0,0
+25971,VN,RS,Serbia,Freight,Import,0,0,0,10,0,0
+25972,VN,RS,Serbia,Freight,Import,0,0,0,0,0,0
+25973,VN,SG,Singapore#,Freight,Export,0,0,0,1,0,0
+25974,VN,SG,Singapore#,Freight,Export,0,0,0,0,0,0
+25975,VN,SG,Singapore#,Freight,Import,0,0,0,2,0,0
+25976,VN,SG,Singapore#,Freight,Import,0,0,0,0,0,0
+25977,VN,SK,Slovakia,Freight,Export,0,0,0,7,0,0
+25978,VN,SK,Slovakia,Freight,Export,0,0,0,0,0,0
+25979,VN,SK,Slovakia,Freight,Import,0,0,0,10,0,0
+25980,VN,SK,Slovakia,Freight,Import,0,0,0,0,0,0
+25981,VN,SI,Slovenia,Freight,Export,0,0,0,7,0,0
+25982,VN,SI,Slovenia,Freight,Export,0,0,0,0,7,0
+25983,VN,ZA,South Africa*,Freight,Export,0,0,0,9,0,0
+25984,VN,ZA,South Africa*,Freight,Export,0,0,0,0,0,0
+25985,VN,ZA,South Africa*,Freight,Import,0,0,0,9,0,0
+25986,VN,ZA,South Africa*,Freight,Import,0,0,0,0,0,0
+25987,VN,ES,Spain*,Freight,Export,0,0,0,6,0,0
+25988,VN,ES,Spain*,Freight,Export,0,0,0,0,6,0
+25989,VN,ES,Spain*,Freight,Import,0,0,0,6,0,0
+25990,VN,ES,Spain*,Freight,Import,0,0,0,0,0,0
+25991,VN,LK,Sri Lanka*,Freight,Export,0,0,0,4,0,0
+25992,VN,LK,Sri Lanka*,Freight,Export,0,0,0,0,0,0
+25993,VN,LK,Sri Lanka*,Freight,Import,0,0,0,3,0,0
+25994,VN,LK,Sri Lanka*,Freight,Import,0,0,0,0,0,0
+25995,VN,SE,Sweden*,Freight,Export,0,0,0,6,0,0
+25996,VN,SE,Sweden*,Freight,Export,0,0,0,0,6,0
+25997,VN,SE,Sweden*,Freight,Import,0,0,0,6,0,0
+25998,VN,SE,Sweden*,Freight,Import,0,0,0,0,0,0
+25999,VN,CH,Switzerland*,Freight,Export,0,0,0,6,0,0
+26000,VN,CH,Switzerland*,Freight,Export,0,0,0,0,6,0
+26001,VN,CH,Switzerland*,Freight,Import,0,0,0,6,0,0
+26002,VN,CH,Switzerland*,Freight,Import,0,0,0,0,0,0
+26003,VN,TW,"Taiwan, China*#",Freight,Export,0,0,0,3,0,0
+26004,VN,TW,"Taiwan, China*#",Freight,Export,0,0,0,0,3,0
+26005,VN,TW,"Taiwan, China*#",Freight,Import,0,0,0,1,0,0
+26006,VN,TW,"Taiwan, China*#",Freight,Import,0,0,0,0,0,0
+26007,VN,TH,Thailand*#,Freight,Export,0,0,0,1,0,0
+26008,VN,TH,Thailand*#,Freight,Export,0,0,0,0,0,0
+26009,VN,TH,Thailand*#,Freight,Import,0,0,0,1,0,0
+26010,VN,TH,Thailand*#,Freight,Import,0,0,0,0,0,0
+26011,VN,TN,Tunisia,Freight,Export,0,0,0,9,0,0
+26012,VN,TN,Tunisia,Freight,Export,0,0,0,0,0,0
+26013,VN,TN,Tunisia,Freight,Import,0,0,0,10,0,0
+26014,VN,TN,Tunisia,Freight,Import,0,0,0,0,0,0
+26015,VN,TR,Turkey,Freight,Export,0,0,0,7,0,0
+26016,VN,TR,Turkey,Freight,Export,0,0,0,0,7,0
+26017,VN,TR,Turkey,Freight,Import,0,0,0,6,0,0
+26018,VN,TR,Turkey,Freight,Import,0,0,0,0,0,0
+26019,VN,AE,United Arab Emirates,Freight,Export,0,0,0,7,0,0
+26020,VN,AE,United Arab Emirates,Freight,Export,0,0,0,0,7,0
+26021,VN,AE,United Arab Emirates,Freight,Import,0,0,0,7,0,0
+26022,VN,AE,United Arab Emirates,Freight,Import,0,0,0,0,0,0
+26023,VN,GB,United Kingdom*,Freight,Export,0,0,0,6,0,0
+26024,VN,GB,United Kingdom*,Freight,Export,0,0,0,0,6,0
+26025,VN,GB,United Kingdom*,Freight,Import,0,0,0,6,0,0
+26026,VN,GB,United Kingdom*,Freight,Import,0,0,0,0,0,0
+26027,VN,US,United States*,Freight,Export,0,0,0,5,0,0
+26028,VN,US,United States*,Freight,Export,0,0,0,0,5,0
+26029,VN,US,United States*,Freight,Import,0,0,0,5,0,0
+26030,VN,US,United States*,Freight,Import,0,0,0,0,0,0
+33097,VN,AF,Afghanistan,Package,Export,0,0,0,0,0,0
+33098,VN,AF,Afghanistan,Package,Import,0,0,0,0,0,10
+33099,VN,AX,Aland Island (Finland)*,Package,Export,0,0,0,0,0,0
+33100,VN,AX,Aland Island (Finland)*,Package,Import,0,0,0,0,0,6
+33101,VN,AL,Albania,Package,Export,0,0,0,0,0,9
+33102,VN,AL,Albania,Package,Import,0,0,0,0,0,10
+33103,VN,DZ,Algeria,Package,Export,0,0,0,0,0,0
+33104,VN,DZ,Algeria,Package,Import,0,0,0,0,0,10
+33105,VN,AS,American Samoa,Package,Export,0,0,0,0,0,0
+33106,VN,AS,American Samoa,Package,Import,0,0,0,0,0,10
+33107,VN,AD,Andorra,Package,Export,0,0,0,0,0,0
+33108,VN,AD,Andorra,Package,Import,0,0,0,0,0,0
+33109,VN,AO,Angola,Package,Export,0,0,0,0,0,0
+33110,VN,AO,Angola,Package,Import,0,0,0,0,0,10
+33111,VN,AI,Anguilla,Package,Export,0,0,0,0,0,0
+33112,VN,AI,Anguilla,Package,Import,0,0,0,0,0,9
+33113,VN,AG,Antigua and Barbuda,Package,Export,0,0,0,0,0,0
+33114,VN,AG,Antigua and Barbuda,Package,Import,0,0,0,0,0,9
+33115,VN,AR,Argentina*,Package,Export,0,0,0,0,0,0
+33116,VN,AR,Argentina*,Package,Import,0,0,0,0,0,9
+33117,VN,AM,Armenia,Package,Export,0,0,0,0,0,9
+33118,VN,AM,Armenia,Package,Import,0,0,0,0,0,10
+33119,VN,AW,Aruba,Package,Export,0,0,0,0,0,0
+33120,VN,AW,Aruba,Package,Import,0,0,0,0,0,9
+33121,VN,AU,Australia*#,Package,Export,0,0,0,0,0,0
+33122,VN,AU,Australia*#,Package,Import,0,0,0,0,0,3
+33123,VN,AT,Austria*,Package,Export,0,0,0,0,0,6
+33124,VN,AT,Austria*,Package,Import,0,0,0,0,0,6
+33125,VN,AZ,Azerbaijan,Package,Export,0,0,0,0,0,0
+33126,VN,AZ,Azerbaijan,Package,Import,0,0,0,0,0,10
+33127,VN,A2,Azores (Portugal)*,Package,Export,0,0,0,0,0,0
+33128,VN,A2,Azores (Portugal)*,Package,Import,0,0,0,0,0,7
+33129,VN,BS,Bahamas*,Package,Export,0,0,0,0,0,0
+33130,VN,BS,Bahamas*,Package,Import,0,0,0,0,0,9
+33131,VN,BH,Bahrain,Package,Export,0,0,0,0,0,7
+33132,VN,BH,Bahrain,Package,Import,0,0,0,0,0,10
+33133,VN,BD,Bangladesh,Package,Export,0,0,0,0,0,0
+33134,VN,BD,Bangladesh,Package,Import,0,0,0,0,0,4
+33135,VN,BB,Barbados,Package,Export,0,0,0,0,0,0
+33136,VN,BB,Barbados,Package,Import,0,0,0,0,0,9
+33137,VN,BY,Belarus*,Package,Export,0,0,0,0,0,7
+33138,VN,BY,Belarus*,Package,Import,0,0,0,0,0,10
+33139,VN,BE,Belgium,Package,Export,0,0,0,0,0,6
+33140,VN,BE,Belgium,Package,Import,0,0,0,0,0,6
+33141,VN,BZ,Belize,Package,Export,0,0,0,0,0,0
+33142,VN,BZ,Belize,Package,Import,0,0,0,0,0,0
+33143,VN,BJ,Benin,Package,Export,0,0,0,0,0,0
+33144,VN,BJ,Benin,Package,Import,0,0,0,0,0,10
+33145,VN,BM,Bermuda,Package,Export,0,0,0,0,0,0
+33146,VN,BM,Bermuda,Package,Import,0,0,0,0,0,10
+33147,VN,BT,Bhutan,Package,Export,0,0,0,0,0,0
+33148,VN,BT,Bhutan,Package,Import,0,0,0,0,0,0
+33149,VN,BO,Bolivia,Package,Export,0,0,0,0,0,0
+33150,VN,BO,Bolivia,Package,Import,0,0,0,0,0,9
+33151,VN,BQ,"Bonaire, St. Eustatius, Saba",Package,Export,0,0,0,0,0,0
+33152,VN,BQ,"Bonaire, St. Eustatius, Saba",Package,Import,0,0,0,0,0,9
+33153,VN,BA,Bosnia and Herzegovina,Package,Export,0,0,0,0,0,7
+33154,VN,BA,Bosnia and Herzegovina,Package,Import,0,0,0,0,0,10
+33155,VN,BW,Botswana,Package,Export,0,0,0,0,0,0
+33156,VN,BW,Botswana,Package,Import,0,0,0,0,0,10
+33157,VN,BR,Brazil*,Package,Export,0,0,0,0,0,8
+33158,VN,BR,Brazil*,Package,Import,0,0,0,0,0,9
+33159,VN,VG,British Virgin Islands,Package,Export,0,0,0,0,0,0
+33160,VN,VG,British Virgin Islands,Package,Import,0,0,0,0,0,9
+33161,VN,BN,Brunei*,Package,Export,0,0,0,0,0,0
+33162,VN,BN,Brunei*,Package,Import,0,0,0,0,0,4
+33163,VN,B1,Buesingen (Germany)*,Package,Export,0,0,0,0,0,0
+33164,VN,B1,Buesingen (Germany)*,Package,Import,0,0,0,0,0,0
+33165,VN,BG,Bulgaria,Package,Export,0,0,0,0,0,7
+33166,VN,BG,Bulgaria,Package,Import,0,0,0,0,0,10
+33167,VN,BF,Burkina Faso,Package,Export,0,0,0,0,0,0
+33168,VN,BF,Burkina Faso,Package,Import,0,0,0,0,0,10
+33169,VN,BI,Burundi,Package,Export,0,0,0,0,0,0
+33170,VN,BI,Burundi,Package,Import,0,0,0,0,0,9
+33171,VN,KH,Cambodia*,Package,Export,0,0,0,0,0,0
+33172,VN,KH,Cambodia*,Package,Import,0,0,0,0,0,4
+33173,VN,CM,Cameroon,Package,Export,0,0,0,0,0,0
+33174,VN,CM,Cameroon,Package,Import,0,0,0,0,0,10
+33175,VN,C3,Campione/ Lake Lugano (Italy)*,Package,Export,0,0,0,0,0,0
+33176,VN,C3,Campione/ Lake Lugano (Italy)*,Package,Import,0,0,0,0,0,6
+33177,VN,CA,Canada*,Package,Export,0,0,0,0,0,5
+33178,VN,CA,Canada*,Package,Import,0,0,0,0,0,5
+33179,VN,IC,Canary Islands (Spain)*,Package,Export,0,0,0,0,0,0
+33180,VN,IC,Canary Islands (Spain)*,Package,Import,0,0,0,0,0,6
+33181,VN,CV,Cape Verde,Package,Export,0,0,0,0,0,0
+33182,VN,CV,Cape Verde,Package,Import,0,0,0,0,0,10
+33183,VN,KY,Cayman Islands,Package,Export,0,0,0,0,0,0
+33184,VN,KY,Cayman Islands,Package,Import,0,0,0,0,0,9
+33185,VN,CF,Central African Republic,Package,Export,0,0,0,0,0,0
+33186,VN,CF,Central African Republic,Package,Import,0,0,0,0,0,0
+33187,VN,C2,Ceuta (Spain)*,Package,Export,0,0,0,0,0,0
+33188,VN,C2,Ceuta (Spain)*,Package,Import,0,0,0,0,0,0
+33189,VN,TD,Chad,Package,Export,0,0,0,0,0,0
+33190,VN,TD,Chad,Package,Import,0,0,0,0,0,10
+33191,VN,CL,Chile*,Package,Export,0,0,0,0,0,0
+33192,VN,CL,Chile*,Package,Import,0,0,0,0,0,9
+33193,VN,CNN,China Mainland (Excluding Southern China Mainland)*#,Package,Export,0,0,0,0,0,3
+33194,VN,CNN,China Mainland (Excluding Southern China Mainland)*#,Package,Import,0,0,0,0,0,3
+33195,VN,CNS,Southern China Mainland+*#,Package,Export,0,0,0,0,0,10
+33196,VN,CNS,Southern China Mainland+*#,Package,Import,0,0,0,0,0,11
+33197,VN,CO,Colombia*,Package,Export,0,0,0,0,0,0
+33198,VN,CO,Colombia*,Package,Import,0,0,0,0,0,9
+33199,VN,KM,Comoros,Package,Export,0,0,0,0,0,0
+33200,VN,KM,Comoros,Package,Import,0,0,0,0,0,10
+33201,VN,CG,"Congo, Republic of",Package,Export,0,0,0,0,0,0
+33202,VN,CG,"Congo, Republic of",Package,Import,0,0,0,0,0,10
+33203,VN,CD,"Congo, Democratic Republic of",Package,Export,0,0,0,0,0,0
+33204,VN,CD,"Congo, Democratic Republic of",Package,Import,0,0,0,0,0,10
+33205,VN,CK,Cook Islands,Package,Export,0,0,0,0,0,0
+33206,VN,CK,Cook Islands,Package,Import,0,0,0,0,0,0
+33207,VN,CR,Costa Rica*,Package,Export,0,0,0,0,0,0
+33208,VN,CR,Costa Rica*,Package,Import,0,0,0,0,0,6
+33209,VN,CI,Cote d'Ivoire (Ivory Coast),Package,Export,0,0,0,0,0,0
+33210,VN,CI,Cote d'Ivoire (Ivory Coast),Package,Import,0,0,0,0,0,10
+33211,VN,HR,Croatia*,Package,Export,0,0,0,0,0,0
+33212,VN,HR,Croatia*,Package,Import,0,0,0,0,0,10
+33213,VN,CW,Curacao,Package,Export,0,0,0,0,0,0
+33214,VN,CW,Curacao,Package,Import,0,0,0,0,0,9
+33215,VN,CY,Cyprus,Package,Export,0,0,0,0,0,7
+33216,VN,CY,Cyprus,Package,Import,0,0,0,0,0,10
+33217,VN,CZ,Czech Republic*,Package,Export,0,0,0,0,0,7
+33218,VN,CZ,Czech Republic*,Package,Import,0,0,0,0,0,7
+33219,VN,DK,Denmark*,Package,Export,0,0,0,0,0,6
+33220,VN,DK,Denmark*,Package,Import,0,0,0,0,0,6
+33221,VN,DJ,Djibouti,Package,Export,0,0,0,0,0,0
+33222,VN,DJ,Djibouti,Package,Import,0,0,0,0,0,10
+33223,VN,DM,Dominica,Package,Export,0,0,0,0,0,0
+33224,VN,DM,Dominica,Package,Import,0,0,0,0,0,9
+33225,VN,DO,Dominican Republic*,Package,Export,0,0,0,0,0,0
+33226,VN,DO,Dominican Republic*,Package,Import,0,0,0,0,0,9
+33227,VN,EC,Ecuador*,Package,Export,0,0,0,0,0,0
+33228,VN,EC,Ecuador*,Package,Import,0,0,0,0,0,9
+33229,VN,EG,Egypt,Package,Export,0,0,0,0,0,0
+33230,VN,EG,Egypt,Package,Import,0,0,0,0,0,10
+33231,VN,SV,El Salvador*,Package,Export,0,0,0,0,0,0
+33232,VN,SV,El Salvador*,Package,Import,0,0,0,0,0,9
+33233,VN,EN,England (United Kingdom)*,Package,Export,0,0,0,0,0,0
+33234,VN,EN,England (United Kingdom)*,Package,Import,0,0,0,0,0,6
+33235,VN,GQ,Equatorial Guinea,Package,Export,0,0,0,0,0,0
+33236,VN,GQ,Equatorial Guinea,Package,Import,0,0,0,0,0,0
+33237,VN,ER,Eritrea,Package,Export,0,0,0,0,0,0
+33238,VN,ER,Eritrea,Package,Import,0,0,0,0,0,10
+33239,VN,EE,Estonia,Package,Export,0,0,0,0,0,0
+33240,VN,EE,Estonia,Package,Import,0,0,0,0,0,10
+33241,VN,ET,Ethiopia,Package,Export,0,0,0,0,0,0
+33242,VN,ET,Ethiopia,Package,Import,0,0,0,0,0,10
+33243,VN,FO,Faroe Islands,Package,Export,0,0,0,0,0,0
+33244,VN,FO,Faroe Islands,Package,Import,0,0,0,0,0,0
+33245,VN,FJ,Fiji,Package,Export,0,0,0,0,0,0
+33246,VN,FJ,Fiji,Package,Import,0,0,0,0,0,0
+33247,VN,FI,Finland*,Package,Export,0,0,0,0,0,0
+33248,VN,FI,Finland*,Package,Import,0,0,0,0,0,6
+33249,VN,FR,France*,Package,Export,0,0,0,0,0,6
+33250,VN,FR,France*,Package,Import,0,0,0,0,0,6
+33251,VN,GF,French Guiana,Package,Export,0,0,0,0,0,0
+33252,VN,GF,French Guiana,Package,Import,0,0,0,0,0,0
+33253,VN,PF,French Polynesia,Package,Export,0,0,0,0,0,0
+33254,VN,PF,French Polynesia,Package,Import,0,0,0,0,0,0
+33255,VN,GA,Gabon,Package,Export,0,0,0,0,0,0
+33256,VN,GA,Gabon,Package,Import,0,0,0,0,0,10
+33257,VN,GM,Gambia,Package,Export,0,0,0,0,0,0
+33258,VN,GM,Gambia,Package,Import,0,0,0,0,0,10
+33259,VN,GE,Georgia*,Package,Export,0,0,0,0,0,9
+33260,VN,GE,Georgia*,Package,Import,0,0,0,0,0,10
+33261,VN,DE,Germany*,Package,Export,0,0,0,0,0,6
+33262,VN,DE,Germany*,Package,Import,0,0,0,0,0,6
+33263,VN,GH,Ghana,Package,Export,0,0,0,0,0,0
+33264,VN,GH,Ghana,Package,Import,0,0,0,0,0,10
+33265,VN,GI,Gibraltar,Package,Export,0,0,0,0,0,0
+33266,VN,GI,Gibraltar,Package,Import,0,0,0,0,0,7
+33267,VN,GR,Greece*,Package,Export,0,0,0,0,0,0
+33268,VN,GR,Greece*,Package,Import,0,0,0,0,0,6
+33269,VN,GL,Greenland,Package,Export,0,0,0,0,0,0
+33270,VN,GL,Greenland,Package,Import,0,0,0,0,0,0
+33271,VN,GD,Grenada,Package,Export,0,0,0,0,0,0
+33272,VN,GD,Grenada,Package,Import,0,0,0,0,0,9
+33273,VN,GP,Guadeloupe*,Package,Export,0,0,0,0,0,0
+33274,VN,GP,Guadeloupe*,Package,Import,0,0,0,0,0,9
+33275,VN,GU,Guam,Package,Export,0,0,0,0,0,0
+33276,VN,GU,Guam,Package,Import,0,0,0,0,0,4
+33277,VN,GT,Guatemala*,Package,Export,0,0,0,0,0,0
+33278,VN,GT,Guatemala*,Package,Import,0,0,0,0,0,9
+33279,VN,GG,Guernsey (Channel Islands),Package,Export,0,0,0,0,0,0
+33280,VN,GG,Guernsey (Channel Islands),Package,Import,0,0,0,0,0,10
+33281,VN,GN,Guinea,Package,Export,0,0,0,0,0,0
+33282,VN,GN,Guinea,Package,Import,0,0,0,0,0,10
+33283,VN,GW,Guinea-Bissau,Package,Export,0,0,0,0,0,0
+33284,VN,GW,Guinea-Bissau,Package,Import,0,0,0,0,0,10
+33285,VN,GY,Guyana*,Package,Export,0,0,0,0,0,0
+33286,VN,GY,Guyana*,Package,Import,0,0,0,0,0,9
+33287,VN,HT,Haiti*,Package,Export,0,0,0,0,0,0
+33288,VN,HT,Haiti*,Package,Import,0,0,0,0,0,9
+33289,VN,H1,Heligoland (Germany)*,Package,Export,0,0,0,0,0,0
+33290,VN,H1,Heligoland (Germany)*,Package,Import,0,0,0,0,0,6
+33291,VN,HN,Honduras*,Package,Export,0,0,0,0,0,0
+33292,VN,HN,Honduras*,Package,Import,0,0,0,0,0,9
+33293,VN,HK,"Hong Kong SAR, China#",Package,Export,0,0,0,0,0,1
+33294,VN,HK,"Hong Kong SAR, China#",Package,Import,0,0,0,0,0,0
+33295,VN,HU,Hungary*,Package,Export,0,0,0,0,0,7
+33296,VN,HU,Hungary*,Package,Import,0,0,0,0,0,7
+33297,VN,IS,Iceland,Package,Export,0,0,0,0,0,0
+33298,VN,IS,Iceland,Package,Import,0,0,0,0,0,9
+33299,VN,IN,India*,Package,Export,0,0,0,0,0,4
+33300,VN,IN,India*,Package,Import,0,0,0,0,0,2
+33301,VN,ID,Indonesia*#,Package,Export,0,0,0,0,0,0
+33302,VN,ID,Indonesia*#,Package,Import,0,0,0,0,0,2
+33303,VN,IQ,Iraq,Package,Export,0,0,0,0,0,0
+33304,VN,IQ,Iraq,Package,Import,0,0,0,0,0,0
+33305,VN,IE,Ireland,Package,Export,0,0,0,0,0,6
+33306,VN,IE,Ireland,Package,Import,0,0,0,0,0,6
+33307,VN,IL,Israel,Package,Export,0,0,0,0,0,0
+33308,VN,IL,Israel,Package,Import,0,0,0,0,0,10
+33309,VN,IT,Italy*,Package,Export,0,0,0,0,0,6
+33310,VN,IT,Italy*,Package,Import,0,0,0,0,0,6
+33311,VN,JM,Jamaica*,Package,Export,0,0,0,0,0,0
+33312,VN,JM,Jamaica*,Package,Import,0,0,0,0,0,9
+33313,VN,JP,Japan*#,Package,Export,0,0,0,0,0,0
+33314,VN,JP,Japan*#,Package,Import,0,0,0,0,0,3
+33315,VN,JE,Jersey (Channel Islands),Package,Export,0,0,0,0,0,0
+33316,VN,JE,Jersey (Channel Islands),Package,Import,0,0,0,0,0,10
+33317,VN,JO,Jordan,Package,Export,0,0,0,0,0,0
+33318,VN,JO,Jordan,Package,Import,0,0,0,0,0,10
+33319,VN,KZ,Kazakhstan*,Package,Export,0,0,0,0,0,0
+33320,VN,KZ,Kazakhstan*,Package,Import,0,0,0,0,0,10
+33321,VN,KE,Kenya,Package,Export,0,0,0,0,0,0
+33322,VN,KE,Kenya,Package,Import,0,0,0,0,0,10
+33323,VN,KG,Kyrgyzstan,Package,Export,0,0,0,0,0,0
+33324,VN,KG,Kyrgyzstan,Package,Import,0,0,0,0,0,10
+33325,VN,KI,Kiribati,Package,Export,0,0,0,0,0,0
+33326,VN,KI,Kiribati,Package,Import,0,0,0,0,0,0
+33327,VN,KR,"Korea, South#",Package,Export,0,0,0,0,0,0
+33328,VN,KR,"Korea, South#",Package,Import,0,0,0,0,0,1
+33329,VN,KV,Kosovo,Package,Export,0,0,0,0,0,9
+33330,VN,KV,Kosovo,Package,Import,0,0,0,0,0,10
+33331,VN,KO,"Kosrae (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+33332,VN,KO,"Kosrae (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+33333,VN,KW,Kuwait,Package,Export,0,0,0,0,0,7
+33334,VN,KW,Kuwait,Package,Import,0,0,0,0,0,10
+33335,VN,LA,Laos,Package,Export,0,0,0,0,0,0
+33336,VN,LA,Laos,Package,Import,0,0,0,0,0,4
+33337,VN,LV,Latvia,Package,Export,0,0,0,0,0,0
+33338,VN,LV,Latvia,Package,Import,0,0,0,0,0,10
+33339,VN,LB,Lebanon,Package,Export,0,0,0,0,0,0
+33340,VN,LB,Lebanon,Package,Import,0,0,0,0,0,10
+33341,VN,LS,Lesotho,Package,Export,0,0,0,0,0,0
+33342,VN,LS,Lesotho,Package,Import,0,0,0,0,0,9
+33343,VN,LR,Liberia,Package,Export,0,0,0,0,0,0
+33344,VN,LR,Liberia,Package,Import,0,0,0,0,0,10
+33345,VN,LY,Libyan Arab Jamahiriya,Package,Export,0,0,0,0,0,0
+33346,VN,LY,Libyan Arab Jamahiriya,Package,Import,0,0,0,0,0,0
+33347,VN,LI,Liechtenstein*,Package,Export,0,0,0,0,0,0
+33348,VN,LI,Liechtenstein*,Package,Import,0,0,0,0,0,6
+33349,VN,LT,Lithuania,Package,Export,0,0,0,0,0,0
+33350,VN,LT,Lithuania,Package,Import,0,0,0,0,0,10
+33351,VN,L1,Livigno (Italy)*,Package,Export,0,0,0,0,0,0
+33352,VN,L1,Livigno (Italy)*,Package,Import,0,0,0,0,0,6
+33353,VN,LU,Luxembourg,Package,Export,0,0,0,0,0,6
+33354,VN,LU,Luxembourg,Package,Import,0,0,0,0,0,6
+33355,VN,MO,"Macau SAR, China#",Package,Export,0,0,0,0,0,0
+33356,VN,MO,"Macau SAR, China#",Package,Import,0,0,0,0,0,0
+33357,VN,MK,North Macedonia,Package,Export,0,0,0,0,0,9
+33358,VN,MK,North Macedonia,Package,Import,0,0,0,0,0,10
+33359,VN,MG,Madagascar,Package,Export,0,0,0,0,0,0
+33360,VN,MG,Madagascar,Package,Import,0,0,0,0,0,10
+33361,VN,M3,Madeira (Portugal)*,Package,Export,0,0,0,0,0,0
+33362,VN,M3,Madeira (Portugal)*,Package,Import,0,0,0,0,0,7
+33363,VN,MW,Malawi,Package,Export,0,0,0,0,0,0
+33364,VN,MW,Malawi,Package,Import,0,0,0,0,0,10
+33365,VN,MY,Malaysia*#,Package,Export,0,0,0,0,0,0
+33366,VN,MY,Malaysia*#,Package,Import,0,0,0,0,0,2
+33367,VN,MV,Maldives,Package,Export,0,0,0,0,0,0
+33368,VN,MV,Maldives,Package,Import,0,0,0,0,0,0
+33369,VN,ML,Mali,Package,Export,0,0,0,0,0,0
+33370,VN,ML,Mali,Package,Import,0,0,0,0,0,10
+33371,VN,MT,Malta,Package,Export,0,0,0,0,0,0
+33372,VN,MT,Malta,Package,Import,0,0,0,0,0,10
+33373,VN,MH,Marshall Islands,Package,Export,0,0,0,0,0,0
+33374,VN,MH,Marshall Islands,Package,Import,0,0,0,0,0,0
+33375,VN,MQ,Martinique,Package,Export,0,0,0,0,0,0
+33376,VN,MQ,Martinique,Package,Import,0,0,0,0,0,9
+33377,VN,MR,Mauritania,Package,Export,0,0,0,0,0,0
+33378,VN,MR,Mauritania,Package,Import,0,0,0,0,0,10
+33379,VN,MU,Mauritius,Package,Export,0,0,0,0,0,0
+33380,VN,MU,Mauritius,Package,Import,0,0,0,0,0,10
+33381,VN,YT,Mayotte,Package,Export,0,0,0,0,0,0
+33382,VN,YT,Mayotte,Package,Import,0,0,0,0,0,10
+33383,VN,M1,Melilla (Spain)*,Package,Export,0,0,0,0,0,0
+33384,VN,M1,Melilla (Spain)*,Package,Import,0,0,0,0,0,0
+33385,VN,MX,Mexico*,Package,Export,0,0,0,0,0,5
+33386,VN,MX,Mexico*,Package,Import,0,0,0,0,0,5
+33387,VN,FM,"Micronesia, Federated States of",Package,Export,0,0,0,0,0,0
+33388,VN,FM,"Micronesia, Federated States of",Package,Import,0,0,0,0,0,0
+33389,VN,MD,Moldova*,Package,Export,0,0,0,0,0,9
+33390,VN,MD,Moldova*,Package,Import,0,0,0,0,0,10
+33391,VN,MC,Monaco*,Package,Export,0,0,0,0,0,0
+33392,VN,MC,Monaco*,Package,Import,0,0,0,0,0,6
+33393,VN,MN,Mongolia,Package,Export,0,0,0,0,0,0
+33394,VN,MN,Mongolia,Package,Import,0,0,0,0,0,10
+33395,VN,ME,Montenegro,Package,Export,0,0,0,0,0,9
+33396,VN,ME,Montenegro,Package,Import,0,0,0,0,0,10
+33397,VN,MS,Montserrat,Package,Export,0,0,0,0,0,0
+33398,VN,MS,Montserrat,Package,Import,0,0,0,0,0,9
+33399,VN,MA,Morocco,Package,Export,0,0,0,0,0,0
+33400,VN,MA,Morocco,Package,Import,0,0,0,0,0,10
+33401,VN,M2,Mount Athos (Greece)*,Package,Export,0,0,0,0,0,0
+33402,VN,M2,Mount Athos (Greece)*,Package,Import,0,0,0,0,0,6
+33403,VN,MZ,Mozambique,Package,Export,0,0,0,0,0,0
+33404,VN,MZ,Mozambique,Package,Import,0,0,0,0,0,9
+33405,VN,MM,Myanmar,Package,Export,0,0,0,0,0,0
+33406,VN,MM,Myanmar,Package,Import,0,0,0,0,0,4
+33407,VN,NA,Namibia,Package,Export,0,0,0,0,0,0
+33408,VN,NA,Namibia,Package,Import,0,0,0,0,0,10
+33409,VN,NP,Nepal*,Package,Export,0,0,0,0,0,0
+33410,VN,NP,Nepal*,Package,Import,0,0,0,0,0,0
+33411,VN,NL,Netherlands (Holland)*,Package,Export,0,0,0,0,0,6
+33412,VN,NL,Netherlands (Holland)*,Package,Import,0,0,0,0,0,6
+33413,VN,NC,New Caledonia,Package,Export,0,0,0,0,0,0
+33414,VN,NC,New Caledonia,Package,Import,0,0,0,0,0,10
+33415,VN,NZ,New Zealand*,Package,Export,0,0,0,0,0,0
+33416,VN,NZ,New Zealand*,Package,Import,0,0,0,0,0,3
+33417,VN,NI,Nicaragua,Package,Export,0,0,0,0,0,0
+33418,VN,NI,Nicaragua,Package,Import,0,0,0,0,0,9
+33419,VN,NE,Niger,Package,Export,0,0,0,0,0,0
+33420,VN,NE,Niger,Package,Import,0,0,0,0,0,10
+33421,VN,NG,Nigeria*,Package,Export,0,0,0,0,0,0
+33422,VN,NG,Nigeria*,Package,Import,0,0,0,0,0,10
+33423,VN,NF,Norfolk Island (Australia)*,Package,Export,0,0,0,0,0,0
+33424,VN,NF,Norfolk Island (Australia)*,Package,Import,0,0,0,0,0,0
+33425,VN,NB,Northern Ireland (United Kingdom)*,Package,Export,0,0,0,0,0,0
+33426,VN,NB,Northern Ireland (United Kingdom)*,Package,Import,0,0,0,0,0,6
+33427,VN,MP,Northern Mariana Islands*,Package,Export,0,0,0,0,0,0
+33428,VN,MP,Northern Mariana Islands*,Package,Import,0,0,0,0,0,10
+33429,VN,NO,Norway*,Package,Export,0,0,0,0,0,6
+33430,VN,NO,Norway*,Package,Import,0,0,0,0,0,6
+33431,VN,OM,Oman,Package,Export,0,0,0,0,0,0
+33432,VN,OM,Oman,Package,Import,0,0,0,0,0,10
+33433,VN,PK,Pakistan*,Package,Export,0,0,0,0,0,0
+33434,VN,PK,Pakistan*,Package,Import,0,0,0,0,0,10
+33435,VN,PW,Palau,Package,Export,0,0,0,0,0,0
+33436,VN,PW,Palau,Package,Import,0,0,0,0,0,0
+33437,VN,PA,Panama*,Package,Export,0,0,0,0,0,0
+33438,VN,PA,Panama*,Package,Import,0,0,0,0,0,9
+33439,VN,PG,Papua New Guinea,Package,Export,0,0,0,0,0,0
+33440,VN,PG,Papua New Guinea,Package,Import,0,0,0,0,0,0
+33441,VN,PY,Paraguay,Package,Export,0,0,0,0,0,0
+33442,VN,PY,Paraguay,Package,Import,0,0,0,0,0,9
+33443,VN,PE,Peru*,Package,Export,0,0,0,0,0,0
+33444,VN,PE,Peru*,Package,Import,0,0,0,0,0,9
+33445,VN,PH,Philippines*#,Package,Export,0,0,0,0,0,0
+33446,VN,PH,Philippines*#,Package,Import,0,0,0,0,0,2
+33447,VN,PL,Poland*,Package,Export,0,0,0,0,0,7
+33448,VN,PL,Poland*,Package,Import,0,0,0,0,0,10
+33449,VN,PO,"Ponape (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+33450,VN,PO,"Ponape (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+33451,VN,PT,Portugal*,Package,Export,0,0,0,0,0,7
+33452,VN,PT,Portugal*,Package,Import,0,0,0,0,0,7
+33453,VN,PR,Puerto Rico*,Package,Export,0,0,0,0,0,0
+33454,VN,PR,Puerto Rico*,Package,Import,0,0,0,0,0,5
+33455,VN,QA,Qatar,Package,Export,0,0,0,0,0,0
+33456,VN,QA,Qatar,Package,Import,0,0,0,0,0,10
+33457,VN,RE,Reunion,Package,Export,0,0,0,0,0,0
+33458,VN,RE,Reunion,Package,Import,0,0,0,0,0,10
+33459,VN,RO,Romania,Package,Export,0,0,0,0,0,7
+33460,VN,RO,Romania,Package,Import,0,0,0,0,0,10
+33461,VN,RT,Rota (Northern Mariana Islands)*,Package,Export,0,0,0,0,0,0
+33462,VN,RT,Rota (Northern Mariana Islands)*,Package,Import,0,0,0,0,0,10
+33463,VN,RU,Russia*,Package,Export,0,0,0,0,0,7
+33464,VN,RU,Russia*,Package,Import,0,0,0,0,0,10
+33465,VN,RW,Rwanda,Package,Export,0,0,0,0,0,0
+33466,VN,RW,Rwanda,Package,Import,0,0,0,0,0,9
+33467,VN,SP,Saipan (Northern Mariana Islands)*,Package,Export,0,0,0,0,0,0
+33468,VN,SP,Saipan (Northern Mariana Islands)*,Package,Import,0,0,0,0,0,10
+33469,VN,WS,Samoa,Package,Export,0,0,0,0,0,0
+33470,VN,WS,Samoa,Package,Import,0,0,0,0,0,10
+33471,VN,SM,San Marino,Package,Export,0,0,0,0,0,0
+33472,VN,SM,San Marino,Package,Import,0,0,0,0,0,6
+33473,VN,SA,Saudi Arabia,Package,Export,0,0,0,0,0,7
+33474,VN,SA,Saudi Arabia,Package,Import,0,0,0,0,0,10
+33475,VN,SF,Scotland (United Kingdom)*,Package,Export,0,0,0,0,0,0
+33476,VN,SF,Scotland (United Kingdom)*,Package,Import,0,0,0,0,0,6
+33477,VN,SN,Senegal,Package,Export,0,0,0,0,0,0
+33478,VN,SN,Senegal,Package,Import,0,0,0,0,0,10
+33479,VN,RS,Serbia,Package,Export,0,0,0,0,0,9
+33480,VN,RS,Serbia,Package,Import,0,0,0,0,0,10
+33481,VN,SC,Seychelles,Package,Export,0,0,0,0,0,0
+33482,VN,SC,Seychelles,Package,Import,0,0,0,0,0,10
+33483,VN,SL,Sierra Leone,Package,Export,0,0,0,0,0,0
+33484,VN,SL,Sierra Leone,Package,Import,0,0,0,0,0,10
+33485,VN,SG,Singapore#,Package,Export,0,0,0,0,0,1
+33486,VN,SG,Singapore#,Package,Import,0,0,0,0,0,2
+33487,VN,SK,Slovakia,Package,Export,0,0,0,0,0,7
+33488,VN,SK,Slovakia,Package,Import,0,0,0,0,0,10
+33489,VN,SI,Slovenia,Package,Export,0,0,0,0,0,7
+33490,VN,SI,Slovenia,Package,Import,0,0,0,0,0,10
+33491,VN,SB,Solomon Islands,Package,Export,0,0,0,0,0,0
+33492,VN,SB,Solomon Islands,Package,Import,0,0,0,0,0,0
+33493,VN,ZA,South Africa*,Package,Export,0,0,0,0,0,9
+33494,VN,ZA,South Africa*,Package,Import,0,0,0,0,0,9
+33495,VN,ES,Spain*,Package,Export,0,0,0,0,0,6
+33496,VN,ES,Spain*,Package,Import,0,0,0,0,0,6
+33497,VN,LK,Sri Lanka*,Package,Export,0,0,0,0,0,0
+33498,VN,LK,Sri Lanka*,Package,Import,0,0,0,0,0,3
+33499,VN,BL,St. Barthelemy,Package,Export,0,0,0,0,0,0
+33500,VN,BL,St. Barthelemy,Package,Import,0,0,0,0,0,9
+33501,VN,SW,St. Christopher (St. Kitts),Package,Export,0,0,0,0,0,0
+33502,VN,SW,St. Christopher (St. Kitts),Package,Import,0,0,0,0,0,9
+33503,VN,UV,St. John (U.S. Virgin Islands),Package,Export,0,0,0,0,0,0
+33504,VN,UV,St. John (U.S. Virgin Islands),Package,Import,0,0,0,0,0,9
+33505,VN,KN,St. Kitts and Nevis,Package,Export,0,0,0,0,0,0
+33506,VN,KN,St. Kitts and Nevis,Package,Import,0,0,0,0,0,9
+33507,VN,LC,St. Lucia,Package,Export,0,0,0,0,0,0
+33508,VN,LC,St. Lucia,Package,Import,0,0,0,0,0,9
+33509,VN,SX,"St. Maarten, St. Martin",Package,Export,0,0,0,0,0,0
+33510,VN,SX,"St. Maarten, St. Martin",Package,Import,0,0,0,0,0,9
+33511,VN,VL,St. Thomas (U.S. Virgin Islands),Package,Export,0,0,0,0,0,0
+33512,VN,VL,St. Thomas (U.S. Virgin Islands),Package,Import,0,0,0,0,0,9
+33513,VN,VC,St. Vincent & the Grenadines,Package,Export,0,0,0,0,0,0
+33514,VN,VC,St. Vincent & the Grenadines,Package,Import,0,0,0,0,0,9
+33515,VN,SR,Suriname,Package,Export,0,0,0,0,0,0
+33516,VN,SR,Suriname,Package,Import,0,0,0,0,0,9
+33517,VN,SZ,Swaziland,Package,Export,0,0,0,0,0,0
+33518,VN,SZ,Swaziland,Package,Import,0,0,0,0,0,9
+33519,VN,SE,Sweden*,Package,Export,0,0,0,0,0,6
+33520,VN,SE,Sweden*,Package,Import,0,0,0,0,0,6
+33521,VN,CH,Switzerland*,Package,Export,0,0,0,0,0,6
+33522,VN,CH,Switzerland*,Package,Import,0,0,0,0,0,6
+33523,VN,TA,Tahiti (French Polynesia),Package,Export,0,0,0,0,0,0
+33524,VN,TA,Tahiti (French Polynesia),Package,Import,0,0,0,0,0,0
+33525,VN,TW,"Taiwan, China*#",Package,Export,0,0,0,0,0,3
+33526,VN,TW,"Taiwan, China*#",Package,Import,0,0,0,0,0,1
+33527,VN,TZ,Tanzania,Package,Export,0,0,0,0,0,0
+33528,VN,TZ,Tanzania,Package,Import,0,0,0,0,0,10
+33529,VN,TH,Thailand*#,Package,Export,0,0,0,0,0,1
+33530,VN,TH,Thailand*#,Package,Import,0,0,0,0,0,1
+33531,VN,TL,Timor-Leste,Package,Export,0,0,0,0,0,0
+33532,VN,TL,Timor-Leste,Package,Import,0,0,0,0,0,0
+33533,VN,TI,Tinian (Northern Mariana Islands)*,Package,Export,0,0,0,0,0,0
+33534,VN,TI,Tinian (Northern Mariana Islands)*,Package,Import,0,0,0,0,0,10
+33535,VN,TG,Togo,Package,Export,0,0,0,0,0,0
+33536,VN,TG,Togo,Package,Import,0,0,0,0,0,10
+33537,VN,TO,Tonga,Package,Export,0,0,0,0,0,0
+33538,VN,TO,Tonga,Package,Import,0,0,0,0,0,0
+33539,VN,ZZ,Tortola (British Virgin Islands),Package,Export,0,0,0,0,0,0
+33540,VN,ZZ,Tortola (British Virgin Islands),Package,Import,0,0,0,0,0,9
+33541,VN,TT,Trinidad & Tobago*,Package,Export,0,0,0,0,0,0
+33542,VN,TT,Trinidad & Tobago*,Package,Import,0,0,0,0,0,9
+33543,VN,TU,"Truk (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+33544,VN,TU,"Truk (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+33545,VN,TN,Tunisia,Package,Export,0,0,0,0,0,0
+33546,VN,TN,Tunisia,Package,Import,0,0,0,0,0,10
+33547,VN,TR,Turkey,Package,Export,0,0,0,0,0,7
+33548,VN,TR,Turkey,Package,Import,0,0,0,0,0,6
+33549,VN,TM,Turkmenistan,Package,Export,0,0,0,0,0,0
+33550,VN,TM,Turkmenistan,Package,Import,0,0,0,0,0,0
+33551,VN,TC,Turks & Caicos Islands,Package,Export,0,0,0,0,0,0
+33552,VN,TC,Turks & Caicos Islands,Package,Import,0,0,0,0,0,0
+33553,VN,TV,Tuvalu,Package,Export,0,0,0,0,0,0
+33554,VN,TV,Tuvalu,Package,Import,0,0,0,0,0,0
+33555,VN,VI,U.S. Virgin Islands,Package,Export,0,0,0,0,0,0
+33556,VN,VI,U.S. Virgin Islands,Package,Import,0,0,0,0,0,9
+33557,VN,UG,Uganda,Package,Export,0,0,0,0,0,0
+33558,VN,UG,Uganda,Package,Import,0,0,0,0,0,10
+33559,VN,UA,Ukraine*,Package,Export,0,0,0,0,0,7
+33560,VN,UA,Ukraine*,Package,Import,0,0,0,0,0,10
+33561,VN,UI,Union Islands (St. Vincent & the Grenadines),Package,Export,0,0,0,0,0,0
+33562,VN,UI,Union Islands (St. Vincent & the Grenadines),Package,Import,0,0,0,0,0,9
+33563,VN,AE,United Arab Emirates,Package,Export,0,0,0,0,0,7
+33564,VN,AE,United Arab Emirates,Package,Import,0,0,0,0,0,7
+33565,VN,GB,United Kingdom*,Package,Export,0,0,0,0,0,6
+33566,VN,GB,United Kingdom*,Package,Import,0,0,0,0,0,6
+33567,VN,US,United States*,Package,Export,0,0,0,0,0,5
+33568,VN,US,United States*,Package,Import,0,0,0,0,0,5
+33569,VN,UY,Uruguay,Package,Export,0,0,0,0,0,0
+33570,VN,UY,Uruguay,Package,Import,0,0,0,0,0,9
+33571,VN,UZ,Uzbekistan,Package,Export,0,0,0,0,0,0
+33572,VN,UZ,Uzbekistan,Package,Import,0,0,0,0,0,10
+33573,VN,VU,Vanuatu,Package,Export,0,0,0,0,0,0
+33574,VN,VU,Vanuatu,Package,Import,0,0,0,0,0,0
+33575,VN,VA,Vatican City (Italy)*,Package,Export,0,0,0,0,0,0
+33576,VN,VA,Vatican City (Italy)*,Package,Import,0,0,0,0,0,6
+33577,VN,VE,Venezuela*,Package,Export,0,0,0,0,0,0
+33578,VN,VE,Venezuela*,Package,Import,0,0,0,0,0,9
+33579,VN,WL,Wales (United Kingdom)*,Package,Export,0,0,0,0,0,0
+33580,VN,WL,Wales (United Kingdom)*,Package,Import,0,0,0,0,0,6
+33581,VN,WF,Wallis & Futuna Islands,Package,Export,0,0,0,0,0,0
+33582,VN,WF,Wallis & Futuna Islands,Package,Import,0,0,0,0,0,0
+33583,VN,YA,"Yap (Micronesia, Federated States of)",Package,Export,0,0,0,0,0,0
+33584,VN,YA,"Yap (Micronesia, Federated States of)",Package,Import,0,0,0,0,0,0
+33585,VN,YE,"Yemen, Republic of",Package,Export,0,0,0,0,0,0
+33586,VN,YE,"Yemen, Republic of",Package,Import,0,0,0,0,0,0
+33587,VN,ZM,Zambia,Package,Export,0,0,0,0,0,0
+33588,VN,ZM,Zambia,Package,Import,0,0,0,0,0,10
+33589,VN,ZW,Zimbabwe,Package,Export,0,0,0,0,0,0
+33590,VN,ZW,Zimbabwe,Package,Import,0,0,0,0,0,10
+33604,VN,EG,Egypt,Freight,Export,0,0,0,7,0,0
+33618,VN,EG,Egypt,Freight,Export,0,0,0,0,0,0
+33697,VN,KE,Kenya,Freight,Export,0,0,0,9,0,0
+33698,VN,MU,Mauritius,Freight,Export,0,0,0,9,0,0
+33699,VN,MC,Monaco*,Freight,Export,0,0,0,6,0,0
+33700,VN,RE,Reunion,Freight,Export,0,0,0,9,0,0
+33701,VN,SM,San Marino,Freight,Export,0,0,0,6,0,0
+33702,VN,VA,Vatican City (Italy)*,Freight,Export,0,0,0,6,0,0
+33781,VN,KE,Kenya,Freight,Export,0,0,0,0,0,0
+33782,VN,MU,Mauritius,Freight,Export,0,0,0,0,0,0
+33783,VN,MC,Monaco*,Freight,Export,0,0,0,0,0,0
+33784,VN,RE,Reunion,Freight,Export,0,0,0,0,0,0
+33785,VN,SM,San Marino,Freight,Export,0,0,0,0,0,0
+33786,VN,VA,Vatican City (Italy)*,Freight,Export,0,0,0,0,0,0
+33917,VN,EG,Egypt,Freight,Import,0,0,0,10,0,0
+33918,VN,KE,Kenya,Freight,Import,0,0,0,10,0,0
+33919,VN,LV,Latvia,Freight,Import,0,0,0,10,0,0
+33920,VN,LT,Lithuania,Freight,Import,0,0,0,10,0,0
+33921,VN,MU,Mauritius,Freight,Import,0,0,0,10,0,0
+33922,VN,MC,Monaco*,Freight,Import,0,0,0,6,0,0
+33923,VN,RE,Reunion,Freight,Import,0,0,0,10,0,0
+33924,VN,RU,Russia*,Freight,Import,0,0,0,10,0,0
+33925,VN,SI,Slovenia,Freight,Import,0,0,0,10,0,0
+33926,VN,VA,Vatican City (Italy)*,Freight,Import,0,0,0,6,0,0
+34058,VN,CU,Cuba,Package,Export,0,0,0,0,0,0
+34059,VN,ST,Sao Tome and Principe,Package,Export,0,0,0,0,0,0
+34060,VN,TJ,Tajikistan,Package,Export,0,0,0,0,0,0
+34130,VN,CU,Cuba,Package,Export,0,0,0,0,0,0
+34131,VN,ST,Sao Tome and Principe,Package,Export,0,0,0,0,0,0
+34132,VN,TJ,Tajikistan,Package,Export,0,0,0,0,0,0
+34142,VN,CU,Cuba,Package,Export,0,0,0,0,0,0
+34143,VN,ST,Sao Tome and Principe,Package,Export,0,0,0,0,0,0
+34144,VN,TJ,Tajikistan,Package,Export,0,0,0,0,0,0
+34457,VN,CU,Cuba,Package,Export,0,0,0,0,0,0
+34458,VN,ST,Sao Tome and Principe,Package,Export,0,0,0,0,0,0
+34459,VN,TJ,Tajikistan,Package,Export,0,0,0,0,0,0
+36944,VN,AD,Andorra,Freight,Export,0,0,0,0,0,0
+36945,VN,AF,Afghanistan,Freight,Export,0,0,0,0,0,0
+36946,VN,AG,Antigua and Barbuda,Freight,Export,0,0,0,0,0,0
+36947,VN,AI,Anguilla,Freight,Export,0,0,0,0,0,0
+36948,VN,AL,Albania,Freight,Export,0,0,0,0,0,0
+36949,VN,AM,Armenia,Freight,Export,0,0,0,0,0,0
+36950,VN,AO,Angola,Freight,Export,0,0,0,0,0,0
+36951,VN,AS,American Samoa,Freight,Export,0,0,0,0,0,0
+36952,VN,AW,Aruba,Freight,Export,0,0,0,0,0,0
+36953,VN,AZ,Azerbaijan,Freight,Export,0,0,0,0,0,0
+36954,VN,BA,Bosnia and Herzegovina,Freight,Export,0,0,0,0,0,0
+36955,VN,BB,Barbados,Freight,Export,0,0,0,0,0,0
+36956,VN,BF,Burkina Faso,Freight,Export,0,0,0,0,0,0
+36957,VN,BI,Burundi,Freight,Export,0,0,0,0,0,0
+36958,VN,BJ,Benin,Freight,Export,0,0,0,0,0,0
+36959,VN,BM,Bermuda,Freight,Export,0,0,0,0,0,0
+36960,VN,BN,Brunei*,Freight,Export,0,0,0,0,0,0
+36961,VN,BO,Bolivia,Freight,Export,0,0,0,0,0,0
+36962,VN,BQ,"Bonaire, St. Eustatius, Saba",Freight,Export,0,0,0,0,0,0
+36963,VN,BS,Bahamas*,Freight,Export,0,0,0,0,0,0
+36964,VN,BT,Bhutan,Freight,Export,0,0,0,0,0,0
+36965,VN,BW,Botswana,Freight,Export,0,0,0,0,0,0
+36966,VN,BY,Belarus*,Freight,Export,0,0,0,0,0,0
+36967,VN,BZ,Belize,Freight,Export,0,0,0,0,0,0
+36968,VN,CD,"Congo, Democratic Republic of",Freight,Export,0,0,0,0,0,0
+36969,VN,CF,Central African Republic,Freight,Export,0,0,0,0,0,0
+36970,VN,CG,"Congo, Republic of",Freight,Export,0,0,0,0,0,0
+36971,VN,CI,Cote d'Ivoire (Ivory Coast),Freight,Export,0,0,0,0,0,0
+36972,VN,CK,Cook Islands,Freight,Export,0,0,0,0,0,0
+36973,VN,CM,Cameroon,Freight,Export,0,0,0,0,0,0
+36974,VN,CU,Cuba,Freight,Export,0,0,0,0,0,0
+36975,VN,CV,Cape Verde,Freight,Export,0,0,0,0,0,0
+36976,VN,CW,Curacao,Freight,Export,0,0,0,0,0,0
+36977,VN,CY,Cyprus,Freight,Export,0,0,0,0,0,0
+36978,VN,DJ,Djibouti,Freight,Export,0,0,0,0,0,0
+36979,VN,DM,Dominica,Freight,Export,0,0,0,0,0,0
+36980,VN,DZ,Algeria,Freight,Export,0,0,0,0,0,0
+36981,VN,EE,Estonia,Freight,Export,0,0,0,0,0,0
+36982,VN,ER,Eritrea,Freight,Export,0,0,0,0,0,0
+36983,VN,ET,Ethiopia,Freight,Export,0,0,0,0,0,0
+36984,VN,FJ,Fiji,Freight,Export,0,0,0,0,0,0
+36985,VN,FM,"Micronesia, Federated States of",Freight,Export,0,0,0,0,0,0
+36986,VN,FO,Faroe Islands,Freight,Export,0,0,0,0,0,0
+36987,VN,GA,Gabon,Freight,Export,0,0,0,0,0,0
+36988,VN,GD,Grenada,Freight,Export,0,0,0,0,0,0
+36989,VN,GE,Georgia*,Freight,Export,0,0,0,0,0,0
+36990,VN,GF,French Guiana,Freight,Export,0,0,0,0,0,0
+36991,VN,GG,Guernsey (Channel Islands),Freight,Export,0,0,0,0,0,0
+36992,VN,GH,Ghana,Freight,Export,0,0,0,0,0,0
+36993,VN,GI,Gibraltar,Freight,Export,0,0,0,0,0,0
+36994,VN,GL,Greenland,Freight,Export,0,0,0,0,0,0
+36995,VN,GM,Gambia,Freight,Export,0,0,0,0,0,0
+36996,VN,GN,Guinea,Freight,Export,0,0,0,0,0,0
+36997,VN,GP,Guadeloupe*,Freight,Export,0,0,0,0,0,0
+36998,VN,GQ,Equatorial Guinea,Freight,Export,0,0,0,0,0,0
+36999,VN,GU,Guam,Freight,Export,0,0,0,0,0,0
+37000,VN,GW,Guinea-Bissau,Freight,Export,0,0,0,0,0,0
+37001,VN,GY,Guyana*,Freight,Export,0,0,0,0,0,0
+37002,VN,HT,Haiti*,Freight,Export,0,0,0,0,0,0
+37003,VN,IQ,Iraq,Freight,Export,0,0,0,0,0,0
+37004,VN,IS,Iceland,Freight,Export,0,0,0,0,0,0
+37005,VN,JE,Jersey (Channel Islands),Freight,Export,0,0,0,0,0,0
+37006,VN,JM,Jamaica*,Freight,Export,0,0,0,0,0,0
+37007,VN,JO,Jordan,Freight,Export,0,0,0,0,0,0
+37008,VN,KG,Kyrgyzstan,Freight,Export,0,0,0,0,0,0
+37009,VN,KH,Cambodia*,Freight,Export,0,0,0,0,0,0
+37010,VN,KI,Kiribati,Freight,Export,0,0,0,0,0,0
+37011,VN,KM,Comoros,Freight,Export,0,0,0,0,0,0
+37012,VN,KN,St. Kitts and Nevis,Freight,Export,0,0,0,0,0,0
+37013,VN,KV,Kosovo,Freight,Export,0,0,0,0,0,0
+37014,VN,KY,Cayman Islands,Freight,Export,0,0,0,0,0,0
+37015,VN,KZ,Kazakhstan*,Freight,Export,0,0,0,0,0,0
+37016,VN,LA,Laos,Freight,Export,0,0,0,0,0,0
+37017,VN,LC,St. Lucia,Freight,Export,0,0,0,0,0,0
+37018,VN,LR,Liberia,Freight,Export,0,0,0,0,0,0
+37019,VN,LS,Lesotho,Freight,Export,0,0,0,0,0,0
+37020,VN,LT,Lithuania,Freight,Export,0,0,0,0,0,0
+37021,VN,LV,Latvia,Freight,Export,0,0,0,0,0,0
+37022,VN,LY,Libyan Arab Jamahiriya,Freight,Export,0,0,0,0,0,0
+37023,VN,MD,Moldova*,Freight,Export,0,0,0,0,0,0
+37024,VN,ME,Montenegro,Freight,Export,0,0,0,0,0,0
+37025,VN,MG,Madagascar,Freight,Export,0,0,0,0,0,0
+37026,VN,MH,Marshall Islands,Freight,Export,0,0,0,0,0,0
+37027,VN,MK,North Macedonia,Freight,Export,0,0,0,0,0,0
+37028,VN,ML,Mali,Freight,Export,0,0,0,0,0,0
+37029,VN,MN,Mongolia,Freight,Export,0,0,0,0,0,0
+37030,VN,MO,"Macau SAR, China#",Freight,Export,0,0,0,0,0,0
+37031,VN,MP,Northern Mariana Islands*,Freight,Export,0,0,0,0,0,0
+37032,VN,MQ,Martinique,Freight,Export,0,0,0,0,0,0
+37033,VN,MR,Mauritania,Freight,Export,0,0,0,0,0,0
+37034,VN,MS,Montserrat,Freight,Export,0,0,0,0,0,0
+37035,VN,MV,Maldives,Freight,Export,0,0,0,0,0,0
+37036,VN,MW,Malawi,Freight,Export,0,0,0,0,0,0
+37037,VN,MZ,Mozambique,Freight,Export,0,0,0,0,0,0
+37038,VN,NA,Namibia,Freight,Export,0,0,0,0,0,0
+37039,VN,NC,New Caledonia,Freight,Export,0,0,0,0,0,0
+37040,VN,NE,Niger,Freight,Export,0,0,0,0,0,0
+37041,VN,NP,Nepal*,Freight,Export,0,0,0,0,0,0
+37042,VN,PE,Peru*,Freight,Export,0,0,0,0,0,0
+37043,VN,PF,French Polynesia,Freight,Export,0,0,0,0,0,0
+37044,VN,PG,Papua New Guinea,Freight,Export,0,0,0,0,0,0
+37045,VN,PW,Palau,Freight,Export,0,0,0,0,0,0
+37046,VN,PY,Paraguay,Freight,Export,0,0,0,0,0,0
+37047,VN,RU,Russia*,Freight,Export,0,0,0,0,0,0
+37048,VN,RW,Rwanda,Freight,Export,0,0,0,0,0,0
+37049,VN,SB,Solomon Islands,Freight,Export,0,0,0,0,0,0
+37050,VN,SC,Seychelles,Freight,Export,0,0,0,0,0,0
+37051,VN,SL,Sierra Leone,Freight,Export,0,0,0,0,0,0
+37052,VN,SN,Senegal,Freight,Export,0,0,0,0,0,0
+37053,VN,SR,Suriname,Freight,Export,0,0,0,0,0,0
+37054,VN,ST,Sao Tome and Principe,Freight,Export,0,0,0,0,0,0
+37055,VN,SX,"St. Maarten, St. Martin",Freight,Export,0,0,0,0,0,0
+37056,VN,SZ,Swaziland,Freight,Export,0,0,0,0,0,0
+37057,VN,TC,Turks & Caicos Islands,Freight,Export,0,0,0,0,0,0
+37058,VN,TD,Chad,Freight,Export,0,0,0,0,0,0
+37059,VN,TG,Togo,Freight,Export,0,0,0,0,0,0
+37060,VN,TJ,Tajikistan,Freight,Export,0,0,0,0,0,0
+37061,VN,TL,Timor-Leste,Freight,Export,0,0,0,0,0,0
+37062,VN,TM,Turkmenistan,Freight,Export,0,0,0,0,0,0
+37063,VN,TO,Tonga,Freight,Export,0,0,0,0,0,0
+37064,VN,TT,Trinidad & Tobago*,Freight,Export,0,0,0,0,0,0
+37065,VN,TV,Tuvalu,Freight,Export,0,0,0,0,0,0
+37066,VN,TZ,Tanzania,Freight,Export,0,0,0,0,0,0
+37067,VN,UA,Ukraine*,Freight,Export,0,0,0,0,0,0
+37068,VN,UG,Uganda,Freight,Export,0,0,0,0,0,0
+37069,VN,UY,Uruguay,Freight,Export,0,0,0,0,0,0
+37070,VN,UZ,Uzbekistan,Freight,Export,0,0,0,0,0,0
+37071,VN,VC,St. Vincent & the Grenadines,Freight,Export,0,0,0,0,0,0
+37072,VN,VE,Venezuela*,Freight,Export,0,0,0,0,0,0
+37073,VN,VG,British Virgin Islands,Freight,Export,0,0,0,0,0,0
+37074,VN,VI,U.S. Virgin Islands,Freight,Export,0,0,0,0,0,0
+37075,VN,VU,Vanuatu,Freight,Export,0,0,0,0,0,0
+37076,VN,WF,Wallis & Futuna Islands,Freight,Export,0,0,0,0,0,0
+37077,VN,WS,Samoa,Freight,Export,0,0,0,0,0,0
+37078,VN,YE,"Yemen, Republic of",Freight,Export,0,0,0,0,0,0
+37079,VN,YT,Mayotte,Freight,Export,0,0,0,0,0,0
+37080,VN,ZM,Zambia,Freight,Export,0,0,0,0,0,0
+37081,VN,ZW,Zimbabwe,Freight,Export,0,0,0,0,0,0
+37714,VN,AD,Andorra,Freight,Export,0,0,0,0,0,0
+37715,VN,AF,Afghanistan,Freight,Export,0,0,0,0,0,0
+37716,VN,AG,Antigua and Barbuda,Freight,Export,0,0,0,0,0,0
+37717,VN,AI,Anguilla,Freight,Export,0,0,0,0,0,0
+37718,VN,AL,Albania,Freight,Export,0,0,0,0,0,0
+37719,VN,AM,Armenia,Freight,Export,0,0,0,0,0,0
+37720,VN,AO,Angola,Freight,Export,0,0,0,0,0,0
+37721,VN,AS,American Samoa,Freight,Export,0,0,0,0,0,0
+37722,VN,AW,Aruba,Freight,Export,0,0,0,0,0,0
+37723,VN,AZ,Azerbaijan,Freight,Export,0,0,0,0,0,0
+37724,VN,BA,Bosnia and Herzegovina,Freight,Export,0,0,0,0,0,0
+37725,VN,BB,Barbados,Freight,Export,0,0,0,0,0,0
+37726,VN,BF,Burkina Faso,Freight,Export,0,0,0,0,0,0
+37727,VN,BI,Burundi,Freight,Export,0,0,0,0,0,0
+37728,VN,BJ,Benin,Freight,Export,0,0,0,0,0,0
+37729,VN,BM,Bermuda,Freight,Export,0,0,0,0,0,0
+37730,VN,BN,Brunei*,Freight,Export,0,0,0,0,0,0
+37731,VN,BO,Bolivia,Freight,Export,0,0,0,0,0,0
+37732,VN,BQ,"Bonaire, St. Eustatius, Saba",Freight,Export,0,0,0,0,0,0
+37733,VN,BS,Bahamas*,Freight,Export,0,0,0,0,0,0
+37734,VN,BT,Bhutan,Freight,Export,0,0,0,0,0,0
+37735,VN,BW,Botswana,Freight,Export,0,0,0,0,0,0
+37736,VN,BY,Belarus*,Freight,Export,0,0,0,0,0,0
+37737,VN,BZ,Belize,Freight,Export,0,0,0,0,0,0
+37738,VN,CD,"Congo, Democratic Republic of",Freight,Export,0,0,0,0,0,0
+37739,VN,CF,Central African Republic,Freight,Export,0,0,0,0,0,0
+37740,VN,CG,"Congo, Republic of",Freight,Export,0,0,0,0,0,0
+37741,VN,CI,Cote d'Ivoire (Ivory Coast),Freight,Export,0,0,0,0,0,0
+37742,VN,CK,Cook Islands,Freight,Export,0,0,0,0,0,0
+37743,VN,CM,Cameroon,Freight,Export,0,0,0,0,0,0
+37744,VN,CU,Cuba,Freight,Export,0,0,0,0,0,0
+37745,VN,CV,Cape Verde,Freight,Export,0,0,0,0,0,0
+37746,VN,CW,Curacao,Freight,Export,0,0,0,0,0,0
+37747,VN,CY,Cyprus,Freight,Export,0,0,0,0,0,0
+37748,VN,DJ,Djibouti,Freight,Export,0,0,0,0,0,0
+37749,VN,DM,Dominica,Freight,Export,0,0,0,0,0,0
+37750,VN,DZ,Algeria,Freight,Export,0,0,0,0,0,0
+37751,VN,EE,Estonia,Freight,Export,0,0,0,0,0,0
+37752,VN,ER,Eritrea,Freight,Export,0,0,0,0,0,0
+37753,VN,ET,Ethiopia,Freight,Export,0,0,0,0,0,0
+37754,VN,FJ,Fiji,Freight,Export,0,0,0,0,0,0
+37755,VN,FM,"Micronesia, Federated States of",Freight,Export,0,0,0,0,0,0
+37756,VN,FO,Faroe Islands,Freight,Export,0,0,0,0,0,0
+37757,VN,GA,Gabon,Freight,Export,0,0,0,0,0,0
+37758,VN,GD,Grenada,Freight,Export,0,0,0,0,0,0
+37759,VN,GE,Georgia*,Freight,Export,0,0,0,0,0,0
+37760,VN,GF,French Guiana,Freight,Export,0,0,0,0,0,0
+37761,VN,GG,Guernsey (Channel Islands),Freight,Export,0,0,0,0,0,0
+37762,VN,GH,Ghana,Freight,Export,0,0,0,0,0,0
+37763,VN,GI,Gibraltar,Freight,Export,0,0,0,0,0,0
+37764,VN,GL,Greenland,Freight,Export,0,0,0,0,0,0
+37765,VN,GM,Gambia,Freight,Export,0,0,0,0,0,0
+37766,VN,GN,Guinea,Freight,Export,0,0,0,0,0,0
+37767,VN,GP,Guadeloupe*,Freight,Export,0,0,0,0,0,0
+37768,VN,GQ,Equatorial Guinea,Freight,Export,0,0,0,0,0,0
+37769,VN,GU,Guam,Freight,Export,0,0,0,0,0,0
+37770,VN,GW,Guinea-Bissau,Freight,Export,0,0,0,0,0,0
+37771,VN,GY,Guyana*,Freight,Export,0,0,0,0,0,0
+37772,VN,HT,Haiti*,Freight,Export,0,0,0,0,0,0
+37773,VN,IQ,Iraq,Freight,Export,0,0,0,0,0,0
+37774,VN,IS,Iceland,Freight,Export,0,0,0,0,0,0
+37775,VN,JE,Jersey (Channel Islands),Freight,Export,0,0,0,0,0,0
+37776,VN,JM,Jamaica*,Freight,Export,0,0,0,0,0,0
+37777,VN,JO,Jordan,Freight,Export,0,0,0,0,0,0
+37778,VN,KG,Kyrgyzstan,Freight,Export,0,0,0,0,0,0
+37779,VN,KH,Cambodia*,Freight,Export,0,0,0,0,0,0
+37780,VN,KI,Kiribati,Freight,Export,0,0,0,0,0,0
+37781,VN,KM,Comoros,Freight,Export,0,0,0,0,0,0
+37782,VN,KN,St. Kitts and Nevis,Freight,Export,0,0,0,0,0,0
+37783,VN,KV,Kosovo,Freight,Export,0,0,0,0,0,0
+37784,VN,KY,Cayman Islands,Freight,Export,0,0,0,0,0,0
+37785,VN,KZ,Kazakhstan*,Freight,Export,0,0,0,0,0,0
+37786,VN,LA,Laos,Freight,Export,0,0,0,0,0,0
+37787,VN,LC,St. Lucia,Freight,Export,0,0,0,0,0,0
+37788,VN,LR,Liberia,Freight,Export,0,0,0,0,0,0
+37789,VN,LS,Lesotho,Freight,Export,0,0,0,0,0,0
+37790,VN,LT,Lithuania,Freight,Export,0,0,0,0,0,0
+37791,VN,LV,Latvia,Freight,Export,0,0,0,0,0,0
+37792,VN,LY,Libyan Arab Jamahiriya,Freight,Export,0,0,0,0,0,0
+37793,VN,MD,Moldova*,Freight,Export,0,0,0,0,0,0
+37794,VN,ME,Montenegro,Freight,Export,0,0,0,0,0,0
+37795,VN,MG,Madagascar,Freight,Export,0,0,0,0,0,0
+37796,VN,MH,Marshall Islands,Freight,Export,0,0,0,0,0,0
+37797,VN,MK,North Macedonia,Freight,Export,0,0,0,0,0,0
+37798,VN,ML,Mali,Freight,Export,0,0,0,0,0,0
+37799,VN,MN,Mongolia,Freight,Export,0,0,0,0,0,0
+37800,VN,MO,"Macau SAR, China#",Freight,Export,0,0,0,0,0,0
+37801,VN,MP,Northern Mariana Islands*,Freight,Export,0,0,0,0,0,0
+37802,VN,MQ,Martinique,Freight,Export,0,0,0,0,0,0
+37803,VN,MR,Mauritania,Freight,Export,0,0,0,0,0,0
+37804,VN,MS,Montserrat,Freight,Export,0,0,0,0,0,0
+37805,VN,MV,Maldives,Freight,Export,0,0,0,0,0,0
+37806,VN,MW,Malawi,Freight,Export,0,0,0,0,0,0
+37807,VN,MZ,Mozambique,Freight,Export,0,0,0,0,0,0
+37808,VN,NA,Namibia,Freight,Export,0,0,0,0,0,0
+37809,VN,NC,New Caledonia,Freight,Export,0,0,0,0,0,0
+37810,VN,NE,Niger,Freight,Export,0,0,0,0,0,0
+37811,VN,NP,Nepal*,Freight,Export,0,0,0,0,0,0
+37812,VN,PE,Peru*,Freight,Export,0,0,0,0,0,0
+37813,VN,PF,French Polynesia,Freight,Export,0,0,0,0,0,0
+37814,VN,PG,Papua New Guinea,Freight,Export,0,0,0,0,0,0
+37815,VN,PW,Palau,Freight,Export,0,0,0,0,0,0
+37816,VN,PY,Paraguay,Freight,Export,0,0,0,0,0,0
+37817,VN,RU,Russia*,Freight,Export,0,0,0,0,0,0
+37818,VN,RW,Rwanda,Freight,Export,0,0,0,0,0,0
+37819,VN,SB,Solomon Islands,Freight,Export,0,0,0,0,0,0
+37820,VN,SC,Seychelles,Freight,Export,0,0,0,0,0,0
+37821,VN,SL,Sierra Leone,Freight,Export,0,0,0,0,0,0
+37822,VN,SN,Senegal,Freight,Export,0,0,0,0,0,0
+37823,VN,SR,Suriname,Freight,Export,0,0,0,0,0,0
+37824,VN,ST,Sao Tome and Principe,Freight,Export,0,0,0,0,0,0
+37825,VN,SX,"St. Maarten, St. Martin",Freight,Export,0,0,0,0,0,0
+37826,VN,SZ,Swaziland,Freight,Export,0,0,0,0,0,0
+37827,VN,TC,Turks & Caicos Islands,Freight,Export,0,0,0,0,0,0
+37828,VN,TD,Chad,Freight,Export,0,0,0,0,0,0
+37829,VN,TG,Togo,Freight,Export,0,0,0,0,0,0
+37830,VN,TJ,Tajikistan,Freight,Export,0,0,0,0,0,0
+37831,VN,TL,Timor-Leste,Freight,Export,0,0,0,0,0,0
+37832,VN,TM,Turkmenistan,Freight,Export,0,0,0,0,0,0
+37833,VN,TO,Tonga,Freight,Export,0,0,0,0,0,0
+37834,VN,TT,Trinidad & Tobago*,Freight,Export,0,0,0,0,0,0
+37835,VN,TV,Tuvalu,Freight,Export,0,0,0,0,0,0
+37836,VN,TZ,Tanzania,Freight,Export,0,0,0,0,0,0
+37837,VN,UA,Ukraine*,Freight,Export,0,0,0,0,0,0
+37838,VN,UG,Uganda,Freight,Export,0,0,0,0,0,0
+37839,VN,UY,Uruguay,Freight,Export,0,0,0,0,0,0
+37840,VN,UZ,Uzbekistan,Freight,Export,0,0,0,0,0,0
+37841,VN,VC,St. Vincent & the Grenadines,Freight,Export,0,0,0,0,0,0
+37842,VN,VE,Venezuela*,Freight,Export,0,0,0,0,0,0
+37843,VN,VG,British Virgin Islands,Freight,Export,0,0,0,0,0,0
+37844,VN,VI,U.S. Virgin Islands,Freight,Export,0,0,0,0,0,0
+37845,VN,VU,Vanuatu,Freight,Export,0,0,0,0,0,0
+37846,VN,WF,Wallis & Futuna Islands,Freight,Export,0,0,0,0,0,0
+37847,VN,WS,Samoa,Freight,Export,0,0,0,0,0,0
+37848,VN,YE,"Yemen, Republic of",Freight,Export,0,0,0,0,0,0
+37849,VN,YT,Mayotte,Freight,Export,0,0,0,0,0,0
+37850,VN,ZM,Zambia,Freight,Export,0,0,0,0,0,0
+37851,VN,ZW,Zimbabwe,Freight,Export,0,0,0,0,0,0
+38781,VN,CU,Cuba,Package,Import,0,0,0,0,0,0
+38782,VN,ST,Sao Tome and Principe,Package,Import,0,0,0,0,0,0
+39381,VN,CU,Cuba,Package,Import,0,0,0,0,0,0
+39382,VN,ST,Sao Tome and Principe,Package,Import,0,0,0,0,0,0
+39383,VN,CU,Cuba,Package,Import,0,0,0,0,0,0
+39384,VN,ST,Sao Tome and Principe,Package,Import,0,0,0,0,0,0
+41562,VN,AF,Afghanistan,Freight,Import,0,0,0,0,0,0
+41563,VN,AG,Antigua and Barbuda,Freight,Import,0,0,0,0,0,0
+41564,VN,AI,Anguilla,Freight,Import,0,0,0,0,0,0
+41565,VN,AL,Albania,Freight,Import,0,0,0,0,0,0
+41566,VN,AM,Armenia,Freight,Import,0,0,0,0,0,0
+41567,VN,AO,Angola,Freight,Import,0,0,0,0,0,0
+41568,VN,AS,American Samoa,Freight,Import,0,0,0,0,0,0
+41569,VN,AW,Aruba,Freight,Import,0,0,0,0,0,0
+41570,VN,AZ,Azerbaijan,Freight,Import,0,0,0,0,0,0
+41571,VN,BA,Bosnia and Herzegovina,Freight,Import,0,0,0,0,0,0
+41572,VN,BB,Barbados,Freight,Import,0,0,0,0,0,0
+41573,VN,BF,Burkina Faso,Freight,Import,0,0,0,0,0,0
+41574,VN,BI,Burundi,Freight,Import,0,0,0,0,0,0
+41575,VN,BJ,Benin,Freight,Import,0,0,0,0,0,0
+41576,VN,BM,Bermuda,Freight,Import,0,0,0,0,0,0
+41577,VN,BN,Brunei*,Freight,Import,0,0,0,0,0,0
+41578,VN,BO,Bolivia,Freight,Import,0,0,0,0,0,0
+41579,VN,BQ,"Bonaire, St. Eustatius, Saba",Freight,Import,0,0,0,0,0,0
+41580,VN,BS,Bahamas*,Freight,Import,0,0,0,0,0,0
+41581,VN,BT,Bhutan,Freight,Import,0,0,0,0,0,0
+41582,VN,BW,Botswana,Freight,Import,0,0,0,0,0,0
+41583,VN,BY,Belarus*,Freight,Import,0,0,0,0,0,0
+41584,VN,CD,"Congo, Democratic Republic of",Freight,Import,0,0,0,0,0,0
+41585,VN,CG,"Congo, Republic of",Freight,Import,0,0,0,0,0,0
+41586,VN,CI,Cote d'Ivoire (Ivory Coast),Freight,Import,0,0,0,0,0,0
+41587,VN,CM,Cameroon,Freight,Import,0,0,0,0,0,0
+41588,VN,CU,Cuba,Freight,Import,0,0,0,0,0,0
+41589,VN,CV,Cape Verde,Freight,Import,0,0,0,0,0,0
+41590,VN,CW,Curacao,Freight,Import,0,0,0,0,0,0
+41591,VN,CY,Cyprus,Freight,Import,0,0,0,0,0,0
+41592,VN,DJ,Djibouti,Freight,Import,0,0,0,0,0,0
+41593,VN,DM,Dominica,Freight,Import,0,0,0,0,0,0
+41594,VN,DZ,Algeria,Freight,Import,0,0,0,0,0,0
+41595,VN,EE,Estonia,Freight,Import,0,0,0,0,0,0
+41596,VN,EG,Egypt,Freight,Import,0,0,0,0,0,0
+41597,VN,ER,Eritrea,Freight,Import,0,0,0,0,0,0
+41598,VN,ET,Ethiopia,Freight,Import,0,0,0,0,0,0
+41599,VN,FJ,Fiji,Freight,Import,0,0,0,0,0,0
+41600,VN,MC,Monaco*,Freight,Import,0,0,0,0,0,0
+41601,VN,GA,Gabon,Freight,Import,0,0,0,0,0,0
+41602,VN,GD,Grenada,Freight,Import,0,0,0,0,0,0
+41603,VN,GE,Georgia*,Freight,Import,0,0,0,0,0,0
+41604,VN,GG,Guernsey (Channel Islands),Freight,Import,0,0,0,0,0,0
+41605,VN,GH,Ghana,Freight,Import,0,0,0,0,0,0
+41606,VN,GI,Gibraltar,Freight,Import,0,0,0,0,0,0
+41607,VN,GM,Gambia,Freight,Import,0,0,0,0,0,0
+41608,VN,GN,Guinea,Freight,Import,0,0,0,0,0,0
+41609,VN,GP,Guadeloupe*,Freight,Import,0,0,0,0,0,0
+41610,VN,GQ,Equatorial Guinea,Freight,Import,0,0,0,0,0,0
+41611,VN,GU,Guam,Freight,Import,0,0,0,0,0,0
+41612,VN,GW,Guinea-Bissau,Freight,Import,0,0,0,0,0,0
+41613,VN,GY,Guyana*,Freight,Import,0,0,0,0,0,0
+41614,VN,HT,Haiti*,Freight,Import,0,0,0,0,0,0
+41615,VN,IQ,Iraq,Freight,Import,0,0,0,0,0,0
+41616,VN,IS,Iceland,Freight,Import,0,0,0,0,0,0
+41617,VN,JE,Jersey (Channel Islands),Freight,Import,0,0,0,0,0,0
+41618,VN,JM,Jamaica*,Freight,Import,0,0,0,0,0,0
+41619,VN,JO,Jordan,Freight,Import,0,0,0,0,0,0
+41620,VN,KE,Kenya,Freight,Import,0,0,0,0,0,0
+41621,VN,KG,Kyrgyzstan,Freight,Import,0,0,0,0,0,0
+41622,VN,KH,Cambodia*,Freight,Import,0,0,0,0,0,0
+41623,VN,KM,Comoros,Freight,Import,0,0,0,0,0,0
+41624,VN,KN,St. Kitts and Nevis,Freight,Import,0,0,0,0,0,0
+41625,VN,KY,Cayman Islands,Freight,Import,0,0,0,0,0,0
+41626,VN,KZ,Kazakhstan*,Freight,Import,0,0,0,0,0,0
+41627,VN,LA,Laos,Freight,Import,0,0,0,0,0,0
+41628,VN,LC,St. Lucia,Freight,Import,0,0,0,0,0,0
+41629,VN,LR,Liberia,Freight,Import,0,0,0,0,0,0
+41630,VN,LS,Lesotho,Freight,Import,0,0,0,0,0,0
+41631,VN,LT,Lithuania,Freight,Import,0,0,0,0,0,0
+41632,VN,LV,Latvia,Freight,Import,0,0,0,0,0,0
+41633,VN,LY,Libyan Arab Jamahiriya,Freight,Import,0,0,0,0,0,0
+41634,VN,MD,Moldova*,Freight,Import,0,0,0,0,0,0
+41635,VN,ME,Montenegro,Freight,Import,0,0,0,0,0,0
+41636,VN,MG,Madagascar,Freight,Import,0,0,0,0,0,0
+41637,VN,MK,North Macedonia,Freight,Import,0,0,0,0,0,0
+41638,VN,ML,Mali,Freight,Import,0,0,0,0,0,0
+41639,VN,MN,Mongolia,Freight,Import,0,0,0,0,0,0
+41640,VN,MO,"Macau SAR, China#",Freight,Import,0,0,0,0,0,0
+41641,VN,MP,Northern Mariana Islands*,Freight,Import,0,0,0,0,0,0
+41642,VN,MQ,Martinique,Freight,Import,0,0,0,0,0,0
+41643,VN,MR,Mauritania,Freight,Import,0,0,0,0,0,0
+41644,VN,MS,Montserrat,Freight,Import,0,0,0,0,0,0
+41645,VN,MU,Mauritius,Freight,Import,0,0,0,0,0,0
+41646,VN,MV,Maldives,Freight,Import,0,0,0,0,0,0
+41647,VN,MW,Malawi,Freight,Import,0,0,0,0,0,0
+41648,VN,MZ,Mozambique,Freight,Import,0,0,0,0,0,0
+41649,VN,NA,Namibia,Freight,Import,0,0,0,0,0,0
+41650,VN,NC,New Caledonia,Freight,Import,0,0,0,0,0,0
+41651,VN,NE,Niger,Freight,Import,0,0,0,0,0,0
+41652,VN,NP,Nepal*,Freight,Import,0,0,0,0,0,0
+41653,VN,PE,Peru*,Freight,Import,0,0,0,0,0,0
+41654,VN,PF,French Polynesia,Freight,Import,0,0,0,0,0,0
+41655,VN,M3,Madeira (Portugal)*,Freight,Import,0,0,0,0,0,0
+41656,VN,A2,Azores (Portugal)*,Freight,Import,0,0,0,0,0,0
+41657,VN,PY,Paraguay,Freight,Import,0,0,0,0,0,0
+41658,VN,RE,Reunion,Freight,Import,0,0,0,0,0,0
+41659,VN,RU,Russia*,Freight,Import,0,0,0,0,0,0
+41660,VN,RW,Rwanda,Freight,Import,0,0,0,0,0,0
+41661,VN,SC,Seychelles,Freight,Import,0,0,0,0,0,0
+41662,VN,SI,Slovenia,Freight,Import,0,0,0,0,0,0
+41663,VN,SL,Sierra Leone,Freight,Import,0,0,0,0,0,0
+41664,VN,SM,San Marino,Freight,Import,0,0,0,0,0,0
+41665,VN,SN,Senegal,Freight,Import,0,0,0,0,0,0
+41666,VN,SR,Suriname,Freight,Import,0,0,0,0,0,0
+41667,VN,ST,Sao Tome and Principe,Freight,Import,0,0,0,0,0,0
+41668,VN,SX,"St. Maarten, St. Martin",Freight,Import,0,0,0,0,0,0
+41669,VN,SZ,Swaziland,Freight,Import,0,0,0,0,0,0
+41670,VN,TC,Turks & Caicos Islands,Freight,Import,0,0,0,0,0,0
+41671,VN,TD,Chad,Freight,Import,0,0,0,0,0,0
+41672,VN,TG,Togo,Freight,Import,0,0,0,0,0,0
+41673,VN,TJ,Tajikistan,Freight,Import,0,0,0,0,0,0
+41674,VN,TM,Turkmenistan,Freight,Import,0,0,0,0,0,0
+41675,VN,TT,Trinidad & Tobago*,Freight,Import,0,0,0,0,0,0
+41676,VN,TZ,Tanzania,Freight,Import,0,0,0,0,0,0
+41677,VN,UA,Ukraine*,Freight,Import,0,0,0,0,0,0
+41678,VN,UG,Uganda,Freight,Import,0,0,0,0,0,0
+41679,VN,UY,Uruguay,Freight,Import,0,0,0,0,0,0
+41680,VN,UZ,Uzbekistan,Freight,Import,0,0,0,0,0,0
+41681,VN,VC,St. Vincent & the Grenadines,Freight,Import,0,0,0,0,0,0
+41682,VN,VE,Venezuela*,Freight,Import,0,0,0,0,0,0
+41683,VN,VG,British Virgin Islands,Freight,Import,0,0,0,0,0,0
+41684,VN,VI,U.S. Virgin Islands,Freight,Import,0,0,0,0,0,0
+41685,VN,WS,Samoa,Freight,Import,0,0,0,0,0,0
+41686,VN,YE,"Yemen, Republic of",Freight,Import,0,0,0,0,0,0
+41687,VN,YT,Mayotte,Freight,Import,0,0,0,0,0,0
+41688,VN,ZM,Zambia,Freight,Import,0,0,0,0,0,0
+41689,VN,ZW,Zimbabwe,Freight,Import,0,0,0,0,0,0
+42211,VN,AF,Afghanistan,Freight,Import,0,0,0,0,0,0
+42212,VN,AG,Antigua and Barbuda,Freight,Import,0,0,0,0,0,0
+42213,VN,AI,Anguilla,Freight,Import,0,0,0,0,0,0
+42214,VN,AL,Albania,Freight,Import,0,0,0,0,0,0
+42215,VN,AM,Armenia,Freight,Import,0,0,0,0,0,0
+42216,VN,AO,Angola,Freight,Import,0,0,0,0,0,0
+42217,VN,AS,American Samoa,Freight,Import,0,0,0,0,0,0
+42218,VN,AW,Aruba,Freight,Import,0,0,0,0,0,0
+42219,VN,AZ,Azerbaijan,Freight,Import,0,0,0,0,0,0
+42220,VN,BA,Bosnia and Herzegovina,Freight,Import,0,0,0,0,0,0
+42221,VN,BB,Barbados,Freight,Import,0,0,0,0,0,0
+42222,VN,BF,Burkina Faso,Freight,Import,0,0,0,0,0,0
+42223,VN,BI,Burundi,Freight,Import,0,0,0,0,0,0
+42224,VN,BJ,Benin,Freight,Import,0,0,0,0,0,0
+42225,VN,BM,Bermuda,Freight,Import,0,0,0,0,0,0
+42226,VN,BN,Brunei*,Freight,Import,0,0,0,0,0,0
+42227,VN,BO,Bolivia,Freight,Import,0,0,0,0,0,0
+42228,VN,BQ,"Bonaire, St. Eustatius, Saba",Freight,Import,0,0,0,0,0,0
+42229,VN,BS,Bahamas*,Freight,Import,0,0,0,0,0,0
+42230,VN,BT,Bhutan,Freight,Import,0,0,0,0,0,0
+42231,VN,BW,Botswana,Freight,Import,0,0,0,0,0,0
+42232,VN,BY,Belarus*,Freight,Import,0,0,0,0,0,0
+42233,VN,CD,"Congo, Democratic Republic of",Freight,Import,0,0,0,0,0,0
+42234,VN,CG,"Congo, Republic of",Freight,Import,0,0,0,0,0,0
+42235,VN,CI,Cote d'Ivoire (Ivory Coast),Freight,Import,0,0,0,0,0,0
+42236,VN,CM,Cameroon,Freight,Import,0,0,0,0,0,0
+42237,VN,CU,Cuba,Freight,Import,0,0,0,0,0,0
+42238,VN,CV,Cape Verde,Freight,Import,0,0,0,0,0,0
+42239,VN,CW,Curacao,Freight,Import,0,0,0,0,0,0
+42240,VN,CY,Cyprus,Freight,Import,0,0,0,0,0,0
+42241,VN,DJ,Djibouti,Freight,Import,0,0,0,0,0,0
+42242,VN,DM,Dominica,Freight,Import,0,0,0,0,0,0
+42243,VN,DZ,Algeria,Freight,Import,0,0,0,0,0,0
+42244,VN,EE,Estonia,Freight,Import,0,0,0,0,0,0
+42245,VN,ER,Eritrea,Freight,Import,0,0,0,0,0,0
+42246,VN,ET,Ethiopia,Freight,Import,0,0,0,0,0,0
+42247,VN,FJ,Fiji,Freight,Import,0,0,0,0,0,0
+42248,VN,GA,Gabon,Freight,Import,0,0,0,0,0,0
+42249,VN,GD,Grenada,Freight,Import,0,0,0,0,0,0
+42250,VN,GE,Georgia*,Freight,Import,0,0,0,0,0,0
+42251,VN,GG,Guernsey (Channel Islands),Freight,Import,0,0,0,0,0,0
+42252,VN,GH,Ghana,Freight,Import,0,0,0,0,0,0
+42253,VN,GI,Gibraltar,Freight,Import,0,0,0,0,0,0
+42254,VN,GM,Gambia,Freight,Import,0,0,0,0,0,0
+42255,VN,GN,Guinea,Freight,Import,0,0,0,0,0,0
+42256,VN,GP,Guadeloupe*,Freight,Import,0,0,0,0,0,0
+42257,VN,GQ,Equatorial Guinea,Freight,Import,0,0,0,0,0,0
+42258,VN,GU,Guam,Freight,Import,0,0,0,0,0,0
+42259,VN,GW,Guinea-Bissau,Freight,Import,0,0,0,0,0,0
+42260,VN,GY,Guyana*,Freight,Import,0,0,0,0,0,0
+42261,VN,HT,Haiti*,Freight,Import,0,0,0,0,0,0
+42262,VN,IQ,Iraq,Freight,Import,0,0,0,0,0,0
+42263,VN,IS,Iceland,Freight,Import,0,0,0,0,0,0
+42264,VN,JE,Jersey (Channel Islands),Freight,Import,0,0,0,0,0,0
+42265,VN,JM,Jamaica*,Freight,Import,0,0,0,0,0,0
+42266,VN,JO,Jordan,Freight,Import,0,0,0,0,0,0
+42267,VN,KG,Kyrgyzstan,Freight,Import,0,0,0,0,0,0
+42268,VN,KH,Cambodia*,Freight,Import,0,0,0,0,0,0
+42269,VN,KM,Comoros,Freight,Import,0,0,0,0,0,0
+42270,VN,KN,St. Kitts and Nevis,Freight,Import,0,0,0,0,0,0
+42271,VN,KY,Cayman Islands,Freight,Import,0,0,0,0,0,0
+42272,VN,KZ,Kazakhstan*,Freight,Import,0,0,0,0,0,0
+42273,VN,LA,Laos,Freight,Import,0,0,0,0,0,0
+42274,VN,LC,St. Lucia,Freight,Import,0,0,0,0,0,0
+42275,VN,LR,Liberia,Freight,Import,0,0,0,0,0,0
+42276,VN,LS,Lesotho,Freight,Import,0,0,0,0,0,0
+42277,VN,LY,Libyan Arab Jamahiriya,Freight,Import,0,0,0,0,0,0
+42278,VN,MD,Moldova*,Freight,Import,0,0,0,0,0,0
+42279,VN,ME,Montenegro,Freight,Import,0,0,0,0,0,0
+42280,VN,MG,Madagascar,Freight,Import,0,0,0,0,0,0
+42281,VN,MK,North Macedonia,Freight,Import,0,0,0,0,0,0
+42282,VN,ML,Mali,Freight,Import,0,0,0,0,0,0
+42283,VN,MN,Mongolia,Freight,Import,0,0,0,0,0,0
+42284,VN,MO,"Macau SAR, China#",Freight,Import,0,0,0,0,0,0
+42285,VN,MP,Northern Mariana Islands*,Freight,Import,0,0,0,0,0,0
+42286,VN,MQ,Martinique,Freight,Import,0,0,0,0,0,0
+42287,VN,MR,Mauritania,Freight,Import,0,0,0,0,0,0
+42288,VN,MS,Montserrat,Freight,Import,0,0,0,0,0,0
+42289,VN,MV,Maldives,Freight,Import,0,0,0,0,0,0
+42290,VN,MW,Malawi,Freight,Import,0,0,0,0,0,0
+42291,VN,MZ,Mozambique,Freight,Import,0,0,0,0,0,0
+42292,VN,NA,Namibia,Freight,Import,0,0,0,0,0,0
+42293,VN,NC,New Caledonia,Freight,Import,0,0,0,0,0,0
+42294,VN,NE,Niger,Freight,Import,0,0,0,0,0,0
+42295,VN,NP,Nepal*,Freight,Import,0,0,0,0,0,0
+42296,VN,PE,Peru*,Freight,Import,0,0,0,0,0,0
+42297,VN,PF,French Polynesia,Freight,Import,0,0,0,0,0,0
+42298,VN,M3,Madeira (Portugal)*,Freight,Import,0,0,0,0,0,0
+42299,VN,A2,Azores (Portugal)*,Freight,Import,0,0,0,0,0,0
+42300,VN,PY,Paraguay,Freight,Import,0,0,0,0,0,0
+42301,VN,RW,Rwanda,Freight,Import,0,0,0,0,0,0
+42302,VN,SC,Seychelles,Freight,Import,0,0,0,0,0,0
+42303,VN,SL,Sierra Leone,Freight,Import,0,0,0,0,0,0
+42304,VN,SM,San Marino,Freight,Import,0,0,0,0,0,0
+42305,VN,SN,Senegal,Freight,Import,0,0,0,0,0,0
+42306,VN,SR,Suriname,Freight,Import,0,0,0,0,0,0
+42307,VN,ST,Sao Tome and Principe,Freight,Import,0,0,0,0,0,0
+42308,VN,SX,"St. Maarten, St. Martin",Freight,Import,0,0,0,0,0,0
+42309,VN,SZ,Swaziland,Freight,Import,0,0,0,0,0,0
+42310,VN,TC,Turks & Caicos Islands,Freight,Import,0,0,0,0,0,0
+42311,VN,TD,Chad,Freight,Import,0,0,0,0,0,0
+42312,VN,TG,Togo,Freight,Import,0,0,0,0,0,0
+42313,VN,TJ,Tajikistan,Freight,Import,0,0,0,0,0,0
+42314,VN,TM,Turkmenistan,Freight,Import,0,0,0,0,0,0
+42315,VN,TT,Trinidad & Tobago*,Freight,Import,0,0,0,0,0,0
+42316,VN,TZ,Tanzania,Freight,Import,0,0,0,0,0,0
+42317,VN,UA,Ukraine*,Freight,Import,0,0,0,0,0,0
+42318,VN,UG,Uganda,Freight,Import,0,0,0,0,0,0
+42319,VN,UY,Uruguay,Freight,Import,0,0,0,0,0,0
+42320,VN,UZ,Uzbekistan,Freight,Import,0,0,0,0,0,0
+42321,VN,VC,St. Vincent & the Grenadines,Freight,Import,0,0,0,0,0,0
+42322,VN,VE,Venezuela*,Freight,Import,0,0,0,0,0,0
+42323,VN,VG,British Virgin Islands,Freight,Import,0,0,0,0,0,0
+42324,VN,VI,U.S. Virgin Islands,Freight,Import,0,0,0,0,0,0
+42325,VN,WS,Samoa,Freight,Import,0,0,0,0,0,0
+42326,VN,YE,"Yemen, Republic of",Freight,Import,0,0,0,0,0,0
+42327,VN,YT,Mayotte,Freight,Import,0,0,0,0,0,0
+42328,VN,ZM,Zambia,Freight,Import,0,0,0,0,0,0
+42329,VN,ZW,Zimbabwe,Freight,Import,0,0,0,0,0,0
+42457,VN,CU,Cuba,Package,Import,0,0,0,0,0,0
+42458,VN,ST,Sao Tome and Principe,Package,Import,0,0,0,0,0,0

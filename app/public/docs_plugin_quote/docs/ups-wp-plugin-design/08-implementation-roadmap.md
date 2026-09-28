@@ -1297,14 +1297,14 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - `05-admin-ui-and-public-ui.md` § 1 — Admin menu structure
 
 **Tasks**:
-- [ ] Tạo `admin/class-admin-menu.php`.
-- [ ] Top-level menu: "UPS Quote", icon `dashicons-calculator`.
-- [ ] 7 submenus: Dashboard, Import, Rates, Zones, Countries, Settings, Logs.
+- [x] Tạo `admin/class-admin-menu.php`.
+- [x] Top-level menu: "UPS Quote", icon `dashicons-calculator`.
+- [x] 7 submenus: Dashboard, Import, Rates, Zones, Countries, Settings, Logs.
 
 🧪 **Tests Step 5.1**:
-- [ ] Menu visible in WP Admin sidebar.
-- [ ] All submenus accessible.
-- [ ] Non-admin user → menu not visible.
+- [x] Menu visible in WP Admin sidebar.
+- [x] All submenus accessible.
+- [x] Non-admin user → menu not visible.
 
 ---
 
@@ -1322,20 +1322,20 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - `05-admin-ui-and-public-ui.md` § 1 — Rate Cards management
 
 **Tasks**:
-- [ ] Tạo `admin/views/rate-cards.php` — WP_List_Table.
-- [ ] Cột: ID, Tên, Chiều vận chuyển, Dịch vụ (icons), Status, Actions.
-- [ ] Actions: Đổi tên, Activate, Archive, Delete.
-- [ ] Button "Tạo mới": modal → tạo draft rate card.
-- [ ] Rate Card detail page / modal:
-  - [ ] Direction toggles (Export/Import checkboxes).
-  - [ ] Rate group grid per direction: 6 services × rate groups với toggle ON/OFF.
-  - [ ] Toggle disabled khi rate group có 0 rows.
-  - [ ] AJAX save: `ups_update_rate_card_toggles`.
-  - [ ] Cache invalidation sau save.
+- [x] Tạo `admin/views/rate-cards.php` — WP_List_Table.
+- [x] Cột: ID, Tên, Chiều vận chuyển, Dịch vụ (icons), Status, Actions.
+- [x] Actions: Đổi tên, Activate, Archive, Delete.
+- [x] Button "Tạo mới": modal → tạo draft rate card.
+- [x] Rate Card detail page / modal:
+  - [x] Direction toggles (Export/Import checkboxes).
+  - [x] Rate group grid per direction: 6 services × rate groups với toggle ON/OFF.
+  - [x] Toggle disabled khi rate group có 0 rows.
+  - [x] AJAX save: `ups_update_rate_card_toggles`.
+  - [x] Cache invalidation sau save.
 
 🧪 **Tests Step 5.2**:
-- [ ] List all rate cards with correct status.
-- [ ] Create → rename → activate → archive → delete cycle.
+- [x] List all rate cards with correct status.
+- [x] Create → rename → activate → archive → delete cycle.
 
 ---
 
@@ -1354,14 +1354,17 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - `05-admin-ui-and-public-ui.md` § 2 — Import wizard steps
 
 **Tasks**:
-- [ ] Tạo `admin/views/import.php` — Step wizard.
-- [ ] AJAX: `ups_import_preview`, `ups_import_execute`.
-- [ ] Preview summary: rate groups, countries, zones, warnings.
+- [x] Tạo `admin/views/import.php` — Step wizard (Tách riêng Tab 1: Biểu phí Rates & Tab 2: Phân vùng Zone Set độc lập).
+- [x] Kiến trúc Zone Set độc lập (`ups_zone_sets`): Cho phép chọn Zone Set đã có (dropdown) hoặc import kèm Zone mới khi tạo Rate Card.
+- [x] Tab Import Zone: Cho phép đặt tên Zone Set, import và tái sử dụng cho nhiều bảng giá khác nhau (quan hệ 1:N).
+- [x] AJAX: `ups_import_preview`, `ups_import_execute`, `ups_import_cancel`.
+- [x] Preview summary: rate groups, countries, zones, warnings.
 
 🧪 **Tests Step 5.3**:
-- [ ] Upload XLSX → preview summary correct.
-- [ ] Confirm → data imported.
-- [ ] Cancel → no data written.
+- [x] Upload file → preview summary correct.
+- [x] Confirm → data imported & Rate Card liên kết đúng Zone Set.
+- [x] Cancel → no data written.
+- [x] Tái sử dụng 1 Zone Set cho nhiều Rate Card & chặn xóa Zone Set khi đang có Rate Card sử dụng.
 
 ---
 
@@ -1375,15 +1378,15 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - `05-admin-ui-and-public-ui.md` § 1 — Zone Maps, Rates edit
 
 **Tasks**:
-- [ ] Tạo `admin/views/rates-edit.php` — WP_List_Table + inline edit.
-- [ ] Filter: rate_group, zone. Pagination.
-- [ ] Inline edit: click cell → input → save AJAX.
+- [x] Tạo `admin/views/rates-edit.php` — WP_List_Table + inline edit.
+- [x] Filter: rate_group, zone. Pagination.
+- [x] Inline edit: click cell → input → save AJAX.
 
 🧪 **Tests Step 5.4**:
-- [ ] Filter by rate_group → correct rows.
-- [ ] Edit price → save → reload → value persisted.
-- [ ] Add row → visible in list.
-- [ ] Delete rows → removed.
+- [x] Filter by rate_group → correct rows.
+- [x] Edit price → save → reload → value persisted.
+- [x] Add row → visible in list.
+- [x] Delete rows → removed.
 
 ---
 
@@ -1392,12 +1395,12 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 🛠 **Skills**: Same as Step 5.4
 
 **Tasks**:
-- [ ] Tạo `admin/views/zones-edit.php` — WP_List_Table + inline edit.
-- [ ] Filter: direction, service_code, search country.
+- [x] Tạo `admin/views/zones-edit.php` — WP_List_Table + inline edit.
+- [x] Filter: direction, service_code, search country.
 
 🧪 **Tests Step 5.5**:
-- [ ] Filter by service → correct rows.
-- [ ] Edit zone → save → persisted.
+- [x] Filter by service → correct rows.
+- [x] Edit zone → save → persisted.
 
 ---
 
@@ -1406,12 +1409,12 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 🛠 **Skills**: Same as Step 5.4
 
 **Tasks**:
-- [ ] Tạo `admin/views/countries-edit.php` — WP_List_Table.
-- [ ] Toggle active switch. Search by name/IATA.
+- [x] Tạo `admin/views/countries-edit.php` — WP_List_Table.
+- [x] Toggle active switch. Search by name/IATA.
 
 🧪 **Tests Step 5.6**:
-- [ ] Toggle active → status changed.
-- [ ] Search "United" → US result.
+- [x] Toggle active → status changed.
+- [x] Search "United" → US result.
 
 ---
 

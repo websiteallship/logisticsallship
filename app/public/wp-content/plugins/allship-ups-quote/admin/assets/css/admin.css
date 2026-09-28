@@ -1,0 +1,1360 @@
+/**
+ * Allship UPS Quote - Admin Design System & Components
+ *
+ * Modular CSS architecture with BEM components (Flat / Sharp corners - Không bo viền):
+ * - Tokens: CSS Variables (--as-*)
+ * - Page Header: .as-page-header
+ * - Buttons: .as-btn (variants: primary, secondary, brand, danger; sizes: sm, md, lg)
+ * - Empty State: .as-empty-state
+ * - Cards: .as-card, .allship-card-container
+ * - Badges & Chips: .as-badge, .as-chip, .as-tag
+ * - Table: .as-table, .rate-cards-table
+ * - Modals: .as-modal
+ * - Forms & Toggles: .as-form, .as-toggle
+ *
+ * @package Allship_UPS_Quote
+ */
+
+/* ==========================================================================
+   1. DESIGN TOKENS
+   ========================================================================== */
+:root {
+  /* Brand & Theme Colors */
+  --as-brand-red: #CE2027;
+  --as-brand-red-hover: #b01a20;
+  --as-brand-red-light: #fee2e2;
+  --as-wp-blue: #2271b1;
+  --as-wp-blue-hover: #135e96;
+  --as-wp-blue-light: #f0f6fc;
+  --as-navy-900: #0A1628;
+  --as-navy-800: #0F2240;
+
+  /* Neutrals */
+  --as-bg: #f8fafc;
+  --as-card-bg: #ffffff;
+  --as-border: #e2e8f0;
+  --as-border-dark: #cbd5e1;
+  --as-text-dark: #0f172a;
+  --as-text: #1e293b;
+  --as-text-muted: #64748b;
+  --as-text-light: #94a3b8;
+
+  /* Semantic Feedback */
+  --as-success: #059669;
+  --as-success-bg: #ecfdf5;
+  --as-success-border: #a7f3d0;
+  --as-warning: #d97706;
+  --as-warning-bg: #fffbeb;
+  --as-warning-border: #fde68a;
+  --as-danger: #dc2626;
+  --as-danger-bg: #fef2f2;
+  --as-danger-border: #fecaca;
+
+  /* Radii & Shadows - Bỏ bo viền (Không bo góc) */
+  --as-radius-sm: 0px;
+  --as-radius-md: 0px;
+  --as-radius-lg: 0px;
+  --as-radius-full: 0px;
+  --as-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --as-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+  --as-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --as-shadow-modal: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+}
+
+/* Base Wrapper - Full Width */
+.allship-ups-admin-wrap {
+  margin-top: 16px;
+  max-width: none !important;
+  width: auto;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   2. COMPONENT: PAGE HEADER
+   ========================================================================== */
+.as-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.as-page-header__title {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: var(--as-text-dark) !important;
+  line-height: 1.3 !important;
+}
+
+.as-page-header__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   3. COMPONENT: BUTTONS (.as-btn & WP overrides)
+   ========================================================================== */
+/* Standard component button - Bỏ bo viền (radius: 0) */
+.as-btn,
+.allship-ups-admin-wrap .page-title-action,
+.allship-ups-admin-wrap .button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+  vertical-align: middle !important;
+  cursor: pointer !important;
+  padding: 0 14px !important;
+  height: 34px !important;
+  border-radius: 0 !important;
+  border: 1px solid var(--as-border-dark) !important;
+  box-sizing: border-box !important;
+  background: #ffffff !important;
+  color: var(--as-text) !important;
+  box-shadow: none !important;
+  transition: all 0.15s ease-in-out !important;
+  user-select: none !important;
+}
+
+/* Ensure all Dashicons inside buttons never wrap and align dead-center */
+.as-btn .dashicons,
+.allship-ups-admin-wrap .page-title-action .dashicons,
+.allship-ups-admin-wrap .button .dashicons {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  line-height: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+  vertical-align: middle !important;
+}
+
+/* Hover base */
+.as-btn:hover,
+.allship-ups-admin-wrap .page-title-action:hover,
+.allship-ups-admin-wrap .button:hover {
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+  color: var(--as-text-dark) !important;
+}
+
+/* Primary Variant (WordPress Blue) */
+.as-btn--primary,
+.allship-ups-admin-wrap .page-title-action.button-primary,
+.allship-ups-admin-wrap .button.button-primary {
+  background: var(--as-wp-blue) !important;
+  border-color: var(--as-wp-blue) !important;
+  color: #ffffff !important;
+}
+
+.as-btn--primary:hover,
+.as-btn--primary:focus,
+.allship-ups-admin-wrap .page-title-action.button-primary:hover,
+.allship-ups-admin-wrap .button.button-primary:hover {
+  background: var(--as-wp-blue-hover) !important;
+  border-color: var(--as-wp-blue-hover) !important;
+  color: #ffffff !important;
+}
+
+/* Brand Variant (Allship Red) */
+.as-btn--brand {
+  background: var(--as-brand-red) !important;
+  border-color: var(--as-brand-red) !important;
+  color: #ffffff !important;
+}
+
+.as-btn--brand:hover,
+.as-btn--brand:focus {
+  background: var(--as-brand-red-hover) !important;
+  border-color: var(--as-brand-red-hover) !important;
+  color: #ffffff !important;
+}
+
+/* Secondary Variant */
+.as-btn--secondary {
+  background: #ffffff !important;
+  border-color: var(--as-border-dark) !important;
+  color: var(--as-text) !important;
+}
+
+/* Danger Variant */
+.as-btn--danger,
+.allship-action-buttons .button-link-delete {
+  background: #ffffff !important;
+  border-color: var(--as-danger-border) !important;
+  color: var(--as-danger) !important;
+}
+
+.as-btn--danger:hover,
+.allship-action-buttons .button-link-delete:hover {
+  background: var(--as-danger-bg) !important;
+  border-color: var(--as-danger) !important;
+  color: #b91c1c !important;
+}
+
+/* Button Sizes */
+.as-btn--sm,
+.allship-ups-admin-wrap .button.button-small {
+  height: 28px !important;
+  padding: 0 10px !important;
+  font-size: 12px !important;
+  gap: 4px !important;
+  border-radius: 0 !important;
+}
+
+.as-btn--sm .dashicons,
+.allship-ups-admin-wrap .button.button-small .dashicons {
+  font-size: 14px !important;
+  width: 14px !important;
+  height: 14px !important;
+  line-height: 14px !important;
+}
+
+.as-btn--lg,
+.allship-ups-admin-wrap .button.button-hero {
+  height: 42px !important;
+  padding: 0 20px !important;
+  font-size: 14px !important;
+  gap: 8px !important;
+  border-radius: 0 !important;
+}
+
+.as-btn--lg .dashicons,
+.allship-ups-admin-wrap .button.button-hero .dashicons {
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  line-height: 18px !important;
+}
+
+/* ==========================================================================
+   4. COMPONENT: EMPTY STATE
+   ========================================================================== */
+.as-empty-state,
+.allship-empty-card {
+  background: #ffffff;
+  border: 1px solid var(--as-border);
+  border-radius: 0 !important;
+  padding: 56px 32px;
+  text-align: center;
+  box-shadow: none !important;
+  max-width: 680px;
+  margin: 40px auto;
+}
+
+.as-empty-state__icon-wrap,
+.allship-empty-card .allship-empty-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  border-radius: 0 !important;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--as-text-muted);
+}
+
+.as-empty-state__icon,
+.allship-empty-card .allship-empty-icon .dashicons {
+  font-size: 40px !important;
+  width: 40px !important;
+  height: 40px !important;
+  line-height: 40px !important;
+  color: #64748b !important;
+}
+
+.as-empty-state__title,
+.allship-empty-card h3 {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: var(--as-text-dark) !important;
+  margin: 0 0 10px 0 !important;
+}
+
+.as-empty-state__desc,
+.allship-empty-card p {
+  font-size: 14px !important;
+  color: var(--as-text-muted) !important;
+  max-width: 520px !important;
+  margin: 0 auto 28px !important;
+  line-height: 1.6 !important;
+}
+
+.as-empty-state__actions,
+.allship-empty-card .allship-empty-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   5. COMPONENT: CARDS & CONTAINERS
+   ========================================================================== */
+.as-card,
+.allship-card-container {
+  background: #ffffff;
+  border: 1px solid var(--as-border);
+  border-radius: 0 !important;
+  padding: 24px;
+  box-shadow: none !important;
+  margin-top: 20px;
+}
+
+.as-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--as-border);
+}
+
+.as-card__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--as-text-dark);
+}
+
+.allship-section-box {
+  background: #ffffff;
+  border: 1px solid var(--as-border);
+  border-radius: 0 !important;
+  padding: 16px;
+}
+
+/* ==========================================================================
+   6. COMPONENT: BADGES, CHIPS & TAGS
+   ========================================================================== */
+/* Status Badges */
+.as-badge,
+.allship-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 9999px !important;
+  line-height: 1.3;
+}
+
+.as-badge .dashicons,
+.allship-badge .dashicons {
+  font-size: 13px !important;
+  width: 13px !important;
+  height: 13px !important;
+  line-height: 13px !important;
+}
+
+.as-badge--active,
+.allship-badge-active {
+  background-color: var(--as-success-bg);
+  color: var(--as-success);
+  border: 1px solid var(--as-success-border);
+}
+
+.as-badge--draft,
+.allship-badge-draft {
+  background-color: var(--as-warning-bg);
+  color: var(--as-warning);
+  border: 1px solid var(--as-warning-border);
+}
+
+.as-badge--archived,
+.allship-badge-archived {
+  background-color: #f1f5f9;
+  color: var(--as-text-muted);
+  border: 1px solid var(--as-border-dark);
+}
+
+/* Direction Chips */
+.as-chip,
+.allship-chip {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px !important;
+  line-height: 1.4;
+}
+
+.as-chip--blue,
+.allship-chip-blue {
+  background-color: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+.as-chip--green,
+.allship-chip-green {
+  background-color: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+/* Service Code Tags */
+.as-tag,
+.allship-svc-tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 0 !important;
+  border: 1px solid transparent;
+  display: inline-block;
+  margin: 1px 2px;
+}
+
+.as-tag--on,
+.svc-tag-on {
+  background-color: #f8fafc;
+  color: var(--as-text-dark);
+  border-color: var(--as-border-dark);
+}
+
+.as-tag--off,
+.svc-tag-off {
+  background-color: #f1f5f9;
+  color: var(--as-text-light);
+  opacity: 0.6;
+}
+
+/* ==========================================================================
+   7. COMPONENT: TABLE
+   ========================================================================== */
+.as-table,
+.rate-cards-table {
+  border: 1px solid var(--as-border) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+.as-table thead th,
+.rate-cards-table thead th {
+  background: #f8fafc !important;
+  font-weight: 700 !important;
+  color: var(--as-text) !important;
+  border-bottom: 1px solid var(--as-border) !important;
+  padding: 12px 14px !important;
+  font-size: 13px !important;
+}
+
+.as-table td,
+.rate-cards-table td {
+  padding: 12px 14px !important;
+  vertical-align: middle !important;
+  border-top: 1px solid #f1f5f9 !important;
+}
+
+.rate-cards-table .is-active-card td {
+  background-color: #f0fdf4 !important;
+}
+
+.as-table__actions,
+.allship-action-buttons {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+}
+
+/* ==========================================================================
+   8. COMPONENT: MODALS
+   ========================================================================== */
+.as-modal,
+.allship-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(3px);
+  z-index: 100050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.as-modal__box,
+.allship-modal-box {
+  background: #ffffff;
+  border-radius: 0 !important;
+  box-shadow: var(--as-shadow-modal);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: asModalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.as-modal__header,
+.allship-modal-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--as-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+}
+
+.as-modal__title,
+.allship-modal-header h3 {
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: var(--as-text-dark) !important;
+}
+
+.as-modal__close,
+.allship-modal-close {
+  background: transparent !important;
+  border: none !important;
+  font-size: 22px !important;
+  color: var(--as-text-muted) !important;
+  cursor: pointer !important;
+  line-height: 1 !important;
+  padding: 4px 8px !important;
+  border-radius: 0 !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.as-modal__close:hover,
+.allship-modal-close:hover {
+  background: #fee2e2 !important;
+  color: var(--as-brand-red) !important;
+}
+
+.as-modal__body,
+.allship-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.as-modal__footer,
+.allship-modal-footer {
+  padding: 14px 24px;
+  background: #f8fafc;
+  border-top: 1px solid var(--as-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@keyframes asModalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ==========================================================================
+   9. COMPONENT: WIZARD & DROPZONES (Flat / Không bo viền)
+   ========================================================================== */
+.as-wizard-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid var(--as-border);
+  margin-bottom: 24px;
+  padding: 0;
+  list-style: none;
+  border-radius: 0 !important;
+}
+
+.as-wizard-step {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--as-text-muted);
+  border-bottom: 3px solid transparent;
+  border-right: 1px solid var(--as-border);
+  background: #f8fafc;
+  margin: 0;
+}
+
+.as-wizard-step:last-child {
+  border-right: none;
+}
+
+.as-wizard-step--active {
+  background: #ffffff;
+  color: var(--as-wp-blue);
+  border-bottom-color: var(--as-wp-blue);
+}
+
+.as-wizard-step--completed {
+  background: #ffffff;
+  color: var(--as-success);
+  border-bottom-color: var(--as-success);
+}
+
+.as-wizard-step__badge {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #e2e8f0;
+  color: var(--as-text);
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 0 !important;
+}
+
+.as-wizard-step--active .as-wizard-step__badge {
+  background: var(--as-wp-blue);
+  color: #ffffff;
+}
+
+.as-wizard-step--completed .as-wizard-step__badge {
+  background: var(--as-success);
+  color: #ffffff;
+}
+
+/* Import Mode Tabs (Rates vs Zones) */
+.as-import-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--as-border);
+  margin: -10px -20px 20px -20px;
+  padding: 0 20px;
+  background: #f8fafc;
+}
+
+.as-import-tab {
+  padding: 14px 22px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--as-text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 0 !important;
+  transition: all 0.15s ease-in-out;
+  margin-bottom: -2px;
+}
+
+.as-import-tab:hover {
+  color: var(--as-text-dark);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.as-import-tab--active {
+  background: #ffffff;
+  color: var(--as-wp-blue);
+  border-bottom-color: var(--as-wp-blue);
+}
+
+/* Dropzone */
+.as-dropzone {
+  border: 2px dashed var(--as-border-dark);
+  padding: 24px 20px;
+  text-align: center;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  margin-top: 6px;
+  position: relative;
+  border-radius: 0 !important;
+}
+
+.as-dropzone:hover,
+.as-dropzone--dragover {
+  border-color: var(--as-wp-blue);
+  background: #eff6ff;
+}
+
+.as-dropzone__input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+/* Stats Cards */
+.as-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.as-stat-card {
+  background: #f8fafc;
+  border: 1px solid var(--as-border);
+  padding: 16px;
+  text-align: center;
+  border-radius: 0 !important;
+}
+
+.as-stat-card__val {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--as-text-dark);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.as-stat-card__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--as-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ==========================================================================
+   9. RATE CARDS LIST POLISH
+   ========================================================================== */
+.as-rate-group-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.as-rate-group-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.as-rate-group-key {
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 1px 7px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+  line-height: 1.4;
+}
+
+.as-rate-count-box {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 3px;
+  padding: 3px 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+}
+
+.as-rate-count-val {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.as-rate-count-sub {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.allship-action-buttons {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  justify-content: flex-end !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+}
+
+.allship-action-buttons .button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  height: 30px !important;
+  line-height: 28px !important;
+  padding: 0 10px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  border-radius: 4px !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.allship-action-buttons .button .dashicons {
+  font-size: 14px !important;
+  width: 14px !important;
+  height: 14px !important;
+  line-height: 14px !important;
+  margin: 0 !important;
+}
+
+.allship-action-buttons .button-primary {
+  background: var(--as-wp-blue) !important;
+  border-color: var(--as-wp-blue) !important;
+  color: #fff !important;
+}
+
+.allship-action-buttons .button-primary:hover {
+  background: var(--as-wp-blue-hover) !important;
+  border-color: var(--as-wp-blue-hover) !important;
+}
+
+.allship-action-buttons .button-link-delete {
+  color: #b91c1c !important;
+  border-color: #fecaca !important;
+  background: #fff !important;
+}
+
+.allship-action-buttons .button-link-delete:hover {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+  border-color: #f87171 !important;
+}
+
+/* ==========================================================================
+   RATES EDIT PAGE (Step 5.4)
+   ========================================================================== */
+
+/* --- Filter Bar --- */
+.as-rates-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.as-rates-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.as-rates-filter-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--as-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.as-rates-select,
+.as-rates-input {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--as-border);
+  background: var(--as-card-bg);
+  color: var(--as-text-dark);
+  font-size: 13px;
+  transition: border-color 0.15s;
+  min-width: 0;
+}
+
+.as-rates-select:focus,
+.as-rates-input:focus {
+  border-color: var(--as-wp-blue);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--as-wp-blue);
+}
+
+.as-rates-filter-actions {
+  display: flex;
+  gap: 6px;
+  align-self: flex-end;
+}
+
+/* --- Toolbar --- */
+.as-rates-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 4px;
+  padding: 0 2px;
+}
+
+.as-rates-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.as-rates-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.as-rates-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--as-text-muted);
+}
+
+/* --- Rates Data Table --- */
+.as-rates-table-container {
+  padding: 0;
+  overflow-x: auto;
+}
+
+.as-rates-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.as-rates-data-table thead th {
+  background: var(--as-bg);
+  border-bottom: 2px solid var(--as-border);
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--as-text-muted);
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.as-rates-data-table tbody tr {
+  transition: background-color 0.1s;
+}
+
+.as-rates-data-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.as-rates-data-table tbody tr.as-rates-row--saving {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.as-rates-data-table tbody td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--as-border);
+  color: var(--as-text);
+  vertical-align: middle;
+}
+
+.as-rates-th-check { width: 36px; text-align: center; }
+.as-rates-th-id { width: 60px; }
+.as-rates-th-price { min-width: 120px; }
+.as-rates-th-actions { width: 50px; text-align: center; }
+
+/* Editable cell */
+.as-rates-cell-editable {
+  cursor: pointer;
+  position: relative;
+  min-width: 70px;
+}
+
+.as-rates-cell-editable:hover {
+  background-color: #eff6ff;
+  outline: 1px dashed var(--as-wp-blue);
+  outline-offset: -1px;
+}
+
+.as-rates-cell-editable .as-rates-cell-value {
+  display: block;
+}
+
+.as-rates-cell-editable .as-rates-cell-input {
+  display: none;
+  width: 100%;
+  border: 1px solid var(--as-wp-blue);
+  padding: 3px 6px;
+  font-size: 13px;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(34, 113, 177, 0.15);
+}
+
+.as-rates-cell-editable.as-rates-cell--editing .as-rates-cell-value {
+  display: none;
+}
+
+.as-rates-cell-editable.as-rates-cell--editing .as-rates-cell-input {
+  display: block;
+}
+
+.as-rates-cell-editable.as-rates-cell--editing {
+  background-color: #fff;
+  outline: none;
+}
+
+/* Cell save feedback */
+.as-rates-cell--saved {
+  animation: ratesCellFlash 0.5s ease;
+}
+
+@keyframes ratesCellFlash {
+  0%   { background-color: #dcfce7; }
+  100% { background-color: transparent; }
+}
+
+.as-rates-cell--error {
+  animation: ratesCellError 0.5s ease;
+}
+
+@keyframes ratesCellError {
+  0%   { background-color: #fee2e2; }
+  100% { background-color: transparent; }
+}
+
+/* Price column — right align */
+.as-rates-data-table td.as-rates-col-price {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.as-rates-data-table th.as-rates-th-price {
+  text-align: right;
+}
+
+/* Delete button in row */
+.as-rates-btn-delete-row {
+  background: none;
+  border: none;
+  color: var(--as-text-light);
+  cursor: pointer;
+  padding: 2px;
+  transition: color 0.15s;
+}
+
+.as-rates-btn-delete-row:hover {
+  color: var(--as-danger);
+}
+
+/* Checkbox column */
+.as-rates-data-table td.as-rates-col-check,
+.as-rates-data-table th.as-rates-th-check {
+  text-align: center;
+}
+
+/* --- Pagination --- */
+.as-rates-pagination,
+.as-rates-pagination-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 8px 2px;
+}
+
+.as-rates-pagination-bottom {
+  margin-top: 4px;
+}
+
+.as-rates-pg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--as-border);
+  background: var(--as-card-bg);
+  color: var(--as-text);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.as-rates-pg-btn:hover {
+  border-color: var(--as-wp-blue);
+  color: var(--as-wp-blue);
+}
+
+.as-rates-pg-btn.as-rates-pg-btn--active {
+  background: var(--as-wp-blue);
+  color: #fff;
+  border-color: var(--as-wp-blue);
+}
+
+.as-rates-pg-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.as-rates-pg-info {
+  font-size: 12px;
+  color: var(--as-text-muted);
+  margin-right: 8px;
+}
+
+/* --- Add Rate Modal Form Enhancements --- */
+.as-form__row {
+  margin-bottom: 14px;
+}
+
+.as-form__row label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--as-text-dark);
+  margin-bottom: 4px;
+}
+
+.as-form__row input,
+.as-form__row select {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--as-border);
+  font-size: 13px;
+  color: var(--as-text);
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.as-form__row input:focus,
+.as-form__row select:focus {
+  border-color: var(--as-wp-blue);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--as-wp-blue);
+}
+
+.as-form__row--half {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.as-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--as-border);
+}
+
+/* --- Loading state --- */
+.as-rates-loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--as-text-muted);
+}
+
+.as-rates-loading .dashicons {
+  animation: spin 1s infinite linear;
+}
+
+/* Empty row */
+.as-rates-empty-row td {
+  border-bottom: none;
+}
+
+/* Billing unit badge */
+.as-rates-billing-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.as-rates-billing-badge--flat { background: #e0e7ff; color: #4338ca; }
+.as-rates-billing-badge--per_kg { background: #ecfdf5; color: #059669; }
+.as-rates-billing-badge--minimum { background: #fffbeb; color: #d97706; }
+.as-rates-billing-badge--envelope { background: #fce7f3; color: #be185d; }
+
+/* Zone table badges */
+.as-zone-dir-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.as-zone-dir-badge--export { background: #e0f2fe; color: #0369a1; }
+.as-zone-dir-badge--import { background: #ede9fe; color: #6d28d9; }
+
+.as-zone-service-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #334155;
+  border-radius: 2px;
+}
+
+.as-zone-iata-badge {
+  display: inline-block;
+  padding: 1px 5px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #f8fafc;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+  margin-right: 6px;
+}
+
+.as-zone-status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.as-zone-status-badge--active { background: #ecfdf5; color: #059669; }
+.as-zone-status-badge--inactive { background: #fef2f2; color: #dc2626; }
+
+/* ==========================================================================
+   COUNTRY EDIT PAGE (Step 5.6)
+   ========================================================================== */
+.as-country-iata-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.as-country-override-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 4px;
+}
+.as-country-override-badge--active {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  cursor: pointer;
+}
+.as-country-override-badge--inactive {
+  background: #f8fafc;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+}
+
+.as-country-ext-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  border-radius: 4px;
+}
+
+/* Toggle Switch */
+.as-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  vertical-align: middle;
+  margin: 0;
+}
+.as-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.as-switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: .25s ease;
+  border-radius: 24px;
+}
+.as-switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .25s ease;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.as-switch input:checked + .as-switch-slider {
+  background-color: #10b981;
+}
+.as-switch input:checked + .as-switch-slider:before {
+  transform: translateX(20px);
+}
+.as-switch.is-loading .as-switch-slider {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.as-country-btn-edit {
+  background: none;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+.as-country-btn-edit:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+

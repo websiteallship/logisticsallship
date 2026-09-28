@@ -79,6 +79,48 @@ class Allship_UPS_CSV_Parser {
 	}
 
 	/**
+	 * Parse CSV file into raw 2D array without expecting specific headers.
+	 *
+	 * @param string $file_path Path to the CSV file.
+	 * @param string $delimiter CSV delimiter character. Default ','.
+	 * @return array 2D array of rows.
+	 * @throws Exception If file cannot be read.
+	 */
+	public function parse_raw( $file_path, $delimiter = ',' ) {
+		if ( ! file_exists( $file_path ) || ! is_readable( $file_path ) ) {
+			throw new Exception( 'FILE_NOT_READABLE: Cannot read file at ' . $file_path );
+		}
+
+		$handle = fopen( $file_path, 'r' );
+		if ( ! $handle ) {
+			throw new Exception( 'FILE_OPEN_FAILED: Unable to open ' . $file_path );
+		}
+
+		// Handle UTF-8 BOM
+		$bom = fread( $handle, 3 );
+		if ( "\xEF\xBB\xBF" !== $bom ) {
+			rewind( $handle );
+		}
+
+		$rows = [];
+		while ( ( $row = fgetcsv( $handle, 0, $delimiter ) ) !== false ) {
+			if ( empty( $row ) || ( 1 === count( $row ) && null === $row[0] ) ) {
+				continue;
+			}
+
+			// Clean possible residual BOM from first token
+			if ( isset( $row[0] ) ) {
+				$row[0] = preg_replace( '/^\xEF\xBB\xBF/', '', (string) $row[0] );
+			}
+
+			$rows[] = array_map( 'trim', $row );
+		}
+
+		fclose( $handle );
+		return $rows;
+	}
+
+	/**
 	 * Validate that all required headers are present.
 	 *
 	 * @param array    $headers Parsed file headers.

@@ -17,6 +17,7 @@ CREATE TABLE {prefix}ups_rate_cards (
   valid_from DATE NULL,
   source_file_name VARCHAR(255) NULL,
   source_file_hash CHAR(64) NULL,
+  zone_set_id BIGINT UNSIGNED NULL,
   status VARCHAR(20) NOT NULL DEFAULT 'draft',
   enabled_directions JSON DEFAULT '["export"]',
   disabled_rate_groups JSON DEFAULT '[]',
@@ -24,6 +25,7 @@ CREATE TABLE {prefix}ups_rate_cards (
   activated_at DATETIME NULL,
   created_by BIGINT UNSIGNED NULL,
   PRIMARY KEY (id),
+  KEY zone_set_id (zone_set_id),
   KEY status (status),
   KEY market_status (market_code, status)
 );
@@ -31,10 +33,30 @@ CREATE TABLE {prefix}ups_rate_cards (
 
 | Column | Mô tả |
 |--------|-------|
+| `zone_set_id` | ID của bảng phân vùng Zone (`ups_zone_sets`) được gắn kết với Rate Card này. |
 | `enabled_directions` | Chiều vận chuyển admin bật cho card này. Default `["export"]`. |
 | `disabled_rate_groups` | Rate groups bị admin tắt thủ công. Default `[]` (tất cả ON). |
 
-## 3. `ups_countries`
+## 3. `ups_zone_sets` (Phân vùng Zone độc lập)
+
+Bảng quản lý tập hợp phân vùng Zone độc lập, cho phép tái sử dụng 1 Zone Set cho nhiều Rate Cards khác nhau (quan hệ 1:N).
+
+```sql
+CREATE TABLE {prefix}ups_zone_sets (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  description TEXT NULL,
+  source_file_name VARCHAR(255) NULL,
+  source_file_hash CHAR(64) NULL,
+  record_count INT UNSIGNED NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL,
+  created_by BIGINT UNSIGNED NULL,
+  PRIMARY KEY (id),
+  KEY name (name(191))
+);
+```
+
+## 4. `ups_countries`
 
 ```sql
 CREATE TABLE {prefix}ups_countries (
@@ -51,28 +73,29 @@ CREATE TABLE {prefix}ups_countries (
 );
 ```
 
-## 4. `ups_zone_maps`
+## 5. `ups_zone_maps`
 
 ```sql
 CREATE TABLE {prefix}ups_zone_maps (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  rate_card_id BIGINT UNSIGNED NOT NULL,
+  zone_set_id BIGINT UNSIGNED NOT NULL,
   country_id BIGINT UNSIGNED NOT NULL,
   direction VARCHAR(10) NOT NULL,
   service_code VARCHAR(10) NOT NULL,
   service_type VARCHAR(20) NULL,
   zone VARCHAR(10) NULL,
   is_available TINYINT(1) NOT NULL DEFAULT 0,
+  rate_card_id BIGINT UNSIGNED NULL,
   PRIMARY KEY (id),
-  UNIQUE KEY unique_zone (rate_card_id, country_id, direction, service_code),
-  KEY lookup_zone (rate_card_id, direction, service_code, country_id),
+  UNIQUE KEY unique_zone (zone_set_id, country_id, direction, service_code),
+  KEY lookup_zone (zone_set_id, direction, service_code, country_id),
   KEY zone (zone)
 );
 ```
 
 `zone` dùng `VARCHAR` để lưu được `US5` nếu sau này cần, nhưng phase 1 vẫn lưu zone thực `1-10`; `US5` chỉ dùng ở bước chọn cột giá.
 
-## 5. `ups_rates`
+## 6. `ups_rates`
 
 ```sql
 CREATE TABLE {prefix}ups_rates (
@@ -101,7 +124,7 @@ CREATE TABLE {prefix}ups_rates (
 
 Rate group naming convention: `{direction}_{service_code}_{shipment_type}`. Xem chi tiết tại `01-business-requirements.md` § 3.1.
 
-## 6. `ups_settings`
+## 7. `ups_settings`
 
 ```sql
 CREATE TABLE {prefix}ups_settings (
@@ -134,7 +157,7 @@ Settings mặc định:
 
 > **Deprecated**: `phase_direction`, `enabled_services`, `disabled_services` đã chuyển sang `ups_rate_cards.enabled_directions` và `ups_rate_cards.disabled_rate_groups` (per rate card).
 
-## 7. `ups_quote_logs`
+## 8. `ups_quote_logs`
 
 ```sql
 CREATE TABLE {prefix}ups_quote_logs (
@@ -169,7 +192,7 @@ CREATE TABLE {prefix}ups_quote_logs (
 );
 ```
 
-## 8. REST API quote
+## 9. REST API quote
 
 Endpoint:
 
@@ -177,7 +200,7 @@ Endpoint:
 POST /wp-json/ups-quote/v1/calculate
 ```
 
-### 8.1. Single Service Request
+### 9.1. Single Service Request
 
 ```json
 {
@@ -348,7 +371,7 @@ Response thành công (Batch):
 }
 ```
 
-### 8.3. Transient Caching
+### 9.3. Transient Caching
 - **Cache Key**: `ups_calc_` + `md5(json_encode(normalized_params))`
 - **TTL**: 3600 giây (1 giờ).
 - **Invalidation**: Xóa toàn bộ transient `_transient_ups_%` khi admin kích hoạt rate card mới hoặc thay đổi cấu hình settings.
@@ -365,7 +388,7 @@ Response lỗi:
 }
 ```
 
-## 9. REST API support endpoints
+## 10. REST API support endpoints
 
 ### Countries
 
@@ -451,7 +474,7 @@ Trả về dịch vụ theo direction, bao gồm trạng thái bật/tắt, lý 
 
 Default `direction=export` nếu không truyền (backward compatible).
 
-## 10. Shortcode
+## 11. Shortcode
 
 ```text
 [ups_quote_form]    (shortcode tự động chèn vào page "Báo giá UPS" khi activate)

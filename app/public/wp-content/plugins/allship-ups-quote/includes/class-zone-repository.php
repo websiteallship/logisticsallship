@@ -39,33 +39,33 @@ class Allship_UPS_Zone_Repository {
 	}
 
 	/**
-	 * Find mapped zone string for a rate card, country, direction, and service.
+	 * Find mapped zone string for a zone set, country, direction, and service.
 	 *
-	 * @param int    $rate_card_id Rate card ID.
+	 * @param int    $zone_set_id Zone set ID.
 	 * @param int    $country_id Country ID.
 	 * @param string $direction 'export' or 'import'.
 	 * @param string $service_code Service code (e.g. 'WXS', 'XPD', etc.).
 	 * @return string|null Zone code (e.g. '5') or null if not found.
 	 */
-	public function find_zone( $rate_card_id, $country_id, $direction, $service_code ) {
-		$rate_card_id = abs( (int) $rate_card_id );
+	public function find_zone( $zone_set_id, $country_id, $direction, $service_code ) {
+		$zone_set_id  = abs( (int) $zone_set_id );
 		$country_id   = abs( (int) $country_id );
 		$direction    = strtolower( trim( (string) $direction ) );
 		$service_code = strtoupper( trim( (string) $service_code ) );
 
-		if ( ! $rate_card_id || ! $country_id || empty( $direction) || empty( $service_code ) || ! $this->wpdb || empty( $this->table ) ) {
+		if ( ! $zone_set_id || ! $country_id || empty( $direction ) || empty( $service_code ) || ! $this->wpdb || empty( $this->table ) ) {
 			return null;
 		}
 
 		$zone = $this->wpdb->get_var(
 			$this->wpdb->prepare(
 				"SELECT zone FROM {$this->table}
-				 WHERE rate_card_id = %d
+				 WHERE zone_set_id = %d
 				   AND country_id = %d
 				   AND direction = %s
 				   AND service_code = %s
 				 LIMIT 1",
-				$rate_card_id,
+				$zone_set_id,
 				$country_id,
 				$direction,
 				$service_code
@@ -76,21 +76,21 @@ class Allship_UPS_Zone_Repository {
 	}
 
 	/**
-	 * Get zone records for a specific rate card with optional filters.
+	 * Get zone records for a specific zone set with optional filters.
 	 *
-	 * @param int   $rate_card_id Rate card ID.
+	 * @param int   $zone_set_id Zone set ID.
 	 * @param array $args Optional query filters.
 	 * @return array
 	 */
-	public function get_by_rate_card( $rate_card_id, array $args = [] ) {
-		$rate_card_id = abs( (int) $rate_card_id );
-		if ( ! $rate_card_id || ! $this->wpdb || empty( $this->table ) ) {
+	public function get_by_zone_set( $zone_set_id, array $args = [] ) {
+		$zone_set_id = abs( (int) $zone_set_id );
+		if ( ! $zone_set_id || ! $this->wpdb || empty( $this->table ) ) {
 			return [];
 		}
 
 		$table_countries = $this->wpdb->prefix . 'ups_countries';
-		$where           = [ 'zm.rate_card_id = %d' ];
-		$params          = [ $rate_card_id ];
+		$where           = [ 'zm.zone_set_id = %d' ];
+		$params          = [ $zone_set_id ];
 
 		if ( ! empty( $args['direction'] ) ) {
 			$where[]  = 'zm.direction = %s';
@@ -138,6 +138,37 @@ class Allship_UPS_Zone_Repository {
 	}
 
 	/**
+	 * Backward compatibility alias: get zone records by rate card ID.
+	 *
+	 * @param int   $rate_card_id Rate card ID or Zone set ID.
+	 * @param array $args Optional query filters.
+	 * @return array
+	 */
+	public function get_by_rate_card( $rate_card_id, array $args = [] ) {
+		$rate_card_id = abs( (int) $rate_card_id );
+		if ( ! $rate_card_id ) {
+			return [];
+		}
+
+		// Try to resolve zone_set_id from rate card if available
+		$zone_set_id = $rate_card_id;
+		if ( $this->wpdb ) {
+			$table_rc = $this->wpdb->prefix . 'ups_rate_cards';
+			$mapped_zs = $this->wpdb->get_var(
+				$this->wpdb->prepare(
+					"SELECT zone_set_id FROM {$table_rc} WHERE id = %d LIMIT 1",
+					$rate_card_id
+				)
+			);
+			if ( $mapped_zs ) {
+				$zone_set_id = (int) $mapped_zs;
+			}
+		}
+
+		return $this->get_by_zone_set( $zone_set_id, $args );
+	}
+
+	/**
 	 * Insert a zone mapping record. Updates existing record if duplicate constraint matches.
 	 *
 	 * @param array $data Record fields.
@@ -148,12 +179,12 @@ class Allship_UPS_Zone_Repository {
 			return 0;
 		}
 
-		$rate_card_id = abs( (int) ( isset( $data['rate_card_id'] ) ? $data['rate_card_id'] : 0 ) );
+		$zone_set_id  = abs( (int) ( isset( $data['zone_set_id'] ) ? $data['zone_set_id'] : ( isset( $data['rate_card_id'] ) ? $data['rate_card_id'] : 0 ) ) );
 		$country_id   = abs( (int) ( isset( $data['country_id'] ) ? $data['country_id'] : 0 ) );
 		$direction    = strtolower( trim( (string) ( isset( $data['direction'] ) ? $data['direction'] : 'export' ) ) );
 		$service_code = strtoupper( trim( (string) ( isset( $data['service_code'] ) ? $data['service_code'] : '' ) ) );
 
-		if ( ! $rate_card_id || ! $country_id || empty( $direction ) || empty( $service_code ) ) {
+		if ( ! $zone_set_id || ! $country_id || empty( $direction ) || empty( $service_code ) ) {
 			return 0;
 		}
 
@@ -167,13 +198,13 @@ class Allship_UPS_Zone_Repository {
 		}
 
 		$sql = $this->wpdb->prepare(
-			"INSERT INTO {$this->table} (rate_card_id, country_id, direction, service_code, service_type, zone, is_available)
+			"INSERT INTO {$this->table} (zone_set_id, country_id, direction, service_code, service_type, zone, is_available)
 			 VALUES (%d, %d, %s, %s, %s, %s, %d)
 			 ON DUPLICATE KEY UPDATE
 			   service_type = VALUES(service_type),
 			   zone = VALUES(zone),
 			   is_available = VALUES(is_available)",
-			$rate_card_id,
+			$zone_set_id,
 			$country_id,
 			$direction,
 			$service_code,
@@ -195,8 +226,8 @@ class Allship_UPS_Zone_Repository {
 		$existing_id = $this->wpdb->get_var(
 			$this->wpdb->prepare(
 				"SELECT id FROM {$this->table}
-				 WHERE rate_card_id = %d AND country_id = %d AND direction = %s AND service_code = %s LIMIT 1",
-				$rate_card_id,
+				 WHERE zone_set_id = %d AND country_id = %d AND direction = %s AND service_code = %s LIMIT 1",
+				$zone_set_id,
 				$country_id,
 				$direction,
 				$service_code
@@ -284,12 +315,12 @@ class Allship_UPS_Zone_Repository {
 
 		$count = 0;
 		foreach ( $rows as $row ) {
-			$rate_card_id = abs( (int) ( isset( $row['rate_card_id'] ) ? $row['rate_card_id'] : 0 ) );
+			$zone_set_id  = abs( (int) ( isset( $row['zone_set_id'] ) ? $row['zone_set_id'] : ( isset( $row['rate_card_id'] ) ? $row['rate_card_id'] : 0 ) ) );
 			$country_id   = abs( (int) ( isset( $row['country_id'] ) ? $row['country_id'] : 0 ) );
 			$direction    = strtolower( trim( (string) ( isset( $row['direction'] ) ? $row['direction'] : 'export' ) ) );
 			$service_code = strtoupper( trim( (string) ( isset( $row['service_code'] ) ? $row['service_code'] : '' ) ) );
 
-			if ( ! $rate_card_id || ! $country_id || empty( $direction ) || empty( $service_code ) ) {
+			if ( ! $zone_set_id || ! $country_id || empty( $direction ) || empty( $service_code ) ) {
 				continue;
 			}
 
@@ -303,13 +334,13 @@ class Allship_UPS_Zone_Repository {
 			}
 
 			$sql = $this->wpdb->prepare(
-				"INSERT INTO {$this->table} (rate_card_id, country_id, direction, service_code, service_type, zone, is_available)
+				"INSERT INTO {$this->table} (zone_set_id, country_id, direction, service_code, service_type, zone, is_available)
 				 VALUES (%d, %d, %s, %s, %s, %s, %d)
 				 ON DUPLICATE KEY UPDATE
 				   service_type = VALUES(service_type),
 				   zone = VALUES(zone),
 				   is_available = VALUES(is_available)",
-				$rate_card_id,
+				$zone_set_id,
 				$country_id,
 				$direction,
 				$service_code,
@@ -327,24 +358,34 @@ class Allship_UPS_Zone_Repository {
 	}
 
 	/**
-	 * Delete all zone mappings for a rate card.
+	 * Delete all zone mappings for a zone set.
 	 *
-	 * @param int $rate_card_id Rate card ID.
+	 * @param int $zone_set_id Zone set ID.
 	 * @return bool True on success, false on failure.
 	 */
-	public function delete_by_rate_card( $rate_card_id ) {
-		$rate_card_id = abs( (int) $rate_card_id );
-		if ( ! $rate_card_id || ! $this->wpdb || empty( $this->table ) ) {
+	public function delete_by_zone_set( $zone_set_id ) {
+		$zone_set_id = abs( (int) $zone_set_id );
+		if ( ! $zone_set_id || ! $this->wpdb || empty( $this->table ) ) {
 			return false;
 		}
 
 		$res = $this->wpdb->delete(
 			$this->table,
-			[ 'rate_card_id' => $rate_card_id ],
+			[ 'zone_set_id' => $zone_set_id ],
 			[ '%d' ]
 		);
 
 		return false !== $res;
+	}
+
+	/**
+	 * Backward compatibility alias: delete by rate card.
+	 *
+	 * @param int $rate_card_id Rate card ID or Zone set ID.
+	 * @return bool True on success, false on failure.
+	 */
+	public function delete_by_rate_card( $rate_card_id ) {
+		return $this->delete_by_zone_set( $rate_card_id );
 	}
 
 	/**
@@ -359,7 +400,8 @@ class Allship_UPS_Zone_Repository {
 		}
 
 		$row->id           = (int) $row->id;
-		$row->rate_card_id = (int) $row->rate_card_id;
+		$row->zone_set_id  = isset( $row->zone_set_id ) ? (int) $row->zone_set_id : ( isset( $row->rate_card_id ) ? (int) $row->rate_card_id : 0 );
+		$row->rate_card_id = $row->zone_set_id; // backward compatibility
 		$row->country_id   = (int) $row->country_id;
 		$row->is_available = (int) $row->is_available;
 		if ( isset( $row->is_us_override ) ) {

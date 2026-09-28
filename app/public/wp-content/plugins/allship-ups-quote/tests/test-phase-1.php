@@ -250,7 +250,7 @@ class Allship_UPS_Phase1_Mock_WPDB {
 		}
 
 		if ( strpos( $query, 'ups_zone_maps' ) !== false ) {
-			if ( preg_match( "/rate_card_id\s*=\s*(\d+)/", $query, $m_rc ) &&
+			if ( preg_match( "/(?:rate_card_id|zone_set_id)\s*=\s*(\d+)/", $query, $m_rc ) &&
 			     preg_match( "/country_id\s*=\s*(\d+)/", $query, $m_c ) &&
 			     preg_match( "/direction\s*=\s*'([^']+)'/", $query, $m_d ) &&
 			     preg_match( "/service_code\s*=\s*'([^']+)'/", $query, $m_s ) ) {
@@ -341,13 +341,16 @@ class Allship_UPS_Phase1_Mock_WPDB {
 			}
 
 			if ( strpos( $query, "billing_unit = 'per_kg'" ) !== false ) {
-				if ( preg_match( '/weight_from <= ([\d.]+)/', $query, $m ) ) {
-					$target  = (float) $m[1];
+				$target = null;
+				if ( preg_match( '/(?:weight_from <=|weight_to >=)\s*([\d.]+)/', $query, $m ) ) {
+					$target = (float) $m[1];
+				}
+				if ( null !== $target ) {
 					$matched = null;
 					foreach ( $this->rates as $r ) {
-						if ( 'per_kg' === $r->billing_unit && null !== $r->weight_from && $r->weight_from <= $target ) {
+						if ( 'per_kg' === $r->billing_unit && ( null === $r->weight_from || $r->weight_from <= $target ) ) {
 							if ( null === $r->weight_to || $r->weight_to >= $target ) {
-								if ( null === $matched || $r->weight_from > $matched->weight_from ) {
+								if ( null === $matched || ( null !== $r->weight_to && $r->weight_to < $matched->weight_to ) ) {
 									$matched = $r;
 								}
 							}

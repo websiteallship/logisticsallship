@@ -254,12 +254,24 @@ class Allship_UPS_Zone_Resolver {
 			] );
 		}
 
-		// 3. Resolve rate card ID if not supplied
+		// 3. Resolve rate card ID & zone set ID
+		$zone_set_id = null;
 		if ( ! $rate_card_id && $this->rate_card_repo ) {
 			$active_card = $this->rate_card_repo->get_active();
 			if ( $active_card ) {
 				$rate_card_id = (int) $active_card->id;
+				$zone_set_id  = ! empty( $active_card->zone_set_id ) ? (int) $active_card->zone_set_id : null;
 			}
+		} elseif ( $rate_card_id && $this->rate_card_repo ) {
+			$card = $this->rate_card_repo->get( $rate_card_id );
+			if ( $card && ! empty( $card->zone_set_id ) ) {
+				$zone_set_id = (int) $card->zone_set_id;
+			}
+		}
+
+		// Fallback: if zone_set_id not found on card, fallback to rate_card_id (backward compatibility)
+		if ( ! $zone_set_id ) {
+			$zone_set_id = $rate_card_id;
 		}
 
 		if ( ! $rate_card_id ) {
@@ -273,8 +285,8 @@ class Allship_UPS_Zone_Resolver {
 			] );
 		}
 
-		// 4. Query physical zone from zone repository
-		$raw_zone = $this->zone_repo->find_zone( $rate_card_id, $country->id, $direction, $service_code );
+		// 4. Query physical zone from zone repository using zone_set_id
+		$raw_zone = $this->zone_repo->find_zone( $zone_set_id, $country->id, $direction, $service_code );
 
 		if ( null === $raw_zone || '' === trim( $raw_zone ) || '0' === trim( $raw_zone ) ) {
 			return new Allship_UPS_Zone_Result( [

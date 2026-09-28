@@ -14,7 +14,7 @@ class Allship_UPS_Activator {
 	/**
 	 * Database schema version.
 	 */
-	const DB_VERSION = '1.0.0';
+	const DB_VERSION = '1.1.0';
 
 	/**
 	 * Run activation tasks: create/update tables and version tracking.
@@ -25,7 +25,7 @@ class Allship_UPS_Activator {
 	}
 
 	/**
-	 * Execute dbDelta migrations for the 6 custom tables.
+	 * Execute dbDelta migrations for the 7 custom tables.
 	 */
 	public static function migrate() {
 		global $wpdb;
@@ -35,9 +35,22 @@ class Allship_UPS_Activator {
 		$charset_collate = $wpdb->get_charset_collate();
 		$prefix          = $wpdb->prefix;
 
-		$sql = "CREATE TABLE {$prefix}ups_rate_cards (
+		$sql = "CREATE TABLE {$prefix}ups_zone_sets (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL,
+  description TEXT NULL,
+  source_file_name VARCHAR(255) NULL,
+  source_file_hash CHAR(64) NULL,
+  record_count INT UNSIGNED DEFAULT 0,
+  created_at DATETIME NOT NULL,
+  created_by BIGINT UNSIGNED NULL,
+  PRIMARY KEY  (id)
+) {$charset_collate};
+
+CREATE TABLE {$prefix}ups_rate_cards (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  zone_set_id BIGINT UNSIGNED NULL,
   market_code VARCHAR(10) NOT NULL DEFAULT 'VN',
   valid_from DATE NULL,
   source_file_name VARCHAR(255) NULL,
@@ -50,6 +63,7 @@ class Allship_UPS_Activator {
   created_by BIGINT UNSIGNED NULL,
   PRIMARY KEY  (id),
   KEY status (status),
+  KEY zone_set (zone_set_id),
   KEY market_status (market_code, status)
 ) {$charset_collate};
 
@@ -68,7 +82,7 @@ CREATE TABLE {$prefix}ups_countries (
 
 CREATE TABLE {$prefix}ups_zone_maps (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  rate_card_id BIGINT UNSIGNED NOT NULL,
+  zone_set_id BIGINT UNSIGNED NOT NULL,
   country_id BIGINT UNSIGNED NOT NULL,
   direction VARCHAR(10) NOT NULL,
   service_code VARCHAR(10) NOT NULL,
@@ -76,8 +90,8 @@ CREATE TABLE {$prefix}ups_zone_maps (
   zone VARCHAR(10) NULL,
   is_available TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY  (id),
-  UNIQUE KEY unique_zone (rate_card_id, country_id, direction, service_code),
-  KEY lookup_zone (rate_card_id, direction, service_code, country_id),
+  UNIQUE KEY unique_zone (zone_set_id, country_id, direction, service_code),
+  KEY lookup_zone (zone_set_id, direction, service_code, country_id),
   KEY zone (zone)
 ) {$charset_collate};
 
@@ -140,6 +154,51 @@ CREATE TABLE {$prefix}ups_quote_logs (
 ) {$charset_collate};";
 
 		dbDelta( $sql );
+
+		// Run inline schema transitions for existing databases if needed
+		if ( $wpdb ) {
+			// Check rate_cards for zone_set_id
+			$rate_card_table = $prefix . 'ups_rate_cards';
+			$has_table       = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $rate_card_table ) );
+			if ( $has_table ) {
+				$cols = $wpdb->get_col( "DESC `{$rate_card_table}`", 0 );
+				if ( is_array( $cols ) && ! in_array( 'zone_set_id', $cols, true ) ) {
+					$wpdb->query( "ALTER TABLE `{$rate_card_table}` ADD COLUMN zone_set_id BIGINT UNSIGNED NULL AFTER name" );
+				}
+			}
+
+			// Check ups_zone_maps for unassigned records or empty zone sets
+			$zone_set_table = $prefix . 'ups_zone_sets';
+			$zone_map_table = $prefix . 'ups_zone_maps';
+			$has_zm_table   = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $zone_map_table ) );
+			$has_zs_table   = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $zone_set_table ) );
+
+			if ( $has_zm_table && $has_zs_table ) {
+				$zs_count      = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$zone_set_table}`" );
+				$unassigned_zm = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$zone_map_table}` WHERE zone_set_id = 0 OR zone_set_id IS NULL" );
+
+				if ( 0 === $zs_count && $unassigned_zm > 0 ) {
+					$now = function_exists( 'current_time' ) ? current_time( 'mysql' ) : gmdate( 'Y-m-d H:i:s' );
+					$wpdb->insert(
+						$zone_set_table,
+						[
+							'name'             => 'Zone UPS Chuẩn 2026',
+							'description'      => 'Bảng phân vùng mặc định chuyển đổi từ dữ liệu đã import',
+							'source_file_name' => 'Zone chart.csv',
+							'record_count'     => $unassigned_zm,
+							'created_at'       => $now,
+						],
+						[ '%s', '%s', '%s', '%d', '%s' ]
+					);
+					$default_zs_id = $wpdb->insert_id ?: 1;
+
+					$wpdb->query( "UPDATE `{$zone_map_table}` SET zone_set_id = {$default_zs_id} WHERE zone_set_id = 0 OR zone_set_id IS NULL" );
+					if ( $has_table ) {
+						$wpdb->query( "UPDATE `{$rate_card_table}` SET zone_set_id = {$default_zs_id} WHERE zone_set_id = 0 OR zone_set_id IS NULL" );
+					}
+				}
+			}
+		}
 
 		self::insert_default_settings();
 

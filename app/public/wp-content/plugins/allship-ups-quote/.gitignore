@@ -1,2 +1,4 @@
 node_modules/
 package-lock.json
+private/uploads/*.xlsx
+private/uploads/*.csv
