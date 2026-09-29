@@ -261,15 +261,21 @@ assert($sm->get('dim_divisor', 5000) === 5000);
 - [x] Methods:
   - `create(array $data): int` — tạo rate card với tên tùy ý.
   - `get(int $id): ?object`
-  - `get_active(): ?object` — rate card đang active.
+  - `get_active(?string $rate_group = null): ?object` — rate card đang active (toàn cục hoặc theo rate_group).
+  - `get_active_id(?string $rate_group = null): int`
+  - `get_active_for_rate_group(string $rate_group): ?object`
+  - `get_active_id_for_rate_group(string $rate_group): int`
+  - `get_active_for_service(string $service_code, string $direction, string $shipment_type): ?object`
+  - `get_all_active(): array` — danh sách tất cả các rate cards đang active.
+  - `get_conflicting_active_cards(int $id): array` — tìm các card active bị xung đột rate_group.
   - `get_all(): array` — tất cả rate cards, ordered by imported_at DESC.
-  - `activate(int $id): bool` — archive card cũ, activate card mới.
+  - `activate(int $id): bool` — archive các card cùng rate_group, activate card mới.
   - `archive(int $id): bool`
   - `delete(int $id): bool` — xóa card + cascade rates/zones.
   - `update_name(int $id, string $name): bool` — đổi tên rate card.
   - `update_directions(int $id, array $directions): bool` — bật/tắt chiều vận chuyển.
   - `update_disabled_groups(int $id, array $groups): bool` — toggle rate groups.
-- [x] Business rule: chỉ 1 card active tại 1 thời điểm.
+- [x] Business rule (ADR-009): Cho phép nhiều card active cùng lúc. Chỉ duy nhất 1 card active cho mỗi dịch vụ và chiều vận chuyển (Rate Group). Tự động archive chỉ các card active bị trùng lặp dịch vụ & chiều.
 - [x] Tạo `includes/config/service-registry.php` — `SERVICE_REGISTRY` constant (6 services × 2 directions = 18 rate groups).
 - [x] Tạo `includes/class-service-availability-manager.php`:
   - `get_services_for_direction(string $direction, ?int $rate_card_id): array`
@@ -430,7 +436,7 @@ assert($count >= 1);
 |---|-------|--------|
 | 1 | Settings CRUD hoạt động (get/set/delete) | ☑ |
 | 2 | Rate Card: create, activate, archive, delete, rename | ☑ |
-| 3 | Rate Card: chỉ 1 active tại 1 thời điểm | ☑ |
+| 3 | Rate Card: chỉ 1 active cho mỗi dịch vụ & chiều (ADR-009) | ☑ |
 | 4 | Country: CRUD + search + bulk_upsert | ☑ |
 | 5 | Zone: CRUD + find_zone + bulk_insert | ☑ |
 | 6 | Rate: CRUD + find_price (flat, per_kg, minimum) | ☑ |
@@ -514,10 +520,10 @@ assert($count >= 1);
 **Tasks**:
 - [x] Tạo `includes/importers/class-rate-importer.php`.
 - [x] **Hỗ trợ 2 format input:**
-  - **CSV template**: headers = `rate_group, weight_label, weight_from, weight_to, billing_unit, zone_1...zone_10, zone_us5`.
-  - **XLSX gốc UPS**: detect bằng label "Express Saver Document Rates:" → parse tự động.
+  - **Cấu trúc chung (Simple Matrix)**: Dòng 1 chứa tiêu đề zone (1..10, US5), từ dòng 2 là weight + giá.
+  - Rate group (dịch vụ) được chọn trực tiếp từ UI form khi upload, thay vì quét tự động 4 label.
 - [x] Chuẩn hóa weight brackets (UPS Envelope, flat, per_kg, minimum).
-- [x] Validate: 4 rate groups found, zones 1-10 + US5, giá là số dương.
+- [x] Validate: tìm thấy dòng header zone (1-10 + US5) trong 10 dòng đầu, giá là số dương.
 - [x] Preview mode: return summary trước khi commit DB.
 
 🧪 **Tests Step 2.3**:
@@ -618,7 +624,7 @@ assert($count >= 1);
 
 | # | Check | Status |
 |---|-------|--------|
-| 1 | Import `VN from 20.Aug.2026.xlsx` → 4 rate groups, đúng số dòng | ☑ |
+| 1 | Import file giá (Matrix format) → parse đúng số dòng, gắn đúng rate group đã chọn | ☑ |
 | 2 | Import `IATA.xlsx` (flat) → 249 countries, US `is_us_override` | ☑ |
 | 3 | Import CSV template → cùng kết quả | ☑ |
 | 4 | Preview mode → summary đúng, không commit DB | ☑ |
@@ -1431,16 +1437,16 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - `05-admin-ui-and-public-ui.md` § 3 — Settings sections
 
 **Tasks**:
-- [ ] Tạo `admin/views/settings.php` — WP Settings API.
-- [ ] Sections: Weight, Fees, Advanced.
-- [ ] Sanitize callbacks. Nonce validation.
+- [x] Tạo `admin/views/settings.php` — WP Settings API.
+- [x] Sections: Weight, Fees, Advanced.
+- [x] Sanitize callbacks. Nonce validation.
 
 > **Note**: Nhóm `Services` và `Phase` đã chuyển sang Rate Card detail page.
 
 🧪 **Tests Step 5.7**:
-- [ ] Change dim_divisor → save → reload → value persisted.
-- [ ] Toggle VAT ON → save → value = true.
-- [ ] Invalid value → sanitized.
+- [x] Change dim_divisor → save → reload → value persisted.
+- [x] Toggle VAT ON → save → value = true.
+- [x] Invalid value → sanitized.
 
 ---
 
@@ -1454,14 +1460,14 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - `11-backend-tech-spec.md` § 7 — CSV export
 
 **Tasks**:
-- [ ] Tạo `admin/views/quote-logs.php` — WP_List_Table.
-- [ ] Filters: date range, service, destination.
-- [ ] Export CSV + Excel (UTF-8 BOM).
+- [x] Tạo `admin/views/quote-logs.php` — WP_List_Table.
+- [x] Filters: date range, service, destination.
+- [x] Export CSV + Excel (UTF-8 BOM).
 
 🧪 **Tests Step 5.8**:
-- [ ] Logs appear after calculate.
-- [ ] Filter by service → correct rows.
-- [ ] Export CSV → file downloads, opens in Excel correctly (Vietnamese text OK).
+- [x] Logs appear after calculate.
+- [x] Filter by service → correct rows.
+- [x] Export CSV → file downloads, opens in Excel correctly (Vietnamese text OK).
 
 ---
 
@@ -1647,7 +1653,7 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - [ ] **Case Document 6kg** → DOCUMENT_OVER_5KG error.
 - [ ] **Case multi-piece 1.3+2.1** → chargeable 4.0kg.
 - [ ] **Case WFM unavailable destination** → LANE_NOT_AVAILABLE.
-- [ ] **Case import new rate card** → old archived, new active.
+- [ ] **Case import new rate card** → card active cũ cùng rate_group chuyển sang archived, các card active của dịch vụ khác vẫn active (ADR-009).
 - [ ] **V4 Case: 6-service comparison US 6kg** → all 6 services render, EXW=WXS×1.25, XPR=WXS×1.15, "Giá tốt nhất" badge correct.
 - [ ] **V4 Case: Mobile compact → select XPD** → sticky bar updates to XPD price.
 - [ ] **V4 Case: Category filter "Freight"** → chỉ hiển thị WXP + WFM cards.

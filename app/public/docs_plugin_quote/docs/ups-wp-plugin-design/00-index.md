@@ -37,16 +37,17 @@ Phạm vi: Phase 1 - tính giá chiều Export, gửi hàng từ Việt Nam đi 
 
 - Plugin name: **Allship UPS Quote**, slug `allship-ups-quote`.
 - Phase 1 chỉ mở `Export`.
-- Dịch vụ phase 1: `WXS`, `XPD`, `WFM`.
+- Dịch vụ phase 1: Hỗ trợ đầy đủ 6 dịch vụ (`WXS`, `XPD`, `WFM`, `EXW`, `XPR`, `WXP`).
 - `WXS` tách thành Document và Non-document.
-- `EXW`, `XPR`, `WXP` có thể import zone trước nhưng chưa mở tính giá vì chưa có bảng giá tương ứng.
+- `EXW`, `XPR`, `WXP`: Ưu tiên tính trực tiếp nếu có bảng giá active riêng (e.g. `export_wxp`), hoặc tự động tính phái sinh bằng hệ số (multipliers) từ WXS / WFM nếu chưa có bảng giá riêng.
 - Cân quy đổi mặc định: `D x R x C / 5500` (đã chốt). Setting `dim_divisor` cho admin.
 - Heavy bracket (`21-44`, `45-70`...): **per_kg** (đã chốt). Giá × cân tính cước.
 - Cân tính cước mỗi kiện: `max(actual_weight, dim_weight)`, làm tròn lên mốc `0.5kg`, sau đó cộng nhiều kiện.
 - Giá file gốc chưa gồm VAT, FSC, Surge fee, customs fee 10.000 VND/AWB và phụ phí khác.
 - Mỹ dùng cột giá riêng `US5`, không dùng giá Zone 5 chung.
 - Import dữ liệu: **CSV-first** (zero dependency) + SimpleXLSX (~100KB) cho .xlsx.
-- Admin có thể tạo **nhiều bảng giá** (rate cards) với tên tùy ý, chỉ 1 active.
+- Admin có thể tạo **nhiều bảng giá** (rate cards) với tên tùy ý, cho phép **nhiều bảng giá active cùng lúc** (mỗi dịch vụ & chiều Import/Export chỉ có tối đa 1 bảng giá active tại 1 thời điểm).
+- Kết quả báo giá: Ẩn hoàn toàn các dịch vụ không có giá khả dụng, tự động căn chỉnh grid (1 cột max-w-md, 2 cột max-w-3xl, 3+ cột) và auto-switch sang dịch vụ khả dụng đầu tiên (ADR-010).
 - Admin có thể chỉnh sửa thủ công rates/zones qua UI.
 - Plugin tự tạo page "Báo giá UPS" (slug `bao-gia-ups`) khi activate.
 - Quote logs hỗ trợ export CSV/Excel.

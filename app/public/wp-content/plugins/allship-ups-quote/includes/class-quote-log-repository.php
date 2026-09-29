@@ -42,6 +42,44 @@ class Allship_UPS_Quote_Log_Repository {
 	 * Insert a new quote log entry.
 	 *
 	 * @param array $data Quote log attributes.
+	/**
+	 * Flag indicating whether table schema has been checked for new columns.
+	 *
+	 * @var bool
+	 */
+	private static $columns_checked = false;
+
+	/**
+	 * Ensure database table contains latest columns (ip_address, device_type, user_agent).
+	 *
+	 * @return void
+	 */
+	private function ensure_schema() {
+		if ( self::$columns_checked || ! $this->wpdb || empty( $this->table ) ) {
+			return;
+		}
+		self::$columns_checked = true;
+
+		if ( method_exists( $this->wpdb, 'get_col' ) ) {
+			$cols = $this->wpdb->get_col( "DESC `{$this->table}`", 0 );
+			if ( is_array( $cols ) && ! empty( $cols ) ) {
+				if ( ! in_array( 'ip_address', $cols, true ) ) {
+					$this->wpdb->query( "ALTER TABLE `{$this->table}` ADD COLUMN ip_address VARCHAR(45) NULL AFTER session_id" );
+				}
+				if ( ! in_array( 'device_type', $cols, true ) ) {
+					$this->wpdb->query( "ALTER TABLE `{$this->table}` ADD COLUMN device_type VARCHAR(20) NULL AFTER ip_address" );
+				}
+				if ( ! in_array( 'user_agent', $cols, true ) ) {
+					$this->wpdb->query( "ALTER TABLE `{$this->table}` ADD COLUMN user_agent VARCHAR(255) NULL AFTER device_type" );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Insert a new quote log entry.
+	 *
+	 * @param array $data Quote log attributes.
 	 * @return int Inserted ID or 0 on failure.
 	 */
 	public function insert( array $data ) {
@@ -49,12 +87,17 @@ class Allship_UPS_Quote_Log_Repository {
 			return 0;
 		}
 
+		$this->ensure_schema();
+
 		$sanitize_text = function_exists( 'sanitize_text_field' ) ? 'sanitize_text_field' : 'trim';
 		$json_func     = function_exists( 'wp_json_encode' ) ? 'wp_json_encode' : 'json_encode';
 
 		$rate_card_id           = ! empty( $data['rate_card_id'] ) ? abs( (int) $data['rate_card_id'] ) : null;
 		$user_id                = isset( $data['user_id'] ) ? ( ! empty( $data['user_id'] ) ? abs( (int) $data['user_id'] ) : null ) : ( function_exists( 'get_current_user_id' ) ? ( get_current_user_id() ?: null ) : null );
 		$session_id             = ! empty( $data['session_id'] ) ? $sanitize_text( $data['session_id'] ) : null;
+		$ip_address             = ! empty( $data['ip_address'] ) ? $sanitize_text( $data['ip_address'] ) : null;
+		$device_type            = ! empty( $data['device_type'] ) ? $sanitize_text( $data['device_type'] ) : null;
+		$user_agent             = ! empty( $data['user_agent'] ) ? mb_substr( $sanitize_text( $data['user_agent'] ), 0, 255 ) : null;
 		$direction              = ! empty( $data['direction'] ) ? strtolower( trim( (string) $data['direction'] ) ) : 'export';
 		$origin_iata            = ! empty( $data['origin_iata'] ) ? strtoupper( trim( (string) $data['origin_iata'] ) ) : 'VN';
 		$origin_province        = ! empty( $data['origin_province'] ) ? $sanitize_text( $data['origin_province'] ) : null;
@@ -73,43 +116,57 @@ class Allship_UPS_Quote_Log_Repository {
 		$base_price_vnd         = isset( $data['base_price_vnd'] ) && '' !== $data['base_price_vnd'] ? abs( (int) $data['base_price_vnd'] ) : null;
 		$total_price_vnd        = isset( $data['total_price_vnd'] ) && '' !== $data['total_price_vnd'] ? abs( (int) $data['total_price_vnd'] ) : null;
 
-		$pieces_json = ! empty( $data['pieces_json'] ) ? ( is_array( $data['pieces_json'] ) ? $json_func( $data['pieces_json'] ) : (string) $data['pieces_json'] ) : null;
+		$pieces_json    = ! empty( $data['pieces_json'] ) ? ( is_array( $data['pieces_json'] ) ? $json_func( $data['pieces_json'] ) : (string) $data['pieces_json'] ) : null;
 		$breakdown_json = ! empty( $data['breakdown_json'] ) ? ( is_array( $data['breakdown_json'] ) ? $json_func( $data['breakdown_json'] ) : (string) $data['breakdown_json'] ) : null;
-		$created_at     = ! empty( $data['created_at'] ) ? $data['created_at'] : ( function_exists( 'current_time' ) ? current_time( 'mysql' ) : gmdate( 'Y-m-d H:i:s' ) );
+
+		// WordPress Setting Timezone (wp_date or current_time)
+		$created_at = ! empty( $data['created_at'] )
+			? $data['created_at']
+			: ( function_exists( 'wp_date' )
+				? wp_date( 'Y-m-d H:i:s' )
+				: ( function_exists( 'current_time' ) ? current_time( 'mysql' ) : gmdate( 'Y-m-d H:i:s' ) ) );
+
+		$insert_fields = [
+			'rate_card_id'            => $rate_card_id,
+			'user_id'                 => $user_id,
+			'session_id'              => $session_id,
+			'ip_address'              => $ip_address,
+			'device_type'             => $device_type,
+			'user_agent'              => $user_agent,
+			'direction'               => $direction,
+			'origin_iata'             => $origin_iata,
+			'origin_province'         => $origin_province,
+			'destination_iata'        => $destination_iata,
+			'destination_state'       => $destination_state,
+			'destination_city'        => $destination_city,
+			'destination_postal_code' => $destination_postal_code,
+			'destination_address'     => $destination_address,
+			'service_code'            => $service_code,
+			'shipment_type'           => $shipment_type,
+			'zone'                    => $zone,
+			'rate_zone'               => $rate_zone,
+			'actual_weight_kg'        => $actual_weight_kg,
+			'dim_weight_kg'           => $dim_weight_kg,
+			'chargeable_weight_kg'    => $chargeable_weight_kg,
+			'base_price_vnd'          => $base_price_vnd,
+			'total_price_vnd'         => $total_price_vnd,
+			'pieces_json'             => $pieces_json,
+			'breakdown_json'          => $breakdown_json,
+			'created_at'              => $created_at,
+		];
+
+		$insert_formats = [
+			'%d', '%d', '%s', '%s', '%s', '%s',
+			'%s', '%s', '%s', '%s', '%s', '%s',
+			'%s', '%s', '%s', '%s', '%s', '%s',
+			'%f', '%f', '%f', '%d', '%d', '%s',
+			'%s', '%s'
+		];
 
 		$inserted = $this->wpdb->insert(
 			$this->table,
-			[
-				'rate_card_id'            => $rate_card_id,
-				'user_id'                 => $user_id,
-				'session_id'              => $session_id,
-				'direction'               => $direction,
-				'origin_iata'             => $origin_iata,
-				'origin_province'         => $origin_province,
-				'destination_iata'        => $destination_iata,
-				'destination_state'       => $destination_state,
-				'destination_city'        => $destination_city,
-				'destination_postal_code' => $destination_postal_code,
-				'destination_address'     => $destination_address,
-				'service_code'            => $service_code,
-				'shipment_type'           => $shipment_type,
-				'zone'                    => $zone,
-				'rate_zone'               => $rate_zone,
-				'actual_weight_kg'        => $actual_weight_kg,
-				'dim_weight_kg'           => $dim_weight_kg,
-				'chargeable_weight_kg'    => $chargeable_weight_kg,
-				'base_price_vnd'          => $base_price_vnd,
-				'total_price_vnd'         => $total_price_vnd,
-				'pieces_json'             => $pieces_json,
-				'breakdown_json'          => $breakdown_json,
-				'created_at'              => $created_at,
-			],
-			[
-				'%d', '%d', '%s', '%s', '%s', '%s',
-				'%s', '%s', '%s', '%s', '%s', '%s',
-				'%s', '%s', '%s', '%f', '%f', '%f',
-				'%d', '%d', '%s', '%s', '%s'
-			]
+			$insert_fields,
+			$insert_formats
 		);
 
 		return false !== $inserted ? (int) $this->wpdb->insert_id : 0;
@@ -192,6 +249,45 @@ class Allship_UPS_Quote_Log_Repository {
 		);
 
 		return false !== $res;
+	}
+
+	/**
+	 * Delete a single quote log by ID.
+	 *
+	 * @param int $id Quote log ID.
+	 * @return bool True on success, false on failure.
+	 */
+	public function delete( $id ) {
+		$id = abs( (int) $id );
+		if ( ! $id || ! $this->wpdb || empty( $this->table ) ) {
+			return false;
+		}
+
+		$res = $this->wpdb->delete(
+			$this->table,
+			[ 'id' => $id ],
+			[ '%d' ]
+		);
+
+		return false !== $res;
+	}
+
+	/**
+	 * Delete multiple quote logs by IDs.
+	 *
+	 * @param array<int> $ids Array of quote log IDs.
+	 * @return int Number of affected rows.
+	 */
+	public function delete_multiple( array $ids ) {
+		$clean_ids = array_filter( array_map( 'absint', $ids ) );
+		if ( empty( $clean_ids ) || ! $this->wpdb || empty( $this->table ) ) {
+			return 0;
+		}
+
+		$placeholders = implode( ',', array_fill( 0, count( $clean_ids ), '%d' ) );
+		$sql          = $this->wpdb->prepare( "DELETE FROM {$this->table} WHERE id IN ($placeholders)", $clean_ids );
+
+		return (int) $this->wpdb->query( $sql );
 	}
 
 	/**
@@ -494,14 +590,17 @@ class Allship_UPS_Quote_Log_Repository {
 			return null;
 		}
 
-		$row->id                   = (int) $row->id;
-		$row->rate_card_id         = null !== $row->rate_card_id ? (int) $row->rate_card_id : null;
-		$row->user_id              = null !== $row->user_id ? (int) $row->user_id : null;
-		$row->actual_weight_kg     = null !== $row->actual_weight_kg ? (float) $row->actual_weight_kg : null;
-		$row->dim_weight_kg        = null !== $row->dim_weight_kg ? (float) $row->dim_weight_kg : null;
-		$row->chargeable_weight_kg = null !== $row->chargeable_weight_kg ? (float) $row->chargeable_weight_kg : null;
-		$row->base_price_vnd       = null !== $row->base_price_vnd ? (int) $row->base_price_vnd : null;
-		$row->total_price_vnd      = null !== $row->total_price_vnd ? (int) $row->total_price_vnd : null;
+		$row->id                   = isset( $row->id ) ? (int) $row->id : 0;
+		$row->rate_card_id         = isset( $row->rate_card_id ) && null !== $row->rate_card_id ? (int) $row->rate_card_id : null;
+		$row->user_id              = isset( $row->user_id ) && null !== $row->user_id ? (int) $row->user_id : null;
+		$row->ip_address           = isset( $row->ip_address ) ? (string) $row->ip_address : '';
+		$row->device_type          = isset( $row->device_type ) ? (string) $row->device_type : '';
+		$row->user_agent           = isset( $row->user_agent ) ? (string) $row->user_agent : '';
+		$row->actual_weight_kg     = isset( $row->actual_weight_kg ) && null !== $row->actual_weight_kg ? (float) $row->actual_weight_kg : null;
+		$row->dim_weight_kg        = isset( $row->dim_weight_kg ) && null !== $row->dim_weight_kg ? (float) $row->dim_weight_kg : null;
+		$row->chargeable_weight_kg = isset( $row->chargeable_weight_kg ) && null !== $row->chargeable_weight_kg ? (float) $row->chargeable_weight_kg : null;
+		$row->base_price_vnd       = isset( $row->base_price_vnd ) && null !== $row->base_price_vnd ? (int) $row->base_price_vnd : null;
+		$row->total_price_vnd      = isset( $row->total_price_vnd ) && null !== $row->total_price_vnd ? (int) $row->total_price_vnd : null;
 
 		$row->pieces    = ! empty( $row->pieces_json ) ? json_decode( $row->pieces_json, true ) : [];
 		$row->breakdown = ! empty( $row->breakdown_json ) ? json_decode( $row->breakdown_json, true ) : [];

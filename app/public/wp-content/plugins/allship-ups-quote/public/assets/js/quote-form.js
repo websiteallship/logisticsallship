@@ -31,9 +31,9 @@
       icon: 'ph-globe',
       iconBg: '#FEF3C7',
       iconColor: '#D97706',
-      desc_vi: 'Sáng sớm · 1-2 ngày',
+      desc_vi: 'Sớm · 1-2 ngày',
       eta_vi: 'Trước 9:00 AM',
-      badge_text: 'Sáng sớm',
+      badge_text: 'Sớm',
       badge_color: 'amber'
     },
     XPR: {
@@ -346,6 +346,7 @@
     pieceIdCounter: 1,
     calculatedResults: [],
     mobileViewMode: 'compact',
+    servicesAvailability: {},
     config: {
       pluginUrl: '',
       statesBaseUrl: '/wp-content/plugins/allship-ups-quote/public/assets/data/states/',
@@ -467,9 +468,191 @@
     const searchVal = document.getElementById('countrySearchInput')?.value;
     if (searchVal) filterCountries(searchVal);
     else renderCountryOptions(state.config.COUNTRIES);
+
+    // Sync services availability for the chosen direction
+    syncServicesAvailability(dir);
   }
 
-  // ===== C. SERVICE TABS MANAGER =====
+  // ===== C. SERVICE TABS & AVAILABILITY MANAGER =====
+  function adjustGridColumns(visibleCount) {
+    const tabs = document.getElementById('serviceTabs');
+    if (!tabs) return;
+
+    tabs.classList.remove(
+      'grid-cols-2', 'sm:grid-cols-3', 'lg:grid-cols-6',
+      'grid-cols-auto-1', 'grid-cols-auto-2', 'grid-cols-auto-3',
+      'grid-cols-auto-4', 'grid-cols-auto-5', 'grid-cols-auto-6',
+      'max-w-md', 'max-w-2xl', 'max-w-3xl'
+    );
+
+    if (visibleCount <= 1) {
+      tabs.classList.add('grid-cols-auto-1', 'max-w-md');
+    } else if (visibleCount === 2) {
+      tabs.classList.add('grid-cols-auto-2', 'max-w-2xl');
+    } else if (visibleCount === 3) {
+      tabs.classList.add('grid-cols-auto-3', 'max-w-3xl');
+    } else if (visibleCount === 4) {
+      tabs.classList.add('grid-cols-auto-4');
+    } else if (visibleCount === 5) {
+      tabs.classList.add('grid-cols-auto-5');
+    } else {
+      tabs.classList.add('grid-cols-2', 'sm:grid-cols-3', 'lg:grid-cols-6', 'grid-cols-auto-6');
+    }
+  }
+
+  function updateCategoryTabCounts() {
+    let totalAvail = 0;
+    let parcelAvail = 0;
+    let freightAvail = 0;
+
+    const cards = document.querySelectorAll('.service-card-item');
+    cards.forEach(card => {
+      const code = card.dataset.code;
+      const cat = card.dataset.cat;
+      const s = state.servicesAvailability[code];
+      const isEnabled = s ? s.enabled : !card.classList.contains('is-disabled');
+      if (isEnabled) {
+        totalAvail++;
+        if (cat === 'parcel') parcelAvail++;
+        else if (cat === 'freight') freightAvail++;
+      }
+    });
+
+    const tabAll = document.querySelector('.cat-filter-tab[data-cat="all"]');
+    if (tabAll) tabAll.textContent = `Tất cả (${totalAvail})`;
+
+    const tabParcel = document.querySelector('.cat-filter-tab[data-cat="parcel"]');
+    if (tabParcel) {
+      tabParcel.textContent = `Bưu kiện dưới 70kg (${parcelAvail})`;
+      if (parcelAvail === 0) {
+        tabParcel.classList.add('opacity-40', 'pointer-events-none');
+      } else {
+        tabParcel.classList.remove('opacity-40', 'pointer-events-none');
+      }
+    }
+
+    const tabFreight = document.querySelector('.cat-filter-tab[data-cat="freight"]');
+    if (tabFreight) {
+      tabFreight.textContent = `Hàng nặng trên 70kg (${freightAvail})`;
+      if (freightAvail === 0) {
+        tabFreight.classList.add('opacity-40', 'pointer-events-none');
+      } else {
+        tabFreight.classList.remove('opacity-40', 'pointer-events-none');
+      }
+    }
+
+    const countNotice = document.getElementById('serviceCountNotice');
+    if (countNotice) {
+      countNotice.textContent = `(${totalAvail} gói khả dụng)`;
+    }
+  }
+
+  function updateServicesUI(servicesList) {
+    if (!Array.isArray(servicesList)) return;
+
+    let hasEnabled = false;
+    let firstEnabled = null;
+
+    servicesList.forEach(s => {
+      state.servicesAvailability[s.code] = s;
+      if (s.enabled) {
+        hasEnabled = true;
+        if (!firstEnabled) firstEnabled = s.code;
+      }
+    });
+
+    document.querySelectorAll('.service-card-item').forEach(card => {
+      const code = card.dataset.code;
+      const s = state.servicesAvailability[code];
+      if (!s) return;
+
+      const badgeEl = card.querySelector('.service-status-badge');
+      if (s.enabled) {
+        card.classList.remove('is-disabled', 'opacity-45', 'cursor-not-allowed', 'hidden');
+        card.classList.add('cursor-pointer');
+        card.setAttribute('tabindex', '0');
+        card.removeAttribute('title');
+        card.style.display = 'flex';
+        if (badgeEl) {
+          badgeEl.className = 'font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded service-status-badge';
+          badgeEl.textContent = 'Khả dụng';
+          badgeEl.removeAttribute('title');
+        }
+      } else {
+        card.classList.add('is-disabled', 'opacity-45', 'cursor-not-allowed', 'hidden');
+        card.classList.remove('cursor-pointer', 'active');
+        card.setAttribute('aria-checked', 'false');
+        card.setAttribute('tabindex', '-1');
+        card.style.display = 'none';
+        const reason = s.reason || (s.admin_disabled ? 'Admin tạm tắt dịch vụ này' : 'Chưa có bảng giá cho dịch vụ này');
+        card.setAttribute('title', reason);
+        if (badgeEl) {
+          if (s.admin_disabled) {
+            badgeEl.className = 'font-bold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded service-status-badge';
+            badgeEl.textContent = 'Tạm tắt';
+          } else {
+            badgeEl.className = 'font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded service-status-badge';
+            badgeEl.textContent = 'Chưa có giá';
+          }
+          badgeEl.setAttribute('title', reason);
+        }
+      }
+    });
+
+    // Update notice banner if no services are available
+    const notice = document.getElementById('noServicesAvailableNotice');
+    if (notice) {
+      notice.classList.toggle('hidden', hasEnabled);
+    }
+
+    // Update category tab counts
+    updateCategoryTabCounts();
+
+    // Re-apply current category filter to hide/show and adjust columns
+    const currentBtn = document.querySelector(`.cat-filter-tab[data-cat="${state.categoryFilter}"]`) || document.querySelector('.cat-filter-tab[data-cat="all"]');
+    filterCategory(state.categoryFilter, currentBtn);
+
+    // Update calculate button state
+    const btnCalc = document.getElementById('btnCalculate');
+    if (btnCalc) {
+      if (!hasEnabled) {
+        btnCalc.disabled = true;
+        btnCalc.classList.add('opacity-50', 'cursor-not-allowed');
+        btnCalc.setAttribute('title', 'Hiện không có dịch vụ nào khả dụng');
+      } else {
+        btnCalc.disabled = false;
+        btnCalc.classList.remove('opacity-50', 'cursor-not-allowed');
+        btnCalc.removeAttribute('title');
+      }
+    }
+
+    // If current selected service is disabled or empty, switch to first available enabled
+    const currentSvc = state.servicesAvailability[state.service];
+    if ((!currentSvc || !currentSvc.enabled) && firstEnabled) {
+      selectService(firstEnabled);
+    } else if (!hasEnabled) {
+      state.service = '';
+    }
+  }
+
+  function syncServicesAvailability(dir) {
+    dir = dir || state.direction;
+    if (!state.config.apiBase) return;
+
+    fetch(`${state.config.apiBase}/services?direction=${dir}`, {
+      headers: { 'X-WP-Nonce': state.config.nonce || '' }
+    })
+    .then(res => res.json())
+    .then(res => {
+      if (res && res.success && Array.isArray(res.data)) {
+        updateServicesUI(res.data);
+      }
+    })
+    .catch(err => {
+      console.warn('UPS syncServicesAvailability error:', err);
+    });
+  }
+
   function filterCategory(cat, btn) {
     state.categoryFilter = cat;
     document.querySelectorAll('.cat-filter-tab').forEach(t => {
@@ -482,19 +665,39 @@
     }
 
     const cards = document.querySelectorAll('.service-card-item');
-    let count = 0;
+    let visibleCount = 0;
     cards.forEach(c => {
+      const code = c.getAttribute('data-code');
       const cardCat = c.getAttribute('data-cat');
-      if (cat === 'all' || cardCat === cat) {
+      const s = state.servicesAvailability[code];
+      const isEnabled = s ? s.enabled : !c.classList.contains('is-disabled');
+
+      // Card is only visible if enabled AND matches category filter
+      if (isEnabled && (cat === 'all' || cardCat === cat)) {
         c.style.display = 'flex';
-        count++;
+        c.classList.remove('hidden');
+        visibleCount++;
       } else {
         c.style.display = 'none';
+        c.classList.add('hidden');
       }
     });
 
+    adjustGridColumns(visibleCount);
+
     const countNotice = document.getElementById('serviceCountNotice');
-    if (countNotice) countNotice.textContent = '(' + count + ' gói)';
+    if (countNotice) {
+      countNotice.textContent = '(' + visibleCount + ' gói khả dụng)';
+    }
+
+    // If current selected service is hidden under this filter, switch to first visible
+    const currentCard = document.querySelector(`.service-card-item[data-code="${state.service}"]`);
+    if (currentCard && currentCard.style.display === 'none') {
+      const firstVisible = document.querySelector('.service-card-item:not(.hidden):not(.is-disabled)');
+      if (firstVisible && firstVisible.dataset.code) {
+        selectService(firstVisible.dataset.code);
+      }
+    }
 
     // If result section is visible, re-render result grid
     const resultSec = document.getElementById('resultSection');
@@ -506,6 +709,14 @@
   function selectService(code) {
     const serviceConf = SERVICE_REGISTRY[code];
     if (!serviceConf) return;
+
+    // Guard: Prevent selecting disabled services
+    const avail = state.servicesAvailability[code];
+    if (avail && !avail.enabled) {
+      const reason = avail.reason || 'Dịch vụ này hiện chưa có bảng giá khả dụng. Vui lòng chọn gói khác hoặc liên hệ Hotline 1900 252 338.';
+      showError(reason);
+      return;
+    }
 
     state.service = code;
     document.querySelectorAll('.service-card-item').forEach(card => {
@@ -1436,7 +1647,7 @@
           ...base,
           price: Math.round(base.price * 1.25),
           ratePerKg: base.ratePerKg ? Math.round(base.ratePerKg * 1.25) : undefined,
-          surchargeNote: 'Đã bao gồm phụ phí phát sáng sớm (Early 8:30 AM)'
+          surchargeNote: 'Đã bao gồm phụ phí phát sớm (Early 8:30 AM)'
         };
       }
       return base;
@@ -1554,7 +1765,7 @@
         destination_iata: state.selectedCountry.iata,
         service_code: 'ALL',
         shipment_type: state.shipmentType,
-        origin_province: document.getElementById('originProvince')?.value || 'TP. Hồ Chí Minh',
+        origin_province: state.originProvince || document.getElementById('originProvinceDisplay')?.value || document.getElementById('originProvince')?.value || 'TP. Hồ Chí Minh',
         destination_state: document.getElementById('destState')?.value || '',
         destination_city: document.getElementById('destCity')?.value || '',
         destination_postal_code: document.getElementById('destZipcode')?.value || '',
@@ -1614,7 +1825,7 @@
     const isExport = state.direction === 'export';
 
     const provSelect = document.getElementById('originProvince');
-    const originLabel = provSelect?.value || 'Việt Nam';
+    const originLabel = state.originProvince || document.getElementById('originProvinceDisplay')?.value || provSelect?.value || 'TP. Hồ Chí Minh';
 
     const stateSelect = document.getElementById('destState');
     const selectedStateText = stateSelect && stateSelect.value && !stateSelect.disabled && stateSelect.options && stateSelect.selectedIndex >= 0
@@ -1704,7 +1915,7 @@
     const isExport = state.direction === 'export';
 
     const provSelect = document.getElementById('originProvince');
-    const originLabel = provSelect?.value || 'Việt Nam';
+    const originLabel = state.originProvince || document.getElementById('originProvinceDisplay')?.value || provSelect?.value || 'TP. Hồ Chí Minh';
 
     const stateSelect = document.getElementById('destState');
     const selectedStateText = stateSelect && stateSelect.value && !stateSelect.disabled && stateSelect.options && stateSelect.selectedIndex >= 0
@@ -1769,7 +1980,7 @@
     // 6 Services calculations (Offline / Test Fallback)
     const services = [
       {
-        code: 'EXW', name: 'Express Early', transit: '1-2 ngày (Giao sáng sớm)',
+        code: 'EXW', name: 'Express Early', transit: '1-2 ngày (Giao sớm)',
         icon: 'ph-globe', iconBg: '#FEF3C7', iconColor: '#D97706',
         zone: c.wxs,
         calc: c.wxs > 0 ? lookupRate('EXW', state.shipmentType, weight, c.wxs) : { price: null, error: 'Không hỗ trợ' }
@@ -1816,160 +2027,187 @@
 
   function renderCalculatedServicesView(services, bestPrice, weight) {
     const totalPiecesCount = state.pieces.reduce((sum, p) => sum + Math.max(1, p.qty || 1), 0);
-    const availablePrices = services.filter(s => s.calc.price > 0).map(s => s.calc.price);
+    const availablePrices = services.filter(s => s.calc && s.calc.price !== null && s.calc.price > 0).map(s => s.calc.price);
     const c = state.selectedCountry || { iata: '', name: '' };
     const isExport = state.direction === 'export';
 
+    // Rule: Hide unquoted/unavailable services from results
+    const availableServices = services.filter(s => s.calc && s.calc.price !== null && s.calc.price > 0);
+
     const displayServices = (state.categoryFilter === 'all')
-      ? services
-      : services.filter(s => SERVICE_REGISTRY[s.code]?.cat === state.categoryFilter);
+      ? availableServices
+      : availableServices.filter(s => SERVICE_REGISTRY[s.code]?.cat === state.categoryFilter);
+
+    // Auto-select first available service if currently selected service has no rate
+    if (displayServices.length > 0 && !displayServices.some(s => s.code === state.service)) {
+      state.service = displayServices[0].code;
+      const servLabelEl = document.getElementById('ribbonServiceLabel');
+      if (servLabelEl) servLabelEl.textContent = 'UPS ' + state.service;
+    }
 
     // 1. Mobile Compact Comparison List
     const mobileList = document.getElementById('mobileCompactListContainer');
     if (mobileList) {
-      mobileList.innerHTML = displayServices.map(s => {
-        const hasRate = s.calc.price !== null && s.calc.price > 0;
-        const isBest = hasRate && s.calc.price === bestPrice && availablePrices.length > 1;
-        const isCurrent = s.code === state.service;
-
-        let badgeTag = '';
-        if (isBest) {
-          badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">Giá tốt nhất</span>';
-        } else if (s.code === 'EXW') {
-          badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">Sáng sớm</span>';
-        } else if (s.code === 'XPR') {
-          badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Ưu tiên</span>';
-        } else if (s.code === 'WXS') {
-          badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-50 text-amber-700">Phổ biến</span>';
-        } else if (s.code === 'WXP') {
-          badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-rose-100 text-rose-800">Hỏa tốc nặng</span>';
-        } else if (s.code === 'WFM') {
-          badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">Tiết kiệm nặng</span>';
-        }
-
-        return `
-          <div class="mobile-comp-row ${isCurrent ? 'active' : ''} rounded-xl p-3 cursor-pointer" onclick="UPSQuote.selectServiceFromMobileList('${s.code}')">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2.5">
-                <div class="w-4 h-4 rounded-full border-2 border-slate-300 comp-radio-dot flex items-center justify-center shrink-0">
-                  ${isCurrent ? '<div class="w-1.5 h-1.5 rounded-full bg-white"></div>' : ''}
-                </div>
-                <div class="w-9 h-9 rounded-lg flex items-center justify-center text-lg shrink-0" style="background:${s.iconBg}; color:${s.iconColor};">
-                  <i class="ph-bold ${s.icon}"></i>
-                </div>
-                <div>
-                  <div class="flex items-center gap-1.5">
-                    <span class="text-xs font-black text-navy-900">${s.name}</span>
-                    <span class="text-[9px] font-mono font-bold text-slate-400">${s.code}</span>
-                  </div>
-                  <div class="flex items-center gap-1.5 mt-0.5">
-                    <span class="text-[10px] text-slate-500 font-medium">${s.transit}</span>
-                    ${badgeTag}
-                  </div>
-                </div>
-              </div>
-              <div class="text-right">
-                ${hasRate ? `
-                  <div class="text-sm font-black ${isCurrent ? 'text-brand-red' : 'text-navy-900'}">${formatVND(s.calc.price)} đ</div>
-                  <div class="text-[9px] text-slate-400">Tạm tính</div>
-                ` : `
-                  <div class="text-xs font-bold text-slate-400">Liên hệ</div>
-                  <div class="text-[9px] text-slate-400">Báo giá riêng</div>
-                `}
-              </div>
-            </div>
+      if (displayServices.length === 0) {
+        mobileList.innerHTML = `
+          <div class="p-4 text-center text-xs text-slate-500 bg-slate-50 rounded-xl">
+            Không có bảng giá nào khả dụng cho phân loại này.
           </div>
         `;
-      }).join('');
+      } else {
+        mobileList.innerHTML = displayServices.map(s => {
+          const isBest = s.calc.price === bestPrice && availablePrices.length > 1;
+          const isCurrent = s.code === state.service;
+
+          let badgeTag = '';
+          if (isBest) {
+            badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">Giá tốt nhất</span>';
+          } else if (s.code === 'EXW') {
+            badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">Sớm</span>';
+          } else if (s.code === 'XPR') {
+            badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Ưu tiên</span>';
+          } else if (s.code === 'WXS') {
+            badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-50 text-amber-700">Phổ biến</span>';
+          } else if (s.code === 'WXP') {
+            badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-rose-100 text-rose-800">Hỏa tốc nặng</span>';
+          } else if (s.code === 'WFM') {
+            badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">Tiết kiệm nặng</span>';
+          }
+
+          return `
+            <div class="mobile-comp-row ${isCurrent ? 'active' : ''} rounded-xl p-3 cursor-pointer" onclick="UPSQuote.selectServiceFromMobileList('${s.code}')">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-4 h-4 rounded-full border-2 border-slate-300 comp-radio-dot flex items-center justify-center shrink-0">
+                    ${isCurrent ? '<div class="w-1.5 h-1.5 rounded-full bg-white"></div>' : ''}
+                  </div>
+                  <div class="w-9 h-9 rounded-lg flex items-center justify-center text-lg shrink-0" style="background:${s.iconBg}; color:${s.iconColor};">
+                    <i class="ph-bold ${s.icon}"></i>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-xs font-black text-navy-900">${s.name}</span>
+                      <span class="text-[9px] font-mono font-bold text-slate-400">${s.code}</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 mt-0.5">
+                      <span class="text-[10px] text-slate-500 font-medium">${s.transit}</span>
+                      ${badgeTag}
+                    </div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-sm font-black ${isCurrent ? 'text-brand-red' : 'text-navy-900'}">${formatVND(s.calc.price)} đ</div>
+                  <div class="text-[9px] text-slate-400">Tạm tính</div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
     }
 
     // 2. Desktop Cards Grid
     const grid = document.getElementById('serviceCardsGrid');
     if (grid) {
-      grid.innerHTML = displayServices.map(s => {
-        const hasRate = s.calc.price !== null && s.calc.price > 0;
-        const isBest = hasRate && s.calc.price === bestPrice && availablePrices.length > 1;
-        const isActive = s.code === state.service;
+      if (displayServices.length === 0) {
+        grid.className = 'grid grid-cols-1 max-w-xl mx-auto mb-4 md:mb-7';
+        grid.innerHTML = `
+          <div class="col-span-full py-10 px-6 text-center bg-white rounded-2xl border border-slate-200 shadow-sm max-w-xl mx-auto">
+            <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3">
+              <i class="ph-bold ph-info"></i>
+            </div>
+            <div class="text-base font-extrabold text-navy-900 mb-1">Chưa có bảng giá cho dịch vụ này</div>
+            <div class="text-xs text-slate-500 mb-4">Vui lòng chọn dịch vụ khác hoặc liên hệ hotline Allship để nhận báo giá ưu đãi riêng.</div>
+            <button type="button" onclick="UPSQuote.openBookingModal()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-red text-white text-xs font-bold rounded-xl shadow-brand hover:bg-brand-red-hover transition-all cursor-pointer">
+              <i class="ph-bold ph-phone-call"></i> Liên hệ hotline 1900 252 338
+            </button>
+          </div>
+        `;
+      } else {
+        if (displayServices.length === 1) {
+          grid.className = 'grid grid-cols-1 max-w-md mx-auto gap-4 md:gap-5 mb-4 md:mb-7';
+        } else if (displayServices.length === 2) {
+          grid.className = 'grid grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto gap-4 md:gap-5 mb-4 md:mb-7';
+        } else {
+          grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 mb-4 md:mb-7';
+        }
 
-        let priceHTML, detailHTML = '';
-        if (hasRate) {
-          priceHTML = `<div class="text-2xl font-black tracking-tight flex items-baseline gap-1 ${isActive ? 'text-brand-red' : 'text-navy-900'}">${formatVND(s.calc.price)} <span class="text-sm font-bold text-slate-500">đ</span></div>`;
+        grid.innerHTML = displayServices.map(s => {
+          const isBest = s.calc.price === bestPrice && availablePrices.length > 1;
+          const isActive = s.code === state.service;
+
+          let priceHTML = `<div class="text-2xl font-black tracking-tight flex items-baseline gap-1 ${isActive ? 'text-brand-red' : 'text-navy-900'}">${formatVND(s.calc.price)} <span class="text-sm font-bold text-slate-500">đ</span></div>`;
           if (s.calc.unit === 'per_kg') {
             priceHTML += `<div class="text-[11px] text-slate-500 mt-1 font-medium">= ${formatVND(s.calc.ratePerKg)} đ/kg × ${weight.toFixed(1)}kg (bậc ${s.calc.bracket})</div>`;
           }
           if (s.calc.warning) {
             priceHTML += `<div class="text-[11px] text-amber-600 mt-1 font-medium"><i class="ph ph-warning"></i> ${s.calc.warning}</div>`;
           }
-          detailHTML = `
+          const detailHTML = `
             <button type="button" onclick="UPSQuote.openPiecesDetailModal()"
                     class="w-full py-2 text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50/60 hover:bg-blue-100 rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer mb-3 border border-blue-100">
               <i class="ph-bold ph-list-numbers text-sm" aria-hidden="true"></i>
               <span>Xem bảng kê ${totalPiecesCount} kiện</span>
             </button>
           `;
-        } else {
-          priceHTML = `<div class="text-sm font-bold text-slate-400 py-1 flex items-center gap-1.5"><i class="ph ph-clock text-base"></i> ${s.calc.error || 'Đang cập nhật'}</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Liên hệ hotline 1900 252 338 để nhận bảng phí riêng.</div>`;
-        }
 
-        let tagHTML = '';
-        if (isBest) {
-          tagHTML = '<span class="absolute top-3 right-3 bg-brand-red text-white text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide shadow-xs">GIÁ TỐT NHẤT</span>';
-        } else if (s.code === 'EXW') {
-          tagHTML = '<span class="absolute top-3 right-3 bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">SÁNG SỚM</span>';
-        } else if (s.code === 'XPR') {
-          tagHTML = '<span class="absolute top-3 right-3 bg-purple-100 text-purple-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">ƯU TIÊN</span>';
-        } else if (s.code === 'WXS') {
-          tagHTML = '<span class="absolute top-3 right-3 bg-amber-50 text-amber-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">PHỔ BIẾN</span>';
-        } else if (s.code === 'WXP') {
-          tagHTML = '<span class="absolute top-3 right-3 bg-rose-100 text-rose-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">HỎA TỐC NẶNG</span>';
-        } else if (s.code === 'WFM') {
-          tagHTML = '<span class="absolute top-3 right-3 bg-emerald-50 text-emerald-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">TIẾT KIỆM NẶNG</span>';
-        } else if (!hasRate) {
-          tagHTML = '<span class="absolute top-3 right-3 bg-slate-100 text-slate-500 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">LIÊN HỆ</span>';
-        }
+          let tagHTML = '';
+          if (isBest) {
+            tagHTML = '<span class="absolute top-3 right-3 bg-brand-red text-white text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide shadow-xs">GIÁ TỐT NHẤT</span>';
+          } else if (s.code === 'EXW') {
+            tagHTML = '<span class="absolute top-3 right-3 bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">SỚM</span>';
+          } else if (s.code === 'XPR') {
+            tagHTML = '<span class="absolute top-3 right-3 bg-purple-100 text-purple-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">ƯU TIÊN</span>';
+          } else if (s.code === 'WXS') {
+            tagHTML = '<span class="absolute top-3 right-3 bg-amber-50 text-amber-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">PHỔ BIẾN</span>';
+          } else if (s.code === 'WXP') {
+            tagHTML = '<span class="absolute top-3 right-3 bg-rose-100 text-rose-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">HỎA TỐC NẶNG</span>';
+          } else if (s.code === 'WFM') {
+            tagHTML = '<span class="absolute top-3 right-3 bg-emerald-50 text-emerald-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">TIẾT KIỆM NẶNG</span>';
+          }
 
-        return `
-          <div class="service-card bg-white rounded-2xl border-[1.5px] p-5 md:p-6 flex flex-col justify-between transition-all duration-300 relative overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 ${isBest ? 'border-brand-red bg-linear-to-b from-brand-red/[0.02] to-white shadow-[0_8px_24px_rgba(206,32,39,0.1)]' : 'border-slate-200'} ${!hasRate ? 'opacity-85 hover:translate-y-0' : ''}">
-            ${tagHTML}
-            <div>
-              <div class="flex items-center gap-3 mb-4">
-                <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0" style="background:${s.iconBg}; color:${s.iconColor};">
-                  <i class="ph-bold ${s.icon}" aria-hidden="true"></i>
+          return `
+            <div class="service-card bg-white rounded-2xl border-[1.5px] p-5 md:p-6 flex flex-col justify-between transition-all duration-300 relative overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 ${isBest ? 'border-brand-red bg-linear-to-b from-brand-red/[0.02] to-white shadow-[0_8px_24px_rgba(206,32,39,0.1)]' : 'border-slate-200'}">
+              ${tagHTML}
+              <div>
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0" style="background:${s.iconBg}; color:${s.iconColor};">
+                    <i class="ph-bold ${s.icon}" aria-hidden="true"></i>
+                  </div>
+                  <div>
+                    <div class="text-base font-extrabold text-navy-900">${s.name}</div>
+                    <div class="text-xs text-slate-500 font-medium mt-0.5">UPS ${s.code} · ${s.transit}</div>
+                  </div>
                 </div>
-                <div>
-                  <div class="text-base font-extrabold text-navy-900">${s.name}</div>
-                  <div class="text-xs text-slate-500 font-medium mt-0.5">UPS ${s.code} · ${s.transit}</div>
+                <div class="space-y-1.5 py-3 border-y border-slate-100 mb-4">
+                  <div class="flex justify-between items-center text-xs">
+                    <span class="text-slate-500 font-medium">Zone</span>
+                    <span class="font-bold text-navy-900">${c.iata === 'US' ? 'US5 (Zone 5)' : (s.zone > 0 ? 'Zone ' + s.zone : '—')}</span>
+                  </div>
+                  <div class="flex justify-between items-center text-xs">
+                    <span class="text-slate-500 font-medium">Cân tính cước</span>
+                    <span class="font-bold text-navy-900">${weight.toFixed(1)} kg</span>
+                  </div>
+                  <div class="flex justify-between items-center text-xs">
+                    <span class="text-slate-500 font-medium">${isExport ? 'Nước đến' : 'Nước gửi'}</span>
+                    <span class="font-bold text-navy-900">${c.name}</span>
+                  </div>
                 </div>
               </div>
-              <div class="space-y-1.5 py-3 border-y border-slate-100 mb-4">
-                <div class="flex justify-between items-center text-xs">
-                  <span class="text-slate-500 font-medium">Zone</span>
-                  <span class="font-bold text-navy-900">${c.iata === 'US' ? 'US5 (Zone 5)' : (s.zone > 0 ? 'Zone ' + s.zone : '—')}</span>
+              <div>
+                <div class="bg-slate-50 rounded-xl p-3 mb-3">
+                  <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1">Cước tạm tính:</div>
+                  ${priceHTML}
                 </div>
-                <div class="flex justify-between items-center text-xs">
-                  <span class="text-slate-500 font-medium">Cân tính cước</span>
-                  <span class="font-bold text-navy-900">${weight.toFixed(1)} kg</span>
-                </div>
-                <div class="flex justify-between items-center text-xs">
-                  <span class="text-slate-500 font-medium">${isExport ? 'Nước đến' : 'Nước gửi'}</span>
-                  <span class="font-bold text-navy-900">${c.name}</span>
-                </div>
+                ${detailHTML}
+                <button type="button" class="w-full h-10 rounded-xl font-sans text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${isActive ? 'bg-brand-red text-white shadow-brand hover:bg-brand-red-hover' : 'bg-white border-[1.5px] border-slate-300 text-slate-700 hover:border-brand-red hover:text-brand-red'}" onclick="UPSQuote.openBookingModal()">
+                  <i class="ph-bold ph-chat-centered-dots text-sm" aria-hidden="true"></i> Liên hệ đặt dịch vụ
+                </button>
               </div>
             </div>
-            <div>
-              <div class="bg-slate-50 rounded-xl p-3 mb-3">
-                <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1">Cước tạm tính:</div>
-                ${priceHTML}
-              </div>
-              ${detailHTML}
-              <button type="button" class="w-full h-10 rounded-xl font-sans text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${isActive && hasRate ? 'bg-brand-red text-white shadow-brand hover:bg-brand-red-hover' : 'bg-white border-[1.5px] border-slate-300 text-slate-700 hover:border-brand-red hover:text-brand-red'}" onclick="UPSQuote.openBookingModal()">
-                <i class="ph-bold ph-chat-centered-dots text-sm" aria-hidden="true"></i> ${hasRate ? 'Liên hệ đặt dịch vụ' : 'Yêu cầu báo giá riêng'}
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
+      }
     }
 
     // Display result section
@@ -1997,7 +2235,7 @@
   function openBookingModal() {
     const isExport = state.direction === 'export';
     const provSelect = document.getElementById('originProvince');
-    const originLabel = provSelect?.value || 'Việt Nam';
+    const originLabel = state.originProvince || document.getElementById('originProvinceDisplay')?.value || provSelect?.value || 'TP. Hồ Chí Minh';
     const c = state.selectedCountry || { name: 'United States', iata: 'US' };
 
     const stateSelect = document.getElementById('destState');
@@ -2271,6 +2509,13 @@
       Object.assign(state.config, window.upsQuoteConfig);
     }
 
+    if (state.config.dim_divisor) {
+      const heroDimEl = document.getElementById('heroDimDivisor');
+      if (heroDimEl) heroDimEl.textContent = state.config.dim_divisor;
+      const modalDimEl = document.getElementById('modalDimDivisor');
+      if (modalDimEl) modalDimEl.textContent = state.config.dim_divisor;
+    }
+
     // Leave destination country & address blank for user selection
     const countries = state.config.COUNTRIES || [];
     state.selectedCountry = null;
@@ -2283,10 +2528,10 @@
     const originHidden = document.getElementById('originProvince');
     if (originDisp) originDisp.value = 'TP. Hồ Chí Minh';
     if (originHidden) {
-      originHidden.value = 'TP. Hồ Chí Minh';
-      if (state.config.VN_PROVINCES) {
-        originHidden.innerHTML = state.config.VN_PROVINCES.map(p => `<option value="${escapeHTML(p)}">${escapeHTML(p)}</option>`).join('');
+      if (state.config.VN_PROVINCES && state.config.VN_PROVINCES.length) {
+        originHidden.innerHTML = state.config.VN_PROVINCES.map(p => `<option value="${escapeHTML(p)}"${p === 'TP. Hồ Chí Minh' ? ' selected' : ''}>${escapeHTML(p)}</option>`).join('');
       }
+      originHidden.value = 'TP. Hồ Chí Minh';
     }
     renderOriginOptions(state.config.VN_PROVINCES);
 
@@ -2353,6 +2598,15 @@
       const cib = document.getElementById('cityCombobox');
       if (cib && !cib.contains(e.target)) toggleCityDropdown(false);
     });
+
+    // Hydrate initial services availability from localized config or sync via REST
+    if (Array.isArray(state.config.INITIAL_SERVICES) && state.config.INITIAL_SERVICES.length > 0) {
+      updateServicesUI(state.config.INITIAL_SERVICES);
+    } else {
+      updateCategoryTabCounts();
+      filterCategory(state.categoryFilter);
+    }
+    syncServicesAvailability(state.direction);
   }
 
   // ===== PUBLIC API / EXPORT =====
@@ -2371,6 +2625,10 @@
     selectDirection,
     filterCategory,
     selectService,
+    updateServicesUI,
+    adjustGridColumns,
+    updateCategoryTabCounts,
+    syncServicesAvailability,
     setShipmentType,
     toggleOriginDropdown,
     selectOriginProvince,
@@ -2413,6 +2671,10 @@
   window.selectDirection = selectDirection;
   window.filterCategory = filterCategory;
   window.selectService = selectService;
+  window.updateServicesUI = updateServicesUI;
+  window.adjustGridColumns = adjustGridColumns;
+  window.updateCategoryTabCounts = updateCategoryTabCounts;
+  window.syncServicesAvailability = syncServicesAvailability;
   window.setShipmentType = setShipmentType;
   window.toggleOriginDropdown = toggleOriginDropdown;
   window.selectOriginProvince = selectOriginProvince;

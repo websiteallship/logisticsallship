@@ -19,6 +19,138 @@ $available_directions = $service_mgr ? $service_mgr->get_available_directions() 
 $has_both_directions  = count( $available_directions ) > 1;
 $default_direction    = in_array( 'export', $available_directions, true ) ? 'export' : ( ! empty( $available_directions[0] ) ? $available_directions[0] : 'export' );
 $plugin_version       = defined( 'ALLSHIP_UPS_QUOTE_VERSION' ) ? ALLSHIP_UPS_QUOTE_VERSION : '1.0.0';
+
+$settings_mgr = class_exists( 'Allship_UPS_Settings_Manager' ) ? new Allship_UPS_Settings_Manager() : null;
+$dim_divisor  = $settings_mgr ? (int) $settings_mgr->get( 'dim_divisor', 5500 ) : 5500;
+
+$initial_services = [];
+if ( class_exists( 'Allship_UPS_REST_Controller' ) ) {
+	$ctrl = new Allship_UPS_REST_Controller();
+	$req  = class_exists( 'WP_REST_Request' ) ? new WP_REST_Request( 'GET', '/services' ) : (object) [ 'direction' => $default_direction ];
+	if ( is_object( $req ) && method_exists( $req, 'set_param' ) ) {
+		$req->set_param( 'direction', $default_direction );
+	}
+	$res = $ctrl->get_services( $req );
+	if ( is_object( $res ) && method_exists( $res, 'get_data' ) ) {
+		$data = $res->get_data();
+		$initial_services = isset( $data['data'] ) && is_array( $data['data'] ) ? $data['data'] : [];
+	} elseif ( is_array( $res ) ) {
+		$initial_services = isset( $res['data'] ) && is_array( $res['data'] ) ? $res['data'] : [];
+	}
+}
+
+$services_by_code = [];
+foreach ( $initial_services as $s ) {
+	$services_by_code[ $s['code'] ] = $s;
+}
+
+$has_any_enabled    = false;
+$first_enabled_code = '';
+$enabled_total      = 0;
+$enabled_parcel     = 0;
+$enabled_freight    = 0;
+
+foreach ( [ 'EXW', 'XPR', 'WXS', 'XPD', 'WXP', 'WFM' ] as $sc ) {
+	if ( ! empty( $services_by_code[ $sc ]['enabled'] ) ) {
+		$has_any_enabled = true;
+		$enabled_total++;
+		if ( in_array( $sc, [ 'EXW', 'XPR', 'WXS', 'XPD' ], true ) ) {
+			$enabled_parcel++;
+		} else {
+			$enabled_freight++;
+		}
+		if ( ! $first_enabled_code ) {
+			$first_enabled_code = $sc;
+		}
+	}
+}
+
+$default_service_code = 'WXS';
+if ( empty( $services_by_code[ $default_service_code ]['enabled'] ) && $first_enabled_code ) {
+	$default_service_code = $first_enabled_code;
+}
+
+$service_names_map = [
+	'EXW' => 'Express Early',
+	'XPR' => 'Express Plus',
+	'WXS' => 'Express Saver',
+	'XPD' => 'Expedited',
+	'WXP' => 'Express Freight',
+	'WFM' => 'Freight Midday',
+];
+$default_service_name = $service_names_map[ $default_service_code ] ?? 'Express Saver';
+
+// Auto-align grid layout class based on enabled count
+$grid_cols_class = 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 grid-cols-auto-6';
+if ( $enabled_total <= 1 ) {
+	$grid_cols_class = 'grid-cols-auto-1 max-w-md';
+} elseif ( $enabled_total === 2 ) {
+	$grid_cols_class = 'grid-cols-auto-2 max-w-2xl';
+} elseif ( $enabled_total === 3 ) {
+	$grid_cols_class = 'grid-cols-auto-3 max-w-3xl';
+} elseif ( $enabled_total === 4 ) {
+	$grid_cols_class = 'grid-cols-auto-4';
+} elseif ( $enabled_total === 5 ) {
+	$grid_cols_class = 'grid-cols-auto-5';
+}
+
+$render_svc_card = function( $code, $cat, $doc_split, $name, $desc, $icon_class, $icon_bg, $icon_color, $tag_text, $tag_color ) use ( $services_by_code, $default_service_code ) {
+	$s          = $services_by_code[ $code ] ?? null;
+	$is_enabled = $s ? ! empty( $s['enabled'] ) : true;
+	$is_active  = ( $code === $default_service_code && $is_enabled );
+	$reason     = $s['reason'] ?? '';
+
+	$badge_html = '<span class="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded service-status-badge">' . esc_html__( 'Khả dụng', 'allship-ups-quote' ) . '</span>';
+	if ( ! $is_enabled ) {
+		if ( ! empty( $s['admin_disabled'] ) ) {
+			$badge_html = '<span class="font-bold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded service-status-badge" title="' . esc_attr( $reason ) . '">' . esc_html__( 'Tạm tắt', 'allship-ups-quote' ) . '</span>';
+		} else {
+			$badge_html = '<span class="font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded service-status-badge" title="' . esc_attr( $reason ) . '">' . esc_html__( 'Chưa có giá', 'allship-ups-quote' ) . '</span>';
+		}
+	}
+
+	$card_classes = 'service-card-item rounded-xl p-3 flex flex-col justify-between';
+	if ( $is_active ) {
+		$card_classes .= ' active';
+	}
+	if ( $is_enabled ) {
+		$card_classes .= ' cursor-pointer';
+	} else {
+		$card_classes .= ' is-disabled opacity-45 cursor-not-allowed hidden';
+	}
+
+	?>
+	<div class="<?php echo esc_attr( $card_classes ); ?>"
+		 data-code="<?php echo esc_attr( $code ); ?>"
+		 data-cat="<?php echo esc_attr( $cat ); ?>"
+		 data-doc-split="<?php echo $doc_split ? 'true' : 'false'; ?>"
+		 onclick="selectService('<?php echo esc_attr( $code ); ?>')"
+		 role="radio"
+		 aria-checked="<?php echo $is_active ? 'true' : 'false'; ?>"
+		 tabindex="<?php echo $is_enabled ? '0' : '-1'; ?>"
+		 <?php echo ! empty( $reason ) && ! $is_enabled ? 'title="' . esc_attr( $reason ) . '"' : ''; ?>
+		 <?php if ( ! $is_enabled ) : ?>style="display: none !important;"<?php endif; ?>
+		 aria-label="<?php echo esc_attr( ( function_exists( '__' ) ? __( 'Dịch vụ', 'allship-ups-quote' ) : 'Dịch vụ' ) . ' ' . $name ); ?>">
+		<div class="card-check-badge absolute -top-1.5 -right-1.5 w-4.5 h-4.5 rounded-full bg-brand-red text-white text-[10px] items-center justify-center">
+			<i class="ph-bold ph-check" aria-hidden="true"></i>
+		</div>
+		<div>
+			<div class="flex items-center justify-between mb-2">
+				<div class="w-8 h-8 rounded-lg flex items-center justify-center text-base <?php echo esc_attr( $icon_bg . ' ' . $icon_color ); ?>">
+					<i class="ph-bold <?php echo esc_attr( $icon_class ); ?>" aria-hidden="true"></i>
+				</div>
+				<span class="text-[9px] font-bold text-slate-400 bg-slate-100 px-1 py-0.5 rounded"><?php echo esc_html( $code ); ?></span>
+			</div>
+			<div class="text-xs font-extrabold text-navy-900 leading-tight"><?php echo esc_html( $name ); ?></div>
+			<div class="text-[10px] text-slate-500 mt-0.5 font-medium leading-snug"><?php echo esc_html( $desc ); ?></div>
+		</div>
+		<div class="mt-2 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9px]">
+			<?php echo $badge_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<span class="<?php echo esc_attr( $tag_color ); ?> font-bold"><?php echo esc_html( $tag_text ); ?></span>
+		</div>
+	</div>
+	<?php
+};
 ?>
 
 <div id="ups-quote-app" class="ups-quote-form ups-quote-app max-w-[1200px] mx-auto my-4 md:my-8 px-3 sm:px-5 w-full font-sans text-navy-900 leading-relaxed" data-version="<?php echo esc_attr( $plugin_version ); ?>">
@@ -34,7 +166,7 @@ $plugin_version       = defined( 'ALLSHIP_UPS_QUOTE_VERSION' ) ? ALLSHIP_UPS_QUO
 			<?php echo esc_html__( 'Báo Giá Vận Chuyển Quốc Tế', 'allship-ups-quote' ); ?>
 		</h1>
 		<p class="hidden sm:block text-xs md:text-sm text-slate-600 max-w-[660px] mx-auto">
-			<?php echo esc_html__( 'Tra cứu biểu cước hàng không UPS Net Rates chính hãng. Quy đổi tự động trọng lượng thể tích theo tiêu chuẩn IATA (DIM 5500).', 'allship-ups-quote' ); ?>
+			<?php echo esc_html__( 'Tra cứu biểu cước hàng không UPS Net Rates chính hãng. Quy đổi tự động trọng lượng thể tích theo tiêu chuẩn IATA (DIM ', 'allship-ups-quote' ); ?><span id="heroDimDivisor"><?php echo esc_html( $dim_divisor ); ?></span><?php echo esc_html__( ').', 'allship-ups-quote' ); ?>
 		</p>
 		<div id="heroDirectionBadge" class="inline-flex items-center gap-2 mt-2 text-xs md:text-sm font-bold text-brand-red bg-brand-red-light px-3.5 py-1 rounded-full transition-all" aria-live="polite">
 			<i class="ph-bold ph-airplane-takeoff" id="heroDirectionIcon" aria-hidden="true"></i>
@@ -123,168 +255,47 @@ $plugin_version       = defined( 'ALLSHIP_UPS_QUOTE_VERSION' ) ? ALLSHIP_UPS_QUO
 				<div class="text-xs md:text-[13px] font-extrabold text-navy-900 flex items-center gap-2 uppercase tracking-wide">
 					<i class="ph-bold ph-package text-brand-red text-base" aria-hidden="true"></i>
 					<span><?php echo esc_html__( '2. Chọn dịch vụ UPS', 'allship-ups-quote' ); ?></span>
-					<span class="text-xs font-semibold text-slate-400 normal-case" id="serviceCountNotice"><?php echo esc_html__( '(6 gói chuẩn)', 'allship-ups-quote' ); ?></span>
+					<span class="text-xs font-semibold text-slate-400 normal-case" id="serviceCountNotice"><?php echo esc_html( sprintf( ( function_exists( '__' ) ? __( '(%d gói khả dụng)', 'allship-ups-quote' ) : '(%d gói khả dụng)' ), $enabled_total ) ); ?></span>
 				</div>
 
 				<!-- Category filter tabs for easy mobile navigation -->
 				<div class="inline-flex p-1 bg-slate-100 rounded-xl gap-1 self-start sm:self-auto text-xs font-bold" role="tablist" aria-label="<?php echo esc_attr__( 'Lọc loại dịch vụ', 'allship-ups-quote' ); ?>">
 					<button type="button" class="cat-filter-tab active px-3 py-1 rounded-lg cursor-pointer" data-cat="all" onclick="filterCategory('all', this)" role="tab" aria-selected="true">
-						<?php echo esc_html__( 'Tất cả (6)', 'allship-ups-quote' ); ?>
+						<?php echo esc_html( sprintf( ( function_exists( '__' ) ? __( 'Tất cả (%d)', 'allship-ups-quote' ) : 'Tất cả (%d)' ), $enabled_total ) ); ?>
 					</button>
-					<button type="button" class="cat-filter-tab px-3 py-1 rounded-lg cursor-pointer text-slate-600 hover:text-navy-900" data-cat="parcel" onclick="filterCategory('parcel', this)" role="tab" aria-selected="false">
-						<?php echo esc_html__( 'Bưu kiện dưới 70kg (4)', 'allship-ups-quote' ); ?>
+					<button type="button" class="cat-filter-tab px-3 py-1 rounded-lg cursor-pointer text-slate-600 hover:text-navy-900<?php echo $enabled_parcel === 0 ? ' opacity-40 pointer-events-none' : ''; ?>" data-cat="parcel" onclick="filterCategory('parcel', this)" role="tab" aria-selected="false">
+						<?php echo esc_html( sprintf( ( function_exists( '__' ) ? __( 'Bưu kiện dưới 70kg (%d)', 'allship-ups-quote' ) : 'Bưu kiện dưới 70kg (%d)' ), $enabled_parcel ) ); ?>
 					</button>
-					<button type="button" class="cat-filter-tab px-3 py-1 rounded-lg cursor-pointer text-slate-600 hover:text-navy-900" data-cat="freight" onclick="filterCategory('freight', this)" role="tab" aria-selected="false">
-						<?php echo esc_html__( 'Hàng nặng trên 70kg (2)', 'allship-ups-quote' ); ?>
+					<button type="button" class="cat-filter-tab px-3 py-1 rounded-lg cursor-pointer text-slate-600 hover:text-navy-900<?php echo $enabled_freight === 0 ? ' opacity-40 pointer-events-none' : ''; ?>" data-cat="freight" onclick="filterCategory('freight', this)" role="tab" aria-selected="false">
+						<?php echo esc_html( sprintf( ( function_exists( '__' ) ? __( 'Hàng nặng trên 70kg (%d)', 'allship-ups-quote' ) : 'Hàng nặng trên 70kg (%d)' ), $enabled_freight ) ); ?>
 					</button>
 				</div>
 			</div>
 
-			<!-- 6 Service Cards Grid -->
-			<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-2.5" id="serviceTabs" role="radiogroup" aria-label="<?php echo esc_attr__( 'Danh sách gói dịch vụ UPS', 'allship-ups-quote' ); ?>">
-
-				<!-- EXW -->
-				<div class="service-card-item rounded-xl p-3 cursor-pointer flex flex-col justify-between"
-					 data-code="EXW" data-cat="parcel" data-doc-split="true" onclick="selectService('EXW')"
-					 role="radio" aria-checked="false" tabindex="0" aria-label="<?php echo esc_attr__( 'Dịch vụ Express Early', 'allship-ups-quote' ); ?>">
-					<div class="card-check-badge absolute -top-1.5 -right-1.5 w-4.5 h-4.5 rounded-full bg-brand-red text-white text-[10px] items-center justify-center">
-						<i class="ph-bold ph-check" aria-hidden="true"></i>
-					</div>
-					<div>
-						<div class="flex items-center justify-between mb-2">
-							<div class="w-8 h-8 rounded-lg flex items-center justify-center text-base bg-amber-100 text-amber-700">
-								<i class="ph-bold ph-globe" aria-hidden="true"></i>
-							</div>
-							<span class="text-[9px] font-bold text-slate-400 bg-slate-100 px-1 py-0.5 rounded">EXW</span>
-						</div>
-						<div class="text-xs font-extrabold text-navy-900 leading-tight">Express Early</div>
-						<div class="text-[10px] text-slate-500 mt-0.5 font-medium leading-snug"><?php echo esc_html__( 'Sáng sớm · 1-2 ngày', 'allship-ups-quote' ); ?></div>
-					</div>
-					<div class="mt-2 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9px]">
-						<span class="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded"><?php echo esc_html__( 'Khả dụng', 'allship-ups-quote' ); ?></span>
-						<span class="text-amber-600 font-bold"><?php echo esc_html__( 'Sáng sớm', 'allship-ups-quote' ); ?></span>
-					</div>
+			<!-- Notice banner when no services are available -->
+			<div id="noServicesAvailableNotice" class="<?php echo $has_any_enabled ? 'hidden' : ''; ?> mb-3 p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center gap-3">
+				<i class="ph-bold ph-warning-circle text-xl text-amber-600 shrink-0" aria-hidden="true"></i>
+				<div>
+					<div class="font-bold"><?php echo esc_html__( 'Hiện chưa có bảng giá khả dụng cho chiều vận chuyển này.', 'allship-ups-quote' ); ?></div>
+					<div class="text-[11px] text-amber-700 mt-0.5"><?php echo esc_html__( 'Vui lòng liên hệ Hotline 1900 252 338 để được nhân viên Allship hỗ trợ tra cứu giá nhanh.', 'allship-ups-quote' ); ?></div>
 				</div>
+			</div>
 
-				<!-- XPR -->
-				<div class="service-card-item rounded-xl p-3 cursor-pointer flex flex-col justify-between"
-					 data-code="XPR" data-cat="parcel" data-doc-split="true" onclick="selectService('XPR')"
-					 role="radio" aria-checked="false" tabindex="0" aria-label="<?php echo esc_attr__( 'Dịch vụ Express Plus', 'allship-ups-quote' ); ?>">
-					<div class="card-check-badge absolute -top-1.5 -right-1.5 w-4.5 h-4.5 rounded-full bg-brand-red text-white text-[10px] items-center justify-center">
-						<i class="ph-bold ph-check" aria-hidden="true"></i>
-					</div>
-					<div>
-						<div class="flex items-center justify-between mb-2">
-							<div class="w-8 h-8 rounded-lg flex items-center justify-center text-base bg-purple-100 text-purple-700">
-								<i class="ph-bold ph-rocket-launch" aria-hidden="true"></i>
-							</div>
-							<span class="text-[9px] font-bold text-slate-400 bg-slate-100 px-1 py-0.5 rounded">XPR</span>
-						</div>
-						<div class="text-xs font-extrabold text-navy-900 leading-tight">Express Plus</div>
-						<div class="text-[10px] text-slate-500 mt-0.5 font-medium leading-snug"><?php echo esc_html__( 'Ưu tiên · 1-2 ngày', 'allship-ups-quote' ); ?></div>
-					</div>
-					<div class="mt-2 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9px]">
-						<span class="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded"><?php echo esc_html__( 'Khả dụng', 'allship-ups-quote' ); ?></span>
-						<span class="text-purple-600 font-bold"><?php echo esc_html__( 'Ưu tiên', 'allship-ups-quote' ); ?></span>
-					</div>
-				</div>
-
-				<!-- WXS -->
-				<div class="service-card-item active rounded-xl p-3 cursor-pointer flex flex-col justify-between"
-					 data-code="WXS" data-cat="parcel" data-doc-split="true" onclick="selectService('WXS')"
-					 role="radio" aria-checked="true" tabindex="0" aria-label="<?php echo esc_attr__( 'Dịch vụ Express Saver', 'allship-ups-quote' ); ?>">
-					<div class="card-check-badge absolute -top-1.5 -right-1.5 w-4.5 h-4.5 rounded-full bg-brand-red text-white text-[10px] items-center justify-center">
-						<i class="ph-bold ph-check" aria-hidden="true"></i>
-					</div>
-					<div>
-						<div class="flex items-center justify-between mb-2">
-							<div class="w-8 h-8 rounded-lg flex items-center justify-center text-base bg-amber-500 text-white shadow-xs">
-								<i class="ph-bold ph-airplane-tilt" aria-hidden="true"></i>
-							</div>
-							<span class="text-[9px] font-extrabold text-amber-800 bg-amber-50 px-1 py-0.5 rounded">WXS</span>
-						</div>
-						<div class="text-xs font-extrabold text-navy-900 leading-tight">Express Saver</div>
-						<div class="text-[10px] text-slate-500 mt-0.5 font-medium leading-snug"><?php echo esc_html__( 'Nhanh nhất · 1-3 ngày', 'allship-ups-quote' ); ?></div>
-					</div>
-					<div class="mt-2 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9px]">
-						<span class="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded"><?php echo esc_html__( 'Khả dụng', 'allship-ups-quote' ); ?></span>
-						<span class="text-amber-600 font-bold"><?php echo esc_html__( 'Phổ biến', 'allship-ups-quote' ); ?></span>
-					</div>
-				</div>
-
-				<!-- XPD -->
-				<div class="service-card-item rounded-xl p-3 cursor-pointer flex flex-col justify-between"
-					 data-code="XPD" data-cat="parcel" data-doc-split="false" onclick="selectService('XPD')"
-					 role="radio" aria-checked="false" tabindex="0" aria-label="<?php echo esc_attr__( 'Dịch vụ Expedited', 'allship-ups-quote' ); ?>">
-					<div class="card-check-badge absolute -top-1.5 -right-1.5 w-4.5 h-4.5 rounded-full bg-brand-red text-white text-[10px] items-center justify-center">
-						<i class="ph-bold ph-check" aria-hidden="true"></i>
-					</div>
-					<div>
-						<div class="flex items-center justify-between mb-2">
-							<div class="w-8 h-8 rounded-lg flex items-center justify-center text-base bg-indigo-100 text-indigo-700">
-								<i class="ph-bold ph-truck" aria-hidden="true"></i>
-							</div>
-							<span class="text-[9px] font-bold text-slate-400 bg-slate-100 px-1 py-0.5 rounded">XPD</span>
-						</div>
-						<div class="text-xs font-extrabold text-navy-900 leading-tight">Expedited</div>
-						<div class="text-[10px] text-slate-500 mt-0.5 font-medium leading-snug"><?php echo esc_html__( 'Tiết kiệm · 3-5 ngày', 'allship-ups-quote' ); ?></div>
-					</div>
-					<div class="mt-2 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9px]">
-						<span class="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded"><?php echo esc_html__( 'Khả dụng', 'allship-ups-quote' ); ?></span>
-						<span class="text-indigo-600 font-bold"><?php echo esc_html__( 'Giá tốt', 'allship-ups-quote' ); ?></span>
-					</div>
-				</div>
-
-				<!-- WXP -->
-				<div class="service-card-item rounded-xl p-3 cursor-pointer flex flex-col justify-between"
-					 data-code="WXP" data-cat="freight" data-doc-split="false" onclick="selectService('WXP')"
-					 role="radio" aria-checked="false" tabindex="0" aria-label="<?php echo esc_attr__( 'Dịch vụ Express Freight', 'allship-ups-quote' ); ?>">
-					<div class="card-check-badge absolute -top-1.5 -right-1.5 w-4.5 h-4.5 rounded-full bg-brand-red text-white text-[10px] items-center justify-center">
-						<i class="ph-bold ph-check" aria-hidden="true"></i>
-					</div>
-					<div>
-						<div class="flex items-center justify-between mb-2">
-							<div class="w-8 h-8 rounded-lg flex items-center justify-center text-base bg-rose-100 text-rose-600">
-								<i class="ph-bold ph-lightning" aria-hidden="true"></i>
-							</div>
-							<span class="text-[9px] font-bold text-slate-400 bg-slate-100 px-1 py-0.5 rounded">WXP</span>
-						</div>
-						<div class="text-xs font-extrabold text-navy-900 leading-tight">Express Freight</div>
-						<div class="text-[10px] text-slate-500 mt-0.5 font-medium leading-snug"><?php echo esc_html__( 'Hỏa tốc trên 70kg', 'allship-ups-quote' ); ?></div>
-					</div>
-					<div class="mt-2 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9px]">
-						<span class="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded"><?php echo esc_html__( 'Khả dụng', 'allship-ups-quote' ); ?></span>
-						<span class="text-rose-600 font-bold"><?php echo esc_html__( 'Hỏa tốc nặng', 'allship-ups-quote' ); ?></span>
-					</div>
-				</div>
-
-				<!-- WFM -->
-				<div class="service-card-item rounded-xl p-3 cursor-pointer flex flex-col justify-between"
-					 data-code="WFM" data-cat="freight" data-doc-split="false" onclick="selectService('WFM')"
-					 role="radio" aria-checked="false" tabindex="0" aria-label="<?php echo esc_attr__( 'Dịch vụ Freight Midday', 'allship-ups-quote' ); ?>">
-					<div class="card-check-badge absolute -top-1.5 -right-1.5 w-4.5 h-4.5 rounded-full bg-brand-red text-white text-[10px] items-center justify-center">
-						<i class="ph-bold ph-check" aria-hidden="true"></i>
-					</div>
-					<div>
-						<div class="flex items-center justify-between mb-2">
-							<div class="w-8 h-8 rounded-lg flex items-center justify-center text-base bg-emerald-100 text-emerald-700">
-								<i class="ph-bold ph-crane" aria-hidden="true"></i>
-							</div>
-							<span class="text-[9px] font-bold text-slate-400 bg-slate-100 px-1 py-0.5 rounded">WFM</span>
-						</div>
-						<div class="text-xs font-extrabold text-navy-900 leading-tight">Freight Midday</div>
-						<div class="text-[10px] text-slate-500 mt-0.5 font-medium leading-snug"><?php echo esc_html__( 'Tiêu chuẩn trên 70kg', 'allship-ups-quote' ); ?></div>
-					</div>
-					<div class="mt-2 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9px]">
-						<span class="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded"><?php echo esc_html__( 'Khả dụng', 'allship-ups-quote' ); ?></span>
-						<span class="text-emerald-700 font-bold"><?php echo esc_html__( 'Pallet', 'allship-ups-quote' ); ?></span>
-					</div>
-				</div>
-
+			<!-- Service Cards Grid with Adaptive Alignment -->
+			<div class="grid <?php echo esc_attr( $grid_cols_class ); ?> gap-2 md:gap-2.5" id="serviceTabs" role="radiogroup" aria-label="<?php echo esc_attr__( 'Danh sách gói dịch vụ UPS', 'allship-ups-quote' ); ?>">
+				<?php
+				$render_svc_card( 'EXW', 'parcel', true, 'Express Early', 'Sớm · 1-2 ngày', 'ph-globe', 'bg-amber-100', 'text-amber-700', 'Sớm', 'text-amber-600' );
+				$render_svc_card( 'XPR', 'parcel', true, 'Express Plus', 'Ưu tiên · 1-2 ngày', 'ph-rocket-launch', 'bg-purple-100', 'text-purple-700', 'Ưu tiên', 'text-purple-600' );
+				$render_svc_card( 'WXS', 'parcel', true, 'Express Saver', 'Nhanh nhất · 1-3 ngày', 'ph-airplane-tilt', 'bg-amber-500', 'text-white shadow-xs', 'Phổ biến', 'text-amber-600' );
+				$render_svc_card( 'XPD', 'parcel', false, 'Expedited', 'Tiết kiệm · 3-5 ngày', 'ph-truck', 'bg-indigo-100', 'text-indigo-700', 'Giá tốt', 'text-indigo-600' );
+				$render_svc_card( 'WXP', 'freight', false, 'Express Freight', 'Hỏa tốc trên 70kg', 'ph-lightning', 'bg-rose-100', 'text-rose-600', 'Hỏa tốc nặng', 'text-rose-600' );
+				$render_svc_card( 'WFM', 'freight', false, 'Freight Midday', 'Tiêu chuẩn trên 70kg', 'ph-crane', 'bg-emerald-100', 'text-emerald-700', 'Pallet', 'text-emerald-700' );
+				?>
 			</div>
 
 			<!-- Shipment type toggle (Only shown for EXW, XPR, WXS) -->
-			<div class="mt-4 pt-3.5 border-t border-slate-100" id="shipmentTypeRow">
+			<?php $has_initial_doc_split = in_array( $default_service_code, [ 'EXW', 'XPR', 'WXS' ], true ); ?>
+			<div class="mt-4 pt-3.5 border-t border-slate-100" id="shipmentTypeRow"<?php echo ! $has_initial_doc_split ? ' style="display:none;"' : ''; ?>>
 				<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2.5">
 					<div class="flex items-center gap-2">
 						<span class="text-xs font-extrabold text-navy-900 tracking-wide uppercase"><?php echo esc_html__( 'Phân loại bưu gửi', 'allship-ups-quote' ); ?></span>
@@ -292,7 +303,7 @@ $plugin_version       = defined( 'ALLSHIP_UPS_QUOTE_VERSION' ) ? ALLSHIP_UPS_QUO
 					</div>
 					<div class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 bg-slate-50 px-2.5 py-0.5 rounded-full border border-slate-200 self-start sm:self-auto">
 						<i class="ph-bold ph-info text-brand-red text-xs" aria-hidden="true"></i>
-						<span><?php echo esc_html__( 'Dịch vụ', 'allship-ups-quote' ); ?> <strong class="text-navy-900" id="currentServiceNameType">Express Saver</strong> <?php echo esc_html__( 'có cước ưu đãi cho chứng từ ≤ 5kg', 'allship-ups-quote' ); ?></span>
+						<span><?php echo esc_html__( 'Dịch vụ', 'allship-ups-quote' ); ?> <strong class="text-navy-900" id="currentServiceNameType"><?php echo esc_html( $default_service_name ); ?></strong> <?php echo esc_html__( 'có cước ưu đãi cho chứng từ ≤ 5kg', 'allship-ups-quote' ); ?></span>
 					</div>
 				</div>
 
@@ -740,7 +751,7 @@ $plugin_version       = defined( 'ALLSHIP_UPS_QUOTE_VERSION' ) ? ALLSHIP_UPS_QUO
 			<!-- Footer Action -->
 			<div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between shrink-0">
 				<div class="text-[11px] text-slate-500 italic">
-					* <?php echo esc_html__( 'Hệ số DIM 5500 chuẩn quốc tế IATA / UPS Air.', 'allship-ups-quote' ); ?>
+					* <?php echo esc_html__( 'Hệ số DIM ', 'allship-ups-quote' ); ?><span id="modalDimDivisor"><?php echo esc_html( $dim_divisor ); ?></span><?php echo esc_html__( ' chuẩn quốc tế IATA / UPS Air.', 'allship-ups-quote' ); ?>
 				</div>
 				<button type="button" onclick="closeModals()" class="px-5 py-2 rounded-xl bg-navy-900 text-white text-xs font-bold hover:bg-navy-800 cursor-pointer">
 					<?php echo esc_html__( 'Đóng', 'allship-ups-quote' ); ?>

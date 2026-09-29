@@ -257,9 +257,38 @@ class Allship_UPS_Admin_Rate_Cards {
 	public function ajax_activate_rate_card() {
 		$this->verify_security();
 
-		$id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
+		$id        = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
+		$confirmed = ! empty( $_POST['confirmed'] );
+
 		if ( ! $id ) {
 			wp_send_json_error( [ 'message' => __( 'ID bảng giá không hợp lệ.', 'allship-ups-quote' ) ] );
+		}
+
+		// Pre-check for conflicting active cards if not yet confirmed by user
+		if ( ! $confirmed && method_exists( $this->rate_card_repo, 'get_conflicting_active_cards' ) ) {
+			$conflicts = $this->rate_card_repo->get_conflicting_active_cards( $id );
+			if ( ! empty( $conflicts ) ) {
+				$conflicting_cards = [];
+				foreach ( $conflicts as $cid ) {
+					$c = $this->rate_card_repo->get( $cid );
+					if ( $c ) {
+						$groups = method_exists( $this->rate_card_repo, 'get_rate_groups_for_card' )
+							? $this->rate_card_repo->get_rate_groups_for_card( $cid )
+							: [];
+						$conflicting_cards[] = [
+							'id'          => (int) $c->id,
+							'name'        => $c->name,
+							'rate_groups' => $groups,
+						];
+					}
+				}
+
+				wp_send_json_success( [
+					'has_conflict'      => true,
+					'conflicting_cards' => $conflicting_cards,
+					'message'           => __( 'Phát hiện bảng giá active khác đang cùng dịch vụ.', 'allship-ups-quote' ),
+				] );
+			}
 		}
 
 		$res = $this->rate_card_repo->activate( $id );
@@ -269,7 +298,10 @@ class Allship_UPS_Admin_Rate_Cards {
 
 		$this->invalidate_caches();
 
-		wp_send_json_success( [ 'message' => __( 'Đã kích hoạt bảng giá thành công.', 'allship-ups-quote' ) ] );
+		wp_send_json_success( [
+			'has_conflict' => false,
+			'message'      => __( 'Đã kích hoạt bảng giá thành công.', 'allship-ups-quote' ),
+		] );
 	}
 
 	/**

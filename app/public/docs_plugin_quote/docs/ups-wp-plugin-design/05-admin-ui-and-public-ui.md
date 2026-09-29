@@ -149,34 +149,45 @@ Nhóm `Fees`:
 5. Nút tính giá.
 6. Bảng kết quả.
 
-## 6. Bảng kết quả
+## 6. Bảng kết quả (Result View & Service Comparison)
 
-Nên hiển thị:
+Bảng kết quả hiển thị dạng Card Grid (Desktop) và Compact Comparison List (Mobile):
+
+### 6.1. Quy tắc hiển thị Card (Cập nhật ADR-010)
+- **Ẩn toàn bộ dịch vụ không có giá khả dụng**: Chỉ hiển thị các service card có cước tính toán thành công (`price > 0`). Tuyệt đối không render các card xám kèm thông báo "Không có bảng giá nào đang hoạt động...".
+- **Dynamic Auto-Aligning Grid**:
+  - Khi có **1 dịch vụ khả dụng**: Render grid 1 cột căn giữa (`grid-cols-1 max-w-md mx-auto`), tạo sự cân đối sang trọng.
+  - Khi có **2 dịch vụ khả dụng**: Render grid 2 cột cân bằng (`grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto`).
+  - Khi có **3 dịch vụ trở lên**: Render grid 3 cột tiêu chuẩn (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`).
+  - Khi **0 dịch vụ khả dụng** (theo filter): Hiển thị banner empty-state thân thiện kèm nút liên hệ hotline 1900 252 338.
+- **Auto-Switch Service**: Nếu dịch vụ khách hàng chọn ở form trước đó không có bảng giá hoạt động, kết quả tự động chuyển active sang dịch vụ có giá đầu tiên và cập nhật badge ribbon header.
+- **Mobile Compact View**: Danh sách thu gọn trên mobile chỉ liệt kê các gói có giá, hiển thị giá rõ ràng, không hiển thị dòng "Liên hệ / Báo giá riêng" cho các bảng giá không tồn tại.
+
+### 6.2. Nội dung chi tiết trên mỗi Card:
 
 | Dòng | Nội dung |
 |---|---|
-| Service | Tên dịch vụ và mã service |
-| Destination | Country và IATA |
-| Zone | Zone thật |
-| Rate zone | `US5` nếu Mỹ, nếu không là Zone |
-| Actual weight | Tổng cân thực |
-| Dim weight | Tổng cân quy đổi |
-| Chargeable weight | Cân tính cước sau rounding |
-| Base price | Giá theo bảng |
-| Fees | Rỗng/off trong phase 1 hoặc chi tiết nếu bật |
-| Total | Tổng giá |
-| Notes | Giá chưa gồm VAT/FSC/Surge/fees nếu chưa bật |
+| Service | Tên dịch vụ, mã service và thời gian vận chuyển (Transit time) |
+| Destination | Country và IATA code |
+| Zone | Zone vật lý và Rate zone (`US5` nếu Mỹ) |
+| Actual weight | Cân thực tế kiện hàng |
+| Chargeable weight | Cân tính cước sau quy đổi thể tích và làm tròn |
+| Base price | Giá cước tạm tính theo bảng giá active |
+| Action Button | Nút "Liên hệ đặt dịch vụ" mở Booking Modal với thông tin tuyến điền sẵn |
 
 ## 7. UX edge cases
 
 | Trường hợp | UI xử lý |
 |---|---|
+| Điểm gửi khởi tạo | Mặc định luôn là "TP. Hồ Chí Minh", đồng bộ qua `state.originProvince`, không bị nhảy về "An Giang" khi load danh sách tỉnh. |
+| Chỉ có 1 hoặc 2 bảng giá active (e.g. XPD & WXP) | Chỉ render đúng 1 hoặc 2 card tương ứng, grid tự động co vào giữa (`max-w-md` hoặc `max-w-3xl`). |
+| Bảng giá WXP active trực tiếp | Tính trực tiếp theo đơn giá của rate card `export_wxp`, không cưỡng ép chuyển sang WFM hay nhân hệ số phái sinh. |
 | Chọn Document nhưng cân > 5kg | Báo: Document chỉ có bảng đến 5kg, vui lòng chọn Non-document hoặc liên hệ tư vấn. |
 | Chọn WFM tới country không có WFM | Báo tuyến không hỗ trợ freight. |
 | Chọn US | Kết quả hiển thị ghi chú dùng `US5`. |
 | Không nhập kích thước | Cho phép nếu chính sách cho phép, dim weight = 0 và cảnh báo nên nhập đủ. |
-| Nhiều kiện | Hiển thị breakdown từng kiện. |
-| Giá chưa gồm phụ phí | Luôn hiển thị note rõ. |
+| Nhiều kiện | Hiển thị modal "Xem bảng kê X kiện" với bảng breakdown chi tiết từng kiện. |
+| Giá chưa gồm phụ phí | Luôn hiển thị note rõ trong card. |
 | Tất cả service bị tắt | Hiện thông báo "Chưa có dịch vụ khả dụng" + hotline. |
 | Chỉ 1 direction bật | Ẩn direction selector, hiện label chiều phía trên. |
 | Đổi direction | Service tabs reload dynamic, origin/dest labels đổi chiều. |

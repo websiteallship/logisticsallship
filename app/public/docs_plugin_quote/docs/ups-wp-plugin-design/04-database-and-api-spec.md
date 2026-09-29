@@ -7,7 +7,7 @@ Prefix dùng `$wpdb->prefix`, ví dụ `wp_ups_rate_cards`.
 ## 2. `ups_rate_cards`
 
 Lưu phiên bản bảng giá. Admin có thể tạo nhiều rate cards với tên tùy ý.
-Chỉ 1 rate card `status=active` tại 1 thời điểm cho public quote.
+Hệ thống cho phép **nhiều rate cards có `status=active` cùng lúc** (mỗi dịch vụ và chiều vận chuyển chỉ có tối đa 1 rate card active tại 1 thời điểm; khi kích hoạt một card mới cho dịch vụ đó, card active cũ cùng dịch vụ và chiều sẽ chuyển sang `archived`).
 
 ```sql
 CREATE TABLE {prefix}ups_rate_cards (
@@ -371,10 +371,14 @@ Response thành công (Batch):
 }
 ```
 
-### 9.3. Transient Caching
-- **Cache Key**: `ups_calc_` + `md5(json_encode(normalized_params))`
+### 9.3. Transient Caching & Cache Invalidation (Cập nhật ADR-010)
+- **Cache Key**: `ups_calc_v2_` + `md5(json_encode([$direction, $destination_iata, $destination_state, $service_code, $shipment_type, $envelope, $clean_pieces, $active_cards_fingerprint]))`.
+- **Active Fingerprint**: Nối chuỗi `id:status:activated_at` của tất cả các rate card đang active.
 - **TTL**: 3600 giây (1 giờ).
-- **Invalidation**: Xóa toàn bộ transient `_transient_ups_%` khi admin kích hoạt rate card mới hoặc thay đổi cấu hình settings.
+- **Auto Cache Busting**: Bất cứ khi nào admin kích hoạt, lưu trữ (archive), hoặc import bảng giá mới, chuỗi fingerprint thay đổi khiến toàn bộ cache cũ tự động được làm mới mà không bị dính dữ liệu lỗi hoặc báo giá cũ.
+- **Calculation Priority**:
+  - Khi tính `WXP`: Ưu tiên bảng giá active trực tiếp của `export_wxp`. Nếu không có mới fallback tính từ `export_wfm` × 1.22.
+  - Khi tính `EXW`/`XPR`: Ưu tiên bảng giá active trực tiếp. Nếu không có mới fallback tính từ `export_wxs` × (1.25 hoặc 1.15).
 
 Response lỗi:
 

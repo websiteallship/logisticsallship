@@ -183,6 +183,18 @@ class Mock_WPDB_REST {
 
 	public function get_row( $query, $output = OBJECT ) {
 		if ( false !== strpos( $query, 'ups_rate_cards' ) ) {
+			if ( preg_match( "/r\.rate_group = '([^']+)'/", $query, $rg ) ) {
+				$found = false;
+				foreach ( $this->rates as $r ) {
+					if ( $r['rate_group'] === $rg[1] ) {
+						$found = true;
+						break;
+					}
+				}
+				if ( ! $found ) {
+					return null;
+				}
+			}
 			return (object) [
 				'id'                   => 1,
 				'name'                 => 'UPS VN Net Rates 2026',

@@ -141,6 +141,9 @@ class Allship_UPS_Zone_Resolver {
 		'WXS',
 		'XPD',
 		'WFM',
+		'EXW',
+		'XPR',
+		'WXP',
 	];
 
 	/**
@@ -257,7 +260,13 @@ class Allship_UPS_Zone_Resolver {
 		// 3. Resolve rate card ID & zone set ID
 		$zone_set_id = null;
 		if ( ! $rate_card_id && $this->rate_card_repo ) {
-			$active_card = $this->rate_card_repo->get_active();
+			$active_card = null;
+			if ( method_exists( $this->rate_card_repo, 'get_active_for_service' ) ) {
+				$active_card = $this->rate_card_repo->get_active_for_service( $service_code, $direction );
+			}
+			if ( empty( $active_card ) ) {
+				$active_card = $this->rate_card_repo->get_active();
+			}
 			if ( $active_card ) {
 				$rate_card_id = (int) $active_card->id;
 				$zone_set_id  = ! empty( $active_card->zone_set_id ) ? (int) $active_card->zone_set_id : null;
@@ -287,6 +296,15 @@ class Allship_UPS_Zone_Resolver {
 
 		// 4. Query physical zone from zone repository using zone_set_id
 		$raw_zone = $this->zone_repo->find_zone( $zone_set_id, $country->id, $direction, $service_code );
+
+		// Fallback for freight/multiplier services if not directly mapped in zone table
+		if ( null === $raw_zone || '' === trim( $raw_zone ) || '0' === trim( $raw_zone ) ) {
+			if ( 'WXP' === $service_code ) {
+				$raw_zone = $this->zone_repo->find_zone( $zone_set_id, $country->id, $direction, 'WFM' );
+			} elseif ( in_array( $service_code, [ 'EXW', 'XPR' ], true ) ) {
+				$raw_zone = $this->zone_repo->find_zone( $zone_set_id, $country->id, $direction, 'WXS' );
+			}
+		}
 
 		if ( null === $raw_zone || '' === trim( $raw_zone ) || '0' === trim( $raw_zone ) ) {
 			return new Allship_UPS_Zone_Result( [

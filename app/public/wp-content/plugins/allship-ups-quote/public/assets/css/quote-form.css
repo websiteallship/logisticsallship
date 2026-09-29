@@ -93,13 +93,72 @@
   box-shadow: 0 0 0 3px rgba(206, 32, 39, 0.12), 0 8px 20px -4px rgba(206, 32, 39, 0.14) !important;
 }
 .service-card-item.is-disabled {
-  opacity: 0.65;
-  background: #F8FAFC;
-  border-style: dashed;
+  display: none !important;
 }
-.service-card-item.is-disabled:hover {
-  opacity: 0.85;
-  border-color: #94A3B8;
+
+/* Service Tabs Adaptive Layout */
+#serviceTabs {
+  transition: all 0.25s ease-in-out;
+}
+#serviceTabs.grid-cols-auto-1 {
+  grid-template-columns: minmax(0, 1fr) !important;
+  max-width: 380px;
+}
+#serviceTabs.grid-cols-auto-2 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  max-width: 680px;
+}
+@media (min-width: 640px) {
+  #serviceTabs.grid-cols-auto-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+#serviceTabs.grid-cols-auto-3 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+@media (min-width: 640px) {
+  #serviceTabs.grid-cols-auto-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+#serviceTabs.grid-cols-auto-4 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+@media (min-width: 640px) {
+  #serviceTabs.grid-cols-auto-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (min-width: 1024px) {
+  #serviceTabs.grid-cols-auto-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+#serviceTabs.grid-cols-auto-5 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+@media (min-width: 640px) {
+  #serviceTabs.grid-cols-auto-5 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+@media (min-width: 1024px) {
+  #serviceTabs.grid-cols-auto-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  }
+}
+#serviceTabs.grid-cols-auto-6 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+@media (min-width: 640px) {
+  #serviceTabs.grid-cols-auto-6 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+@media (min-width: 1024px) {
+  #serviceTabs.grid-cols-auto-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  }
 }
 .card-check-badge { 
   display: none; 

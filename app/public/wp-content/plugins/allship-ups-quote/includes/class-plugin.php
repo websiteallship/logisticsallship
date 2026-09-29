@@ -134,6 +134,14 @@ class Allship_UPS_Plugin {
 				$admin_countries = new Allship_UPS_Admin_Countries();
 				$admin_countries->register_hooks();
 			}
+			if ( class_exists( 'Allship_UPS_Admin_Settings' ) ) {
+				$admin_settings = new Allship_UPS_Admin_Settings();
+				$admin_settings->register_hooks();
+			}
+			if ( class_exists( 'Allship_UPS_Admin_Quote_Logs' ) ) {
+				$admin_quote_logs = new Allship_UPS_Admin_Quote_Logs();
+				$admin_quote_logs->register_hooks();
+			}
 		}
 	}
 

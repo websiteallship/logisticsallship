@@ -314,6 +314,25 @@ class ServiceTabs {
 }
 ```
 
+### 3.6. Result Cards Grid & Auto-Alignment (Cập nhật ADR-010)
+
+```javascript
+class ResultViewManager {
+  // Features:
+  // - Filter out unquoted services: Chỉ render s.calc.price !== null && s.calc.price > 0.
+  // - Dynamic Responsive Grid:
+  //   - 1 card:  'grid grid-cols-1 max-w-md mx-auto gap-4 md:gap-5'
+  //   - 2 cards: 'grid grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto gap-4 md:gap-5'
+  //   - 3+ cards:'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5'
+  //   - 0 cards: Render empty banner thông báo và nút liên hệ hotline.
+  // - Auto-switch selected service:
+  //   Nếu state.service hiện tại không có giá trong kết quả, tự động chọn dịch vụ đầu tiên có giá.
+  // - Origin Province Synchronization:
+  //   state.originProvince luôn giữ giá trị chuẩn "TP. Hồ Chí Minh", đồng bộ với input display
+  //   và select hidden (có thuộc tính selected), không bị reset về index 0 khi tạo danh sách options.
+}
+```
+
 ## 4. Enqueue Strategy
 
 ```php

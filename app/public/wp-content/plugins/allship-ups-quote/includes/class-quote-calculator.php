@@ -208,6 +208,13 @@ class Allship_UPS_Quote_Result implements ArrayAccess, JsonSerializable {
 	public $rate_card_id = null;
 
 	/**
+	 * Inserted quote log record ID in database (if recorded).
+	 *
+	 * @var int|null
+	 */
+	public $quote_log_id = null;
+
+	/**
 	 * Standardized error code if failed.
 	 *
 	 * @var string|null
@@ -499,21 +506,31 @@ class Allship_UPS_Quote_Calculator {
 			}
 
 			// 2. Active Rate Card Resolution
+			$rate_group = $this->rate_lookup ? $this->rate_lookup->map_rate_group( $service_code, $shipment_type, $direction ) : '';
+
 			if ( ! empty( $input['rate_card_id'] ) ) {
 				$rate_card_id = abs( (int) $input['rate_card_id'] );
 			} elseif ( $this->rate_card_repo ) {
-				if ( method_exists( $this->rate_card_repo, 'get_active_id' ) ) {
-					$rate_card_id = $this->rate_card_repo->get_active_id();
-				} else {
-					$active_card  = $this->rate_card_repo->get_active();
-					$rate_card_id = $active_card ? (int) $active_card->id : 0;
+				// Priority: active rate card specifically for this rate group (service + direction)
+				if ( ! empty( $rate_group ) && method_exists( $this->rate_card_repo, 'get_active_id_for_rate_group' ) ) {
+					$rate_card_id = $this->rate_card_repo->get_active_id_for_rate_group( $rate_group );
+				}
+
+				// Fallback: general active rate card
+				if ( empty( $rate_card_id ) ) {
+					if ( method_exists( $this->rate_card_repo, 'get_active_id' ) ) {
+						$rate_card_id = $this->rate_card_repo->get_active_id( $rate_group );
+					} else {
+						$active_card  = $this->rate_card_repo->get_active();
+						$rate_card_id = $active_card ? (int) $active_card->id : 0;
+					}
 				}
 			} else {
 				$rate_card_id = 1;
 			}
 
 			if ( ! $rate_card_id ) {
-				return Allship_UPS_Quote_Result::error( 'NO_ACTIVE_RATE_CARD', 'Không có bảng giá nào đang hoạt động trong hệ thống.' );
+				return Allship_UPS_Quote_Result::error( 'NO_ACTIVE_RATE_CARD', 'Không có bảng giá nào đang hoạt động cho dịch vụ này.' );
 			}
 
 			// 3. Country Verification
@@ -688,13 +705,18 @@ class Allship_UPS_Quote_Calculator {
 	 * @return void
 	 */
 	private function log_quote( array $input, Allship_UPS_Quote_Result $result ) {
-		if ( ! $this->quote_log_repo ) {
+		if ( ! empty( $input['skip_log'] ) || ! $this->quote_log_repo ) {
 			return;
 		}
 
 		try {
 			$log_data = [
 				'rate_card_id'            => $result->rate_card_id,
+				'user_id'                 => ! empty( $input['user_id'] ) ? $input['user_id'] : null,
+				'session_id'              => ! empty( $input['session_id'] ) ? $input['session_id'] : null,
+				'ip_address'              => ! empty( $input['ip_address'] ) ? $input['ip_address'] : null,
+				'device_type'             => ! empty( $input['device_type'] ) ? $input['device_type'] : null,
+				'user_agent'              => ! empty( $input['user_agent'] ) ? $input['user_agent'] : null,
 				'direction'               => $result->direction,
 				'origin_iata'             => $result->origin_iata,
 				'origin_province'         => $result->origin_province,
@@ -721,7 +743,10 @@ class Allship_UPS_Quote_Calculator {
 				],
 			];
 
-			$this->quote_log_repo->insert( $log_data );
+			$inserted_id = $this->quote_log_repo->insert( $log_data );
+			if ( $inserted_id ) {
+				$result->quote_log_id = $inserted_id;
+			}
 		} catch ( Exception $e ) {
 			// Fail-safe: Logging failure should never break quotation calculation.
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && function_exists( 'error_log' ) ) {

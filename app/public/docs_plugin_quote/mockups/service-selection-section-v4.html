@@ -409,10 +409,10 @@
                 <span class="text-[9px] font-bold text-slate-400 bg-slate-100 px-1 py-0.5 rounded">EXW</span>
               </div>
               <div class="text-xs font-extrabold text-navy-900 leading-tight">Express Early</div>
-              <div class="text-[10px] text-slate-500 mt-0.5 font-medium leading-snug">Sáng sớm · 1-2 ngày</div>
+              <div class="text-[10px] text-slate-500 mt-0.5 font-medium leading-snug">Sớm · 1-2 ngày</div>
             </div>
             <div class="mt-2 pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9px]">
-              <span class="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">Khả dụng</span><span class="text-amber-600 font-bold">Sáng sớm</span>
+              <span class="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">Khả dụng</span><span class="text-amber-600 font-bold">Sớm</span>
             </div>
           </div>
 
@@ -1204,7 +1204,7 @@
         code: 'EXW',
         name: 'Express Early',
         cat: 'parcel',
-        desc_vi: 'Sáng sớm · 1-2 ngày',
+        desc_vi: 'Sớm · 1-2 ngày',
         eta_vi: 'Trước 9:00 AM',
         icon: 'ph-globe',
         bg: '#FEF3C7',
@@ -1653,7 +1653,7 @@
             ...base,
             price: Math.round(base.price * 1.25),
             ratePerKg: base.ratePerKg ? Math.round(base.ratePerKg * 1.25) : undefined,
-            surchargeNote: 'Đã bao gồm phụ phí phát sáng sớm (Early 8:30 AM)'
+            surchargeNote: 'Đã bao gồm phụ phí phát sớm (Early 8:30 AM)'
           };
         }
         return base;
@@ -1852,7 +1852,7 @@
       // 6 Services calculations with full rates
       const services = [
         {
-          code: 'EXW', name: 'Express Early', transit: '1-2 ngày (Giao sáng sớm)',
+          code: 'EXW', name: 'Express Early', transit: '1-2 ngày (Giao sớm)',
           icon: 'ph-globe', iconBg: '#FEF3C7', iconColor: '#D97706',
           zone: c.wxs,
           calc: c.wxs > 0 ? lookupRate('EXW', currentShipmentType, weight, c.wxs) : { price: null, error: 'Không hỗ trợ' }
@@ -1914,7 +1914,7 @@
         if (isBest) {
           badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">Giá tốt nhất</span>';
         } else if (s.code === 'EXW') {
-          badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">Sáng sớm</span>';
+          badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">Sớm</span>';
         } else if (s.code === 'XPR') {
           badgeTag = '<span class="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-purple-100 text-purple-800">Ưu tiên</span>';
         } else if (s.code === 'WXS') {
@@ -1994,7 +1994,7 @@
         }
 
         const tagHTML = isBest ? '<span class="absolute top-3 right-3 bg-brand-red text-white text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide shadow-xs">GIÁ TỐT NHẤT</span>'
-          : (s.code === 'EXW' ? '<span class="absolute top-3 right-3 bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">SÁNG SỚM</span>'
+          : (s.code === 'EXW' ? '<span class="absolute top-3 right-3 bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">SỚM</span>'
           : (s.code === 'XPR' ? '<span class="absolute top-3 right-3 bg-purple-100 text-purple-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">ƯU TIÊN</span>'
           : (s.code === 'WXS' ? '<span class="absolute top-3 right-3 bg-amber-50 text-amber-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">PHỔ BIẾN</span>'
           : (s.code === 'WXP' ? '<span class="absolute top-3 right-3 bg-rose-100 text-rose-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded tracking-wide">HỎA TỐC NẶNG</span>'

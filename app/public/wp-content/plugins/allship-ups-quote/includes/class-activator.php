@@ -14,7 +14,7 @@ class Allship_UPS_Activator {
 	/**
 	 * Database schema version.
 	 */
-	const DB_VERSION = '1.1.0';
+	const DB_VERSION = '1.2.0';
 
 	/**
 	 * Run activation tasks: create/update tables and version tracking.
@@ -127,6 +127,9 @@ CREATE TABLE {$prefix}ups_quote_logs (
   rate_card_id BIGINT UNSIGNED NULL,
   user_id BIGINT UNSIGNED NULL,
   session_id VARCHAR(100) NULL,
+  ip_address VARCHAR(45) NULL,
+  device_type VARCHAR(20) NULL,
+  user_agent VARCHAR(255) NULL,
   direction VARCHAR(10) NOT NULL,
   origin_iata VARCHAR(10) NOT NULL DEFAULT 'VN',
   origin_province VARCHAR(100) NULL,
@@ -150,13 +153,32 @@ CREATE TABLE {$prefix}ups_quote_logs (
   PRIMARY KEY  (id),
   KEY created_at (created_at),
   KEY destination (destination_iata),
-  KEY service_code (service_code)
+  KEY service_code (service_code),
+  KEY ip_address (ip_address)
 ) {$charset_collate};";
 
 		dbDelta( $sql );
 
 		// Run inline schema transitions for existing databases if needed
 		if ( $wpdb ) {
+			// Check ups_quote_logs for new columns (ip_address, device_type, user_agent)
+			$logs_table = $prefix . 'ups_quote_logs';
+			$has_logs   = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $logs_table ) );
+			if ( $has_logs ) {
+				$cols = $wpdb->get_col( "DESC `{$logs_table}`", 0 );
+				if ( is_array( $cols ) ) {
+					if ( ! in_array( 'ip_address', $cols, true ) ) {
+						$wpdb->query( "ALTER TABLE `{$logs_table}` ADD COLUMN ip_address VARCHAR(45) NULL AFTER session_id" );
+					}
+					if ( ! in_array( 'device_type', $cols, true ) ) {
+						$wpdb->query( "ALTER TABLE `{$logs_table}` ADD COLUMN device_type VARCHAR(20) NULL AFTER ip_address" );
+					}
+					if ( ! in_array( 'user_agent', $cols, true ) ) {
+						$wpdb->query( "ALTER TABLE `{$logs_table}` ADD COLUMN user_agent VARCHAR(255) NULL AFTER device_type" );
+					}
+				}
+			}
+
 			// Check rate_cards for zone_set_id
 			$rate_card_table = $prefix . 'ups_rate_cards';
 			$has_table       = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $rate_card_table ) );

@@ -455,6 +455,127 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 	}
 
 	/**
+	 * Get client IP address supporting reverse proxies & Cloudflare.
+	 *
+	 * @return string
+	 */
+	public function get_client_ip(): string {
+		$headers = [
+			'HTTP_CF_CONNECTING_IP',
+			'HTTP_X_REAL_IP',
+			'HTTP_X_FORWARDED_FOR',
+			'REMOTE_ADDR',
+		];
+
+		foreach ( $headers as $h ) {
+			if ( ! empty( $_SERVER[ $h ] ) ) {
+				$ip_list = explode( ',', (string) $_SERVER[ $h ] );
+				$ip      = trim( $ip_list[0] );
+				if ( filter_var( $ip, FILTER_VALIDATE_IP ) ) {
+					return $ip;
+				}
+			}
+		}
+
+		return ! empty( $_SERVER['REMOTE_ADDR'] ) ? (string) $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+	}
+
+	/**
+	 * Detect device type (desktop, mobile, tablet) from User-Agent.
+	 *
+	 * @return string
+	 */
+	public function detect_device_type(): string {
+		$ua = ! empty( $_SERVER['HTTP_USER_AGENT'] ) ? strtolower( (string) $_SERVER['HTTP_USER_AGENT'] ) : '';
+		if ( empty( $ua ) ) {
+			return 'desktop';
+		}
+
+		if ( preg_match( '/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i', $ua ) ) {
+			return 'tablet';
+		}
+
+		if ( preg_match( '/(mobi|ipod|phone|blackberry|opera mini|iemobile|mobile)/i', $ua ) ) {
+			return 'mobile';
+		}
+
+		return 'desktop';
+	}
+
+	/**
+	 * Rate limiter for quote calculation endpoint to prevent bot spam/flooding.
+	 *
+	 * Allows normal price checking/comparison by real users, but enforces:
+	 * 1. Cooldown throttling: minimum 350ms between consecutive requests from same IP.
+	 * 2. Rolling window rate limit: maximum 30 requests per minute per IP.
+	 * 3. Whitelist: Administrators (manage_options) are completely exempt.
+	 *
+	 * @param string $client_ip Client IP address.
+	 * @return true|array True if allowed, or error array with code, message, status.
+	 */
+	public function check_calculate_rate_limit( string $client_ip ) {
+		// Unit testing / filter bypass
+		if ( function_exists( 'apply_filters' ) && apply_filters( 'allship_ups_disable_rate_limit', false ) ) {
+			return true;
+		}
+
+		// Admin bypass
+		if ( function_exists( 'current_user_can' ) && current_user_can( 'manage_options' ) ) {
+			return true;
+		}
+
+		if ( empty( $client_ip ) || ! function_exists( 'get_transient' ) || ! function_exists( 'set_transient' ) ) {
+			return true;
+		}
+
+		$rate_key = 'ups_rl_' . md5( $client_ip );
+		$now      = microtime( true );
+		$record   = get_transient( $rate_key );
+
+		$max_per_minute = 30;
+		if ( $this->settings_mgr && method_exists( $this->settings_mgr, 'get' ) ) {
+			$max_per_minute = (int) $this->settings_mgr->get( 'rate_limit_max_per_min', 30 );
+		}
+
+		if ( is_array( $record ) && isset( $record['count'], $record['last_time'] ) ) {
+			// 1. Cooldown burst throttle: min 350ms between requests
+			if ( ( $now - (float) $record['last_time'] ) < 0.35 ) {
+				return [
+					'error'   => true,
+					'code'    => 'RATE_LIMIT_COOLDOWN',
+					'message' => 'Thao tác tra cứu quá nhanh. Vui lòng đợi trong giây lát.',
+					'status'  => 429,
+				];
+			}
+
+			// 2. Volume throttle: max requests in 60s
+			if ( (int) $record['count'] >= $max_per_minute ) {
+				return [
+					'error'   => true,
+					'code'    => 'RATE_LIMIT_EXCEEDED',
+					'message' => 'Bạn đã thực hiện quá nhiều lượt tra cứu liên tục. Vui lòng đợi 1 phút trước khi tiếp tục.',
+					'status'  => 429,
+				];
+			}
+
+			$record['count']     = (int) $record['count'] + 1;
+			$record['last_time'] = $now;
+			set_transient( $rate_key, $record, 60 );
+		} else {
+			set_transient(
+				$rate_key,
+				[
+					'count'     => 1,
+					'last_time' => $now,
+				],
+				60
+			);
+		}
+
+		return true;
+	}
+
+	/**
 	 * POST /calculate — Perform quotation calculation.
 	 *
 	 * @param WP_REST_Request|object $request REST request object.
@@ -464,6 +585,15 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 		$params = is_object( $request ) && method_exists( $request, 'get_params' )
 			? $request->get_params()
 			: (array) $request;
+
+		$client_ip   = $this->get_client_ip();
+		$device_type = $this->detect_device_type();
+		$user_agent  = ! empty( $_SERVER['HTTP_USER_AGENT'] ) ? (string) $_SERVER['HTTP_USER_AGENT'] : '';
+
+		$rate_check = $this->check_calculate_rate_limit( $client_ip );
+		if ( is_array( $rate_check ) && ! empty( $rate_check['error'] ) ) {
+			return $this->error_response( $rate_check['code'], $rate_check['message'], $rate_check['status'] ?? 429 );
+		}
 
 		// 1. Normalize & Validate Input
 		$direction        = ! empty( $params['direction'] ) ? strtolower( trim( (string) $params['direction'] ) ) : 'export';
@@ -509,6 +639,22 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 		}
 
 		// Cache Lookup
+		$active_card_fingerprint = '';
+		if ( $this->rate_card_repo && method_exists( $this->rate_card_repo, 'get_all_active' ) ) {
+			$active_cards = $this->rate_card_repo->get_all_active();
+			if ( ! empty( $active_cards ) ) {
+				$active_card_fingerprint = implode(
+					';',
+					array_map(
+						function ( $c ) {
+							return ( $c->id ?? '' ) . ':' . ( $c->status ?? '' ) . ':' . ( $c->activated_at ?? '' );
+						},
+						$active_cards
+					)
+				);
+			}
+		}
+
 		$cache_data = [
 			$direction,
 			$destination_iata,
@@ -517,9 +663,10 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			$shipment_type,
 			$envelope,
 			$clean_pieces,
+			$active_card_fingerprint,
 		];
 		$cache_payload = function_exists( 'wp_json_encode' ) ? wp_json_encode( $cache_data ) : json_encode( $cache_data );
-		$cache_key     = 'ups_calc_' . md5( (string) $cache_payload );
+		$cache_key     = 'ups_calc_v2_' . md5( (string) $cache_payload );
 
 		if ( function_exists( 'get_transient' ) ) {
 			$cached = get_transient( $cache_key );
@@ -541,6 +688,9 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			'envelope'                => $envelope,
 			'rate_card_id'            => ! empty( $params['rate_card_id'] ) ? absint( $params['rate_card_id'] ) : null,
 			'pieces'                  => $clean_pieces,
+			'ip_address'              => $client_ip,
+			'device_type'             => $device_type,
+			'user_agent'              => $user_agent,
 		];
 
 		// Mode 1: Batch Calculation across all 6 services
@@ -549,13 +699,19 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			$services_res = [];
 			$best_price   = null;
 			$metrics      = null;
+			$best_res_obj = null;
+			$best_service = null;
+
+			// Do not log individual 6 loop services to DB
+			$loop_input             = $calc_input;
+			$loop_input['skip_log'] = true;
 
 			foreach ( $all_services as $code ) {
 				if ( 'document' === $shipment_type && in_array( $code, [ 'WXP', 'WFM', 'XPD' ], true ) ) {
 					continue;
 				}
 
-				$single_res = $this->execute_single_service_calc( $calc_input, $code, false );
+				$single_res = $this->execute_single_service_calc( $loop_input, $code, false );
 				if ( $single_res && ! $single_res->is_error() ) {
 					$arr = $single_res->to_array()['data'];
 					if ( null === $metrics ) {
@@ -567,7 +723,9 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 					}
 					$price = $arr['total_price_vnd'] ?? $arr['base_price_vnd'] ?? null;
 					if ( $price && ( null === $best_price || $price < $best_price ) ) {
-						$best_price = $price;
+						$best_price   = $price;
+						$best_service = $code;
+						$best_res_obj = $single_res;
 					}
 					$services_res[] = [
 						'code'             => $code,
@@ -589,6 +747,43 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 						'notes'       => [],
 						'transit'     => $this->get_service_transit_vi( $code ),
 					];
+				}
+			}
+
+			// Single consolidated quote log entry for the user's calculation request
+			if ( $this->quote_log_repo && $best_res_obj && ! empty( $best_price ) ) {
+				try {
+					$this->quote_log_repo->insert( [
+						'rate_card_id'            => $best_res_obj->rate_card_id,
+						'ip_address'              => $client_ip,
+						'device_type'             => $device_type,
+						'user_agent'              => $user_agent,
+						'direction'               => $calc_input['direction'],
+						'origin_iata'             => $calc_input['origin_iata'],
+						'origin_province'         => $calc_input['origin_province'],
+						'destination_iata'        => $calc_input['destination_iata'],
+						'destination_state'       => $calc_input['destination_state'],
+						'destination_city'        => $calc_input['destination_city'],
+						'destination_postal_code' => $calc_input['destination_postal_code'],
+						'destination_address'     => $calc_input['destination_address'],
+						'service_code'            => $best_service ?: 'ALL',
+						'shipment_type'           => $calc_input['shipment_type'],
+						'zone'                    => $best_res_obj->zone,
+						'rate_zone'               => $best_res_obj->rate_zone,
+						'actual_weight_kg'        => $metrics['actual_weight_kg'] ?? $best_res_obj->actual_weight_kg,
+						'dim_weight_kg'           => $metrics['volumetric_weight_kg'] ?? $best_res_obj->dim_weight_kg,
+						'chargeable_weight_kg'    => $metrics['chargeable_weight_kg'] ?? $best_res_obj->chargeable_weight_kg,
+						'base_price_vnd'          => $best_res_obj->base_price_vnd,
+						'total_price_vnd'         => $best_price,
+						'pieces_json'             => $best_res_obj->pieces,
+						'breakdown_json'          => [
+							'services'   => $services_res,
+							'best_price' => $best_price,
+							'metrics'    => $metrics,
+						],
+					] );
+				} catch ( Exception $e ) {
+					// Fail-safe: logging should not break calculation
 				}
 			}
 
@@ -634,50 +829,25 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 		$service_input               = $calc_input;
 		$service_input['service_code'] = $service_code;
 		$service_input['rate_group']   = $rate_group;
+		if ( ! $record_log ) {
+			$service_input['skip_log'] = true;
+		}
 
-		if ( in_array( $service_code, [ 'EXW', 'XPR' ], true ) ) {
-			$base_input                 = $service_input;
-			$base_input['service_code'] = 'WXS';
-			$result                     = $this->calculator->calculate( $base_input );
+		$has_direct_card = false;
+		if ( $this->rate_card_repo && ! empty( $rate_group ) && method_exists( $this->rate_card_repo, 'get_active_id_for_rate_group' ) ) {
+			$has_direct_card = (bool) $this->rate_card_repo->get_active_id_for_rate_group( $rate_group );
+		}
 
-			if ( $result->is_error() ) {
-				return $result;
+		if ( 'WXP' === $service_code ) {
+			if ( $has_direct_card ) {
+				return $this->calculator->calculate( $service_input );
 			}
 
-			$multiplier     = ( 'EXW' === $service_code ) ? 1.25 : 1.15;
-			$service_name   = ( 'EXW' === $service_code ) ? 'Express Early' : 'Express Plus';
-			$surcharge_note = ( 'EXW' === $service_code )
-				? 'Đã bao gồm phụ phí phát sáng sớm (Early 8:30 AM).'
-				: 'Đã bao gồm phụ phí phát ưu tiên (Plus 10:30 AM).';
-
-			$result->service_code    = $service_code;
-			$result->service_name    = $service_name;
-			$result->base_price_vnd  = (int) round( $result->base_price_vnd * $multiplier );
-			$result->total_price_vnd = (int) round( $result->total_price_vnd * $multiplier );
-			$result->notes[]         = $surcharge_note;
-
-			if ( $record_log && $this->quote_log_repo && ! empty( $result->quote_log_id ) ) {
-				$this->quote_log_repo->update(
-					$result->quote_log_id,
-					[
-						'service_code'    => $service_code,
-						'base_price_vnd'  => $result->base_price_vnd,
-						'total_price_vnd' => $result->total_price_vnd,
-						'breakdown_json'  => [
-							'base_price_vnd'  => $result->base_price_vnd,
-							'fees'            => $result->fees,
-							'total_price_vnd' => $result->total_price_vnd,
-							'notes'           => $result->notes,
-							'multiplier'      => $multiplier,
-						],
-					]
-				);
-			}
-
-			return $result;
-		} elseif ( 'WXP' === $service_code ) {
 			$base_input                 = $service_input;
 			$base_input['service_code'] = 'WFM';
+			if ( ! $record_log ) {
+				$base_input['skip_log'] = true;
+			}
 			$result                     = $this->calculator->calculate( $base_input );
 
 			if ( $result->is_error() ) {
@@ -713,8 +883,58 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			}
 
 			return $result;
+		} elseif ( in_array( $service_code, [ 'EXW', 'XPR' ], true ) ) {
+			if ( $has_direct_card ) {
+				return $this->calculator->calculate( $service_input );
+			}
+
+			$base_input                 = $service_input;
+			$base_input['service_code'] = 'WXS';
+			if ( ! $record_log ) {
+				$base_input['skip_log'] = true;
+			}
+			$result                     = $this->calculator->calculate( $base_input );
+
+			if ( $result->is_error() ) {
+				return $result;
+			}
+
+			$multiplier     = ( 'EXW' === $service_code ) ? 1.25 : 1.15;
+			$service_name   = ( 'EXW' === $service_code ) ? 'Express Early' : 'Express Plus';
+			$surcharge_note = ( 'EXW' === $service_code )
+				? 'Đã bao gồm phụ phí phát sớm (Early 8:30 AM).'
+				: 'Đã bao gồm phụ phí phát ưu tiên (Plus 10:30 AM).';
+
+			$result->service_code    = $service_code;
+			$result->service_name    = $service_name;
+			$result->base_price_vnd  = (int) round( $result->base_price_vnd * $multiplier );
+			$result->total_price_vnd = (int) round( $result->total_price_vnd * $multiplier );
+			$result->notes[]         = $surcharge_note;
+
+			if ( $record_log && $this->quote_log_repo && ! empty( $result->quote_log_id ) ) {
+				$this->quote_log_repo->update(
+					$result->quote_log_id,
+					[
+						'service_code'    => $service_code,
+						'base_price_vnd'  => $result->base_price_vnd,
+						'total_price_vnd' => $result->total_price_vnd,
+						'breakdown_json'  => [
+							'base_price_vnd'  => $result->base_price_vnd,
+							'fees'            => $result->fees,
+							'total_price_vnd' => $result->total_price_vnd,
+							'notes'           => $result->notes,
+							'multiplier'      => $multiplier,
+						],
+					]
+				);
+			}
+
+			return $result;
 		}
 
+		if ( ! $record_log ) {
+			$service_input['skip_log'] = true;
+		}
 		return $this->calculator->calculate( $service_input );
 	}
 
@@ -884,11 +1104,20 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 		$rate_card_id = ! empty( $params['rate_card_id'] ) ? absint( $params['rate_card_id'] ) : 0;
 
 		if ( ! $rate_card_id && $this->rate_card_repo ) {
-			$active_card  = $this->rate_card_repo->get_active();
+			$active_card = null;
+			if ( $service_code && method_exists( $this->rate_card_repo, 'get_active_for_service' ) ) {
+				$active_card = $this->rate_card_repo->get_active_for_service( $service_code, $direction );
+			}
+			if ( empty( $active_card ) ) {
+				$active_card = $this->rate_card_repo->get_active();
+			}
 			$rate_card_id = $active_card ? (int) $active_card->id : 1;
 		}
 
-		$cache_key = 'allship_ups_countries_' . md5( $direction . '_' . ( $service_code ?: 'all' ) . '_' . $rate_card_id );
+		$card         = $this->rate_card_repo ? $this->rate_card_repo->get( $rate_card_id ) : null;
+		$target_zs_id = ( $card && ! empty( $card->zone_set_id ) ) ? (int) $card->zone_set_id : $rate_card_id;
+
+		$cache_key = 'allship_ups_countries_' . md5( $direction . '_' . ( $service_code ?: 'all' ) . '_' . $rate_card_id . '_' . $target_zs_id );
 		if ( function_exists( 'get_transient' ) ) {
 			$cached = get_transient( $cache_key );
 			if ( false !== $cached && is_array( $cached ) ) {
@@ -913,13 +1142,13 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 				               zm.zone, zm.is_available
 				        FROM {$table_countries} c
 				        LEFT JOIN {$table_zones} zm ON zm.country_id = c.id
-				             AND zm.rate_card_id = %d
+				             AND (zm.zone_set_id = %d OR zm.rate_card_id = %d)
 				             AND zm.direction = %s
 				             AND zm.service_code = %s
 				        WHERE c.is_active = 1
 				        ORDER BY c.country_name ASC";
 
-				$rows = $wpdb->get_results( $wpdb->prepare( $sql, $rate_card_id, $direction, $zone_lookup_service ) );
+				$rows = $wpdb->get_results( $wpdb->prepare( $sql, $target_zs_id, $target_zs_id, $direction, $zone_lookup_service ) );
 			} else {
 				$rows = [];
 			}
@@ -1001,26 +1230,45 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 		global $wpdb;
 
 		$params       = is_object( $request ) && method_exists( $request, 'get_params' ) ? $request->get_params() : (array) $request;
-		$direction    = ! empty( $params['direction'] ) ? strtolower( trim( (string) $params['direction'] ) ) : 'export';
-		$rate_card_id = ! empty( $params['rate_card_id'] ) ? absint( $params['rate_card_id'] ) : 0;
+		$direction       = ! empty( $params['direction'] ) ? strtolower( trim( (string) $params['direction'] ) ) : 'export';
+		$rate_card_id    = ! empty( $params['rate_card_id'] ) ? absint( $params['rate_card_id'] ) : 0;
+		$active_ids      = [];
+		$disabled_groups = [];
 
-		if ( ! $rate_card_id && $this->rate_card_repo ) {
-			$active_card  = $this->rate_card_repo->get_active();
-			$rate_card_id = $active_card ? (int) $active_card->id : 1;
+		if ( $rate_card_id ) {
+			$active_ids = [ $rate_card_id ];
+			$card       = $this->rate_card_repo ? $this->rate_card_repo->get( $rate_card_id ) : null;
+			if ( $card && ! empty( $card->disabled_rate_groups_array ) ) {
+				$disabled_groups = $card->disabled_rate_groups_array;
+			}
+		} elseif ( $this->rate_card_repo ) {
+			$active_cards = method_exists( $this->rate_card_repo, 'get_all_active' )
+				? $this->rate_card_repo->get_all_active()
+				: ( $this->rate_card_repo->get_active() ? [ $this->rate_card_repo->get_active() ] : [] );
+
+			foreach ( $active_cards as $c ) {
+				$active_ids[] = (int) $c->id;
+				if ( ! empty( $c->disabled_rate_groups_array ) ) {
+					$disabled_groups = array_merge( $disabled_groups, $c->disabled_rate_groups_array );
+				}
+			}
+			$disabled_groups = array_values( array_unique( $disabled_groups ) );
 		}
 
-		$card            = $this->rate_card_repo ? $this->rate_card_repo->get( $rate_card_id ) : null;
-		$disabled_groups = ( $card && ! empty( $card->disabled_rate_groups_array ) ) ? $card->disabled_rate_groups_array : [];
+		if ( empty( $active_ids ) ) {
+			$active_ids = [ 1 ];
+		}
 
 		// Query rate group row counts from ups_rates
 		$table_rates = $wpdb ? $wpdb->prefix . 'ups_rates' : 'wp_ups_rates';
 		$row_counts  = [];
 
-		if ( $wpdb ) {
-			$counts_raw = $wpdb->get_results(
+		if ( $wpdb && ! empty( $active_ids ) ) {
+			$placeholders = implode( ',', array_fill( 0, count( $active_ids ), '%d' ) );
+			$counts_raw   = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT rate_group, COUNT(*) as count FROM {$table_rates} WHERE rate_card_id = %d GROUP BY rate_group",
-					$rate_card_id
+					"SELECT rate_group, COUNT(*) as count FROM {$table_rates} WHERE rate_card_id IN ($placeholders) GROUP BY rate_group",
+					$active_ids
 				)
 			);
 			if ( is_array( $counts_raw ) ) {
@@ -1040,9 +1288,9 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 				'icon'               => 'ph-globe',
 				'icon_bg'            => '#FEF3C7',
 				'icon_color'         => '#D97706',
-				'desc_vi'            => 'Sáng sớm · 1-2 ngày',
+				'desc_vi'            => 'Sớm · 1-2 ngày',
 				'eta_vi'             => 'Trước 9:00 AM',
-				'badge_text'         => 'Sáng sớm',
+				'badge_text'         => 'Sớm',
 				'badge_color'        => 'amber',
 				'rate_groups'        => [
 					'export' => [ 'export_exw_document', 'export_exw_nondocument' ],
@@ -1154,7 +1402,7 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 				$admin_disabled = $all_disabled;
 			}
 
-			// Check data availability
+			// Check direct data availability
 			$svc_counts = [];
 			$total_rows = 0;
 			foreach ( $direction_groups as $group_name ) {
@@ -1162,18 +1410,40 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 				$svc_counts[ $group_name ] = $count;
 				$total_rows            += $count;
 			}
-			$has_data = $total_rows > 0;
+			$has_direct_data = $total_rows > 0;
+			$has_data        = $has_direct_data;
 
-			// In V4: EXW, XPR, WXP use multiplier when direct tables are not yet uploaded
 			$enabled = ! $admin_disabled;
 			$reason  = null;
+
+			// Base service data checks for multiplier-derived services
+			$wxs_has_data = ( ( $row_counts["{$direction}_wxs_document"] ?? 0 ) + ( $row_counts["{$direction}_wxs_nondocument"] ?? 0 ) ) > 0;
+			$wfm_has_data = ( $row_counts["{$direction}_wfm"] ?? 0 ) > 0;
+
+			if ( in_array( $code, [ 'EXW', 'XPR' ], true ) ) {
+				// Can use direct table or multiplier from WXS
+				if ( ! $has_direct_data ) {
+					$has_data = $wxs_has_data;
+				}
+			} elseif ( 'WXP' === $code ) {
+				// Can use direct table or multiplier from WFM
+				if ( ! $has_direct_data ) {
+					$has_data = $wfm_has_data;
+				}
+			}
 
 			if ( $admin_disabled ) {
 				$enabled = false;
 				$reason  = 'Admin đã tắt dịch vụ này.';
-			} elseif ( ! $has_data && ! in_array( $code, [ 'EXW', 'XPR', 'WXP' ], true ) ) {
+			} elseif ( ! $has_data ) {
 				$enabled = false;
-				$reason  = 'Chưa có bảng giá trong rate card hiện tại.';
+				if ( in_array( $code, [ 'EXW', 'XPR' ], true ) && ! $wxs_has_data ) {
+					$reason = 'Chưa có bảng giá Express Saver (WXS) để tính cước.';
+				} elseif ( 'WXP' === $code && ! $wfm_has_data ) {
+					$reason = 'Chưa có bảng giá Freight (WFM) để tính cước.';
+				} else {
+					$reason = 'Chưa có bảng giá trong rate card hiện tại.';
+				}
 			}
 
 			$services_response[] = [
@@ -1299,6 +1569,8 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			'RATE_CARD_NOT_FOUND'   => 422,
 			'INVALID_RATE_FILE'     => 400,
 			'QUOTE_INTERNAL_ERROR'  => 500,
+			'RATE_LIMIT_COOLDOWN'   => 429,
+			'RATE_LIMIT_EXCEEDED'   => 429,
 		];
 
 		return isset( $map[ $error_code ] ) ? $map[ $error_code ] : 422;

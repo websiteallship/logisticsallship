@@ -82,14 +82,6 @@ class Allship_UPS_Rate_Card_Repository {
 		$imported_at          = ! empty( $data['imported_at'] ) ? $data['imported_at'] : ( function_exists( 'current_time' ) ? current_time( 'mysql' ) : gmdate( 'Y-m-d H:i:s' ) );
 		$created_by           = isset( $data['created_by'] ) ? $this->abs_int( $data['created_by'] ) : ( function_exists( 'get_current_user_id' ) ? ( get_current_user_id() ?: null ) : null );
 
-		// Business rule: only 1 card active at any time.
-		if ( 'active' === $status ) {
-			$this->wpdb->update(
-				$this->table,
-				[ 'status' => 'archived' ],
-				[ 'status' => 'active' ]
-			);
-		}
 
 		$fields = [
 			'name'                 => $name,
@@ -147,13 +139,121 @@ class Allship_UPS_Rate_Card_Repository {
 	}
 
 	/**
-	 * Retrieve current active rate card.
+	 * Safe helper for $wpdb->get_col with fallback to get_results.
 	 *
+	 * @param string $query SQL query.
+	 * @return array
+	 */
+	private function db_get_col( $query ) {
+		if ( ! $this->wpdb ) {
+			return [];
+		}
+
+		if ( method_exists( $this->wpdb, 'get_col' ) ) {
+			$col = $this->wpdb->get_col( $query );
+			return is_array( $col ) ? array_values( array_filter( $col ) ) : [];
+		}
+
+		if ( method_exists( $this->wpdb, 'get_results' ) ) {
+			$rows = $this->wpdb->get_results( $query );
+			if ( is_array( $rows ) ) {
+				$col = [];
+				foreach ( $rows as $r ) {
+					if ( is_object( $r ) ) {
+						$arr   = get_object_vars( $r );
+						$col[] = reset( $arr );
+					} elseif ( is_array( $r ) ) {
+						$col[] = reset( $r );
+					} else {
+						$col[] = $r;
+					}
+				}
+				return array_values( array_filter( $col ) );
+			}
+		}
+
+		return [];
+	}
+
+	/**
+	 * Retrieve distinct rate groups contained in a rate card.
+	 *
+	 * @param int $id Rate card ID.
+	 * @return array
+	 */
+	public function get_rate_groups_for_card( $id ) {
+		$id = $this->abs_int( $id );
+		if ( ! $id || ! $this->wpdb ) {
+			return [];
+		}
+
+		$table_rates = $this->wpdb->prefix . 'ups_rates';
+		$sql         = $this->wpdb->prepare(
+			"SELECT DISTINCT rate_group FROM {$table_rates} WHERE rate_card_id = %d",
+			$id
+		);
+
+		return $this->db_get_col( $sql );
+	}
+
+	/**
+	 * Get IDs of other active rate cards that conflict with this card
+	 * (i.e. share any rate_group, distinguishing service and import/export).
+	 *
+	 * @param int $id Rate card ID.
+	 * @return array List of conflicting active card IDs.
+	 */
+	public function get_conflicting_active_cards( $id ) {
+		$id = $this->abs_int( $id );
+		if ( ! $id || ! $this->wpdb || empty( $this->table ) ) {
+			return [];
+		}
+
+		$card_groups  = $this->get_rate_groups_for_card( $id );
+		$active_cards = $this->get_all_active();
+
+		if ( empty( $active_cards ) ) {
+			return [];
+		}
+
+		$conflicts = [];
+		foreach ( $active_cards as $active_card ) {
+			$other_id = (int) $active_card->id;
+			if ( $other_id === $id ) {
+				continue;
+			}
+
+			$other_groups = $this->get_rate_groups_for_card( $other_id );
+
+			if ( ! empty( $card_groups ) && ! empty( $other_groups ) ) {
+				// Conflict only if they share rate groups (same service & direction)
+				if ( ! empty( array_intersect( $card_groups, $other_groups ) ) ) {
+					$conflicts[] = $other_id;
+				}
+			} elseif ( empty( $card_groups ) && empty( $other_groups ) ) {
+				// Both are unconfigured/dummy cards without rates: conflict
+				$conflicts[] = $other_id;
+			}
+		}
+
+		return array_values( array_unique( $conflicts ) );
+	}
+
+	/**
+	 * Retrieve active rate card.
+	 * If rate_group is specified, returns the active card providing that service & direction.
+	 * Otherwise returns the most recently activated active rate card.
+	 *
+	 * @param string|null $rate_group Optional rate group identifier.
 	 * @return object|null
 	 */
-	public function get_active() {
+	public function get_active( $rate_group = null ) {
 		if ( ! $this->wpdb || empty( $this->table ) ) {
 			return null;
+		}
+
+		if ( ! empty( $rate_group ) ) {
+			return $this->get_active_for_rate_group( $rate_group );
 		}
 
 		$row = $this->wpdb->get_row(
@@ -164,13 +264,130 @@ class Allship_UPS_Rate_Card_Repository {
 	}
 
 	/**
-	 * Retrieve current active rate card ID.
+	 * Retrieve active rate card ID.
 	 *
+	 * @param string|null $rate_group Optional rate group identifier.
 	 * @return int
 	 */
-	public function get_active_id() {
-		$active = $this->get_active();
+	public function get_active_id( $rate_group = null ) {
+		$active = $this->get_active( $rate_group );
 		return $active ? (int) $active->id : 0;
+	}
+
+	/**
+	 * Retrieve active rate card providing a specific rate group.
+	 *
+	 * @param string $rate_group Canonical rate group (e.g. 'export_wxs_nondocument', 'import_xpd').
+	 * @return object|null
+	 */
+	public function get_active_for_rate_group( $rate_group ) {
+		$rate_group = function_exists( 'sanitize_key' ) ? sanitize_key( $rate_group ) : trim( (string) $rate_group );
+		if ( empty( $rate_group ) || ! $this->wpdb || empty( $this->table ) ) {
+			return null;
+		}
+
+		$table_rates = $this->wpdb->prefix . 'ups_rates';
+		$row         = $this->wpdb->get_row(
+			$this->wpdb->prepare(
+				"SELECT rc.* 
+				 FROM {$this->table} rc
+				 INNER JOIN {$table_rates} r ON rc.id = r.rate_card_id
+				 WHERE rc.status = 'active'
+				   AND r.rate_group = %s
+				 ORDER BY rc.activated_at DESC, rc.id DESC
+				 LIMIT 1",
+				$rate_group
+			)
+		);
+
+		return $this->format_row( $row );
+	}
+
+	/**
+	 * Retrieve active rate card ID for a specific rate group.
+	 *
+	 * @param string $rate_group Canonical rate group.
+	 * @return int
+	 */
+	public function get_active_id_for_rate_group( $rate_group ) {
+		$card = $this->get_active_for_rate_group( $rate_group );
+		return $card ? (int) $card->id : 0;
+	}
+
+	/**
+	 * Retrieve active rate card for a given service code, direction and shipment type.
+	 *
+	 * @param string $service_code Service code ('WXS', 'XPD', 'WXP', etc.).
+	 * @param string $direction 'export' or 'import'.
+	 * @param string $shipment_type 'nondocument' or 'document'.
+	 * @return object|null
+	 */
+	public function get_active_for_service( $service_code, $direction = 'export', $shipment_type = 'nondocument' ) {
+		$dir = strtolower( trim( (string) $direction ) );
+		$svc = strtolower( trim( (string) $service_code ) );
+		$typ = strtolower( trim( (string) $shipment_type ) );
+
+		if ( in_array( $svc, [ 'wxs', 'exw', 'xpr' ], true ) ) {
+			$sub = ( 'document' === $typ || 'doc' === $typ ) ? 'document' : 'nondocument';
+			$rate_group = sprintf( '%s_%s_%s', $dir, $svc, $sub );
+		} else {
+			$rate_group = sprintf( '%s_%s', $dir, $svc );
+		}
+
+		return $this->get_active_for_rate_group( $rate_group );
+	}
+
+	/**
+	 * Retrieve all currently active rate cards.
+	 *
+	 * @return array
+	 */
+	public function get_all_active() {
+		if ( ! $this->wpdb || empty( $this->table ) ) {
+			return [];
+		}
+
+		$rows = $this->wpdb->get_results(
+			"SELECT * FROM {$this->table} WHERE status = 'active' ORDER BY activated_at DESC, id DESC"
+		);
+
+		if ( ! is_array( $rows ) ) {
+			return [];
+		}
+
+		return array_map( [ $this, 'format_row' ], $rows );
+	}
+
+	/**
+	 * Map of active rate groups to their active rate card IDs.
+	 *
+	 * @return array Array in format [ 'export_xpd' => 1, 'export_wxp' => 2, ... ]
+	 */
+	public function get_active_rate_groups_map() {
+		if ( ! $this->wpdb || empty( $this->table ) ) {
+			return [];
+		}
+
+		$table_rates = $this->wpdb->prefix . 'ups_rates';
+		$rows        = $this->wpdb->get_results(
+			"SELECT r.rate_group, rc.id as rate_card_id
+			 FROM {$this->table} rc
+			 INNER JOIN {$table_rates} r ON rc.id = r.rate_card_id
+			 WHERE rc.status = 'active'
+			 GROUP BY r.rate_group, rc.id
+			 ORDER BY rc.activated_at DESC, rc.id DESC"
+		);
+
+		$map = [];
+		if ( is_array( $rows ) ) {
+			foreach ( $rows as $row ) {
+				if ( ! isset( $map[ $row->rate_group ] ) ) {
+					$map[ $row->rate_group ] = (int) $row->rate_card_id;
+				}
+			}
+		}
+
+		return $map;
 	}
 
 	/**
@@ -195,7 +412,9 @@ class Allship_UPS_Rate_Card_Repository {
 	}
 
 	/**
-	 * Activate a rate card. Automatically archives previous active card.
+	 * Activate a rate card.
+	 * Business rule: Multiple cards can be active simultaneously, but only ONE card
+	 * per service & direction (rate_group). Automatically archives only conflicting cards.
 	 *
 	 * @param int $id Rate card ID.
 	 * @return bool True on success, false on failure.
@@ -206,13 +425,19 @@ class Allship_UPS_Rate_Card_Repository {
 			return false;
 		}
 
-		// Business rule: archive old active card.
-		$this->wpdb->update(
-			$this->table,
-			[ 'status' => 'archived' ],
-			[ 'status' => 'active' ]
-		);
+		// 1. Find and archive other active cards that conflict on service & direction (rate_group)
+		$conflicts = $this->get_conflicting_active_cards( $id );
+		foreach ( $conflicts as $conflict_id ) {
+			$this->wpdb->update(
+				$this->table,
+				[ 'status' => 'archived' ],
+				[ 'id' => $conflict_id ],
+				[ '%s' ],
+				[ '%d' ]
+			);
+		}
 
+		// 2. Activate target card
 		$now = function_exists( 'current_time' ) ? current_time( 'mysql' ) : gmdate( 'Y-m-d H:i:s' );
 
 		$res = $this->wpdb->update(
@@ -228,7 +453,7 @@ class Allship_UPS_Rate_Card_Repository {
 
 		if ( false !== $res ) {
 			if ( function_exists( 'do_action' ) ) {
-				do_action( 'allship_ups_rate_card_activated', $id );
+				do_action( 'allship_ups_rate_card_activated', $id, $conflicts );
 			}
 			return true;
 		}

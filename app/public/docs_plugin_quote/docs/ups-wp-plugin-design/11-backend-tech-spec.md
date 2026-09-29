@@ -304,35 +304,61 @@ Admin tạo rate card → Đặt tên tùy ý → Import data → Preview → Ac
                       "Test rates cho QA"
 ```
 
-### 4.2. Quy tắc
+### 4.2. Quy tắc (Cập nhật ADR-009)
 
-- **Một** rate card active tại một thời điểm cho public.
-- Admin có thể tạo nhiều rate card (draft/archived) để chuẩn bị trước.
-- Khi activate card mới, card cũ tự động chuyển archived.
-- Admin có thể test draft card bằng cách truyền `rate_card_id` trong API.
-- Rate card name hiển thị trong kết quả báo giá và quote logs.
+- Hỗ trợ **nhiều rate cards active đồng thời** để phục vụ nhiều dịch vụ và chiều vận chuyển khác nhau.
+- **Quy tắc cô lập (Isolation Rule)**: Mỗi dịch vụ và chiều vận chuyển (`rate_group`, phân biệt rõ ràng giữa Export và Import) chỉ có tối đa **1 rate card active** tại một thời điểm.
+- Khi activate card mới, hệ thống chỉ tự động chuyển các card active cũ **cùng `rate_group`** sang `archived`. Các card active của các dịch vụ khác (hoặc chiều khác) vẫn duy trì trạng thái `active`.
+- Admin có thể test draft card bằng cách truyền `rate_card_id` cụ thể trong API payload.
+- Bộ tính cước (`Quote_Calculator`) giải quyết động bảng giá active theo `rate_group` tương ứng với gói cước khách hàng chọn.
 
 ### 4.3. Rate Card Repository
 
 ```php
-class Rate_Card_Repository {
+class Allship_UPS_Rate_Card_Repository {
     public function create( array $data ): int {
-        // $data = ['name' => 'UPS VN Rates Q3-2026', 'valid_from' => '2026-08-20', ...]
+        // Tạo rate card mới (mặc định status = 'draft')
+    }
+
+    public function get_rate_groups_for_card( int $id ): array {
+        // Lấy danh sách các rate_group có trong bảng giá (từ ups_rates)
+    }
+
+    public function get_conflicting_active_cards( int $id ): array {
+        // Tìm các card active khác có trùng lặp rate_group với card $id
     }
     
-    public function activate( int $id ): void {
-        // Deactivate current active → set new active
-        $this->wpdb->update( $this->table, ['status' => 'archived'], ['status' => 'active'] );
-        $this->wpdb->update( $this->table, [
-            'status' => 'active',
-            'activated_at' => current_time( 'mysql' )
-        ], ['id' => $id] );
+    public function activate( int $id ): bool {
+        // 1. Archive các card active đang xung đột cùng rate_group
+        $conflicts = $this->get_conflicting_active_cards( $id );
+        foreach ( $conflicts as $conflict_id ) {
+            $this->wpdb->update( $this->table, [ 'status' => 'archived' ], [ 'id' => $conflict_id ] );
+        }
+        // 2. Kích hoạt card chỉ định
+        return (bool) $this->wpdb->update( $this->table, [
+            'status'       => 'active',
+            'activated_at' => current_time( 'mysql' ),
+        ], [ 'id' => $id ] );
     }
     
-    public function get_active(): ?object {
-        return $this->wpdb->get_row(
-            "SELECT * FROM {$this->table} WHERE status = 'active' LIMIT 1"
-        );
+    public function get_active( ?string $rate_group = null ): ?object {
+        // Trả về card active theo rate_group, hoặc card active mới nhất
+    }
+
+    public function get_active_id( ?string $rate_group = null ): int {
+        // Trả về ID card active
+    }
+
+    public function get_active_for_rate_group( string $rate_group ): ?object {
+        // Query card active có chứa rate_group chỉ định
+    }
+
+    public function get_active_id_for_rate_group( string $rate_group ): int {
+        // Query ID card active theo rate_group
+    }
+
+    public function get_all_active(): array {
+        // Danh sách tất cả rate cards đang active
     }
     
     public function get_all(): array {
@@ -546,3 +572,95 @@ $wpdb->insert(
     ]
 );
 ```
+
+## 9. Calculation Engine Priority & Zone Resolver Resolution (Cập nhật ADR-010)
+
+### 9.1. Ưu tiên Bảng giá Trực tiếp (Direct Rate Card Priority)
+
+Khi khách hàng yêu cầu tính toán gói cước (đặc biệt là các gói cước có khả năng phái sinh như WXP, EXW, XPR):
+
+```php
+private function execute_single_service_calc( array $calc_input, string $service_code, $record_log = true ) {
+    $rate_group = $this->service_mgr
+        ? $this->service_mgr->resolve_rate_group( $calc_input['direction'], $service_code, $calc_input['shipment_type'] )
+        : null;
+
+    $service_input                 = $calc_input;
+    $service_input['service_code'] = $service_code;
+    $service_input['rate_group']   = $rate_group;
+
+    // 1. Kiểm tra xem có bảng giá active trực tiếp cho rate group hay không
+    $has_direct_card = false;
+    if ( $this->rate_card_repo && ! empty( $rate_group ) && method_exists( $this->rate_card_repo, 'get_active_id_for_rate_group' ) ) {
+        $has_direct_card = (bool) $this->rate_card_repo->get_active_id_for_rate_group( $rate_group );
+    }
+
+    // 2. Nếu đã có bảng giá active trực tiếp -> Tính toán trực tiếp theo bảng giá đó
+    if ( 'WXP' === $service_code ) {
+        if ( $has_direct_card ) {
+            return $this->calculator->calculate( $service_input );
+        }
+        // Fallback: Nếu không có bảng giá riêng, tính theo WFM × 1.22
+        $base_input                 = $service_input;
+        $base_input['service_code'] = 'WFM';
+        return $this->calculate_with_multiplier( $base_input, 1.22, 'WXP', 'Express Freight' );
+    } elseif ( in_array( $service_code, [ 'EXW', 'XPR' ], true ) ) {
+        if ( $has_direct_card ) {
+            return $this->calculator->calculate( $service_input );
+        }
+        // Fallback: Tính theo WXS × 1.25 (EXW) hoặc × 1.15 (XPR)
+        $base_input                 = $service_input;
+        $base_input['service_code'] = 'WXS';
+        $multiplier = ( 'EXW' === $service_code ) ? 1.25 : 1.15;
+        return $this->calculate_with_multiplier( $base_input, $multiplier, $service_code );
+    }
+
+    return $this->calculator->calculate( $service_input );
+}
+```
+
+### 9.2. Zone Resolver Resolution & Physical Zone Fallback
+
+`Allship_UPS_Zone_Resolver` hỗ trợ đầy đủ cả 6 dịch vụ UPS và có cơ chế fallback thông minh khi bảng phân vùng không có cột riêng cho dịch vụ phái sinh:
+
+```php
+const SUPPORTED_PHASE1_SERVICES = [
+    'WXS',
+    'XPD',
+    'WFM',
+    'EXW',
+    'XPR',
+    'WXP',
+];
+
+// Query physical zone
+$raw_zone = $this->zone_repo->find_zone( $zone_set_id, $country->id, $direction, $service_code );
+
+// Fallback tra cứu zone physical nếu không map trực tiếp:
+if ( null === $raw_zone || '' === trim( $raw_zone ) || '0' === trim( $raw_zone ) ) {
+    if ( 'WXP' === $service_code ) {
+        $raw_zone = $this->zone_repo->find_zone( $zone_set_id, $country->id, $direction, 'WFM' ); // Cùng freight zone
+    } elseif ( in_array( $service_code, [ 'EXW', 'XPR' ], true ) ) {
+        $raw_zone = $this->zone_repo->find_zone( $zone_set_id, $country->id, $direction, 'WXS' ); // Cùng express saver zone
+    }
+}
+```
+
+### 9.3. Transient Cache Fingerprinting
+
+Cache key tính cước kết hợp `active_card_fingerprint` để tự động bust cache ngay khi dữ liệu bảng giá thay đổi:
+
+```php
+$active_cards = $this->rate_card_repo->get_all_active();
+$active_card_fingerprint = implode( ';', array_map( function( $c ) {
+    return $c->id . ':' . $c->status . ':' . $c->activated_at;
+}, $active_cards ) );
+
+$cache_payload = [
+    $direction, $destination_iata, $destination_state,
+    $service_code, $shipment_type, $envelope, $clean_pieces,
+    $active_card_fingerprint,
+];
+$cache_key = 'ups_calc_v2_' . md5( wp_json_encode( $cache_payload ) );
+```
+

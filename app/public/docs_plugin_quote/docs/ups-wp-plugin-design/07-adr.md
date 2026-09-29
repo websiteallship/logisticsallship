@@ -224,3 +224,52 @@ Trước đây, client nhúng nguyên bundle monolithic `states_by_country.js` (
 
 - Cần 1 network request nhỏ (<2KB) khi người dùng lần đầu chọn một quốc gia có phân bang (US, CA, AU...). Tuy nhiên request này được cache in-memory ngay lập tức.
 
+## ADR-009: Cho phép nhiều bảng giá Active đồng thời với ràng buộc 1 bảng giá Active cho mỗi Dịch vụ & Chiều vận chuyển
+
+Status: Accepted
+
+### Context
+
+Với cơ chế nhập bảng giá theo định dạng Simple Matrix (1 file import đại diện cho 1 dịch vụ - Rate Group cụ thể, e.g. Export WXP, Export XPD, Import WXS...), quy tắc cũ chỉ cho phép duy nhất 1 bảng giá active trên toàn hệ thống khiến việc kích hoạt một dịch vụ mới làm vô hiệu hóa toàn bộ các dịch vụ khác đã active trước đó. Hệ thống không thể phục vụ tra cứu đồng thời nhiều dịch vụ UPS cho khách hàng.
+
+### Decision
+
+1. **Multi-Active Concurrency**: Cho phép nhiều `rate_card` có `status = 'active'` cùng lúc trong cơ sở dữ liệu.
+2. **Rate Group Isolation**: Ràng buộc duy nhất 1 card active được áp dụng ở phạm vi **dịch vụ và chiều vận chuyển** (`rate_group`, phân biệt rõ giữa Export và Import, ví dụ `export_wxp` khác `import_wxp`).
+3. **Smart Archiving on Activation**: Khi kích hoạt một bảng giá (ID = X), repository chỉ tự động chuyển sang `archived` các bảng giá active khác có trùng lặp `rate_group` với card X. Các bảng giá active của các dịch vụ khác hoặc chiều khác vẫn được giữ nguyên trạng thái `active`.
+4. **Dynamic Calculator Resolution**: Bộ tính cước (`Quote_Calculator`) giải quyết động `rate_card_id` dựa trên `rate_group` được yêu cầu (`get_active_id_for_rate_group`). Nếu dịch vụ đó không có bảng giá nào active, trả về lỗi chuẩn `NO_ACTIVE_RATE_CARD`.
+5. **Catalog Aggregation**: Endpoint `/services` tổng hợp số lượng dòng cước và trạng thái bật/tắt trên toàn bộ các bảng giá đang active trong hệ thống.
+
+## ADR-010: Ưu tiên tính trực tiếp Bảng giá Active cho WXP/EXW/XPR, Fallback Zone Resolver và Ẩn Card không có giá trên UI Kết quả
+
+Status: Accepted
+
+### Context
+
+1. **Bug hiển thị WXP**: Quản trị viên đã import và kích hoạt thành công bảng giá riêng cho dịch vụ Express Freight (`export_wxp`), nhưng khi khách tính cước ở frontend thì kết quả trả về "Không có bảng giá nào đang hoạt động". Nguyên nhân là `REST_Controller::execute_single_service_calc` trước đó cưỡng ép chuyển `service_code = 'WXP'` sang `WFM` (để nhân hệ số 1.22), trong khi hệ thống chưa có bảng giá active cho `export_wfm`. Đồng thời `Zone_Resolver` chỉ cho phép 3 dịch vụ Phase 1 (`WXS`, `XPD`, `WFM`) nên từ chối `WXP`.
+2. **Bug điểm đi An Giang**: Khi tải trang, điểm gửi hiển thị "TP. Hồ Chí Minh", nhưng thẻ `<select id="originProvince">` bị gán lại `innerHTML` danh sách tỉnh thành sau khi đặt giá trị, khiến trình duyệt tự động reset về option đầu tiên (index 0 là "An Giang"). Khi tính cước, kết quả trả về lộ trình "An Giang ➔ United States (US)".
+3. **UI/UX rác kết quả**: Khi chỉ có 1 hoặc 2 bảng giá active (ví dụ XPD và WXP), frontend vẫn render ra cả 6 card dịch vụ, trong đó có 4-5 card bị xám và hiện "Không có bảng giá nào đang hoạt động cho dịch vụ này...", gây mất thẩm mỹ và chiếm diện tích màn hình.
+
+### Decision
+
+1. **Direct Rate Card Priority over Multiplier Derivation**:
+   - Trước khi áp dụng công thức nhân hệ số (multiplier) cho `WXP` (từ WFM x1.22) hoặc `EXW`/`XPR` (từ WXS x1.25 / x1.15), controller kiểm tra xem có bảng giá active trực tiếp (`$has_direct_card`) cho rate group tương ứng hay không (`export_wxp`, `export_exw`, `export_xpr`).
+   - Nếu đã có bảng giá active trực tiếp, tính toán trực tiếp theo bảng giá đó với đơn giá thực tế từ DB, không nhân hệ số phái sinh.
+   - Chỉ khi không có bảng giá active trực tiếp mới chuyển tiếp sang dịch vụ cơ sở để nhân hệ số.
+2. **Zone Resolver 6-Service Support & Physical Zone Fallback**:
+   - `Allship_UPS_Zone_Resolver::SUPPORTED_PHASE1_SERVICES` mở rộng hỗ trợ toàn bộ 6 dịch vụ (`WXS`, `XPD`, `WFM`, `EXW`, `XPR`, `WXP`).
+   - Nếu `find_zone` không tìm thấy zone cho `WXP`, tự động fallback tra cứu zone theo `WFM` (freight zone). Đối với `EXW`/`XPR`, tự động fallback sang `WXS`.
+3. **Transient Cache Fingerprinting**:
+   - Cache key tính toán bổ sung fingerprint của các bảng giá đang active (`id:status:activated_at`). Bất cứ khi nào admin import, kích hoạt hoặc archive bảng giá, cache tính cước cũ được tự động vô hiệu hóa ngay lập tức.
+4. **Origin Province Preservation**:
+   - Thẻ `<select id="originProvince">` khi render danh sách `<option>` luôn gán sẵn thuộc tính `selected` cho `TP. Hồ Chí Minh`.
+   - Tất cả các luồng tính giá, cập nhật ribbon kết quả và modal booking đọc trực tiếp từ `state.originProvince` thay vì chỉ đọc từ select element bị reset.
+5. **Hiding Unquoted Cards & Dynamic Grid Re-alignment**:
+   - Bảng kết quả lọc bỏ hoàn toàn các dịch vụ không có giá khả dụng (`calc.price > 0`), không hiển thị card thông báo rác "Không có bảng giá".
+   - Grid desktop tự động co giãn và căn giữa:
+     - 1 card: `grid-cols-1 max-w-md mx-auto` (căn giữa cân đối).
+     - 2 cards: `grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto`.
+     - 3+ cards: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`.
+   - Nếu dịch vụ user đã chọn trước đó không có bảng giá khả dụng, UI tự động switch sang dịch vụ có giá khả dụng đầu tiên và cập nhật ribbon header.
+
+

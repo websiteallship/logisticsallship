@@ -199,10 +199,38 @@ class Allship_UPS_Shortcode {
 			'currency'      => 'VND',
 			'COUNTRIES'     => $this->get_active_countries(),
 			'VN_PROVINCES'  => $this->get_vn_provinces(),
-			'POPULAR_IATA'  => [ 'US', 'AU', 'CA', 'JP', 'KR', 'TW', 'SG', 'MY', 'TH', 'GB', 'DE', 'FR', 'HK' ],
-			'dim_divisor'   => $dim_divisor,
-			'rounding_step' => $rounding_step,
+			'POPULAR_IATA'     => [ 'US', 'AU', 'CA', 'JP', 'KR', 'TW', 'SG', 'MY', 'TH', 'GB', 'DE', 'FR', 'HK' ],
+			'dim_divisor'      => $dim_divisor,
+			'rounding_step'    => $rounding_step,
+			'INITIAL_SERVICES' => $this->get_initial_services( 'export' ),
 		];
+	}
+
+	/**
+	 * Retrieve initial service availability for given direction.
+	 *
+	 * @param string $direction 'export' or 'import'.
+	 * @return array
+	 */
+	public function get_initial_services( $direction = 'export' ) {
+		if ( ! class_exists( 'Allship_UPS_REST_Controller' ) && file_exists( dirname( __FILE__ ) . '/class-rest-controller.php' ) ) {
+			require_once dirname( __FILE__ ) . '/class-rest-controller.php';
+		}
+		if ( class_exists( 'Allship_UPS_REST_Controller' ) ) {
+			$ctrl = new Allship_UPS_REST_Controller();
+			$req  = class_exists( 'WP_REST_Request' ) ? new WP_REST_Request( 'GET', '/services' ) : (object) [ 'direction' => $direction ];
+			if ( is_object( $req ) && method_exists( $req, 'set_param' ) ) {
+				$req->set_param( 'direction', $direction );
+			}
+			$res = $ctrl->get_services( $req );
+			if ( is_object( $res ) && method_exists( $res, 'get_data' ) ) {
+				$data = $res->get_data();
+				return isset( $data['data'] ) && is_array( $data['data'] ) ? $data['data'] : [];
+			} elseif ( is_array( $res ) ) {
+				return isset( $res['data'] ) && is_array( $res['data'] ) ? $res['data'] : [];
+			}
+		}
+		return [];
 	}
 
 	/**

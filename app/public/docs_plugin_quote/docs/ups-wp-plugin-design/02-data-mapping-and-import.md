@@ -78,25 +78,24 @@ Các cột giá trong sheet:
 
 ## 4. Quy tắc importer bảng giá
 
-Importer không nên hard-code số dòng. Nên tìm bằng label:
+Importer hiện tại được thiết kế để đọc cấu trúc **Simple Matrix format** thay vì quét label tự động:
 
-- `Express Saver Document Rates:`
-- `Express Saver Non-Document Rates:`
-- `Expedited Rates:`
-- `Worldwide Express Freight Rates:`
-- `Accessorial Surcharge`
+- **Hàng tiêu đề (Header row):** Chứa các cột zone `1` đến `10` và `US5`. (Cột ngay trước cột zone đầu tiên được ngầm hiểu là cột cân nặng).
+- **Hàng dữ liệu (Data rows):** Các hàng bên dưới chứa trọng lượng (weight/bracket) và giá tiền tương ứng cho từng cột zone.
+- **Rate Group:** Được xác định từ bên ngoài (thông qua dropdown chọn dịch vụ trên form import của Admin) thay vì quét label bên trong file.
 
-Sau khi tìm label:
+=> Do đó, mỗi lần import chỉ xử lý **1 dịch vụ (Rate Group)**. Để đưa dữ liệu 4 dịch vụ vào hệ thống, cần thực hiện import 4 lần với cùng 1 file, mỗi lần chọn một `Rate Group` khác nhau trên giao diện.
 
-1. Tìm dòng header zone gần nhất bên dưới.
-2. Đọc các cột zone từ `1` đến `10` và `US5`.
-3. Đọc từng dòng weight/bracket đến trước label kế tiếp.
+Quy trình đọc file:
+1. Quét 10 dòng đầu để tìm dòng chứa ít nhất 5 từ khóa zone (1,2,3,4,5,6,7,8,9,10,US5).
+2. Lấy chỉ số cột zone tương ứng.
+3. Đọc từng dòng weight/bracket từ sau dòng header.
 4. Chuẩn hóa mỗi dòng thành record:
 
 ```json
 {
   "rate_card_id": 1,
-  "rate_group": "saver_nondocument",
+  "rate_group": "export_wxs_nondocument", // Lấy từ form input
   "weight_label": "3.5",
   "weight_from": 3.5,
   "weight_to": 3.5,
@@ -201,13 +200,13 @@ source_file_hash = sha256
 status = draft/imported/active/archived
 ```
 
-Chỉ một `rate_card` active tại một thời điểm. Admin có thể import trước, preview, chạy test rồi mới activate.
+Hệ thống cho phép **nhiều `rate_card` active đồng thời** để phục vụ nhiều dịch vụ khác nhau. Tuy nhiên, với cùng một dịch vụ và chiều vận chuyển (Rate Group, ví dụ `export_wxp`), chỉ có duy nhất **một** bảng giá active tại một thời điểm. Khi kích hoạt một bảng giá mới cho dịch vụ X, bảng giá active cũ của dịch vụ X sẽ tự động chuyển sang `archived`, trong khi các bảng giá active của các dịch vụ khác (và chiều khác) vẫn duy trì trạng thái `active`. Admin có thể import trước dưới dạng `draft`, preview, test rồi mới bấm activate.
 
 ## 10. Validation khi import
 
 Importer phải báo lỗi nếu:
 
-- Không tìm thấy 4 label bảng giá chính.
+- Không tìm thấy dòng header chứa các cột zone `1-10` và `US5` trong 10 dòng đầu.
 - Thiếu cột `US5`.
 - Thiếu zone `1-10`.
 - Giá không phải số ở dòng giá.

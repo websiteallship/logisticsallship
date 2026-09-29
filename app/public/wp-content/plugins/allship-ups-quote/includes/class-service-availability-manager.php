@@ -49,7 +49,31 @@ class Allship_UPS_Service_Availability_Manager {
 			return [ 'export', 'import' ];
 		}
 
-		$card = $rate_card_id ? $this->rate_card_repo->get( $rate_card_id ) : $this->rate_card_repo->get_active();
+		if ( $rate_card_id ) {
+			$card = $this->rate_card_repo->get( $rate_card_id );
+			if ( $card && ! empty( $card->enabled_directions_array ) ) {
+				return $card->enabled_directions_array;
+			}
+			return [ 'export' ];
+		}
+
+		if ( method_exists( $this->rate_card_repo, 'get_all_active' ) ) {
+			$active_cards = $this->rate_card_repo->get_all_active();
+			if ( ! empty( $active_cards ) ) {
+				$directions = [];
+				foreach ( $active_cards as $card ) {
+					if ( ! empty( $card->enabled_directions_array ) ) {
+						$directions = array_merge( $directions, $card->enabled_directions_array );
+					}
+				}
+				$directions = array_values( array_unique( $directions ) );
+				if ( ! empty( $directions ) ) {
+					return $directions;
+				}
+			}
+		}
+
+		$card = $this->rate_card_repo->get_active();
 
 		if ( $card && ! empty( $card->enabled_directions_array ) ) {
 			return $card->enabled_directions_array;

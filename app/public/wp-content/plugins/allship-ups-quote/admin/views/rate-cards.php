@@ -59,14 +59,14 @@ if ( class_exists( 'Allship_UPS_Rate_Importer' ) ) {
 			</div>
 		</div>
 	<?php else : ?>
-		<table class="wp-list-table widefat fixed striped table-view-list rate-cards-table" style="margin-top: 15px;">
+		<table class="wp-list-table widefat fixed striped table-view-list rate-cards-table">
 			<thead>
 				<tr>
-					<th scope="col" style="width: 55px;">ID</th>
+					<th scope="col" class="as-col-id">ID</th>
 					<th scope="col"><?php echo esc_html__( 'Tên Bảng giá', 'allship-ups-quote' ); ?></th>
-					<th scope="col" style="width: 320px;"><?php echo esc_html__( 'Nhóm cước (Rate Group)', 'allship-ups-quote' ); ?></th>
-					<th scope="col" style="width: 130px; text-align: center;"><?php echo esc_html__( 'Trạng thái', 'allship-ups-quote' ); ?></th>
-					<th scope="col" style="width: 290px; text-align: right;"><?php echo esc_html__( 'Thao tác', 'allship-ups-quote' ); ?></th>
+					<th scope="col" class="as-col-rate-group"><?php echo esc_html__( 'Nhóm cước (Rate Group)', 'allship-ups-quote' ); ?></th>
+					<th scope="col" class="as-col-status"><?php echo esc_html__( 'Trạng thái', 'allship-ups-quote' ); ?></th>
+					<th scope="col" class="as-col-actions"><?php echo esc_html__( 'Thao tác', 'allship-ups-quote' ); ?></th>
 				</tr>
 			</thead>
 			<tbody id="rateCardsTableBody">
@@ -93,19 +93,19 @@ if ( class_exists( 'Allship_UPS_Rate_Importer' ) ) {
 					}
 					?>
 					<tr id="rate-card-row-<?php echo esc_attr( $card['id'] ); ?>" class="<?php echo 'active' === $card['status'] ? 'is-active-card' : ''; ?>">
-						<td><span style="font-weight: 700; color: #64748b;">#<?php echo esc_html( $card['id'] ); ?></span></td>
+						<td><span class="as-card-id-badge">#<?php echo esc_html( $card['id'] ); ?></span></td>
 						<td>
 							<strong>
 								<a href="javascript:void(0)" onclick="AllshipAdmin.openRenameModal(<?php echo esc_attr( $card['id'] ); ?>, '<?php echo esc_js( $card['name'] ); ?>')" class="row-title" title="<?php echo esc_attr__( 'Bấm để đổi tên bảng giá', 'allship-ups-quote' ); ?>">
 									<?php echo esc_html( $card['name'] ); ?>
 								</a>
 							</strong>
-							<div class="row-meta" style="font-size: 11px; color: #64748b; margin-top: 4px;">
+							<div class="row-meta as-card-meta">
 								<span>Mã TT: <strong><?php echo esc_html( $card['market_code'] ); ?></strong></span>
-								<span style="margin: 0 4px; color: #cbd5e1;">|</span>
+								<span class="as-card-meta-sep">|</span>
 								<span>Hiệu lực: <?php echo esc_html( $card['valid_from'] ); ?></span>
 								<?php if ( $card['imported_at'] ) : ?>
-									<span style="margin: 0 4px; color: #cbd5e1;">|</span>
+									<span class="as-card-meta-sep">|</span>
 									<span>Import: <?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $card['imported_at'] ) ) ); ?></span>
 								<?php endif; ?>
 							</div>
@@ -115,18 +115,18 @@ if ( class_exists( 'Allship_UPS_Rate_Importer' ) ) {
 								<div class="as-rate-group-info">
 									<div class="as-rate-group-title">
 										<span class="allship-chip <?php echo esc_attr( $direction_class ); ?>"><?php echo esc_html( $direction_label ); ?></span>
-										<strong style="font-size: 13px; color: #1e293b;"><?php echo esc_html( $rg_clean_label ); ?></strong>
+										<strong class="as-rate-group-label"><?php echo esc_html( $rg_clean_label ); ?></strong>
 									</div>
 									<span class="as-rate-group-key"><?php echo esc_html( $rg_key ); ?></span>
 								</div>
 							<?php else : ?>
-								<span style="color: #94a3b8; font-size: 12px;"><em>Chưa có dữ liệu cước</em></span>
+								<span class="as-rate-group-empty"><em>Chưa có dữ liệu cước</em></span>
 							<?php endif; ?>
 						</td>
-						<td style="text-align: center;">
+						<td class="as-col-status">
 							<?php echo $card['status_badge']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 						</td>
-						<td style="text-align: right; white-space: nowrap;">
+						<td class="as-col-actions">
 							<div class="allship-action-buttons">
 								<button type="button" class="button button-small" onclick="AllshipAdmin.openRenameModal(<?php echo esc_attr( $card['id'] ); ?>, '<?php echo esc_js( $card['name'] ); ?>')" title="<?php echo esc_attr__( 'Đổi tên bảng giá', 'allship-ups-quote' ); ?>">
 									<span class="dashicons dashicons-edit"></span>
@@ -158,7 +158,7 @@ if ( class_exists( 'Allship_UPS_Rate_Importer' ) ) {
 
 <!-- Modal: Đổi tên Bảng giá -->
 <div id="modalRenameRateCard" class="allship-modal-backdrop" style="display:none;">
-	<div class="allship-modal-box" style="max-width: 480px;">
+	<div class="allship-modal-box as-modal-sm">
 		<div class="allship-modal-header">
 			<h3><?php echo esc_html__( 'Đổi tên Bảng giá', 'allship-ups-quote' ); ?></h3>
 			<button type="button" class="allship-modal-close" onclick="AllshipAdmin.closeModals()">&times;</button>
@@ -166,11 +166,11 @@ if ( class_exists( 'Allship_UPS_Rate_Importer' ) ) {
 		<form id="formRenameRateCard" onsubmit="AllshipAdmin.handleRenameSubmit(event)">
 			<input type="hidden" id="renameCardId" name="id">
 			<div class="allship-modal-body">
-				<table class="form-table" style="margin: 0;">
+				<table class="form-table as-modal-form-table">
 					<tr>
-						<th scope="row" style="width: 100px;"><label for="renameCardName"><?php echo esc_html__( 'Tên mới', 'allship-ups-quote' ); ?></label></th>
+						<th scope="row" class="as-modal-form-th"><label for="renameCardName"><?php echo esc_html__( 'Tên mới', 'allship-ups-quote' ); ?></label></th>
 						<td>
-							<input type="text" id="renameCardName" name="name" class="regular-text" required style="width: 100%;">
+							<input type="text" id="renameCardName" name="name" class="regular-text as-modal-input-full" required>
 						</td>
 					</tr>
 				</table>
@@ -180,5 +180,38 @@ if ( class_exists( 'Allship_UPS_Rate_Importer' ) ) {
 				<button type="submit" id="btnSubmitRenameCard" class="button button-primary"><?php echo esc_html__( 'Lưu tên mới', 'allship-ups-quote' ); ?></button>
 			</div>
 		</form>
+	</div>
+</div>
+
+<!-- Modal: Cảnh báo trùng dịch vụ khi Kích hoạt -->
+<div id="modalConflictRateCard" class="allship-modal-backdrop" style="display:none;">
+	<div class="allship-modal-box as-modal-conflict">
+		<div class="allship-modal-header as-modal-header--warning">
+			<h3 class="as-modal-title--warning">
+				<span class="dashicons dashicons-warning as-modal-icon--warning"></span>
+				<span><?php echo esc_html__( 'Trùng lặp dịch vụ đang hoạt động', 'allship-ups-quote' ); ?></span>
+			</h3>
+			<button type="button" class="allship-modal-close" onclick="AllshipAdmin.closeModals()">&times;</button>
+		</div>
+		<div class="allship-modal-body as-modal-body--conflict">
+			<p class="as-modal-lead">
+				<?php echo esc_html__( 'Dịch vụ của bảng giá này hiện đã có bảng giá khác đang kích hoạt (Active):', 'allship-ups-quote' ); ?>
+			</p>
+			<div id="conflictCardsList" class="as-conflict-cards-list">
+				<!-- Dynamic conflicting cards rendered by JS -->
+			</div>
+			<div class="as-conflict-callout">
+				<p class="as-conflict-callout-text">
+					<?php echo esc_html__( 'Nếu tiếp tục, bảng giá cũ sẽ tự động chuyển sang Lưu trữ (Archived) và bảng giá mới sẽ có hiệu lực ngay lập tức.', 'allship-ups-quote' ); ?>
+				</p>
+			</div>
+		</div>
+		<div class="allship-modal-footer">
+			<button type="button" class="button" onclick="AllshipAdmin.closeModals()"><?php echo esc_html__( 'Hủy bỏ', 'allship-ups-quote' ); ?></button>
+			<button type="button" id="btnConfirmActivateConflict" class="button button-primary" onclick="AllshipAdmin.confirmActivateConflict()">
+				<span class="dashicons dashicons-yes-alt as-btn-icon-adjust"></span>
+				<span><?php echo esc_html__( 'Tiếp tục kích hoạt & Lưu trữ bảng giá cũ', 'allship-ups-quote' ); ?></span>
+			</button>
+		</div>
 	</div>
 </div>

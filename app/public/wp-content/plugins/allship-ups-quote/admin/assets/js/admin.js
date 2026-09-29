@@ -79,22 +79,78 @@
       });
     },
 
+    pendingActivateCardId: null,
+
     // --- Actions: Activate, Archive, Delete ---
     activateCard: function(id) {
-      if (!confirm('Bạn có chắc chắn muốn kích hoạt bảng giá này? Bảng giá active hiện tại sẽ được tự động chuyển sang lưu trữ.')) {
-        return;
-      }
+      AllshipAdmin.pendingActivateCardId = id;
       $.post(config.ajaxUrl, {
         action: 'ups_activate_rate_card',
         nonce: config.nonce,
-        id: id
+        id: id,
+        confirmed: 0
+      }, function(res) {
+        if (!res.success) {
+          alert((res.data && res.data.message) || 'Không thể kiểm tra kích hoạt.');
+          return;
+        }
+
+        if (res.data && res.data.has_conflict) {
+          // Render conflict cards in modal and open
+          var cards = res.data.conflicting_cards || [];
+          var listHtml = '';
+          cards.forEach(function(c) {
+            var groupStr = (c.rate_groups && c.rate_groups.length) ? ' (' + c.rate_groups.join(', ') + ')' : '';
+            listHtml += '<div class="as-conflict-item">' +
+                        '<strong>#' + c.id + ' — ' + (c.name || 'Untitled') + '</strong>' +
+                        '<span class="as-conflict-item-group">' + groupStr + '</span>' +
+                        '</div>';
+          });
+          var listEl = document.getElementById('conflictCardsList');
+          if (listEl) {
+            listEl.innerHTML = listHtml;
+          }
+          var modal = document.getElementById('modalConflictRateCard');
+          if (modal) {
+            modal.style.display = 'flex';
+          }
+        } else {
+          // No conflict -> activated directly
+          location.reload();
+        }
+      }).fail(function() {
+        alert('Lỗi kết nối máy chủ.');
+      });
+    },
+
+    confirmActivateConflict: function() {
+      if (!AllshipAdmin.pendingActivateCardId) return;
+      var btn = document.getElementById('btnConfirmActivateConflict');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Đang xử lý...';
+      }
+
+      $.post(config.ajaxUrl, {
+        action: 'ups_activate_rate_card',
+        nonce: config.nonce,
+        id: AllshipAdmin.pendingActivateCardId,
+        confirmed: 1
       }, function(res) {
         if (res.success) {
           location.reload();
         } else {
-          alert((res.data && res.data.message) || '');
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Tiếp tục kích hoạt & Lưu trữ bảng giá cũ';
+          }
+          alert((res.data && res.data.message) || 'Lỗi khi kích hoạt bảng giá.');
         }
       }).fail(function() {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Tiếp tục kích hoạt & Lưu trữ bảng giá cũ';
+        }
         alert('Lỗi kết nối máy chủ.');
       });
     },
