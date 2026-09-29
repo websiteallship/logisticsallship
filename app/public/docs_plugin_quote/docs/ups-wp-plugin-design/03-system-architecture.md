@@ -16,6 +16,7 @@ allship-ups-quote/
     class-country-repository.php
     class-zone-repository.php
     class-rate-repository.php
+    class-quote-log-repository.php
     class-service-availability-manager.php
     class-excel-importer.php
     class-zone-importer.php
@@ -26,11 +27,13 @@ allship-ups-quote/
     class-surcharge-engine.php
     class-quote-calculator.php
     class-rest-controller.php
+    class-fluentform-bridge.php
     class-shortcode.php
     config/
       service-registry.php
   admin/
     class-admin-menu.php
+    class-admin-quote-logs.php
     views/import.php
     views/settings.php
     views/rate-cards.php
@@ -39,6 +42,8 @@ allship-ups-quote/
     assets/js/quote-form.js
     assets/css/quote-form.css
     views/quote-form.php
+  data/
+    fluentform-quote-template.json
   vendor/
     phpoffice/phpspreadsheet/
 ```
@@ -56,10 +61,13 @@ allship-ups-quote/
 | `Rate_Lookup` | Tìm dòng giá theo rate group, zone, chargeable weight. |
 | `Surcharge_Engine` | Extension point cho VAT/FSC/Surge/phụ phí. Phase 1 mặc định off. |
 | `Quote_Calculator` | Orchestrator toàn bộ luồng báo giá. |
-| `Rest_Controller` | Endpoints: `/calculate`, `/countries`, `/services`, `/directions`. |
+| `Rest_Controller` | Endpoints: `/calculate`, `/lead`, `/countries`, `/services`, `/directions`. |
+| `FluentForm_Bridge` | Đồng bộ 2 chiều giữa Lead submissions và `wp_ups_quote_logs`, hỗ trợ `ff-frontend-entries`. |
 | `Shortcode` | Render `[ups_quote_form]`. |
 
-## 4. Luồng báo giá
+## 4. Luồng xử lý nghiệp vụ
+
+### 4.1. Luồng báo giá cước (Quote Calculation)
 
 ```mermaid
 flowchart TD
@@ -75,6 +83,20 @@ flowchart TD
   I --> J["Quote_Calculator tạo breakdown"]
   J --> K["Ghi quote log"]
   K --> L["Trả JSON cho UI"]
+```
+
+### 4.2. Luồng đặt dịch vụ & Đồng bộ Lead (Dual-Storage Lead Booking)
+
+```mermaid
+flowchart TD
+  A1["User bấm 'Liên hệ đặt dịch vụ'"] --> B1["Mở Booking Modal (Route & Giá tự điền)"]
+  B1 --> C1["User nhập Họ tên, SĐT, Ghi chú"]
+  C1 --> D1["JS chuẩn hóa 18 tên dịch vụ & format chi tiết đa kiện"]
+  D1 --> E1["POST /wp-json/ups-quote/v1/lead"]
+  E1 --> F1["Rate limit check + Ghi nhận log UPS (gắn contact)"]
+  F1 --> G1["Bridge push_lead_to_fluentform()"]
+  G1 --> H1["Ghi bảng wp_fluentform_submissions"]
+  H1 --> I1["ff-frontend-entries hiển thị Lead trên Dashboard"]
 ```
 
 ## 5. Pseudocode quote calculator

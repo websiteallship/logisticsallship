@@ -691,6 +691,7 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			'ip_address'              => $client_ip,
 			'device_type'             => $device_type,
 			'user_agent'              => $user_agent,
+			'skip_log'                => true, // Do not write quote log on calculation request
 		];
 
 		// Mode 1: Batch Calculation across all 6 services
@@ -736,6 +737,12 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 						'error'            => null,
 						'notes'            => $arr['notes'] ?? [],
 						'transit'          => $this->get_service_transit_vi( $code ),
+						'zone'             => $arr['zone'] ?? null,
+						'rate_zone'        => $arr['rate_zone'] ?? null,
+						'rate_card_id'     => $arr['rate_card_id'] ?? null,
+						'actual_weight_kg' => $arr['actual_weight_kg'] ?? null,
+						'dim_weight_kg'    => $arr['volumetric_weight_kg'] ?? null,
+						'chargeable_weight_kg' => $arr['chargeable_weight_kg'] ?? null,
 					];
 				} else {
 					$services_res[] = [
@@ -750,47 +757,13 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 				}
 			}
 
-			// Single consolidated quote log entry for the user's calculation request
-			if ( $this->quote_log_repo && $best_res_obj && ! empty( $best_price ) ) {
-				try {
-					$this->quote_log_repo->insert( [
-						'rate_card_id'            => $best_res_obj->rate_card_id,
-						'ip_address'              => $client_ip,
-						'device_type'             => $device_type,
-						'user_agent'              => $user_agent,
-						'direction'               => $calc_input['direction'],
-						'origin_iata'             => $calc_input['origin_iata'],
-						'origin_province'         => $calc_input['origin_province'],
-						'destination_iata'        => $calc_input['destination_iata'],
-						'destination_state'       => $calc_input['destination_state'],
-						'destination_city'        => $calc_input['destination_city'],
-						'destination_postal_code' => $calc_input['destination_postal_code'],
-						'destination_address'     => $calc_input['destination_address'],
-						'service_code'            => $best_service ?: 'ALL',
-						'shipment_type'           => $calc_input['shipment_type'],
-						'zone'                    => $best_res_obj->zone,
-						'rate_zone'               => $best_res_obj->rate_zone,
-						'actual_weight_kg'        => $metrics['actual_weight_kg'] ?? $best_res_obj->actual_weight_kg,
-						'dim_weight_kg'           => $metrics['volumetric_weight_kg'] ?? $best_res_obj->dim_weight_kg,
-						'chargeable_weight_kg'    => $metrics['chargeable_weight_kg'] ?? $best_res_obj->chargeable_weight_kg,
-						'base_price_vnd'          => $best_res_obj->base_price_vnd,
-						'total_price_vnd'         => $best_price,
-						'pieces_json'             => $best_res_obj->pieces,
-						'breakdown_json'          => [
-							'services'   => $services_res,
-							'best_price' => $best_price,
-							'metrics'    => $metrics,
-						],
-					] );
-				} catch ( Exception $e ) {
-					// Fail-safe: logging should not break calculation
-				}
-			}
+			$inserted_log_id = null;
 
 			$batch_data = [
-				'services'   => $services_res,
-				'best_price' => $best_price,
-				'metrics'    => $metrics,
+				'services'     => $services_res,
+				'best_price'   => $best_price,
+				'metrics'      => $metrics,
+				'quote_log_id' => $inserted_log_id ?: null,
 			];
 
 			if ( function_exists( 'set_transient' ) ) {
@@ -985,11 +958,11 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			);
 		}
 
-		$clean_phone = preg_replace( '/[^0-9]/', '', $phone );
-		if ( strlen( $clean_phone ) < 8 || strlen( $clean_phone ) > 15 ) {
+		$clean_phone = preg_replace( '/[\s.\-()]/', '', trim( (string) $phone ) );
+		if ( ! preg_match( '/^(?:\+84|84|0)\d{9}$/', $clean_phone ) ) {
 			return $this->error_response(
 				'INVALID_INPUT',
-				'Số điện thoại không hợp lệ (yêu cầu từ 8 đến 15 chữ số).',
+				'Số điện thoại không hợp lệ (hỗ trợ đầu số 0, 84 hoặc +84 và 9 chữ số tiếp theo).',
 				422
 			);
 		}
@@ -1013,7 +986,7 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 		$lead    = [
 			'lead_id'          => $lead_id,
 			'name'             => $name,
-			'phone'            => $phone,
+			'phone'            => $clean_phone,
 			'email'            => ! empty( $params['email'] ) ? sanitize_email( $params['email'] ) : '',
 			'notes'            => ! empty( $params['notes'] ) ? sanitize_textarea_field( $params['notes'] ) : '',
 			'quote_log_id'     => ! empty( $params['quote_log_id'] ) ? absint( $params['quote_log_id'] ) : null,
@@ -1027,25 +1000,125 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			'created_at'       => function_exists( 'current_time' ) ? current_time( 'mysql' ) : gmdate( 'Y-m-d H:i:s' ),
 		];
 
-		// Attach contact details to quote log if quote_log_id is provided
-		if ( ! empty( $lead['quote_log_id'] ) && $this->quote_log_repo ) {
-			$existing_log = $this->quote_log_repo->get( $lead['quote_log_id'] );
-			if ( $existing_log ) {
-				$breakdown          = is_array( $existing_log->breakdown ) ? $existing_log->breakdown : [];
-				$breakdown['lead']  = [
-					'lead_id'    => $lead_id,
-					'name'       => $name,
-					'phone'      => $phone,
-					'email'      => $lead['email'],
-					'notes'      => $lead['notes'],
-					'created_at' => $lead['created_at'],
-				];
-				$this->quote_log_repo->update(
-					$lead['quote_log_id'],
-					[ 'breakdown_json' => $breakdown ]
-				);
+		$client_ip   = ! empty( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '127.0.0.1';
+		$device_type = $this->detect_device_type();
+		$user_agent  = ! empty( $_SERVER['HTTP_USER_AGENT'] ) ? mb_substr( sanitize_text_field( (string) $_SERVER['HTTP_USER_AGENT'] ), 0, 255 ) : '';
+
+		// Create quote log entry for successful form submission
+		$created_log_id = 0;
+		if ( $this->quote_log_repo ) {
+			$direction    = ! empty( $params['direction'] ) ? sanitize_text_field( $params['direction'] ) : 'export';
+			$service_code = ! empty( $params['service_code'] ) ? sanitize_text_field( $params['service_code'] ) : '';
+			$dest_iata    = ! empty( $params['destination_iata'] ) ? strtoupper( sanitize_text_field( $params['destination_iata'] ) ) : '';
+
+			// 1. Rate Card ID resolution
+			$rate_card_id = ! empty( $params['rate_card_id'] ) ? absint( $params['rate_card_id'] ) : 0;
+			if ( ! $rate_card_id && $this->rate_card_repo ) {
+				if ( $service_code && method_exists( $this->rate_card_repo, 'get_active_for_service' ) ) {
+					$active_card = $this->rate_card_repo->get_active_for_service( $service_code, $direction );
+				} else {
+					$active_card = $this->rate_card_repo->get_active();
+				}
+				$rate_card_id = $active_card ? (int) $active_card->id : 1;
 			}
+			if ( ! $rate_card_id ) {
+				$rate_card_id = 1;
+			}
+
+			// 2. Zone & Rate Zone resolution
+			$zone      = ! empty( $params['zone'] ) ? sanitize_text_field( $params['zone'] ) : null;
+			$rate_zone = ! empty( $params['rate_zone'] ) ? sanitize_text_field( $params['rate_zone'] ) : null;
+			if ( ( empty( $zone ) || empty( $rate_zone ) ) && $dest_iata && $service_code && class_exists( 'Allship_UPS_Zone_Resolver' ) ) {
+				$zone_resolver = new Allship_UPS_Zone_Resolver( $this->rate_card_repo, $this->country_repo );
+				$zone_res      = $zone_resolver->resolve( $dest_iata, $service_code, $direction, $rate_card_id );
+				if ( $zone_res && $zone_res->success ) {
+					if ( empty( $zone ) ) {
+						$zone = $zone_res->zone;
+					}
+					if ( empty( $rate_zone ) ) {
+						$rate_zone = $zone_res->rate_zone;
+					}
+				}
+			}
+
+			// 3. Weight calculation (Actual weight & DIM weight)
+			$actual_weight_kg = isset( $params['actual_weight_kg'] ) && '' !== $params['actual_weight_kg'] ? floatval( $params['actual_weight_kg'] ) : null;
+			$dim_weight_kg    = isset( $params['dim_weight_kg'] ) && '' !== $params['dim_weight_kg'] ? floatval( $params['dim_weight_kg'] ) : null;
+
+			$raw_pieces = ! empty( $params['pieces'] ) ? ( is_array( $params['pieces'] ) ? $params['pieces'] : json_decode( (string) $params['pieces'], true ) ) : [];
+			if ( is_array( $raw_pieces ) && ! empty( $raw_pieces ) ) {
+				$calc_act = 0.0;
+				$calc_dim = 0.0;
+				foreach ( $raw_pieces as $p ) {
+					if ( ! is_array( $p ) ) continue;
+					$qty = isset( $p['qty'] ) ? max( 1, (int) $p['qty'] ) : ( isset( $p['quantity'] ) ? max( 1, (int) $p['quantity'] ) : 1 );
+					$w   = isset( $p['weight'] ) ? floatval( $p['weight'] ) : ( isset( $p['actual_weight_kg'] ) ? floatval( $p['actual_weight_kg'] ) : 0.0 );
+					$l   = isset( $p['len'] ) ? floatval( $p['len'] ) : ( isset( $p['length_cm'] ) ? floatval( $p['length_cm'] ) : 0.0 );
+					$wid = isset( $p['wid'] ) ? floatval( $p['wid'] ) : ( isset( $p['width_cm'] ) ? floatval( $p['width_cm'] ) : 0.0 );
+					$h   = isset( $p['hei'] ) ? floatval( $p['hei'] ) : ( isset( $p['height_cm'] ) ? floatval( $p['height_cm'] ) : 0.0 );
+
+					$calc_act += $w * $qty;
+					if ( $l > 0 && $wid > 0 && $h > 0 ) {
+						$calc_dim += ( ( $l * $wid * $h ) / 5500 ) * $qty;
+					}
+				}
+				if ( null === $actual_weight_kg && $calc_act > 0 ) {
+					$actual_weight_kg = round( $calc_act, 2 );
+				}
+				if ( null === $dim_weight_kg && $calc_dim > 0 ) {
+					$dim_weight_kg = round( $calc_dim, 2 );
+				}
+			}
+			if ( null === $actual_weight_kg && ! empty( $params['weight_kg'] ) ) {
+				$actual_weight_kg = floatval( $params['weight_kg'] );
+			}
+
+			$weight_val  = ! empty( $params['chargeable_weight'] ) ? floatval( preg_replace( '/[^0-9.]/', '', (string) $params['chargeable_weight'] ) ) : ( ! empty( $params['weight_kg'] ) ? floatval( $params['weight_kg'] ) : ( $actual_weight_kg ? max( $actual_weight_kg, $dim_weight_kg ?: 0 ) : null ) );
+			$total_price = ! empty( $params['total_price_raw'] ) ? absint( $params['total_price_raw'] ) : ( ! empty( $params['total_price_vnd'] ) ? absint( $params['total_price_vnd'] ) : null );
+			$pieces_data = ! empty( $params['pieces'] ) ? ( is_array( $params['pieces'] ) ? wp_json_encode( $params['pieces'] ) : (string) $params['pieces'] ) : null;
+
+			$created_log_id = (int) $this->quote_log_repo->insert( [
+				'rate_card_id'         => $rate_card_id,
+				'session_id'           => $lead_id,
+				'ip_address'           => $client_ip,
+				'device_type'          => $device_type,
+				'user_agent'           => $user_agent,
+				'direction'            => $direction,
+				'origin_iata'          => 'VN',
+				'origin_province'      => ! empty( $params['origin'] ) ? sanitize_text_field( $params['origin'] ) : 'TP. Hồ Chí Minh',
+				'destination_iata'     => $dest_iata,
+				'destination_address'  => ! empty( $params['destination'] ) ? sanitize_text_field( $params['destination'] ) : '',
+				'service_code'         => $service_code,
+				'zone'                 => $zone,
+				'rate_zone'            => $rate_zone,
+				'actual_weight_kg'     => $actual_weight_kg,
+				'dim_weight_kg'        => $dim_weight_kg,
+				'chargeable_weight_kg' => $weight_val,
+				'total_price_vnd'      => $total_price,
+				'pieces_json'          => $pieces_data,
+				'breakdown_json'       => [
+					'contact' => [
+						'name'       => $name,
+						'phone'      => $clean_phone,
+						'email'      => ! empty( $params['email'] ) ? sanitize_email( $params['email'] ) : '',
+						'notes'      => ! empty( $params['notes'] ) ? sanitize_textarea_field( $params['notes'] ) : '',
+						'message'    => ! empty( $params['message'] ) ? sanitize_textarea_field( $params['message'] ) : '',
+						'created_at' => $lead['created_at'],
+					],
+					'lead' => [
+						'lead_id'    => $lead_id,
+						'name'       => $name,
+						'phone'      => $clean_phone,
+						'email'      => ! empty( $params['email'] ) ? sanitize_email( $params['email'] ) : '',
+						'notes'      => ! empty( $params['notes'] ) ? sanitize_textarea_field( $params['notes'] ) : '',
+						'created_at' => $lead['created_at'],
+					],
+					'lead_source' => 'ups_quote_booking_modal',
+				],
+			] );
 		}
+
+		$lead['quote_log_id'] = $created_log_id;
 
 		// Store in option log (keeps latest 200 leads)
 		if ( function_exists( 'get_option' ) && function_exists( 'update_option' ) ) {
@@ -1067,10 +1140,10 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			$admin_email = get_option( 'admin_email' );
 			if ( ! empty( $admin_email ) && is_email( $admin_email ) ) {
 				$price_str = $lead['total_price_vnd'] ? number_format( $lead['total_price_vnd'], 0, ',', '.' ) . ' VND' : 'Chưa có';
-				$subject   = sprintf( '[Báo giá UPS] Lead đặt dịch vụ từ %s (%s)', $name, $phone );
+				$subject   = sprintf( '[Báo giá UPS] Lead đặt dịch vụ từ %s (%s)', $name, $clean_phone );
 				$message   = "Khách hàng gửi yêu cầu tư vấn báo giá UPS:\n\n" .
 					"Họ tên: {$name}\n" .
-					"Số điện thoại: {$phone}\n" .
+					"Số điện thoại: {$clean_phone}\n" .
 					"Email: {$lead['email']}\n" .
 					"Dịch vụ: {$lead['service_code']}\n" .
 					"Tuyến: {$lead['route_summary']}\n" .
@@ -1081,9 +1154,31 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			}
 		}
 
+		// Bridge submission into FluentForm submissions table (for ff-frontend-entries)
+		$ff_entry_id = 0;
+		if ( class_exists( 'Allship_UPS_FluentForm_Bridge' ) ) {
+			$bridge_payload = array_merge( (array) $params, $lead );
+			if ( $created_log_id > 0 ) {
+				$bridge_payload['quote_log_id'] = $created_log_id;
+			}
+			$ff_bridge   = new Allship_UPS_FluentForm_Bridge();
+			$ff_entry_id = $ff_bridge->push_lead_to_fluentform( $bridge_payload );
+
+			if ( $created_log_id > 0 && $ff_entry_id > 0 && $this->quote_log_repo ) {
+				$log_obj = $this->quote_log_repo->get( $created_log_id );
+				if ( $log_obj ) {
+					$bd                           = is_array( $log_obj->breakdown ) ? $log_obj->breakdown : [];
+					$bd['contact']['ff_entry_id'] = $ff_entry_id;
+					$this->quote_log_repo->update( $created_log_id, [ 'breakdown_json' => $bd ] );
+				}
+			}
+		}
+
 		return $this->success_response( [
-			'message' => 'Cảm ơn bạn! Yêu cầu tư vấn đã được gửi thành công. Chuyên viên Allship sẽ liên hệ trong ít phút.',
-			'lead_id' => $lead_id,
+			'message'      => 'Cảm ơn bạn! Yêu cầu tư vấn đã được gửi thành công. Chuyên viên Allship sẽ liên hệ trong ít phút.',
+			'lead_id'      => $lead_id,
+			'quote_log_id' => $created_log_id ?: null,
+			'ff_entry_id'  => $ff_entry_id ?: null,
 		] );
 	}
 

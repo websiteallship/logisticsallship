@@ -664,3 +664,80 @@ $cache_payload = [
 $cache_key = 'ups_calc_v2_' . md5( wp_json_encode( $cache_payload ) );
 ```
 
+## 10. FluentForm Bridge & Lead Processing
+
+### 10.1. Class `Allship_UPS_FluentForm_Bridge`
+
+File: `includes/class-fluentform-bridge.php`
+
+Class phụ trách làm cầu nối 2 chiều giữa Allship UPS Quote và FluentForm:
+
+```php
+class Allship_UPS_FluentForm_Bridge {
+    private $log_repo;
+    private $wpdb;
+
+    public function __construct( $log_repo = null, $wpdb = null ) { ... }
+    public function init() {
+        add_action( 'fluentform/submission_inserted', [ $this, 'on_submission_inserted' ], 20, 3 );
+    }
+
+    public function push_lead_to_fluentform( array $lead ): int { ... }
+    public function on_submission_inserted( $insert_id, $form_data, $form = null ) { ... }
+    private function detect_device_type(): string { ... }
+    private function detect_browser(): string { ... }
+}
+```
+
+**Nguyên lý hoạt động chính:**
+1. **Chống lặp đệ quy (`__bridge_sync`)**: Khi `push_lead_to_fluentform()` gọi hook `fluentform/submission_inserted`, mảng dữ liệu có gắn `__bridge_sync = true`. Hàm `on_submission_inserted()` kiểm tra cờ này và lập tức return để tránh vòng lặp vô hạn.
+2. **Auto-Detect Form ID**: Đọc từ option `allship_ups_fluentform_id`. Nếu bằng 0, tự động truy vấn tìm form có status `published` và title chứa `UPS` hoặc `Báo Giá`.
+3. **Serial Number Calculation**: Luôn tính toán `MAX(serial_number) + 1` theo chuẩn nội bộ của FluentForm.
+4. **Metadata Detection**: Phân tích `HTTP_USER_AGENT` để gán chính xác `device` (desktop/tablet/mobile) và `browser` (Chrome, Safari, Firefox, Edge, Opera).
+
+### 10.2. REST Endpoint Lead: `Allship_UPS_REST_Controller::handle_lead`
+
+File: `includes/class-rest-controller.php`
+
+- Route: `POST /wp-json/ups-quote/v1/lead`
+- Callback: `handle_lead(WP_REST_Request $request)`
+- Rate limiting: Transient `allship_lead_limit_{md5(ip)}`, tối đa 10 lần/5 phút.
+- Gắn dữ liệu liên hệ vào `breakdown_json` của quote log:
+  ```php
+  $breakdown['lead'] = [
+      'lead_id'    => $lead_id,
+      'name'       => $name,
+      'phone'      => $phone,
+      'email'      => $lead['email'],
+      'notes'      => $lead['notes'],
+      'created_at' => $lead['created_at'],
+  ];
+  $this->quote_log_repo->update( $lead['quote_log_id'], [ 'breakdown_json' => $breakdown ] );
+  ```
+- Gọi FluentForm Bridge:
+  ```php
+  if ( class_exists( 'Allship_UPS_FluentForm_Bridge' ) ) {
+      $ff_bridge   = new Allship_UPS_FluentForm_Bridge();
+      $ff_entry_id = $ff_bridge->push_lead_to_fluentform( $bridge_payload );
+  }
+  ```
+
+### 10.3. Quản lý và Xoá hàng loạt Quote Logs (Bulk Delete)
+
+1. **Repository Method**: `Allship_UPS_Quote_Log_Repository::delete_multiple(array $ids)`:
+   ```php
+   public function delete_multiple( array $ids ) {
+       $clean_ids = array_filter( array_map( 'absint', $ids ) );
+       if ( empty( $clean_ids ) || ! $this->wpdb || empty( $this->table ) ) {
+           return 0;
+       }
+       $placeholders = implode( ',', array_fill( 0, count( $clean_ids ), '%d' ) );
+       $sql          = $this->wpdb->prepare( "DELETE FROM {$this->table} WHERE id IN ($placeholders)", $clean_ids );
+       return (int) $this->wpdb->query( $sql );
+   }
+   ```
+2. **WP_List_Table Bulk Action**: `Allship_UPS_Quote_Logs_List_Table::process_bulk_action()`:
+   - Được gọi trực tiếp tại dòng đầu của `prepare_items()`.
+   - Kiểm tra `current_user_can('manage_options')` và thực thi xóa danh sách `$_REQUEST['log_ids']`.
+   - Xuất notice `notice-success is-dismissible` thông báo số lượng bản ghi đã xoá thành công mà không gây lỗi `headers already sent`.
+

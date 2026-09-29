@@ -1818,6 +1818,9 @@
   }
 
   function applyServerCalculatedResults(data) {
+    if (data && data.quote_log_id) {
+      state.lastQuoteLogId = data.quote_log_id;
+    }
     const metrics = recalculateMetrics();
     const weight = data.metrics?.chargeable_weight_kg || metrics.chargeable;
     const totalPiecesCount = state.pieces.reduce((sum, p) => sum + Math.max(1, p.qty || 1), 0);
@@ -1896,10 +1899,14 @@
         icon: reg.icon || 'ph-airplane-tilt',
         iconBg: reg.iconBg || '#FEF3C7',
         iconColor: reg.iconColor || '#D97706',
-        zone: null,
+        zone: s.zone || null,
         calc: s.error
           ? { price: null, error: s.error }
-          : { price: s.price, total: s.total_price, vat: s.vat, notes: s.notes, unit: 'server' }
+          : { 
+              price: s.price, total: s.total_price, vat: s.vat, notes: s.notes, unit: 'server',
+              zone: s.zone, rate_zone: s.rate_zone, rate_card_id: s.rate_card_id,
+              actual_weight_kg: s.actual_weight_kg, dim_weight_kg: s.dim_weight_kg, chargeable_weight_kg: s.chargeable_weight_kg
+            }
       };
     });
 
@@ -2200,7 +2207,7 @@
                   ${priceHTML}
                 </div>
                 ${detailHTML}
-                <button type="button" class="w-full h-10 rounded-xl font-sans text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${isActive ? 'bg-brand-red text-white shadow-brand hover:bg-brand-red-hover' : 'bg-white border-[1.5px] border-slate-300 text-slate-700 hover:border-brand-red hover:text-brand-red'}" onclick="UPSQuote.openBookingModal()">
+                <button type="button" class="w-full h-10 rounded-xl font-sans text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${isActive ? 'bg-brand-red text-white shadow-brand hover:bg-brand-red-hover' : 'bg-white border-[1.5px] border-slate-300 text-slate-700 hover:border-brand-red hover:text-brand-red'}" onclick="UPSQuote.openBookingModal('${s.code}')">
                   <i class="ph-bold ph-chat-centered-dots text-sm" aria-hidden="true"></i> Liên hệ đặt dịch vụ
                 </button>
               </div>
@@ -2231,8 +2238,70 @@
     updateStickyBar();
   }
 
-  // ===== J. BOOKING MODAL MANAGER =====
-  function openBookingModal() {
+  // ===== J. BOOKING MODAL & LEAD SUBMIT =====
+  function getStandardServiceName(serviceCode, direction, shipmentType) {
+    const isExport = direction !== 'import';
+    const isDoc = shipmentType === 'document';
+    const suffix = isExport ? 'Export' : 'Import';
+
+    switch (serviceCode) {
+      case 'EXW':
+        return isDoc
+          ? `Express Early Document (EXW Doc) - ${suffix}`
+          : `Express Early Non-Document (EXW Non-Doc) - ${suffix}`;
+      case 'XPR':
+        return isDoc
+          ? `Express Plus Document (XPR Doc) - ${suffix}`
+          : `Express Plus Non-Document (XPR Non-Doc) - ${suffix}`;
+      case 'WXS':
+        return isDoc
+          ? `Express Saver Document (WXS Doc) - ${suffix}`
+          : `Express Saver Non-Document (WXS Non-Doc) - ${suffix}`;
+      case 'XPD':
+        return `Expedited (XPD) - ${suffix}`;
+      case 'WXP':
+        return `Express Freight (WXP) - ${suffix}`;
+      case 'WFM':
+        return `Freight Midday (WFM) - ${suffix}`;
+      default:
+        return `${serviceCode} - ${suffix}`;
+    }
+  }
+
+  function buildBookingDetailedMessage(customNotes, isExport, fromText, toText, standardServiceName, weightText, priceText, pieces) {
+    let msg = '';
+    const cleanNotes = (customNotes || '').trim();
+    if (cleanNotes) {
+      msg += `[Ghi chú khách hàng]:\n${cleanNotes}\n\n`;
+    }
+
+    msg += `--------------------------------------\n`;
+    msg += `THÔNG TIN BÁO GIÁ UPS:\n`;
+    msg += `• Tuyến: ${isExport ? 'Xuất khẩu' : 'Nhập khẩu'} (${fromText} ➔ ${toText})\n`;
+    msg += `• Dịch vụ: ${standardServiceName}\n`;
+    msg += `• Trọng lượng tính cước: ${weightText}\n`;
+    msg += `• Tạm tính: ${priceText}\n`;
+
+    const pieceList = Array.isArray(pieces) ? pieces : [];
+    if (pieceList.length > 0) {
+      msg += `• Chi tiết các kiện hàng (${pieceList.length} kiện):\n`;
+      pieceList.forEach((p, idx) => {
+        const qty = Math.max(1, p.qty || 1);
+        const weight = Number(p.weight) || 0;
+        const l = Number(p.len) || 0;
+        const w = Number(p.wid) || 0;
+        const h = Number(p.hgt) || Number(p.hei) || 0;
+        const divisor = state.config.dim_divisor || 5500;
+        const dimWeight = (l * w * h) / divisor;
+        msg += `  - Kiện #${idx + 1}: ${qty} kiện/thùng, ${weight} kg/kiện, KT: ${l} × ${w} × ${h} cm (TLTT: ${dimWeight.toFixed(2)} kg)\n`;
+      });
+    }
+
+    return msg.trim();
+  }
+
+  function openBookingModal(targetServiceCode = null) {
+    const serviceCodeToUse = targetServiceCode || state.service;
     const isExport = state.direction === 'export';
     const provSelect = document.getElementById('originProvince');
     const originLabel = state.originProvince || document.getElementById('originProvinceDisplay')?.value || provSelect?.value || 'TP. Hồ Chí Minh';
@@ -2254,16 +2323,17 @@
     if (zipVal) destParts.push(zipVal);
     destParts.push(c.name + ' (' + c.iata + ')');
 
+    const foreignText = destParts.length > 0 ? destParts.join(', ') : `${c.name} (${c.iata})`;
+    const fromText = isExport ? originLabel : foreignText;
+    const toText = isExport ? foreignText : originLabel;
+    const dirBadge = isExport ? 'Xuất khẩu' : 'Nhập khẩu';
+    const weightText = document.getElementById('chargeableWeightVal')?.textContent || '0.00 kg';
+    const chosen = state.calculatedResults.find(s => s.code === serviceCodeToUse);
+    const priceText = (chosen && chosen.calc.price > 0) ? formatVND(chosen.calc.price) + ' VND' : 'Liên hệ';
+    const standardServiceName = getStandardServiceName(serviceCodeToUse, state.direction, state.shipmentType);
+
     const modalSummary = document.getElementById('modalRouteSummary');
     if (modalSummary) {
-      const foreignText = destParts.length > 0 ? destParts.join(', ') : `${c.name} (${c.iata})`;
-      const fromText = isExport ? originLabel : foreignText;
-      const toText = isExport ? foreignText : originLabel;
-      const dirBadge = isExport ? 'Xuất khẩu' : 'Nhập khẩu';
-      const weightText = document.getElementById('chargeableWeightVal')?.textContent || '0.00 kg';
-      const chosen = state.calculatedResults.find(s => s.code === state.service);
-      const priceText = (chosen && chosen.calc.price > 0) ? formatVND(chosen.calc.price) + ' VND' : 'Liên hệ';
-
       modalSummary.innerHTML = `
         <div style="font-weight: 700; color: #0F172A; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
           <div style="display: flex; align-items: center; gap: 6px;">
@@ -2275,10 +2345,32 @@
         <div style="margin-bottom: 3px;"><strong>Nơi gửi:</strong> ${escapeHTML(fromText)}</div>
         <div style="margin-bottom: 4px;"><strong>Nơi nhận:</strong> ${escapeHTML(toText)}</div>
         <div style="padding-top: 6px; border-top: 1px dashed #CBD5E1; font-size: 11px; color: #64748B;">
-          Dịch vụ: <strong style="color: #0F172A;">${escapeHTML(state.service)} (${escapeHTML(SERVICE_REGISTRY[state.service]?.name || '')})</strong> | Cân tính cước: <strong style="color: #0F172A;">${escapeHTML(weightText)}</strong> | Tạm tính: <strong style="color: #CE2027;">${escapeHTML(priceText)}</strong>
+          Dịch vụ: <strong style="color: #0F172A;">${escapeHTML(serviceCodeToUse)} (${escapeHTML(SERVICE_REGISTRY[serviceCodeToUse]?.name || '')})</strong> | Cân tính cước: <strong style="color: #0F172A;">${escapeHTML(weightText)}</strong> | Tạm tính: <strong style="color: #CE2027;">${escapeHTML(priceText)}</strong>
         </div>
       `;
     }
+
+    // Populate hidden fields for FluentForm & Quote Logs mapping
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.value = (val !== null && val !== undefined) ? String(val) : '';
+    };
+    setVal('bookingService', standardServiceName);
+    setVal('bookingHiddenServiceName', `Dịch vụ chuyển phát quốc tế UPS - ${dirBadge}`);
+    setVal('bookingDirection', state.direction);
+    setVal('bookingDirectionLabel', dirBadge);
+    setVal('bookingOrigin', fromText);
+    setVal('bookingDestination', toText);
+    setVal('bookingDestinationIata', c.iata || '');
+    setVal('bookingServiceCode', serviceCodeToUse);
+    setVal('bookingServiceName', SERVICE_REGISTRY[serviceCodeToUse]?.name || serviceCodeToUse);
+    setVal('bookingChargeableWeight', weightText);
+    setVal('bookingTotalPrice', priceText);
+    setVal('bookingTotalPriceRaw', chosen?.calc?.price || 0);
+    setVal('bookingQuoteLogId', state.lastQuoteLogId || '');
+    setVal('bookingRouteSummary', `${fromText} ➔ ${toText}`);
+    setVal('bookingPiecesJson', JSON.stringify(state.pieces || []));
+    setVal('bookingHiddenSource', 'ups_quote_booking_modal');
 
     const noticeEl = document.getElementById('bookingNotice');
     if (noticeEl) {
@@ -2312,11 +2404,12 @@
       return;
     }
 
-    const cleanPhone = phone.replace(/[^0-9]/g, '');
-    if (cleanPhone.length < 8 || cleanPhone.length > 15) {
+    const normalizedPhone = phone.trim().replace(/[\s.\-()]/g, '');
+    const vnPhoneRegex = /^(?:\+84|84|0)\d{9}$/;
+    if (!vnPhoneRegex.test(normalizedPhone)) {
       if (noticeEl) {
         noticeEl.className = 'mb-3 p-3 rounded-xl text-xs font-semibold bg-red-50 text-red-700 border border-red-200 block';
-        noticeEl.textContent = 'Số điện thoại không hợp lệ (yêu cầu từ 8 đến 15 chữ số).';
+        noticeEl.textContent = 'Số điện thoại không hợp lệ (hỗ trợ đầu số 0, 84 hoặc +84 và 9 chữ số tiếp theo).';
       }
       return;
     }
@@ -2326,17 +2419,58 @@
       submitBtn.disabled = true;
     }
 
+    const c = state.selectedCountry || { name: 'United States', iata: 'US' };
+    const provSelect = document.getElementById('originProvince');
+    const originLabel = state.originProvince || document.getElementById('originProvinceDisplay')?.value || provSelect?.value || 'TP. Hồ Chí Minh';
+    const isExport = state.direction === 'export';
+    const foreignText = document.getElementById('bookingDestination')?.value || `${c.name} (${c.iata})`;
+    const fromText = isExport ? originLabel : foreignText;
+    const toText = isExport ? foreignText : originLabel;
+    const weightText = document.getElementById('chargeableWeightVal')?.textContent || '0.00 kg';
     const chosen = state.calculatedResults.find(s => s.code === state.service);
+    const priceText = (chosen && chosen.calc.price > 0) ? formatVND(chosen.calc.price) + ' VND' : 'Liên hệ';
+    const standardServiceName = getStandardServiceName(state.service, state.direction, state.shipmentType);
+
+    const fullMessage = buildBookingDetailedMessage(
+      notes,
+      isExport,
+      fromText,
+      toText,
+      standardServiceName,
+      weightText,
+      priceText,
+      state.pieces
+    );
+    const formattedMsgInput = document.getElementById('bookingFormattedMessage');
+    if (formattedMsgInput) formattedMsgInput.value = fullMessage;
+
     const leadPayload = {
       name: name,
-      phone: phone,
+      phone: normalizedPhone,
       notes: notes,
+      message: fullMessage,
       direction: state.direction,
+      service: standardServiceName,
       service_code: state.service,
-      destination_iata: state.selectedCountry?.iata || '',
-      destination_name: state.selectedCountry?.name || '',
-      route_summary: `${state.direction === 'export' ? 'VN' : state.selectedCountry?.iata} ➔ ${state.direction === 'export' ? state.selectedCountry?.iata : 'VN'}`,
-      total_price_vnd: chosen?.calc?.price || 0
+      service_name: SERVICE_REGISTRY[state.service]?.name || state.service,
+      hidden_service_name: `Dịch vụ chuyển phát quốc tế UPS - ${isExport ? 'Xuất khẩu' : 'Nhập khẩu'}`,
+      origin: fromText,
+      destination: toText,
+      destination_iata: c.iata || '',
+      destination_name: c.name || '',
+      zone: chosen?.calc?.zone || chosen?.zone || '',
+      rate_zone: chosen?.calc?.rate_zone || '',
+      rate_card_id: chosen?.calc?.rate_card_id || state.rateCardId || 0,
+      actual_weight_kg: chosen?.calc?.actual_weight_kg || null,
+      dim_weight_kg: chosen?.calc?.dim_weight_kg || null,
+      chargeable_weight: weightText,
+      total_price: priceText,
+      total_price_vnd: chosen?.calc?.price || chosen?.calc?.total_price_vnd || 0,
+      total_price_raw: chosen?.calc?.price || chosen?.calc?.total_price_vnd || 0,
+      quote_log_id: state.lastQuoteLogId || 0,
+      route_summary: `${fromText} ➔ ${toText}`,
+      pieces: state.pieces || [],
+      hidden_source: 'ups_quote_booking_modal'
     };
 
     const endpoint = (state.config.apiBase || '/wp-json/ups-quote/v1') + '/lead';

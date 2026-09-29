@@ -112,6 +112,10 @@ Nhóm `Fees`:
 - Include customs fee: off.
 - Customs fee VND, default 10000.
 
+Nhóm `Advanced`:
+
+- FluentForm Lead Form ID: default `0` (Tự động nhận diện form FluentForm có tiêu đề chứa "UPS" hoặc "Báo Giá"; admin có thể điền ID cụ thể để ép buộc nhận lead).
+
 > **Deprecated**: Nhóm `Phase` và `Services` đã chuyển sang Rate Card detail page (§ 3).
 
 ## 5. Public quote form
@@ -175,7 +179,37 @@ Bảng kết quả hiển thị dạng Card Grid (Desktop) và Compact Compariso
 | Base price | Giá cước tạm tính theo bảng giá active |
 | Action Button | Nút "Liên hệ đặt dịch vụ" mở Booking Modal với thông tin tuyến điền sẵn |
 
-## 7. UX edge cases
+## 7. Booking Modal & Đặt dịch vụ (Lead Capture)
+
+Khi khách hàng bấm **"Liên hệ đặt dịch vụ"** trên card kết quả, Booking Modal xuất hiện đè lên giao diện với thiết kế sang trọng:
+
+### 7.1. Thành phần giao diện Modal:
+1. **Header**: Tiêu đề "Yêu Cầu Tư Vấn & Đặt Dịch Vụ", nút đóng `(X)`, backdrop blur.
+2. **Card Tóm tắt Hành trình & Giá (Route Summary Card)**:
+   - Điểm gửi và Điểm nhận (chi tiết địa chỉ, thành phố, bang, quốc gia).
+   - Badge chiều vận chuyển (`Xuất khẩu` hoặc `Nhập khẩu`).
+   - Tên gói dịch vụ đã chọn, trọng lượng tính cước và tổng cước tạm tính màu đỏ thương hiệu `#CE2027`.
+3. **Form Nhập Liệu Khách Hàng**:
+   - `Họ và tên *`: Text input bắt buộc.
+   - `Số điện thoại *`: Tel input bắt buộc, chuẩn số điện thoại Việt Nam (đầu số `0`, `84` hoặc `+84` kèm 9 chữ số tiếp theo).
+   - `Ghi chú về lô hàng`: Textarea nhập yêu cầu thêm (đóng gỗ, lấy hàng giờ hành chính...).
+4. **Các trường ẩn tự động đồng bộ (Hidden Fields)**:
+   - `service`: Tên dịch vụ chuẩn hóa trong 18 tên quốc tế.
+   - `hidden_service_name`: Nhãn phân loại cấp cao.
+   - `message`: Nội dung kết hợp ghi chú và danh sách bóc tách đa kiện hàng dạng list.
+   - `quote_log_id`, `direction`, `origin`, `destination`, `destination_iata`, `service_code`, `chargeable_weight`, `total_price`, `total_price_raw`, `pieces_json`, `hidden_source`.
+5. **Nút Gửi Yêu Cầu**: Có spinner loading animation, ngăn chặn double submit.
+
+## 8. Quản Lý Bản Ghi Báo Giá (Quote Logs UI)
+
+Tại menu **UPS Rate Calculator ➔ Quote Logs**:
+- Sử dụng bảng chuẩn `WP_List_Table` với phân trang 20 dòng/trang.
+- **Thao tác hàng loạt (Bulk Delete)**: Admin tích chọn các checkbox bản ghi muốn xoá, chọn action `Xóa` trong dropdown và bấm `Áp dụng`. Hệ thống gọi `process_bulk_action()` thực thi xoá đồng loạt thông qua `delete_multiple()` của repository và hiển thị thông báo thành công.
+- **Bộ lọc mạnh mẽ**: Lọc theo Chiều (Export/Import), Dịch vụ (WXS, XPD, WFM...), Quốc gia đến, Khoảng thời gian (Từ ngày - Đến ngày) và ô tìm kiếm từ khóa.
+- **Xem thông tin liên hệ / Lead**: Đối với các bản ghi khách hàng đã điền form đặt chỗ, hiển thị badge Lead kèm thông tin Họ tên, SĐT, Email và ID liên kết bên FluentForm (`ff_entry_id`).
+- **Xuất dữ liệu**: Nút "Xuất CSV" hỗ trợ định dạng chuẩn UTF-8 BOM, tương thích hoàn hảo với Microsoft Excel mà không bị lỗi font tiếng Việt.
+
+## 9. UX edge cases
 
 | Trường hợp | UI xử lý |
 |---|---|

@@ -72,6 +72,8 @@ class Allship_UPS_Plugin {
 			// Endpoints & Views
 			'class-rest-controller.php',
 			'class-shortcode.php',
+			// FluentForm Integration Bridge
+			'class-fluentform-bridge.php',
 		];
 
 		foreach ( $files as $file ) {
@@ -174,6 +176,12 @@ class Allship_UPS_Plugin {
 		if ( class_exists( 'Allship_UPS_Shortcode' ) ) {
 			$shortcode = new Allship_UPS_Shortcode();
 			$shortcode->register();
+		}
+
+		// Initialize FluentForm Bridge.
+		if ( class_exists( 'Allship_UPS_FluentForm_Bridge' ) ) {
+			$bridge = new Allship_UPS_FluentForm_Bridge();
+			$bridge->init();
 		}
 
 		do_action( 'allship_ups_quote_init', $this );

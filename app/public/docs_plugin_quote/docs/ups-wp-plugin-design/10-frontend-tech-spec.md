@@ -463,3 +463,108 @@ CSS fallback:
 - **Bảo mật Zero-Leakage**: Dữ liệu danh sách quốc gia `upsQuoteConfig.countries` chỉ chứa `iata_code` và `country_name`. Cột zone (`wxs`, `xpd`, `wfm`) được bảo vệ 100% tại backend.
 - **Batch Calculation Flow**: Khi user bấm "Tính giá cước", form gửi request `POST /calculate` với `service_code: "ALL"`. Server xử lý và cache toàn bộ dịch vụ, frontend nhận về đối tượng `services` và cập nhật tức thì toàn bộ tabs giá cước.
 - **Booking modal & Results ribbon**: Tự động hiển thị tóm tắt đầy đủ các thành phần địa chỉ đã nhập (ví dụ: `Los Angeles, California (90210) · United States`).
+
+## 9. Booking Modal & Lead Submission Logic
+
+### 9.1. Chuẩn hóa tên dịch vụ (`getStandardServiceName`)
+
+Đảm bảo tên dịch vụ gửi sang FluentForm và `ff-frontend-entries` luôn đồng nhất theo 18 danh mục chuẩn quốc tế:
+
+```javascript
+function getStandardServiceName(serviceCode, direction, shipmentType) {
+  const isExport = direction === 'export';
+  const suffix = isExport ? 'Export' : 'Import';
+  const isDoc = String(shipmentType).toLowerCase().includes('doc') && !String(shipmentType).toLowerCase().includes('non');
+
+  switch (serviceCode) {
+    case 'EXW':
+      return isDoc ? `Express Early Document (EXW Doc) - ${suffix}` : `Express Early Non-Document (EXW Non-Doc) - ${suffix}`;
+    case 'XPR':
+      return isDoc ? `Express Plus Document (XPR Doc) - ${suffix}` : `Express Plus Non-Document (XPR Non-Doc) - ${suffix}`;
+    case 'WXS':
+      return isDoc ? `Express Saver Document (WXS Doc) - ${suffix}` : `Express Saver Non-Document (WXS Non-Doc) - ${suffix}`;
+    case 'XPD':
+      return `Expedited (XPD) - ${suffix}`;
+    case 'WXP':
+      return `Express Freight (WXP) - ${suffix}`;
+    case 'WFM':
+      return `Freight Midday (WFM) - ${suffix}`;
+    default:
+      return `${serviceCode} - ${suffix}`;
+  }
+}
+```
+
+### 9.2. Bóc tách và định dạng đa kiện hàng (`buildBookingDetailedMessage`)
+
+Định dạng nội dung trường `message` hiển thị đầy đủ quy cách từng kiện trong khung chi tiết của `ff-frontend-entries`:
+
+```javascript
+function buildBookingDetailedMessage(customNotes, isExport, fromText, toText, standardServiceName, weightText, priceText, pieces) {
+  let msg = '';
+  const cleanNotes = (customNotes || '').trim();
+  if (cleanNotes) {
+    msg += `[Ghi chú khách hàng]:\n${cleanNotes}\n\n`;
+  }
+
+  msg += `--------------------------------------\n`;
+  msg += `THÔNG TIN BÁO GIÁ UPS:\n`;
+  msg += `• Tuyến: ${isExport ? 'Xuất khẩu' : 'Nhập khẩu'} (${fromText} ➔ ${toText})\n`;
+  msg += `• Dịch vụ: ${standardServiceName}\n`;
+  msg += `• Trọng lượng tính cước: ${weightText}\n`;
+  msg += `• Tạm tính: ${priceText}\n`;
+
+  const pieceList = Array.isArray(pieces) ? pieces : [];
+  if (pieceList.length > 0) {
+    msg += `• Chi tiết các kiện hàng (${pieceList.length} kiện):\n`;
+    pieceList.forEach((p, idx) => {
+      const qty = Math.max(1, p.qty || 1);
+      const weight = Number(p.weight) || 0;
+      const l = Number(p.len) || 0;
+      const w = Number(p.wid) || 0;
+      const h = Number(p.hgt) || Number(p.hei) || 0;
+      const divisor = state.config.dim_divisor || 5500;
+      const dimWeight = (l * w * h) / divisor;
+      msg += `  - Kiện #${idx + 1}: ${qty} kiện/thùng, ${weight} kg/kiện, KT: ${l} × ${w} × ${h} cm (TLTT: ${dimWeight.toFixed(2)} kg)\n`;
+    });
+  }
+
+  return msg.trim();
+}
+```
+
+### 9.3. Gán dữ liệu vào Hidden Fields (`openBookingModal`)
+
+Khi mở modal, JavaScript tự động điền các trường ẩn phục vụ mapping:
+- `bookingService`: Tên chuẩn 18 dịch vụ.
+- `bookingHiddenServiceName`: `Dịch vụ chuyển phát quốc tế UPS - [Xuất khẩu|Nhập khẩu]`.
+- `bookingFormattedMessage`: Nội dung list chi tiết đa kiện.
+- `bookingPiecesJson`: Mảng JSON các kiện hàng `JSON.stringify(state.pieces)`.
+- `bookingQuoteLogId`: ID của bản ghi quote log vừa tính (`state.lastQuoteLogId`).
+- `bookingTotalPriceRaw`: Số tiền nguyên bản VND để lưu trữ cột số.
+
+### 9.4. Validation và Gửi Lead (`handleBookingSubmit`)
+
+```javascript
+// Validation
+if (!name || !phone) {
+  showNotice('Vui lòng điền đầy đủ họ tên và số điện thoại liên hệ.');
+  return;
+}
+const normalizedPhone = phone.trim().replace(/[\s.\-()]/g, '');
+const vnPhoneRegex = /^(?:\+84|84|0)\d{9}$/;
+if (!vnPhoneRegex.test(normalizedPhone)) {
+  showNotice('Số điện thoại không hợp lệ (hỗ trợ đầu số 0, 84 hoặc +84 và 9 chữ số tiếp theo).');
+  return;
+}
+
+// POST to /lead
+fetch((state.config.apiBase || '/wp-json/ups-quote/v1') + '/lead', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-WP-Nonce': state.config.nonce || ''
+  },
+  body: JSON.stringify(leadPayload)
+});
+```

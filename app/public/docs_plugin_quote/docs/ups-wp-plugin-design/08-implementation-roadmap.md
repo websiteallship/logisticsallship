@@ -1463,11 +1463,13 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - [x] Tạo `admin/views/quote-logs.php` — WP_List_Table.
 - [x] Filters: date range, service, destination.
 - [x] Export CSV + Excel (UTF-8 BOM).
+- [x] Xử lý Bulk Action xóa nhiều bản ghi (Bulk Delete) qua `process_bulk_action()` và `delete_multiple()`.
 
 🧪 **Tests Step 5.8**:
 - [x] Logs appear after calculate.
 - [x] Filter by service → correct rows.
 - [x] Export CSV → file downloads, opens in Excel correctly (Vietnamese text OK).
+- [x] Bulk Delete nhiều bản ghi hoạt động và hiển thị admin notice.
 
 ---
 
@@ -1490,7 +1492,32 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 
 ---
 
-### Step 5.10 — Phase 5 Verification
+### Step 5.10 — FluentForm Integration
+
+🛠 **Skills**:
+- `php-pro` — FluentForm hooks, WordPress REST API
+- `javascript-pro` — JSON payloads, modal events
+
+📖 **Docs**:
+- `14-fluentform-integration.md`
+
+**Tasks**:
+- [x] Tạo `data/fluentform-quote-template.json` định nghĩa chuẩn form.
+- [x] Cập nhật JS frontend `quote-form.js` tự động format dịch vụ 18 loai và danh sách kiện hàng dạng list.
+- [x] Tạo class `Allship_UPS_FluentForm_Bridge` kết nối lead sang FluentForm submissions (cho `ff-frontend-entries`).
+- [x] Link 2 chiều: `ff_entry_id` lưu ở logs, `quote_log_id` lưu ở Form.
+- [x] Bổ sung setting field cho FluentForm ID trong `Allship_UPS_Admin_Settings`.
+- [x] Thêm cờ `__bridge_sync` chống lặp vô hạn giữa hook và insert.
+
+🧪 **Tests Step 5.10**:
+- [x] Lead được insert đồng thời vào table `wp_ups_quote_logs` và FluentForm.
+- [x] Tên dịch vụ và danh sách kiện hàng format chuẩn xác.
+- [x] Modal popup hiển thị đúng.
+- [x] Chạy hoàn tất test suite `tests/test-fluentform-integration.php` (7/7 tests passed).
+
+---
+
+### Step 5.11 — Phase 5 Verification
 
 ✅ **Gate — PHẢI pass ALL trước khi sang Phase 6**:
 
@@ -1500,9 +1527,10 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 | 2 | Admin CRUD rates, zones, countries | ☐ |
 | 3 | Admin tạo/đặt tên/activate/archive rate cards | ☐ |
 | 4 | Settings save/load đúng | ☐ |
-| 5 | Quote logs filter + export CSV | ☐ |
+| 5 | Quote logs filter + export CSV + bulk delete | ☑ |
 | 6 | Admin assets chỉ load trên plugin pages | ☐ |
 | 7 | Nonce + capability check trên mọi AJAX | ☐ |
+| 8 | Tích hợp FluentForm và đồng bộ log 2 chiều | ☑ |
 
 ---
 

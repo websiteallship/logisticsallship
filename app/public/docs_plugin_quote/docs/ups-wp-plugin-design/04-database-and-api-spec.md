@@ -151,13 +151,17 @@ Settings mặc định:
   "include_surge": false,
   "surge_percent": 0,
   "include_customs_fee": false,
-  "customs_fee_vnd": 10000
+  "customs_fee_vnd": 10000,
+  "fluentform_id": 0
 }
 ```
 
+> **Ghi chú**: `fluentform_id` = 0 nghĩa là hệ thống tự động nhận diện form FluentForm có tiêu đề chứa "UPS" hoặc "Báo Giá". Admin có thể chỉ định ID cố định.
 > **Deprecated**: `phase_direction`, `enabled_services`, `disabled_services` đã chuyển sang `ups_rate_cards.enabled_directions` và `ups_rate_cards.disabled_rate_groups` (per rate card).
 
 ## 8. `ups_quote_logs`
+
+> **Quy tắc ghi Log**: Hệ thống **không** tự động ghi log khi người dùng chỉ bấm tính giá (`POST /calculate`). Nhật ký báo giá chỉ được tạo khi khách hàng **gửi thành công Form tư vấn đặt dịch vụ** (Booking Modal hoặc FluentForm độc lập), đảm bảo mọi bản ghi log luôn có đầy đủ thông tin liên hệ (`name`, `phone`, `notes`...) và thông số gói cước.
 
 ```sql
 CREATE TABLE {prefix}ups_quote_logs (
@@ -190,6 +194,37 @@ CREATE TABLE {prefix}ups_quote_logs (
   KEY destination (destination_iata),
   KEY service_code (service_code)
 );
+```
+
+### 8.1. Cấu trúc trường `breakdown_json` (Bao gồm thông tin Lead/Contact)
+
+Trường `breakdown_json` lưu trữ chi tiết cấu thành giá và thông tin khách hàng đặt dịch vụ:
+
+```json
+{
+  "base_rate": 1977290,
+  "fees": [],
+  "notes": ["..."],
+  "contact": {
+    "source": "fluentform",
+    "ff_entry_id": 142,
+    "name": "Nguyễn Văn A",
+    "phone": "0987654321",
+    "email": "vana@example.com",
+    "notes": "Cần hỗ trợ đóng gỗ",
+    "message": "[Ghi chú khách hàng]...\nTHÔNG TIN BÁO GIÁ UPS...",
+    "created_at": "2026-09-29 16:00:00"
+  },
+  "lead": {
+    "lead_id": "lead_20260929160000_5678",
+    "name": "Nguyễn Văn A",
+    "phone": "0987654321",
+    "email": "vana@example.com",
+    "notes": "Cần hỗ trợ đóng gỗ",
+    "created_at": "2026-09-29 16:00:00"
+  },
+  "lead_source": "ups_quote_booking_modal"
+}
 ```
 
 ## 9. REST API quote
@@ -392,7 +427,74 @@ Response lỗi:
 }
 ```
 
-## 10. REST API support endpoints
+## 10. REST API Lead submission (Booking Modal & FluentForm Bridge)
+
+Endpoint:
+
+```text
+POST /wp-json/ups-quote/v1/lead
+```
+
+Dùng khi khách hàng hoàn tất tính giá và bấm gửi yêu cầu đặt dịch vụ trên Booking Modal. Endpoint đồng thời ghi nhận lead vào WordPress, cập nhật `wp_ups_quote_logs`, và đẩy sang bảng `wp_fluentform_submissions` của FluentForm để hiển thị trên `ff-frontend-entries`.
+
+### 10.1. Request Headers & Rate Limiting
+- `Content-Type`: `application/json`
+- `X-WP-Nonce`: Nonce hợp lệ từ `allship_ups_quote_params.nonce`
+- **Rate Limit**: Tối đa 10 requests / 5 phút trên mỗi IP (quản lý qua Transient `allship_lead_limit_{md5(ip)}`). Trả mã HTTP `429 Too Many Requests` nếu vi phạm.
+
+### 10.2. Request Payload Mẫu
+
+```json
+{
+  "name": "Nguyễn Văn A",
+  "phone": "0987654321",
+  "email": "vana@example.com",
+  "notes": "Hàng dễ vỡ, cần đóng pallet gỗ",
+  "message": "[Ghi chú khách hàng]:\nHàng dễ vỡ, cần đóng pallet gỗ\n\n--------------------------------------\nTHÔNG TIN BÁO GIÁ UPS:\n• Tuyến: Xuất khẩu (TP. Hồ Chí Minh ➔ United States (US))\n• Dịch vụ: Express Saver Non-Document (WXS Non-Doc) - Export\n• Trọng lượng tính cước: 6.00 kg\n• Tạm tính: 1.977.290 VND\n• Chi tiết các kiện hàng (2 kiện):\n  - Kiện #1: 1 kiện/thùng, 3.2 kg/kiện, KT: 30 × 20 × 15 cm (TLTT: 1.64 kg)\n  - Kiện #2: 2 kiện/thùng, 1.1 kg/kiện, KT: 25 × 20 × 10 cm (TLTT: 0.91 kg)",
+  "direction": "export",
+  "service": "Express Saver Non-Document (WXS Non-Doc) - Export",
+  "service_code": "WXS",
+  "service_name": "Worldwide Express Saver",
+  "hidden_service_name": "Dịch vụ chuyển phát quốc tế UPS - Xuất khẩu",
+  "origin": "TP. Hồ Chí Minh",
+  "destination": "123 Main St, Suite 400, Los Angeles, CA, 90210, United States (US)",
+  "destination_iata": "US",
+  "destination_name": "United States*",
+  "chargeable_weight": "6.00 kg",
+  "total_price": "1.977.290 VND",
+  "total_price_vnd": 1977290,
+  "quote_log_id": 482,
+  "route_summary": "TP. Hồ Chí Minh ➔ United States*",
+  "pieces": [
+    { "quantity": 1, "actual_weight_kg": 3.2, "length_cm": 30, "width_cm": 20, "height_cm": 15 },
+    { "quantity": 2, "actual_weight_kg": 1.1, "length_cm": 25, "width_cm": 20, "height_cm": 10 }
+  ],
+  "hidden_source": "ups_quote_booking_modal"
+}
+```
+
+### 10.3. Xử lý Backend
+1. **Sanitize & Validate**: Kiểm tra `name` (required), `phone` (required, chuẩn số điện thoại Việt Nam: đầu số `0`, `84` hoặc `+84` kèm 9 chữ số tiếp theo).
+2. **Update Quote Log**: Nếu có `quote_log_id`, cập nhật trường `breakdown_json` của dòng log đó để gắn `contact` và `lead_id`.
+3. **Cache Lead**: Lưu vào option `allship_ups_leads` (lưu tối đa 200 leads gần nhất).
+4. **Action Hook**: Bắn sự kiện `do_action('allship_ups_lead_submitted', $lead)`.
+5. **Admin Notification**: Gửi email thông báo đơn vị vận chuyển mới đến email quản trị (`wp_mail`).
+6. **FluentForm Bridge**: Gọi `Allship_UPS_FluentForm_Bridge::push_lead_to_fluentform()`, tạo submission trong bảng `wp_fluentform_submissions` để quản lý tại `ff-frontend-entries`.
+
+### 10.4. Response Thành Công
+
+```json
+{
+  "success": true,
+  "data": {
+    "message": "Cảm ơn bạn! Yêu cầu tư vấn đã được gửi thành công. Chuyên viên Allship sẽ liên hệ trong ít phút.",
+    "lead_id": "lead_20260929162000_8923",
+    "ff_entry_id": 156
+  }
+}
+```
+
+## 11. REST API support endpoints
 
 ### Countries
 
@@ -478,7 +580,7 @@ Trả về dịch vụ theo direction, bao gồm trạng thái bật/tắt, lý 
 
 Default `direction=export` nếu không truyền (backward compatible).
 
-## 11. Shortcode
+## 12. Shortcode
 
 ```text
 [ups_quote_form]    (shortcode tự động chèn vào page "Báo giá UPS" khi activate)

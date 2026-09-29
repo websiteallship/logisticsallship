@@ -795,6 +795,26 @@ $render_svc_card = function( $code, $cat, $doc_split, $name, $desc, $icon_class,
 						<textarea id="bookingNotes" name="notes" class="w-full h-[65px] bg-[#F1F4F9] border-[1.5px] border-transparent rounded-xl px-4 py-2 font-sans text-sm font-semibold text-navy-900 transition-all focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] placeholder:text-slate-400 placeholder:font-medium resize-none" placeholder="<?php echo esc_attr__( 'Mô tả hàng hóa, yêu cầu đóng gỗ, lấy hàng tận nơi...', 'allship-ups-quote' ); ?>"></textarea>
 					</div>
 				</div>
+
+				<!-- Hidden fields for FluentForm & Quote Logs mapping -->
+				<input type="hidden" name="service" id="bookingService" value="">
+				<input type="hidden" name="hidden_service_name" id="bookingHiddenServiceName" value="">
+				<input type="hidden" name="direction" id="bookingDirection" value="export">
+				<input type="hidden" name="direction_label" id="bookingDirectionLabel" value="Xuất khẩu">
+				<input type="hidden" name="origin" id="bookingOrigin" value="">
+				<input type="hidden" name="destination" id="bookingDestination" value="">
+				<input type="hidden" name="destination_iata" id="bookingDestinationIata" value="">
+				<input type="hidden" name="service_code" id="bookingServiceCode" value="">
+				<input type="hidden" name="service_name" id="bookingServiceName" value="">
+				<input type="hidden" name="chargeable_weight" id="bookingChargeableWeight" value="">
+				<input type="hidden" name="total_price" id="bookingTotalPrice" value="">
+				<input type="hidden" name="total_price_raw" id="bookingTotalPriceRaw" value="0">
+				<input type="hidden" name="quote_log_id" id="bookingQuoteLogId" value="">
+				<input type="hidden" name="route_summary" id="bookingRouteSummary" value="">
+				<input type="hidden" name="pieces_json" id="bookingPiecesJson" value="">
+				<input type="hidden" name="message" id="bookingFormattedMessage" value="">
+				<input type="hidden" name="hidden_source" id="bookingHiddenSource" value="ups_quote_booking_modal">
+
 				<button type="submit" id="btnSubmitBooking" class="btn-calculate w-full h-[46px] bg-linear-to-br from-brand-red to-brand-red-hover border-none rounded-xl text-white font-sans text-sm font-extrabold cursor-pointer flex items-center justify-center gap-2 transition-all shadow-brand relative overflow-hidden">
 					<span class="btn-text flex items-center gap-2"><i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i> <?php echo esc_html__( 'Gửi Yêu Cầu Đặt Chỗ', 'allship-ups-quote' ); ?></span>
 					<div class="spinner" aria-hidden="true"></div>

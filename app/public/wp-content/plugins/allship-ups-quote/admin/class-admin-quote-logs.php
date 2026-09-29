@@ -69,6 +69,7 @@ class Allship_UPS_Quote_Logs_List_Table extends WP_List_Table {
 		return [
 			'cb'            => '<input type="checkbox" />',
 			'id'            => __( 'Mã log', 'allship-ups-quote' ),
+			'contact'       => __( 'Khách hàng', 'allship-ups-quote' ),
 			'created_at'    => __( 'Thời gian', 'allship-ups-quote' ),
 			'client'        => __( 'Thiết bị / IP', 'allship-ups-quote' ),
 			'direction'     => __( 'Chiều', 'allship-ups-quote' ),
@@ -149,6 +150,33 @@ class Allship_UPS_Quote_Logs_List_Table extends WP_List_Table {
 			esc_html( date( 'd/m/Y', $time ) ),
 			esc_html( date( 'H:i:s', $time ) )
 		);
+	}
+
+	/**
+	 * Render Contact column.
+	 *
+	 * @param object $item Log row item.
+	 * @return string
+	 */
+	protected function column_contact( $item ) {
+		$breakdown = ! empty( $item->breakdown_json ) ? json_decode( $item->breakdown_json, true ) : null;
+		$contact = $breakdown['contact'] ?? ( $breakdown['lead'] ?? null );
+		if ( ! $contact || ( empty( $contact['name'] ) && empty( $contact['phone'] ) ) ) {
+			return '<span style="color:#94a3b8;font-style:italic;">' . esc_html__( 'Khách vãng lai', 'allship-ups-quote' ) . '</span>';
+		}
+		
+		$name  = ! empty( $contact['name'] ) ? esc_html( $contact['name'] ) : '—';
+		$phone = ! empty( $contact['phone'] ) ? esc_html( $contact['phone'] ) : '';
+		$notes = ! empty( $contact['notes'] ) ? esc_html( wp_trim_words( $contact['notes'], 5, '...' ) ) : '';
+		
+		$html = sprintf( '<strong style="color:#0f172a;">%s</strong>', $name );
+		if ( $phone ) {
+			$html .= sprintf( '<br><a href="tel:%s" style="font-size:12px;font-weight:700;color:#2563eb;text-decoration:none;">%s</a>', esc_attr( preg_replace( '/[^0-9+]/', '', $phone ) ), $phone );
+		}
+		if ( $notes ) {
+			$html .= sprintf( '<br><small style="color:#64748b;" title="%s">%s</small>', esc_attr( $contact['notes'] ), $notes );
+		}
+		return $html;
 	}
 
 	/**
@@ -258,9 +286,35 @@ class Allship_UPS_Quote_Logs_List_Table extends WP_List_Table {
 	 * @return string
 	 */
 	protected function column_weights( $item ) {
-		$actual = null !== $item->actual_weight_kg ? number_format( $item->actual_weight_kg, 1 ) . ' kg' : '—';
-		$dim    = null !== $item->dim_weight_kg ? number_format( $item->dim_weight_kg, 1 ) . ' kg' : '—';
-		$charge = null !== $item->chargeable_weight_kg ? number_format( $item->chargeable_weight_kg, 1 ) . ' kg' : '—';
+		$actual = $item->actual_weight_kg;
+		$dim    = $item->dim_weight_kg;
+
+		if ( ( null === $actual || null === $dim ) && ! empty( $item->pieces_json ) ) {
+			$pieces = is_array( $item->pieces_json ) ? $item->pieces_json : json_decode( (string) $item->pieces_json, true );
+			if ( is_array( $pieces ) && ! empty( $pieces ) ) {
+				$calc_act = 0.0;
+				$calc_dim = 0.0;
+				foreach ( $pieces as $p ) {
+					if ( ! is_array( $p ) ) continue;
+					$qty = isset( $p['qty'] ) ? max( 1, (int) $p['qty'] ) : ( isset( $p['quantity'] ) ? max( 1, (int) $p['quantity'] ) : 1 );
+					$w   = isset( $p['weight'] ) ? floatval( $p['weight'] ) : ( isset( $p['actual_weight_kg'] ) ? floatval( $p['actual_weight_kg'] ) : 0.0 );
+					$l   = isset( $p['len'] ) ? floatval( $p['len'] ) : ( isset( $p['length_cm'] ) ? floatval( $p['length_cm'] ) : 0.0 );
+					$wid = isset( $p['wid'] ) ? floatval( $p['wid'] ) : ( isset( $p['width_cm'] ) ? floatval( $p['width_cm'] ) : 0.0 );
+					$h   = isset( $p['hei'] ) ? floatval( $p['hei'] ) : ( isset( $p['height_cm'] ) ? floatval( $p['height_cm'] ) : 0.0 );
+
+					$calc_act += $w * $qty;
+					if ( $l > 0 && $wid > 0 && $h > 0 ) {
+						$calc_dim += ( ( $l * $wid * $h ) / 5500 ) * $qty;
+					}
+				}
+				if ( null === $actual && $calc_act > 0 ) $actual = round( $calc_act, 1 );
+				if ( null === $dim && $calc_dim > 0 ) $dim = round( $calc_dim, 1 );
+			}
+		}
+
+		$actual_str = null !== $actual ? number_format( (float) $actual, 1 ) . ' kg' : '—';
+		$dim_str    = null !== $dim ? number_format( (float) $dim, 1 ) . ' kg' : '—';
+		$charge_str = null !== $item->chargeable_weight_kg ? number_format( (float) $item->chargeable_weight_kg, 1 ) . ' kg' : '—';
 
 		return sprintf(
 			'<div style="font-size:12px;line-height:1.4;">' .
@@ -268,9 +322,9 @@ class Allship_UPS_Quote_Logs_List_Table extends WP_List_Table {
 			'<span>' . esc_html__( 'DIM:', 'allship-ups-quote' ) . ' %s</span><br>' .
 			'<strong style="color:var(--as-brand-red, #CE2027);">' . esc_html__( 'Cước:', 'allship-ups-quote' ) . ' %s</strong>' .
 			'</div>',
-			esc_html( $actual ),
-			esc_html( $dim ),
-			esc_html( $charge )
+			esc_html( $actual_str ),
+			esc_html( $dim_str ),
+			esc_html( $charge_str )
 		);
 	}
 
@@ -375,11 +429,36 @@ class Allship_UPS_Quote_Logs_List_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Process bulk actions.
+	 */
+	public function process_bulk_action() {
+		$action = $this->current_action();
+
+		if ( 'bulk_delete' === $action ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'Bạn không có quyền thực hiện thao tác này.', 'allship-ups-quote' ), 403 );
+			}
+
+			if ( ! empty( $_REQUEST['log_ids'] ) ) {
+				$ids = array_map( 'absint', (array) $_REQUEST['log_ids'] );
+				if ( $this->repo ) {
+					$deleted = $this->repo->delete_multiple( $ids );
+					if ( $deleted ) {
+						echo '<div class="notice notice-success is-dismissible"><p>' . sprintf( esc_html__( 'Đã xóa %d bản ghi thành công.', 'allship-ups-quote' ), $deleted ) . '</p></div>';
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * Prepare query arguments and fetch records from repository.
 	 *
 	 * @return void
 	 */
 	public function prepare_items() {
+		$this->process_bulk_action();
+
 		$per_page = 20;
 
 		// Columns headers setup
@@ -587,6 +666,16 @@ class Allship_UPS_Admin_Quote_Logs {
 		if ( ! $log ) {
 			wp_send_json_error( [ 'message' => __( 'Không tìm thấy dữ liệu nhật ký báo giá.', 'allship-ups-quote' ) ] );
 		}
+
+		$rate_card_name = '';
+		if ( ! empty( $log->rate_card_id ) && class_exists( 'Allship_UPS_Rate_Card_Repository' ) ) {
+			$rc_repo = new Allship_UPS_Rate_Card_Repository( $this->wpdb );
+			$rc      = $rc_repo->get( $log->rate_card_id );
+			if ( $rc ) {
+				$rate_card_name = $rc->name;
+			}
+		}
+		$log->rate_card_name = $rate_card_name;
 
 		wp_send_json_success(
 			[

@@ -175,6 +175,14 @@ class Allship_UPS_Admin_Settings {
 			self::SETTINGS_PAGE,
 			'allship_ups_section_advanced'
 		);
+
+		add_settings_field(
+			'allship_ups_fluentform_id',
+			__( 'FluentForm Form ID liên kết', 'allship-ups-quote' ),
+			[ $this, 'render_field_fluentform_id' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_advanced'
+		);
 	}
 
 	/**
@@ -345,6 +353,24 @@ class Allship_UPS_Admin_Settings {
 	}
 
 	/**
+	 * Render FluentForm Form ID setting.
+	 */
+	public function render_field_fluentform_id() {
+		$form_id = (int) $this->get_setting( 'fluentform_id', 0 );
+		if ( ! $form_id && function_exists( 'get_option' ) ) {
+			$form_id = (int) get_option( 'allship_ups_fluentform_id', 0 );
+		}
+		?>
+		<div class="as-setting-group-box">
+			<input type="number" name="fluentform_id" id="allship_ups_fluentform_id" value="<?php echo esc_attr( $form_id ? $form_id : '' ); ?>" min="0" placeholder="<?php esc_attr_e( 'Tự động nhận diện', 'allship-ups-quote' ); ?>" class="small-text" style="width: 160px;">
+			<p class="description">
+				<?php esc_html_e( 'Nhập Form ID của FluentForm để đẩy dữ liệu lead khi khách hàng đặt chỗ qua Booking Modal. Để trống nếu muốn hệ thống tự động tìm form UPS đã tạo.', 'allship-ups-quote' ); ?>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Sanitize and validate all settings input.
 	 *
 	 * @param array $input Raw input array from POST.
@@ -392,6 +418,9 @@ class Allship_UPS_Admin_Settings {
 		// 11. delete_data_on_uninstall: Boolean
 		$sanitized['delete_data_on_uninstall'] = ! empty( $input['delete_data_on_uninstall'] );
 
+		// 12. fluentform_id: Non-negative integer
+		$sanitized['fluentform_id'] = ! empty( $input['fluentform_id'] ) ? absint( $input['fluentform_id'] ) : 0;
+
 		return $sanitized;
 	}
 
@@ -410,6 +439,10 @@ class Allship_UPS_Admin_Settings {
 
 		foreach ( $cleaned as $key => $value ) {
 			$this->settings_manager->set( $key, $value );
+		}
+
+		if ( function_exists( 'update_option' ) ) {
+			update_option( 'allship_ups_fluentform_id', $cleaned['fluentform_id'] );
 		}
 
 		// Invalidate calculation transients and memory cache

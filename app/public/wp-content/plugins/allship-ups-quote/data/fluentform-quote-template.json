@@ -1,0 +1,422 @@
+[
+  {
+    "title": "UPS Quote Request - Yêu Cầu Báo Giá UPS",
+    "status": "published",
+    "has_payment": 0,
+    "type": "form",
+    "form_fields": {
+      "fields": [
+        {
+          "index": 0,
+          "element": "input_text",
+          "attributes": {
+            "type": "text",
+            "name": "name",
+            "value": "",
+            "class": "",
+            "id": "bookingName",
+            "placeholder": "Nguyễn Văn An"
+          },
+          "settings": {
+            "container_class": "",
+            "label": "Họ và tên",
+            "label_placement": "top",
+            "admin_field_label": "Họ và tên",
+            "help_message": "",
+            "conditional_logics": [],
+            "validation_rules": {
+              "required": {
+                "value": true,
+                "message": "Vui lòng nhập họ và tên của bạn"
+              }
+            }
+          },
+          "editor_options": {
+            "title": "Họ và tên",
+            "icon_class": "ff-edit-text",
+            "template": "inputText"
+          },
+          "uniqElKey": "el_ups_name"
+        },
+        {
+          "index": 1,
+          "element": "phone",
+          "attributes": {
+            "name": "phone",
+            "value": "",
+            "id": "bookingPhone",
+            "class": "",
+            "placeholder": "090 123 4567",
+            "type": "tel"
+          },
+          "settings": {
+            "container_class": "",
+            "placeholder": "090 123 4567",
+            "auto_select_country": "yes",
+            "label": "Số điện thoại / Zalo",
+            "label_placement": "top",
+            "help_message": "",
+            "admin_field_label": "Số điện thoại / Zalo",
+            "phone_country_list": {
+              "active_list": "all",
+              "visible_list": [],
+              "hidden_list": []
+            },
+            "default_country": "VN",
+            "validation_rules": {
+              "required": {
+                "value": true,
+                "message": "Vui lòng nhập số điện thoại hoặc Zalo liên hệ"
+              }
+            },
+            "conditional_logics": []
+          },
+          "editor_options": {
+            "title": "Số điện thoại",
+            "icon_class": "el-icon-phone-outline",
+            "template": "inputText"
+          },
+          "uniqElKey": "el_ups_phone"
+        },
+        {
+          "index": 2,
+          "element": "textarea",
+          "attributes": {
+            "name": "message",
+            "class": "",
+            "id": "bookingNotes",
+            "value": "",
+            "placeholder": "Mô tả hàng hóa, yêu cầu đóng gỗ, lấy hàng tận nơi...",
+            "rows": 3,
+            "cols": 2
+          },
+          "settings": {
+            "container_class": "",
+            "label": "Ghi chú về lô hàng",
+            "label_placement": "top",
+            "admin_field_label": "Ghi chú / Nội dung chi tiết",
+            "help_message": "",
+            "conditional_logics": [],
+            "validation_rules": {
+              "required": {
+                "value": false,
+                "message": ""
+              }
+            }
+          },
+          "editor_options": {
+            "title": "Ghi chú",
+            "icon_class": "ff-edit-textarea",
+            "template": "inputTextarea"
+          },
+          "uniqElKey": "el_ups_message"
+        },
+        {
+          "index": 3,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "service",
+            "value": ""
+          },
+          "settings": {
+            "admin_field_label": "Dịch vụ quan tâm"
+          },
+          "editor_options": {
+            "title": "Dịch vụ quan tâm",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_service"
+        },
+        {
+          "index": 4,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "hidden_service_name",
+            "value": ""
+          },
+          "settings": {
+            "admin_field_label": "Tên dịch vụ hiển thị"
+          },
+          "editor_options": {
+            "title": "Tên dịch vụ hiển thị",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_hidden_service_name"
+        },
+        {
+          "index": 5,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "direction",
+            "value": "export"
+          },
+          "settings": {
+            "admin_field_label": "Chiều vận chuyển"
+          },
+          "editor_options": {
+            "title": "Chiều vận chuyển",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_direction"
+        },
+        {
+          "index": 6,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "origin",
+            "value": ""
+          },
+          "settings": {
+            "admin_field_label": "Nơi gửi"
+          },
+          "editor_options": {
+            "title": "Nơi gửi",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_origin"
+        },
+        {
+          "index": 7,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "destination",
+            "value": ""
+          },
+          "settings": {
+            "admin_field_label": "Nơi nhận"
+          },
+          "editor_options": {
+            "title": "Nơi nhận",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_destination"
+        },
+        {
+          "index": 8,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "destination_iata",
+            "value": ""
+          },
+          "settings": {
+            "admin_field_label": "Mã quốc gia đến"
+          },
+          "editor_options": {
+            "title": "Mã quốc gia đến",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_destination_iata"
+        },
+        {
+          "index": 9,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "service_code",
+            "value": ""
+          },
+          "settings": {
+            "admin_field_label": "Mã dịch vụ"
+          },
+          "editor_options": {
+            "title": "Mã dịch vụ",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_service_code"
+        },
+        {
+          "index": 10,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "service_name",
+            "value": ""
+          },
+          "settings": {
+            "admin_field_label": "Tên gói cước"
+          },
+          "editor_options": {
+            "title": "Tên gói cước",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_service_name"
+        },
+        {
+          "index": 11,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "chargeable_weight",
+            "value": ""
+          },
+          "settings": {
+            "admin_field_label": "Trọng lượng tính cước"
+          },
+          "editor_options": {
+            "title": "Trọng lượng tính cước",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_chargeable_weight"
+        },
+        {
+          "index": 12,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "total_price",
+            "value": ""
+          },
+          "settings": {
+            "admin_field_label": "Tạm tính (format)"
+          },
+          "editor_options": {
+            "title": "Tạm tính",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_total_price"
+        },
+        {
+          "index": 13,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "total_price_raw",
+            "value": ""
+          },
+          "settings": {
+            "admin_field_label": "Tạm tính (số nguyên)"
+          },
+          "editor_options": {
+            "title": "Tạm tính số nguyên",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_total_price_raw"
+        },
+        {
+          "index": 14,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "quote_log_id",
+            "value": ""
+          },
+          "settings": {
+            "admin_field_label": "Quote Log ID"
+          },
+          "editor_options": {
+            "title": "Quote Log ID",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_quote_log_id"
+        },
+        {
+          "index": 15,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "route_summary",
+            "value": ""
+          },
+          "settings": {
+            "admin_field_label": "Tóm tắt tuyến đường"
+          },
+          "editor_options": {
+            "title": "Tóm tắt tuyến đường",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_route_summary"
+        },
+        {
+          "index": 16,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "pieces_json",
+            "value": ""
+          },
+          "settings": {
+            "admin_field_label": "Danh sách kiện hàng (JSON)"
+          },
+          "editor_options": {
+            "title": "Danh sách kiện hàng",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_pieces_json"
+        },
+        {
+          "index": 17,
+          "element": "input_hidden",
+          "attributes": {
+            "type": "hidden",
+            "name": "hidden_source",
+            "value": "ups_quote_booking_modal"
+          },
+          "settings": {
+            "admin_field_label": "Nguồn lead"
+          },
+          "editor_options": {
+            "title": "Nguồn lead",
+            "icon_class": "ff-edit-hidden-field",
+            "template": "inputHidden"
+          },
+          "uniqElKey": "el_ups_hidden_source"
+        }
+      ],
+      "submitButton": {
+        "uniqElKey": "el_ups_submit",
+        "element": "button",
+        "attributes": {
+          "type": "submit",
+          "class": "btn-calculate"
+        },
+        "settings": {
+          "align": "left",
+          "button_style": "default",
+          "container_class": "",
+          "help_message": "",
+          "background_color": "#CE2027",
+          "color": "#ffffff",
+          "button_size": "md",
+          "button_ui": {
+            "type": "default",
+            "text": "Gửi Yêu Cầu Đặt Chỗ",
+            "img_url": ""
+          },
+          "conditional_logics": [],
+          "normal_styles": {},
+          "hover_styles": {}
+        }
+      }
+    },
+    "metas": [
+      {
+        "meta_key": "formSettings",
+        "value": "{\"confirmation\":{\"redirectTo\":\"samePage\",\"messageToShow\":\"Cảm ơn bạn! Chuyên viên Allship sẽ liên hệ trong 5-10 phút để xác nhận yêu cầu.\",\"customPage\":null,\"samePageFormBehavior\":\"hide_form\",\"customUrl\":null},\"restrictions\":{\"limitNumberOfEntries\":{\"enabled\":false,\"numberOfEntries\":null,\"period\":\"\",\"limitReachedMsg\":\"Maximum number of entries exceeded.\"},\"scheduleForm\":{\"enabled\":false,\"start\":null,\"end\":null,\"pendingMsg\":\"Form submission is not started yet.\",\"expiredMsg\":\"Form submission is now closed.\"},\"requireLogin\":{\"enabled\":false,\"requireLoginMsg\":\"You must be logged in to submit the form.\"},\"denyEmptySubmission\":{\"enabled\":false,\"message\":\"Vui lòng điền thông tin trước khi gửi.\"}},\"layout\":{\"labelPlacement\":\"top\",\"helpMessagePlacement\":\"with_label\",\"errorMessagePlacement\":\"inline\",\"asteriskPlacement\":\"asterisk-right\"},\"delete_entry_on_submission\":\"no\"}"
+      },
+      {
+        "meta_key": "notifications",
+        "value": "{\"1\":{\"name\":\"Admin Notification - UPS Quote Lead\",\"sendTo\":{\"type\":\"email\",\"email\":\"contact@allship.vn\",\"field\":\"phone\",\"routing\":[]},\"fromName\":\"Allship Logistics\",\"fromEmail\":\"\",\"replyTo\":\"\",\"bcc\":\"\",\"subject\":\"[Allship UPS Lead] Yêu cầu báo giá từ {input.name} - {input.service}\",\"message\":\"<h3>Yêu cầu Báo Giá & Đặt Dịch Vụ UPS</h3><table><tr><td><strong>Khách hàng:</strong></td><td>{input.name}</td></tr><tr><td><strong>Điện thoại:</strong></td><td>{input.phone}</td></tr><tr><td><strong>Dịch vụ:</strong></td><td>{input.service}</td></tr><tr><td><strong>Tuyến đường:</strong></td><td>{input.route_summary}</td></tr><tr><td><strong>Trọng lượng:</strong></td><td>{input.chargeable_weight}</td></tr><tr><td><strong>Tạm tính:</strong></td><td>{input.total_price}</td></tr><tr><td><strong>Ghi chú & Chi tiết kiện:</strong></td><td>{input.message}</td></tr></table>\",\"enabled\":true,\"conditionals\":{\"status\":false,\"type\":\"all\",\"conditions\":[]}}}"
+      }
+    ]
+  }
+]

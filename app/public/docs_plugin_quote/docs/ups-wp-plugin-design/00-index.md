@@ -32,6 +32,7 @@ Phạm vi: Phase 1 - tính giá chiều Export, gửi hàng từ Việt Nam đi 
 | [11-backend-tech-spec.md](11-backend-tech-spec.md) | Đặc tả kỹ thuật backend: PHP, CSV/XLSX import, DB, caching. |
 | [12-theme-integration.md](12-theme-integration.md) | Hướng dẫn tích hợp với theme allship-logistics. |
 | [13-destination-address-dropdown-research.md](13-destination-address-dropdown-research.md) | Nghiên cứu và đặc tả dropdown tỉnh/thành - bang - zipcode cho điểm đến (Giải pháp A: Static JSON + Text Zipcode). |
+| [14-fluentform-integration.md](14-fluentform-integration.md) | Kiến trúc tích hợp 2 chiều FluentForm, chuẩn hóa 18 tên dịch vụ và format đa kiện cho `ff-frontend-entries`. |
 
 ## 3. Kết luận thiết kế ngắn
 
@@ -50,5 +51,7 @@ Phạm vi: Phase 1 - tính giá chiều Export, gửi hàng từ Việt Nam đi 
 - Kết quả báo giá: Ẩn hoàn toàn các dịch vụ không có giá khả dụng, tự động căn chỉnh grid (1 cột max-w-md, 2 cột max-w-3xl, 3+ cột) và auto-switch sang dịch vụ khả dụng đầu tiên (ADR-010).
 - Admin có thể chỉnh sửa thủ công rates/zones qua UI.
 - Plugin tự tạo page "Báo giá UPS" (slug `bao-gia-ups`) khi activate.
-- Quote logs hỗ trợ export CSV/Excel.
+- Quote logs hỗ trợ export CSV/Excel, thao tác xoá hàng loạt (Bulk Delete), và liên kết thông tin Lead/Contact.
+- Tích hợp 2 chiều FluentForm: Đồng bộ REST `/lead` sang `wp_fluentform_submissions` (cho `ff-frontend-entries`) và đồng bộ ngược từ hook `fluentform/submission_inserted` sang `wp_ups_quote_logs` với cờ chống lặp đệ quy.
+- Dịch vụ trên Lead form chuẩn hóa theo 18 phân loại quốc tế, nội dung chi tiết đa kiện hiển thị dạng danh sách đầy đủ kích thước và cân nặng quy đổi thể tích.
 - `IATA.xlsx` có cấu trúc **flat** (2838 dòng), xem chi tiết tại `09-iata-data-format-update.md`.

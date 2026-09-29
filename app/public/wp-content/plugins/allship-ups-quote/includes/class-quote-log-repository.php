@@ -446,6 +446,9 @@ class Allship_UPS_Quote_Log_Repository {
 			[
 				'ID',
 				'Date',
+				'Customer Name',
+				'Customer Phone',
+				'Customer Notes',
 				'Direction',
 				'Origin',
 				'Destination',
@@ -464,11 +467,20 @@ class Allship_UPS_Quote_Log_Repository {
 		);
 
 		foreach ( $logs as $log ) {
+			$breakdown     = ! empty( $log->breakdown_json ) ? json_decode( $log->breakdown_json, true ) : [];
+			$contact       = $breakdown['contact'] ?? ( $breakdown['lead'] ?? [] );
+			$contact_name  = $contact['name'] ?? '';
+			$contact_phone = $contact['phone'] ?? '';
+			$contact_notes = $contact['notes'] ?? '';
+
 			fputcsv(
 				$stream,
 				[
 					$log->id,
 					$log->created_at,
+					$contact_name,
+					$contact_phone,
+					$contact_notes,
 					$log->direction,
 					$log->origin_iata,
 					$log->destination_iata,
@@ -530,7 +542,8 @@ class Allship_UPS_Quote_Log_Repository {
 		fputs( $stream, "  <Table>\n" );
 
 		$headers = [
-			'ID', 'Date', 'Direction', 'Origin', 'Destination', 'Destination City',
+			'ID', 'Date', 'Customer Name', 'Customer Phone', 'Customer Notes',
+			'Direction', 'Origin', 'Destination', 'Destination City',
 			'Service', 'Shipment Type', 'Zone', 'Rate Zone', 'Actual Weight (kg)',
 			'Dim Weight (kg)', 'Chargeable Weight (kg)', 'Base Price (VND)',
 			'Total Price (VND)', 'Rate Card ID'
@@ -543,10 +556,19 @@ class Allship_UPS_Quote_Log_Repository {
 		fputs( $stream, "   </Row>\n" );
 
 		foreach ( $logs as $log ) {
+			$breakdown     = ! empty( $log->breakdown_json ) ? json_decode( $log->breakdown_json, true ) : [];
+			$contact       = $breakdown['contact'] ?? ( $breakdown['lead'] ?? [] );
+			$contact_name  = $contact['name'] ?? '';
+			$contact_phone = $contact['phone'] ?? '';
+			$contact_notes = $contact['notes'] ?? '';
+
 			fputs( $stream, "   <Row>\n" );
 			$cols = [
 				[ 'Number', $log->id ],
 				[ 'String', $log->created_at ],
+				[ 'String', $contact_name ],
+				[ 'String', $contact_phone ],
+				[ 'String', $contact_notes ],
 				[ 'String', $log->direction ],
 				[ 'String', $log->origin_iata ],
 				[ 'String', $log->destination_iata ],

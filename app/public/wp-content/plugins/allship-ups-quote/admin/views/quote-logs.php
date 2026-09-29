@@ -113,6 +113,33 @@ document.addEventListener('DOMContentLoaded', function() {
 	const content = document.getElementById('logDetailContent');
 	const title = document.getElementById('logDetailTitle');
 
+	function parseBrowser(ua) {
+		if (!ua || typeof ua !== 'string' || ua === '—') return '—';
+
+		let browser = 'Web';
+		let os = '';
+
+		if (/Windows NT 10\.0/i.test(ua)) os = 'Windows 10/11';
+		else if (/Windows NT 6\.3/i.test(ua)) os = 'Windows 8.1';
+		else if (/Windows NT 6\.1/i.test(ua)) os = 'Windows 7';
+		else if (/Windows/i.test(ua)) os = 'Windows';
+		else if (/iPhone|iPad|iPod/i.test(ua)) os = 'iOS';
+		else if (/Android/i.test(ua)) os = 'Android';
+		else if (/Mac OS X/i.test(ua)) os = 'macOS';
+		else if (/Linux/i.test(ua)) os = 'Linux';
+
+		let m;
+		if ((m = ua.match(/CocCoc\/([0-9.]+)/i))) browser = 'Cốc Cốc ' + m[1].split('.')[0];
+		else if ((m = ua.match(/Edg\/([0-9.]+)/i))) browser = 'Edge ' + m[1].split('.')[0];
+		else if ((m = ua.match(/(?:OPR|Opera)\/([0-9.]+)/i))) browser = 'Opera ' + m[1].split('.')[0];
+		else if ((m = ua.match(/Chrome\/([0-9.]+)/i))) browser = 'Chrome ' + m[1].split('.')[0];
+		else if ((m = ua.match(/Firefox\/([0-9.]+)/i))) browser = 'Firefox ' + m[1].split('.')[0];
+		else if ((m = ua.match(/Version\/([0-9.]+).*Safari/i))) browser = 'Safari ' + m[1].split('.')[0];
+		else if (/Safari/i.test(ua)) browser = 'Safari';
+
+		return os ? browser + ' (' + os + ')' : browser;
+	}
+
 	document.querySelectorAll('.btn-view-log-detail').forEach(function(btn) {
 		btn.addEventListener('click', function(e) {
 			e.preventDefault();
@@ -170,6 +197,31 @@ document.addEventListener('DOMContentLoaded', function() {
 					piecesHtml = '<p style="color:#64748b;font-style:italic;">Không có chi tiết kiện hàng.</p>';
 				}
 
+				let contactDetail = '';
+				const contact = (log.breakdown && (log.breakdown.contact || log.breakdown.lead)) || null;
+				const leadSource = (log.breakdown && log.breakdown.lead_source) || '';
+				if (contact && (contact.name || contact.phone || contact.notes)) {
+					const cleanPhone = (contact.phone || '').replace(/[^0-9+]/g, '');
+					let sourceLabel = 'Booking Modal';
+					if (leadSource === 'fluentform' && contact.ff_entry_id) {
+						sourceLabel = 'FluentForm #' + contact.ff_entry_id;
+					} else if (contact.ff_entry_id) {
+						sourceLabel = 'Booking Modal (Entry #' + contact.ff_entry_id + ')';
+					} else if (leadSource === 'fluentform') {
+						sourceLabel = 'FluentForm';
+					}
+					const sourceBadge = ' <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:700;">' + sourceLabel + '</span>';
+					contactDetail = '<div style="background:#f0f9ff;padding:12px 14px;border:1px solid #bae6fd;border-radius:6px;margin-bottom:16px;">' +
+						'<strong style="display:block;margin-bottom:8px;color:#0369a1;font-size:13px;">Thông Tin Khách Hàng Đặt Dịch Vụ: ' + sourceBadge + '</strong>' +
+						'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">' +
+							'<div><strong>Họ và tên:</strong> <span style="color:#0f172a;font-weight:700;">' + (contact.name || '—') + '</span></div>' +
+							'<div><strong>Số điện thoại / Zalo:</strong> <a href="tel:' + cleanPhone + '" style="color:#2563eb;font-weight:700;text-decoration:none;">' + (contact.phone || '—') + '</a></div>' +
+							(contact.email ? '<div><strong>Email:</strong> ' + contact.email + '</div>' : '') +
+						'</div>' +
+						(contact.notes ? '<div style="margin-top:8px;font-size:12px;color:#334155;background:#ffffff;padding:8px 10px;border:1px dashed #cbd5e1;border-radius:4px;"><strong>Ghi chú từ khách:</strong> ' + contact.notes + '</div>' : '') +
+						'</div>';
+				}
+
 				let addressDetail = '';
 				if (log.destination_address || log.destination_city || log.destination_state || log.destination_postal_code) {
 					addressDetail = '<div style="background:#f8fafc;padding:10px 14px;border:1px solid #e2e8f0;margin-top:8px;">' +
@@ -177,14 +229,17 @@ document.addEventListener('DOMContentLoaded', function() {
 						'</div>';
 				}
 
+				const cleanUA = parseBrowser(log.user_agent);
+				const rawUA = String(log.user_agent || '').replace(/"/g, '&quot;');
 				let clientDetail = '<div style="background:#f8fafc;padding:10px 14px;border:1px solid #e2e8f0;margin-top:8px;font-size:12px;">' +
 					'<strong>Thiết bị & IP:</strong> ' +
 					'<span style="display:inline-block;margin-right:16px;">IP: <strong style="font-family:monospace;color:#0f172a;">' + (log.ip_address || '—') + '</strong></span>' +
 					'<span style="display:inline-block;margin-right:16px;">Thiết bị: <strong>' + (log.device_type ? log.device_type.toUpperCase() : 'DESKTOP') + '</strong></span>' +
-					'<span style="display:inline-block;color:#64748b;word-break:break-all;">Trình duyệt: ' + (log.user_agent || '—') + '</span>' +
+					'<span style="display:inline-block;color:#0f172a;" title="' + rawUA + '">Trình duyệt: <strong>' + cleanUA + '</strong></span>' +
 					'</div>';
 
 				content.innerHTML = '' +
+					contactDetail +
 					'<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">' +
 						'<div style="background:#f8fafc;padding:12px 14px;border:1px solid #e2e8f0;">' +
 							'<strong style="display:block;margin-bottom:6px;color:#0f172a;">Thông tin tuyến đường:</strong>' +
@@ -208,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						piecesHtml +
 					'</div>' +
 					'<div style="margin-top:14px;font-size:11px;color:#94a3b8;">' +
-						'Thời gian tạo: ' + log.created_at + ' | Session ID: ' + (log.session_id || '—') + ' | Rate Card ID: ' + (log.rate_card_id || '—') +
+						'Thời gian tạo: ' + log.created_at + ' | Session ID: ' + (log.session_id || '—') + ' | Rate Card: ' + (log.rate_card_name ? log.rate_card_name + ' (ID ' + log.rate_card_id + ')' : (log.rate_card_id || '—')) +
 					'</div>';
 			}).fail(function() {
 				content.innerHTML = '<div class="notice notice-error"><p>Lỗi kết nối máy chủ khi tải chi tiết bản ghi.</p></div>';
