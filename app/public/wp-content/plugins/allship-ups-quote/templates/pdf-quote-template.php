@@ -421,12 +421,17 @@ $total_price  = (float) ( $pricing['total_price_vnd'] ?? 0 );
 		if ( ! empty( $pieces_list ) && is_array( $pieces_list ) ) :
 			$stt = 1;
 			foreach ( $pieces_list as $p ) :
-				$qty   = (int) ( $p['qty'] ?? ( $p['quantity'] ?? 1 ) );
-				$len   = (float) ( $p['len'] ?? ( $p['length_cm'] ?? 0 ) );
-				$wid   = (float) ( $p['wid'] ?? ( $p['width_cm'] ?? 0 ) );
-				$hei   = (float) ( $p['hei'] ?? ( $p['height_cm'] ?? 0 ) );
-				$act_w = (float) ( $p['weight'] ?? ( $p['actual_weight_kg'] ?? 0 ) ) * $qty;
-				$dim_w = ( ( $len * $wid * $hei ) / (float) ( $company['dim_divisor'] ?? 5000 ) ) * $qty;
+				$qty      = (int) ( $p['qty'] ?? ( $p['quantity'] ?? 1 ) );
+				$len      = (float) ( $p['len'] ?? ( $p['length_cm'] ?? 0 ) );
+				$wid      = (float) ( $p['wid'] ?? ( $p['width_cm'] ?? 0 ) );
+				$hei      = (float) ( $p['hei'] ?? ( $p['height_cm'] ?? 0 ) );
+				$unit_act = (float) ( $p['weight'] ?? ( $p['actual_weight_kg'] ?? 0 ) );
+				$act_w    = $unit_act * $qty;
+				$divisor  = (float) ( $company['dim_divisor'] ?? 5500 );
+				$unit_dim = ( $len > 0 && $wid > 0 && $hei > 0 ) ? ( ( $len * $wid * $hei ) / $divisor ) : 0.0;
+				$dim_w    = $unit_dim * $qty;
+				$unit_max = ceil( max( $unit_act, $unit_dim ) * 2 ) / 2;
+				$chg_w    = isset( $p['chargeable_weight_kg'] ) ? (float) $p['chargeable_weight_kg'] : ( $unit_max * $qty );
 				?>
 				<tr>
 					<td class="text-center"><?php echo $stt++; ?></td>
@@ -434,7 +439,7 @@ $total_price  = (float) ( $pricing['total_price_vnd'] ?? 0 );
 					<td class="text-center"><?php echo $len; ?> &times; <?php echo $wid; ?> &times; <?php echo $hei; ?> cm</td>
 					<td class="text-right"><?php echo number_format( $act_w, 2 ); ?> kg</td>
 					<td class="text-right"><?php echo number_format( $dim_w, 2 ); ?> kg</td>
-					<td class="text-right text-bold"><?php echo number_format( max( $act_w, $dim_w ), 2 ); ?> kg</td>
+					<td class="text-right text-bold"><?php echo number_format( $chg_w, 2 ); ?> kg</td>
 				</tr>
 			<?php endforeach; ?>
 		<?php else : ?>

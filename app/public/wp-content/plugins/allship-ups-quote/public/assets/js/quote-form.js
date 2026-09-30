@@ -2276,6 +2276,7 @@
       resultSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
+    updateRealtimeNoticeDate();
     updateStickyBar();
   }
 
@@ -3202,6 +3203,9 @@
       if (piecesModal && e.target === piecesModal) closeModals();
     });
 
+    // Cập nhật ngày hiệu lực theo thời gian thực (bypass HTML cache)
+    updateRealtimeNoticeDate();
+
     // Hydrate initial services availability from localized config or sync via REST
     if (Array.isArray(state.config.INITIAL_SERVICES) && state.config.INITIAL_SERVICES.length > 0) {
       updateServicesUI(state.config.INITIAL_SERVICES);
@@ -3210,6 +3214,16 @@
       filterCategory(state.categoryFilter);
     }
     syncServicesAvailability(state.direction);
+  }
+
+  function updateRealtimeNoticeDate() {
+    const el = document.getElementById('quoteNoticeDate');
+    if (!el) return;
+    const now = new Date();
+    const d = String(now.getDate()).padStart(2, '0');
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const y = now.getFullYear();
+    el.textContent = `${d}/${m}/${y}`;
   }
 
   // ===== PUBLIC API / EXPORT =====

@@ -884,7 +884,7 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			$active_card_fingerprint,
 		];
 		$cache_payload = function_exists( 'wp_json_encode' ) ? wp_json_encode( $cache_data ) : json_encode( $cache_data );
-		$cache_key     = 'ups_calc_v2_' . md5( (string) $cache_payload );
+		$cache_key     = 'ups_calc_v4_' . md5( (string) $cache_payload );
 
 		if ( function_exists( 'get_transient' ) ) {
 			$cached = get_transient( $cache_key );
@@ -936,7 +936,7 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 					if ( null === $metrics ) {
 						$metrics = [
 							'actual_weight_kg'     => $arr['actual_weight_kg'] ?? 0,
-							'volumetric_weight_kg' => $arr['volumetric_weight_kg'] ?? 0,
+							'volumetric_weight_kg' => $arr['dim_weight_kg'] ?? ( $arr['volumetric_weight_kg'] ?? 0 ),
 							'chargeable_weight_kg' => $arr['chargeable_weight_kg'] ?? 0,
 						];
 					}
@@ -959,7 +959,7 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 						'rate_zone'        => $arr['rate_zone'] ?? null,
 						'rate_card_id'     => $arr['rate_card_id'] ?? null,
 						'actual_weight_kg' => $arr['actual_weight_kg'] ?? null,
-						'dim_weight_kg'    => $arr['volumetric_weight_kg'] ?? null,
+						'dim_weight_kg'    => $arr['dim_weight_kg'] ?? ( $arr['volumetric_weight_kg'] ?? null ),
 						'chargeable_weight_kg' => $arr['chargeable_weight_kg'] ?? null,
 					];
 				} else {
@@ -1512,6 +1512,15 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 		$quote_ref = $this->quote_lead_repo ? $this->quote_lead_repo->generate_quote_ref() : ( 'AS-QUO-' . gmdate( 'Ym' ) . '-' . wp_rand( 1000, 9999 ) );
 
 		// 2. Prepare payload for PDF renderer
+		$total_pieces_count = 0;
+		if ( is_array( $pieces ) && ! empty( $pieces ) ) {
+			foreach ( $pieces as $p ) {
+				$total_pieces_count += isset( $p['qty'] ) ? max( 1, (int) $p['qty'] ) : ( isset( $p['quantity'] ) ? max( 1, (int) $p['quantity'] ) : 1 );
+			}
+		} else {
+			$total_pieces_count = 1;
+		}
+
 		$pdf_payload = [
 			'company'  => [],
 			'quote'    => [
@@ -1533,7 +1542,7 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			],
 			'cargo'    => [
 				'pieces'               => $pieces,
-				'total_pieces'         => is_array( $pieces ) && ! empty( $pieces ) ? count( $pieces ) : 1,
+				'total_pieces'         => $total_pieces_count,
 				'gross_weight_kg'      => $actual_weight_kg,
 				'dim_weight_kg'        => $dim_weight_kg,
 				'chargeable_weight_kg' => $chargeable_weight_kg,

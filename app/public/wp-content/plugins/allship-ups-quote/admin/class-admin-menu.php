@@ -143,11 +143,30 @@ class Allship_UPS_Admin_Menu {
 	 * @param string $hook Current admin page hook.
 	 * @return bool
 	 */
-	public function is_plugin_page( $hook ) {
-		if ( empty( $hook ) ) {
-			return false;
+	public function is_plugin_page( $hook = '' ) {
+		if ( ! empty( $hook ) ) {
+			if ( in_array( $hook, $this->hook_suffixes, true ) ) {
+				return true;
+			}
+			if ( strpos( $hook, 'allship-ups' ) !== false ) {
+				return true;
+			}
 		}
-		return in_array( $hook, $this->hook_suffixes, true ) || strpos( $hook, 'allship-ups-' ) !== false;
+
+		if ( isset( $_GET['page'] ) && is_string( $_GET['page'] ) && strpos( $_GET['page'], 'allship-ups' ) !== false ) {
+			return true;
+		}
+
+		if ( function_exists( 'get_current_screen' ) ) {
+			$screen = get_current_screen();
+			if ( $screen && ! empty( $screen->id ) ) {
+				if ( in_array( $screen->id, $this->hook_suffixes, true ) || strpos( $screen->id, 'allship-ups' ) !== false ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**

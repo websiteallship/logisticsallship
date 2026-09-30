@@ -1483,12 +1483,12 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 - `ups-plugin-frontend.md` — Admin assets chỉ load trên plugin pages
 
 **Tasks**:
-- [ ] Tạo `admin/assets/css/admin.css`, `admin/assets/js/admin.js`.
-- [ ] Enqueue chỉ trên plugin admin pages.
+- [x] Tạo `admin/assets/css/admin.css`, `admin/assets/js/admin.js`.
+- [x] Enqueue chỉ trên plugin admin pages.
 
 🧪 **Tests Step 5.9**:
-- [ ] Admin CSS/JS loaded on plugin pages.
-- [ ] Admin CSS/JS NOT loaded on other admin pages.
+- [x] Admin CSS/JS loaded on plugin pages.
+- [x] Admin CSS/JS NOT loaded on other admin pages.
 
 ---
 
@@ -1523,13 +1523,13 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 
 | # | Check | Status |
 |---|-------|--------|
-| 1 | Admin import CSV/XLSX với preview | ☐ |
-| 2 | Admin CRUD rates, zones, countries | ☐ |
-| 3 | Admin tạo/đặt tên/activate/archive rate cards | ☐ |
-| 4 | Settings save/load đúng | ☐ |
+| 1 | Admin import CSV/XLSX với preview | ☑ |
+| 2 | Admin CRUD rates, zones, countries | ☑ |
+| 3 | Admin tạo/đặt tên/activate/archive rate cards | ☑ |
+| 4 | Settings save/load đúng | ☑ |
 | 5 | Quote logs filter + export CSV + bulk delete | ☑ |
-| 6 | Admin assets chỉ load trên plugin pages | ☐ |
-| 7 | Nonce + capability check trên mọi AJAX | ☐ |
+| 6 | Admin assets chỉ load trên plugin pages | ☑ |
+| 7 | Nonce + capability check trên mọi AJAX | ☑ |
 | 8 | Tích hợp FluentForm và đồng bộ log 2 chiều | ☑ |
 
 ---

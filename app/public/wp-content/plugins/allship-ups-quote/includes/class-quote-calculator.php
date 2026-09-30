@@ -567,7 +567,7 @@ class Allship_UPS_Quote_Calculator {
 					$qty                  = isset( $piece['quantity'] ) ? max( 1, (int) $piece['quantity'] ) : 1;
 					$actual_weight_kg     += (float) $piece['actual_weight_kg'] * $qty;
 					$dim_weight_kg        += (float) $piece['dim_weight_kg'] * $qty;
-					$chargeable_weight_kg += (float) $piece['chargeable_weight_kg'] * $qty;
+					$chargeable_weight_kg += (float) $piece['chargeable_weight_kg'];
 				}
 
 				$actual_weight_kg     = round( $actual_weight_kg, 3 );

@@ -222,6 +222,15 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 		}
 		abstract public function get_columns();
 		abstract public function prepare_items();
+		public function current_action() {
+			if ( isset( $_REQUEST['action'] ) && -1 != $_REQUEST['action'] ) {
+				return $_REQUEST['action'];
+			}
+			if ( isset( $_REQUEST['action2'] ) && -1 != $_REQUEST['action2'] ) {
+				return $_REQUEST['action2'];
+			}
+			return false;
+		}
 	}
 }
 

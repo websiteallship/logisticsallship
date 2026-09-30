@@ -23,8 +23,8 @@ if ( ! current_user_can( 'manage_options' ) ) {
 if ( ! class_exists( 'Allship_UPS_Quote_Log_Repository' ) && file_exists( dirname( dirname( __FILE__ ) ) . '/includes/class-quote-log-repository.php' ) ) {
 	require_once dirname( dirname( __FILE__ ) ) . '/includes/class-quote-log-repository.php';
 }
-if ( ! class_exists( 'Allship_UPS_Admin_Quote_Logs' ) && file_exists( dirname( __FILE__ ) . '/class-admin-quote-logs.php' ) ) {
-	require_once dirname( __FILE__ ) . '/class-admin-quote-logs.php';
+if ( ! class_exists( 'Allship_UPS_Admin_Quote_Logs' ) && file_exists( dirname( __DIR__ ) . '/class-admin-quote-logs.php' ) ) {
+	require_once dirname( __DIR__ ) . '/class-admin-quote-logs.php';
 }
 
 $repo       = class_exists( 'Allship_UPS_Quote_Log_Repository' ) ? new Allship_UPS_Quote_Log_Repository() : null;

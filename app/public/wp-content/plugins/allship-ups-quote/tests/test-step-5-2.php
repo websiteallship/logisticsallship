@@ -361,10 +361,18 @@ try {
 } catch ( Exception $e ) {}
 $card2_id = $GLOBALS['mock_json_response']['data']['card_id'];
 
-$_POST = [ 'id' => $card2_id ];
+$_POST = [ 'id' => $card2_id, 'confirmed' => 0 ];
 try {
 	$controller->ajax_activate_rate_card();
 } catch ( Exception $e ) {}
+$res_conflict = $GLOBALS['mock_json_response'];
+if ( ! empty( $res_conflict['data']['has_conflict'] ) ) {
+	// User confirms overwrite of conflicting cards
+	$_POST = [ 'id' => $card2_id, 'confirmed' => 1 ];
+	try {
+		$controller->ajax_activate_rate_card();
+	} catch ( Exception $e ) {}
+}
 
 if ( $mock_wpdb->rate_cards[ $card1_id ]->status !== 'archived' ) {
 	echo "✘ FAIL: Activating Card #$card2_id did not automatically archive Card #$card1_id.\n";

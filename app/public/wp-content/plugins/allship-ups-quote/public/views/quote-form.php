@@ -648,7 +648,7 @@ $render_svc_card = function( $code, $cat, $doc_split, $name, $desc, $icon_class,
 			<div class="text-[11px] md:text-xs text-amber-900 leading-relaxed md:leading-[1.7]">
 				<strong><?php echo esc_html__( 'Lưu ý quan trọng:', 'allship-ups-quote' ); ?></strong>
 				<ul class="mt-1 pl-4.5 list-disc">
-					<li><?php echo esc_html__( 'Giá tạm tính theo bảng cước Net Rates UPS Vietnam, hiệu lực từ 20/08/2026.', 'allship-ups-quote' ); ?></li>
+					<li><?php printf( esc_html__( 'Giá tạm tính theo bảng cước Net Rates UPS Vietnam, hiệu lực từ %s.', 'allship-ups-quote' ), '<span id="quoteNoticeDate" class="font-semibold">' . esc_html( wp_date( 'd/m/Y' ) ) . '</span>' ); ?></li>
 					<li><?php echo esc_html__( 'Chưa bao gồm: VAT, Phụ phí nhiên liệu (FSC), Surge fee, Phí hải quan 10.000đ/AWB, phụ phí vùng xa.', 'allship-ups-quote' ); ?></li>
 					<li><?php echo esc_html__( 'Trọng lượng tính cước: MAX(cân thực, cân thể tích) - làm tròn lên mốc 0.5kg, tính riêng từng kiện.', 'allship-ups-quote' ); ?></li>
 				</ul>

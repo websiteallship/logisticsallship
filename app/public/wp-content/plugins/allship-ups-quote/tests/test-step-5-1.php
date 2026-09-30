@@ -101,6 +101,23 @@ if ( ! function_exists( 'wp_create_nonce' ) ) {
 	}
 }
 
+if ( ! function_exists( 'add_query_arg' ) ) {
+	function add_query_arg( $args, $url = '' ) {
+		$query = http_build_query( $args );
+		return $url . ( strpos( $url, '?' ) !== false ? '&' : '?' ) . $query;
+	}
+}
+
+if ( ! function_exists( 'wp_nonce_field' ) ) {
+	function wp_nonce_field( $action = -1, $name = '_wpnonce', $referer = true, $echo = true ) {
+		$html = '<input type="hidden" name="' . esc_attr( $name ) . '" value="' . esc_attr( wp_create_nonce( $action ) ) . '" />';
+		if ( $echo ) {
+			echo $html;
+		}
+		return $html;
+	}
+}
+
 if ( ! function_exists( 'selected' ) ) {
 	function selected( $selected, $current = true, $echo = true ) {
 		$result = ( (string) $selected === (string) $current ) ? " selected='selected'" : '';
@@ -168,6 +185,38 @@ if ( ! function_exists( 'wp_die' ) ) {
 		$GLOBALS['mock_wp_die_called'] = true;
 		$GLOBALS['mock_wp_die_message'] = $msg;
 		throw new Exception( 'WP_DIE: ' . $msg );
+	}
+}
+if ( ! function_exists( 'add_settings_section' ) ) {
+	function add_settings_section( $id, $title, $callback, $page ) {}
+}
+if ( ! function_exists( 'add_settings_field' ) ) {
+	function add_settings_field( $id, $title, $callback, $page, $section = 'default', $args = [] ) {}
+}
+if ( ! function_exists( 'register_setting' ) ) {
+	function register_setting( $option_group, $option_name, $args = [] ) {}
+}
+if ( ! function_exists( 'settings_fields' ) ) {
+	function settings_fields( $option_group ) {}
+}
+if ( ! function_exists( 'do_settings_sections' ) ) {
+	function do_settings_sections( $page ) {}
+}
+if ( ! function_exists( 'submit_button' ) ) {
+	function submit_button( $text = null, $type = 'primary', $name = 'submit', $wrap = true, $other_attributes = null ) {
+		echo '<input type="submit" name="' . esc_attr( $name ) . '" value="' . esc_attr( $text ?: 'Save Changes' ) . '" />';
+	}
+}
+
+if ( ! class_exists( 'WP_List_Table' ) ) {
+	class WP_List_Table {
+		public function __construct( $args = [] ) {}
+		public function get_pagenum() { return 1; }
+		public function set_pagination_args( $args ) {}
+		public function current_action() { return false; }
+		public function prepare_items() {}
+		public function display() {}
+		public function search_box( $text, $input_id ) {}
 	}
 }
 

@@ -295,6 +295,7 @@ $mock_wpdb->rates = [
 	// WXS Non-doc US5
 	(object) [ 'id' => 5, 'rate_card_id' => $rc_id, 'rate_group' => 'export_wxs_nondocument', 'zone' => 'US5', 'weight_label' => '4.0', 'weight_from' => 4.0, 'weight_to' => 4.0, 'billing_unit' => 'flat', 'price_vnd' => 1400000 ],
 	(object) [ 'id' => 6, 'rate_card_id' => $rc_id, 'rate_group' => 'export_wxs_nondocument', 'zone' => 'US5', 'weight_label' => '6.0', 'weight_from' => 6.0, 'weight_to' => 6.0, 'billing_unit' => 'flat', 'price_vnd' => 1977290 ],
+	(object) [ 'id' => 9, 'rate_card_id' => $rc_id, 'rate_group' => 'export_wxs_nondocument', 'zone' => 'US5', 'weight_label' => '6.5', 'weight_from' => 6.5, 'weight_to' => 6.5, 'billing_unit' => 'flat', 'price_vnd' => 2100000 ],
 	// WFM Zone 5
 	(object) [ 'id' => 7, 'rate_card_id' => $rc_id, 'rate_group' => 'export_wfm', 'zone' => '5', 'weight_label' => 'Minimum', 'weight_from' => null, 'weight_to' => null, 'billing_unit' => 'minimum', 'price_vnd' => 13089824 ],
 	(object) [ 'id' => 8, 'rate_card_id' => $rc_id, 'rate_group' => 'export_wfm', 'zone' => '5', 'weight_label' => '71-99', 'weight_from' => 71.0, 'weight_to' => 99.0, 'billing_unit' => 'per_kg', 'price_vnd' => 184363 ],
@@ -480,8 +481,24 @@ echo "[Gate 7/8] Multi-piece calculation tính từng kiện riêng: ";
 // Individual: 1.3kg -> 1.5kg, 2.1kg -> 2.5kg => Sum = 4.0kg.
 // If wrongly calculated as sum first: 1.3 + 2.1 = 3.4kg -> rounded to 3.5kg.
 assert( $qc2->chargeable_weight_kg === 4.0, "Must be 4.0kg (1.5 + 2.5), not 3.5kg" );
+
+// Multi-piece with quantity > 1 (prevent double quantity multiplication):
+// Piece 1: 1 unit, 3.2kg (30x20x15 -> dim 1.64) => unit 3.5kg * 1 = 3.5kg
+// Piece 2: 2 units, 1.1kg (25x20x10 -> dim 0.91) => unit 1.5kg * 2 = 3.0kg
+// Total must be 6.5kg, NOT 9.5kg
+$qc_multi_qty = $calc->calculate([
+	'destination_iata' => 'US',
+	'service_code'     => 'WXS',
+	'shipment_type'    => 'nondocument',
+	'pieces'           => [
+		[ 'quantity' => 1, 'actual_weight_kg' => 3.2, 'length_cm' => 30, 'width_cm' => 20, 'height_cm' => 15 ],
+		[ 'quantity' => 2, 'actual_weight_kg' => 1.1, 'length_cm' => 25, 'width_cm' => 20, 'height_cm' => 10 ],
+	],
+]);
+assert( $qc_multi_qty->chargeable_weight_kg === 6.5, "Must be 6.5kg (3.5 + 3.0), got {$qc_multi_qty->chargeable_weight_kg}kg" );
+
 $passed_gates++;
-echo "PASSED (1.5 + 2.5 = 4.0kg)\n";
+echo "PASSED (1.5 + 2.5 = 4.0kg & multi-qty 3.5 + 3.0 = 6.5kg)\n";
 
 // ================================================================
 // GATE 8: WFM minimum logic đúng

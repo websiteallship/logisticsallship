@@ -630,6 +630,18 @@ class Allship_UPS_Admin_Quote_Logs {
 	}
 
 	/**
+	 * Verify nonce and manage_options capability for AJAX requests.
+	 *
+	 * @return void
+	 */
+	public function verify_security() {
+		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( [ 'message' => __( 'Bạn không có quyền thực hiện thao tác này.', 'allship-ups-quote' ) ], 403 );
+		}
+	}
+
+	/**
 	 * Collect and sanitize export filters from query parameters.
 	 *
 	 * @return array<string, mixed>
@@ -710,11 +722,7 @@ class Allship_UPS_Admin_Quote_Logs {
 	 * @return void
 	 */
 	public function ajax_log_detail() {
-		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Bạn không có quyền thực hiện thao tác này.', 'allship-ups-quote' ) ], 403 );
-		}
+		$this->verify_security();
 
 		$id = isset( $_GET['id'] ) ? absint( $_GET['id'] ) : 0;
 		if ( ! $id || ! $this->quote_log_repo ) {
@@ -749,11 +757,7 @@ class Allship_UPS_Admin_Quote_Logs {
 	 * @return void
 	 */
 	public function ajax_delete_logs() {
-		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Bạn không có quyền thực hiện thao tác này.', 'allship-ups-quote' ) ], 403 );
-		}
+		$this->verify_security();
 
 		if ( ! $this->quote_log_repo ) {
 			wp_send_json_error( [ 'message' => __( 'Lỗi cơ sở dữ liệu.', 'allship-ups-quote' ) ] );
