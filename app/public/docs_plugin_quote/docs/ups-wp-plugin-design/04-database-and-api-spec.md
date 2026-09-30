@@ -152,11 +152,24 @@ Settings mặc định:
   "surge_percent": 0,
   "include_customs_fee": false,
   "customs_fee_vnd": 10000,
-  "fluentform_id": 0
+  "fluentform_id": 0,
+  "company_name": "CÔNG TY TNHH ALLSHIP LOGISTICS",
+  "company_tax_id": "031xxxxxxx",
+  "company_address": "Địa chỉ trụ sở Allship Logistics",
+  "company_hotline": "1900 252 338",
+  "company_email": "contact@allship.vn",
+  "company_website": "https://allship.vn",
+  "company_logo_id": 0,
+  "company_logo_scale": 100,
+  "quote_validity_days": 14,
+  "quote_bank_info": "STK: 123456789 - Ngân hàng Vietcombank - Chủ TK: CONG TY TNHH ALLSHIP",
+  "quote_terms_notes": "Báo giá chưa bao gồm thuế nhập khẩu nước đến. Hàng hóa tuân thủ quy định hàng không IATA.",
+  "quote_digital_stamp_id": 0
 }
 ```
 
 > **Ghi chú**: `fluentform_id` = 0 nghĩa là hệ thống tự động nhận diện form FluentForm có tiêu đề chứa "UPS" hoặc "Báo Giá". Admin có thể chỉ định ID cố định.
+> **PDF Settings**: Các trường `company_*` và `quote_*` phục vụ in ấn header, watermark, con dấu và thông tin thanh toán trên file PDF báo giá A4.
 > **Deprecated**: `phase_direction`, `enabled_services`, `disabled_services` đã chuyển sang `ups_rate_cards.enabled_directions` và `ups_rate_cards.disabled_rate_groups` (per rate card).
 
 ## 8. `ups_quote_logs`
@@ -227,7 +240,44 @@ Trường `breakdown_json` lưu trữ chi tiết cấu thành giá và thông ti
 }
 ```
 
-## 9. REST API quote
+## 9. `ups_quote_leads`
+
+Bảng quản lý tập trung toàn bộ khách hàng đã xuất bản báo giá PDF chính thức, hỗ trợ liên kết ngược với `ups_quote_logs`, phục vụ Sales theo dõi và đếm số lượt tải file.
+
+```sql
+CREATE TABLE {prefix}ups_quote_leads (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  quote_ref VARCHAR(30) NOT NULL,
+  quote_log_id BIGINT UNSIGNED NULL,
+  contact_name VARCHAR(150) NOT NULL,
+  company_name VARCHAR(255) NULL,
+  email VARCHAR(100) NOT NULL,
+  phone VARCHAR(30) NULL,
+  source VARCHAR(50) DEFAULT 'pdf_export',
+  direction VARCHAR(10) NOT NULL DEFAULT 'export',
+  service_code VARCHAR(20) NOT NULL,
+  origin_country VARCHAR(10) DEFAULT 'VN',
+  destination_iata VARCHAR(10) NOT NULL,
+  destination_name VARCHAR(150) NULL,
+  chargeable_weight_kg DECIMAL(10,3) NOT NULL,
+  total_price_vnd BIGINT UNSIGNED NOT NULL,
+  quote_data_json LONGTEXT NOT NULL,
+  pdf_path VARCHAR(255) NULL,
+  email_sent TINYINT(1) DEFAULT 0,
+  email_sent_at DATETIME NULL,
+  download_count INT UNSIGNED DEFAULT 1,
+  ip_address VARCHAR(45) NULL,
+  user_agent VARCHAR(255) NULL,
+  created_at DATETIME NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY quote_ref (quote_ref),
+  KEY email (email),
+  KEY phone (phone),
+  KEY created_at (created_at)
+);
+```
+
+## 10. REST API quote
 
 Endpoint:
 
@@ -579,6 +629,72 @@ Trả về dịch vụ theo direction, bao gồm trạng thái bật/tắt, lý 
 ```
 
 Default `direction=export` nếu không truyền (backward compatible).
+
+### Export Quotation PDF (Lead B2B)
+
+```text
+POST /wp-json/ups-quote/v1/export-quote
+```
+
+Nhận thông tin khách hàng, khởi tạo mã `quote_ref`, biên dịch file PDF A4 (Dompdf), lưu Lead vào `wp_ups_quote_leads`, đồng bộ FluentForm và kích hoạt gửi email ngầm bất đồng bộ.
+
+**Payload:**
+```json
+{
+  "name": "Nguyễn Văn A",
+  "contact_name": "Nguyễn Văn A",
+  "company_name": "Công Ty TNHH Logistics ABC",
+  "email": "nguyen@abc.com",
+  "phone": "0901234567",
+  "notes": "Cần hỗ trợ đóng gỗ",
+  "service_code": "WXS",
+  "service_name": "UPS Worldwide Express Saver",
+  "direction": "export",
+  "destination_iata": "US",
+  "destination_name": "United States",
+  "chargeable_weight_kg": 15.5,
+  "total_price_vnd": 7560000,
+  "base_price_vnd": 5450000,
+  "pieces": [
+    { "qty": 1, "len": 50, "wid": 40, "hei": 30, "weight": 15.5 }
+  ],
+  "quote_log_id": 28,
+  "send_email": true
+}
+```
+
+**Response (HTTP 200 — Phản hồi tức thì ~0.7s):**
+```json
+{
+  "success": true,
+  "data": {
+    "quote_ref": "AS-QUO-202609-0014",
+    "download_url": "http://domain.com/wp-json/ups-quote/v1/download-quote?ref=AS-QUO-202609-0014&token=6e96b9a5046a2d3a",
+    "pdf_url": "http://domain.com/wp-content/uploads/allship-quotes/2026/09/AS-QUO-202609-0014.pdf",
+    "lead_id": 14,
+    "quote_log_id": 28,
+    "ff_entry_id": 25,
+    "email_sent": true,
+    "message": "Báo giá đã được tạo thành công và gửi tới email của bạn."
+  }
+}
+```
+
+### Download Quotation PDF
+
+```text
+GET /wp-json/ups-quote/v1/download-quote?ref=AS-QUO-202609-0014&token=6e96b9a5046a2d3a
+```
+
+Stream tải trực tiếp file PDF về thiết bị người dùng. Yêu cầu token HMAC bảo mật được sinh từ `hash_hmac('sha256', $ref, wp_salt('nonce'))`.
+
+### Async Mail Dispatcher (Internal)
+
+```text
+POST /wp-json/ups-quote/v1/async-mail
+```
+
+Endpoint nội bộ xử lý gửi email ngầm (background worker), tách biệt toàn bộ thời gian kết nối SMTP (~12s) ra khỏi vòng đời HTTP của người dùng.
 
 ## 12. Shortcode
 

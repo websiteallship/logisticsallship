@@ -38,17 +38,65 @@ class Allship_UPS_Settings_Manager {
 	 * @var array<string, string>
 	 */
 	private static $schema = [
-		'dim_divisor'              => 'int',
-		'rounding_step_kg'         => 'float',
-		'include_vat'              => 'bool',
-		'vat_percent'              => 'float',
-		'include_fsc'              => 'bool',
-		'fsc_percent'              => 'float',
-		'include_surge'            => 'bool',
-		'surge_percent'            => 'float',
-		'include_customs_fee'      => 'bool',
-		'customs_fee_vnd'          => 'int',
-		'delete_data_on_uninstall' => 'bool',
+		'dim_divisor'               => 'int',
+		'rounding_step_kg'          => 'float',
+		'include_vat'               => 'bool',
+		'vat_percent'               => 'float',
+		'include_fsc'               => 'bool',
+		'fsc_percent'               => 'float',
+		'include_surge'             => 'bool',
+		'surge_percent'             => 'float',
+		'include_customs_fee'       => 'bool',
+		'customs_fee_vnd'           => 'int',
+		'delete_data_on_uninstall'  => 'bool',
+		// Company Profile & PDF Quote Settings
+		'company_name'              => 'string',
+		'company_tax_id'            => 'string',
+		'company_address'           => 'textarea',
+		'company_hotline'           => 'string',
+		'company_email'             => 'string',
+		'company_website'           => 'url',
+		'company_logo_url'          => 'url',
+		'company_logo_id'           => 'int',
+		'company_logo_height'       => 'int',
+		'quote_validity_days'       => 'int',
+		'quote_bank_info'           => 'textarea',
+		'quote_terms_notes'         => 'textarea',
+		'quote_digital_stamp_url'   => 'url',
+		'quote_admin_notify_emails' => 'string',
+	];
+
+	/**
+	 * Default fallback values for settings.
+	 *
+	 * @var array<string, mixed>
+	 */
+	private static $defaults = [
+		'dim_divisor'               => 5000,
+		'rounding_step_kg'          => 0.5,
+		'include_vat'               => true,
+		'vat_percent'               => 8.0,
+		'include_fsc'               => true,
+		'fsc_percent'               => 28.5,
+		'include_surge'             => false,
+		'surge_percent'             => 0.0,
+		'include_customs_fee'       => false,
+		'customs_fee_vnd'           => 0,
+		'delete_data_on_uninstall'  => false,
+		'company_name'              => 'CÔNG TY TNHH ALLSHIP LOGISTICS',
+		'company_tax_id'            => '0317320092',
+		'company_address'           => 'Tầng 3, Tòa nhà Allship, TP. Hồ Chí Minh, Việt Nam',
+		'company_hotline'           => '1900 633 833 / 0903 000 888',
+		'company_email'             => 'quote@allship.vn',
+		'company_website'           => 'https://allship.vn',
+		'company_logo_url'          => '',
+		'company_logo_id'           => 0,
+		'company_logo_height'       => 42,
+		'quote_validity_days'       => 14,
+		'quote_bank_info'           => "Ngân hàng: Techcombank - Chi nhánh TP.HCM\nSố tài khoản: 19038888999999\nChủ tài khoản: CONG TY TNHH ALLSHIP LOGISTICS",
+		'quote_terms_notes'         => "1. Báo giá chưa bao gồm thuế nhập khẩu và thuế giá trị gia tăng tại nước đến (nếu có).\n2. Hàng hóa phải tuân thủ nghiêm ngặt quy định an toàn bay quốc tế của IATA và UPS.\n3. Thời gian giao hàng dự kiến tính theo ngày làm việc (không bao gồm Thứ 7, Chủ Nhật và ngày lễ).",
+		'quote_digital_stamp_url'   => '',
+		'quote_admin_notify_emails' => 'sales@allship.vn',
 	];
 
 	/**
@@ -108,7 +156,11 @@ class Allship_UPS_Settings_Manager {
 			return self::$cache[ $key ];
 		}
 
-		return $default;
+		if ( null !== $default ) {
+			return $default;
+		}
+
+		return isset( self::$defaults[ $key ] ) ? self::$defaults[ $key ] : null;
 	}
 
 	/**
@@ -249,6 +301,12 @@ class Allship_UPS_Settings_Manager {
 		} elseif ( 'bool' === $type ) {
 			$clean  = filter_var( $value, FILTER_VALIDATE_BOOLEAN );
 			$stored = $clean ? 'true' : 'false';
+		} elseif ( 'textarea' === $type ) {
+			$clean  = function_exists( 'sanitize_textarea_field' ) ? sanitize_textarea_field( (string) $value ) : trim( strip_tags( (string) $value ) );
+			$stored = $clean;
+		} elseif ( 'url' === $type ) {
+			$clean  = function_exists( 'esc_url_raw' ) ? esc_url_raw( (string) $value ) : trim( (string) $value );
+			$stored = $clean;
 		} elseif ( 'array' === $type ) {
 			$clean  = is_array( $value ) ? $value : [];
 			$stored = function_exists( 'wp_json_encode' ) ? wp_json_encode( $clean ) : json_encode( $clean );
@@ -298,6 +356,10 @@ class Allship_UPS_Settings_Manager {
 
 		if ( 'bool' === $type ) {
 			return filter_var( $raw, FILTER_VALIDATE_BOOLEAN );
+		}
+
+		if ( 'textarea' === $type || 'url' === $type || 'string' === $type ) {
+			return (string) $raw;
 		}
 
 		if ( 'array' === $type ) {

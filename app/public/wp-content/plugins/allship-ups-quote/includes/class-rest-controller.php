@@ -93,6 +93,27 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 	private $settings_mgr;
 
 	/**
+	 * Quote lead repository.
+	 *
+	 * @var Allship_UPS_Quote_Lead_Repository|null
+	 */
+	private $quote_lead_repo;
+
+	/**
+	 * PDF renderer.
+	 *
+	 * @var Allship_UPS_Quote_Pdf_Renderer|null
+	 */
+	private $pdf_renderer;
+
+	/**
+	 * Quote mailer.
+	 *
+	 * @var Allship_UPS_Quote_Mailer|null
+	 */
+	private $quote_mailer;
+
+	/**
 	 * Constructor with dependency injection.
 	 *
 	 * @param Allship_UPS_Quote_Calculator|null              $calculator Quote calculator.
@@ -103,6 +124,9 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 	 * @param Allship_UPS_Service_Availability_Manager|null  $service_mgr Service availability manager.
 	 * @param Allship_UPS_Quote_Log_Repository|null          $quote_log_repo Quote log repository.
 	 * @param Allship_UPS_Settings_Manager|null              $settings_mgr Settings manager.
+	 * @param Allship_UPS_Quote_Lead_Repository|null         $quote_lead_repo Quote lead repository.
+	 * @param Allship_UPS_Quote_Pdf_Renderer|null            $pdf_renderer PDF renderer.
+	 * @param Allship_UPS_Quote_Mailer|null                  $quote_mailer Quote mailer.
 	 */
 	public function __construct(
 		$calculator = null,
@@ -112,16 +136,22 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 		$rate_repo = null,
 		$service_mgr = null,
 		$quote_log_repo = null,
-		$settings_mgr = null
+		$settings_mgr = null,
+		$quote_lead_repo = null,
+		$pdf_renderer = null,
+		$quote_mailer = null
 	) {
-		$this->rate_card_repo = $rate_card_repo ?: ( class_exists( 'Allship_UPS_Rate_Card_Repository' ) ? new Allship_UPS_Rate_Card_Repository() : null );
-		$this->country_repo   = $country_repo ?: ( class_exists( 'Allship_UPS_Country_Repository' ) ? new Allship_UPS_Country_Repository() : null );
-		$this->zone_repo      = $zone_repo ?: ( class_exists( 'Allship_UPS_Zone_Repository' ) ? new Allship_UPS_Zone_Repository() : null );
-		$this->rate_repo      = $rate_repo ?: ( class_exists( 'Allship_UPS_Rate_Repository' ) ? new Allship_UPS_Rate_Repository() : null );
-		$this->service_mgr    = $service_mgr ?: ( class_exists( 'Allship_UPS_Service_Availability_Manager' ) ? new Allship_UPS_Service_Availability_Manager( $this->rate_card_repo ) : null );
-		$this->quote_log_repo = $quote_log_repo ?: ( class_exists( 'Allship_UPS_Quote_Log_Repository' ) ? new Allship_UPS_Quote_Log_Repository() : null );
-		$this->settings_mgr   = $settings_mgr ?: ( class_exists( 'Allship_UPS_Settings_Manager' ) ? new Allship_UPS_Settings_Manager() : null );
-		$this->calculator     = $calculator ?: ( class_exists( 'Allship_UPS_Quote_Calculator' ) ? new Allship_UPS_Quote_Calculator(
+		$this->rate_card_repo  = $rate_card_repo ?: ( class_exists( 'Allship_UPS_Rate_Card_Repository' ) ? new Allship_UPS_Rate_Card_Repository() : null );
+		$this->country_repo    = $country_repo ?: ( class_exists( 'Allship_UPS_Country_Repository' ) ? new Allship_UPS_Country_Repository() : null );
+		$this->zone_repo       = $zone_repo ?: ( class_exists( 'Allship_UPS_Zone_Repository' ) ? new Allship_UPS_Zone_Repository() : null );
+		$this->rate_repo       = $rate_repo ?: ( class_exists( 'Allship_UPS_Rate_Repository' ) ? new Allship_UPS_Rate_Repository() : null );
+		$this->service_mgr     = $service_mgr ?: ( class_exists( 'Allship_UPS_Service_Availability_Manager' ) ? new Allship_UPS_Service_Availability_Manager( $this->rate_card_repo ) : null );
+		$this->quote_log_repo  = $quote_log_repo ?: ( class_exists( 'Allship_UPS_Quote_Log_Repository' ) ? new Allship_UPS_Quote_Log_Repository() : null );
+		$this->settings_mgr    = $settings_mgr ?: ( class_exists( 'Allship_UPS_Settings_Manager' ) ? new Allship_UPS_Settings_Manager() : null );
+		$this->quote_lead_repo = $quote_lead_repo ?: ( class_exists( 'Allship_UPS_Quote_Lead_Repository' ) ? new Allship_UPS_Quote_Lead_Repository() : null );
+		$this->pdf_renderer    = $pdf_renderer ?: ( class_exists( 'Allship_UPS_Quote_Pdf_Renderer' ) ? new Allship_UPS_Quote_Pdf_Renderer( $this->settings_mgr ) : null );
+		$this->quote_mailer    = $quote_mailer ?: ( class_exists( 'Allship_UPS_Quote_Mailer' ) ? new Allship_UPS_Quote_Mailer( $this->settings_mgr ) : null );
+		$this->calculator      = $calculator ?: ( class_exists( 'Allship_UPS_Quote_Calculator' ) ? new Allship_UPS_Quote_Calculator(
 			$this->rate_card_repo,
 			$this->country_repo,
 			null,
@@ -132,6 +162,10 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			$this->settings_mgr,
 			$this->service_mgr
 		) : null );
+
+		if ( function_exists( 'add_action' ) ) {
+			add_action( 'allship_ups_async_send_email', [ $this, 'handle_async_email_event' ], 10, 2 );
+		}
 	}
 
 	/**
@@ -169,6 +203,52 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 				'callback'            => [ $this, 'submit_lead' ],
 				'permission_callback' => '__return_true',
 				'args'                => $this->get_lead_args_schema(),
+			]
+		);
+
+		// POST /wp-json/ups-quote/v1/export-quote
+		register_rest_route(
+			$this->namespace,
+			'/export-quote',
+			[
+				'methods'             => $methods_post,
+				'callback'            => [ $this, 'export_quote' ],
+				'permission_callback' => '__return_true',
+				'args'                => $this->get_export_quote_args_schema(),
+			]
+		);
+
+		// GET /wp-json/ups-quote/v1/download-quote
+		register_rest_route(
+			$this->namespace,
+			'/download-quote',
+			[
+				'methods'             => $methods_get,
+				'callback'            => [ $this, 'download_quote' ],
+				'permission_callback' => '__return_true',
+				'args'                => [
+					'ref'   => [
+						'type'              => 'string',
+						'required'          => true,
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'token' => [
+						'type'              => 'string',
+						'required'          => false,
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+				],
+			]
+		);
+
+		// POST /wp-json/ups-quote/v1/async-mail (Internal non-blocking email worker)
+		register_rest_route(
+			$this->namespace,
+			'/async-mail',
+			[
+				'methods'             => $methods_post,
+				'callback'            => [ $this, 'process_async_mail' ],
+				'permission_callback' => '__return_true',
 			]
 		);
 
@@ -450,6 +530,144 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 				'type'              => 'string',
 				'required'          => false,
 				'sanitize_callback' => 'sanitize_text_field',
+			],
+		];
+	}
+
+	/**
+	 * Get schema for POST /export-quote endpoint arguments.
+	 *
+	 * @return array
+	 */
+	public function get_export_quote_args_schema() {
+		return [
+			'name'                 => [
+				'description'       => 'Họ và tên khách hàng.',
+				'type'              => 'string',
+				'required'          => false,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'contact_name'         => [
+				'description'       => 'Họ và tên khách hàng (alias).',
+				'type'              => 'string',
+				'required'          => false,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'email'                => [
+				'description'       => 'Email nhận file báo giá PDF (bắt buộc).',
+				'type'              => 'string',
+				'required'          => true,
+				'sanitize_callback' => 'sanitize_email',
+			],
+			'phone'                => [
+				'description'       => 'Số điện thoại hoặc Zalo liên hệ.',
+				'type'              => 'string',
+				'required'          => false,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'company_name'         => [
+				'description'       => 'Tên công ty / Doanh nghiệp.',
+				'type'              => 'string',
+				'required'          => false,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'notes'                => [
+				'description'       => 'Ghi chú thêm về yêu cầu vận chuyển.',
+				'type'              => 'string',
+				'required'          => false,
+				'sanitize_callback' => 'sanitize_textarea_field',
+			],
+			'quote_log_id'         => [
+				'description'       => 'ID bản ghi báo giá đã tính.',
+				'type'              => 'integer',
+				'required'          => false,
+				'sanitize_callback' => 'absint',
+			],
+			'quote_id'             => [
+				'description'       => 'ID bản ghi báo giá (alias).',
+				'type'              => 'integer',
+				'required'          => false,
+				'sanitize_callback' => 'absint',
+			],
+			'direction'            => [
+				'description'       => 'Chiều vận chuyển (export/import).',
+				'type'              => 'string',
+				'default'           => 'export',
+				'enum'              => [ 'export', 'import' ],
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'service_code'         => [
+				'description'       => 'Mã dịch vụ UPS.',
+				'type'              => 'string',
+				'required'          => false,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'service_name'         => [
+				'description'       => 'Tên hiển thị dịch vụ.',
+				'type'              => 'string',
+				'required'          => false,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'origin_country'       => [
+				'description'       => 'Mã nước gửi hàng (mặc định VN).',
+				'type'              => 'string',
+				'default'           => 'VN',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'destination_iata'     => [
+				'description'       => 'Mã quốc gia đến.',
+				'type'              => 'string',
+				'required'          => false,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'destination_name'     => [
+				'description'       => 'Tên quốc gia đến.',
+				'type'              => 'string',
+				'required'          => false,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'chargeable_weight_kg' => [
+				'description' => 'Trọng lượng tính cước (kg).',
+				'type'        => 'number',
+				'required'    => false,
+			],
+			'weight_kg'            => [
+				'description' => 'Trọng lượng tính cước alias (kg).',
+				'type'        => 'number',
+				'required'    => false,
+			],
+			'actual_weight_kg'     => [
+				'description' => 'Trọng lượng thực tế (kg).',
+				'type'        => 'number',
+				'required'    => false,
+			],
+			'dim_weight_kg'        => [
+				'description' => 'Trọng lượng thể tích (kg).',
+				'type'        => 'number',
+				'required'    => false,
+			],
+			'package_type'         => [
+				'description'       => 'Loại hàng hoá (package/document).',
+				'type'              => 'string',
+				'required'          => false,
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'base_price_vnd'       => [
+				'description'       => 'Cước vận chuyển cơ bản (VND).',
+				'type'              => 'integer',
+				'required'          => false,
+				'sanitize_callback' => 'absint',
+			],
+			'total_price_vnd'      => [
+				'description'       => 'Tổng cước thanh toán (VND).',
+				'type'              => 'integer',
+				'required'          => false,
+				'sanitize_callback' => 'absint',
+			],
+			'send_email'           => [
+				'description' => 'Có gửi email báo giá cho khách hàng hay không.',
+				'type'        => 'boolean',
+				'default'     => true,
 			],
 		];
 	}
@@ -1135,25 +1353,6 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			do_action( 'allship_ups_lead_submitted', $lead );
 		}
 
-		// Send email notification to site admin
-		if ( function_exists( 'wp_mail' ) && function_exists( 'get_option' ) ) {
-			$admin_email = get_option( 'admin_email' );
-			if ( ! empty( $admin_email ) && is_email( $admin_email ) ) {
-				$price_str = $lead['total_price_vnd'] ? number_format( $lead['total_price_vnd'], 0, ',', '.' ) . ' VND' : 'Chưa có';
-				$subject   = sprintf( '[Báo giá UPS] Lead đặt dịch vụ từ %s (%s)', $name, $clean_phone );
-				$message   = "Khách hàng gửi yêu cầu tư vấn báo giá UPS:\n\n" .
-					"Họ tên: {$name}\n" .
-					"Số điện thoại: {$clean_phone}\n" .
-					"Email: {$lead['email']}\n" .
-					"Dịch vụ: {$lead['service_code']}\n" .
-					"Tuyến: {$lead['route_summary']}\n" .
-					"Tổng cước tạm tính: {$price_str}\n" .
-					"Ghi chú: {$lead['notes']}\n" .
-					"Thời gian: {$lead['created_at']}\n";
-				wp_mail( $admin_email, $subject, $message );
-			}
-		}
-
 		// Bridge submission into FluentForm submissions table (for ff-frontend-entries)
 		$ff_entry_id = 0;
 		if ( class_exists( 'Allship_UPS_FluentForm_Bridge' ) ) {
@@ -1174,12 +1373,516 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 			}
 		}
 
-		return $this->success_response( [
+		$response_data = [
 			'message'      => 'Cảm ơn bạn! Yêu cầu tư vấn đã được gửi thành công. Chuyên viên Allship sẽ liên hệ trong ít phút.',
 			'lead_id'      => $lead_id,
 			'quote_log_id' => $created_log_id ?: null,
 			'ff_entry_id'  => $ff_entry_id ?: null,
+		];
+
+		// Dispatch admin notification asynchronously (non-blocking)
+		$this->dispatch_async_email( 'booking', [
+			'lead_id'     => $lead_id,
+			'lead'        => $lead,
+			'name'        => $name,
+			'clean_phone' => $clean_phone,
 		] );
+
+		return $this->success_response( $response_data );
+	}
+
+	/**
+	 * POST /export-quote — Generate and export official quotation PDF, save lead, sync FluentForm and dispatch email.
+	 *
+	 * @param WP_REST_Request|object $request REST request object.
+	 * @return WP_REST_Response
+	 */
+	public function export_quote( $request ) {
+		$params = is_object( $request ) && method_exists( $request, 'get_params' )
+			? $request->get_params()
+			: (array) $request;
+
+		$name  = ! empty( $params['contact_name'] ) ? sanitize_text_field( $params['contact_name'] ) : ( ! empty( $params['name'] ) ? sanitize_text_field( $params['name'] ) : '' );
+		$email = ! empty( $params['email'] ) && function_exists( 'sanitize_email' ) ? sanitize_email( $params['email'] ) : ( ! empty( $params['email'] ) ? trim( (string) $params['email'] ) : '' );
+
+		if ( empty( $name ) ) {
+			return $this->error_response(
+				'INVALID_INPUT',
+				'Vui lòng nhập họ tên của bạn để xuất báo giá.',
+				422
+			);
+		}
+
+		if ( empty( $email ) || ( function_exists( 'is_email' ) && ! is_email( $email ) ) ) {
+			return $this->error_response(
+				'INVALID_INPUT',
+				'Vui lòng nhập địa chỉ email hợp lệ để nhận file báo giá.',
+				422
+			);
+		}
+
+		$phone        = ! empty( $params['phone'] ) ? sanitize_text_field( $params['phone'] ) : '';
+		$clean_phone  = ! empty( $phone ) ? preg_replace( '/[\s.\-()]/', '', trim( (string) $phone ) ) : '';
+		$company_name = ! empty( $params['company_name'] ) ? sanitize_text_field( $params['company_name'] ) : '';
+		$notes        = ! empty( $params['notes'] ) && function_exists( 'sanitize_textarea_field' ) ? sanitize_textarea_field( $params['notes'] ) : '';
+
+		$client_ip = $this->get_client_ip();
+
+		// Rate limiting: maximum 15 quote exports per 10 minutes per IP
+		if ( function_exists( 'get_transient' ) && function_exists( 'set_transient' ) ) {
+			$rate_limit_key = 'allship_export_limit_' . md5( $client_ip );
+			$export_count   = (int) get_transient( $rate_limit_key );
+			if ( $export_count >= 15 ) {
+				return $this->error_response(
+					'RATE_LIMIT_EXCEEDED',
+					'Bạn đã gửi yêu cầu xuất báo giá quá nhiều lần trong thời gian ngắn. Vui lòng thử lại sau ít phút.',
+					429
+				);
+			}
+			set_transient( $rate_limit_key, $export_count + 1, 600 );
+		}
+
+		// Resolve calculation from quote_log_id if available
+		$quote_log_id = ! empty( $params['quote_log_id'] ) ? absint( $params['quote_log_id'] ) : ( ! empty( $params['quote_id'] ) ? absint( $params['quote_id'] ) : 0 );
+		$log_obj      = ( $quote_log_id > 0 && $this->quote_log_repo ) ? $this->quote_log_repo->get( $quote_log_id ) : null;
+
+		$direction        = ! empty( $params['direction'] ) ? sanitize_text_field( $params['direction'] ) : ( $log_obj && ! empty( $log_obj->direction ) ? $log_obj->direction : 'export' );
+		$service_code     = ! empty( $params['service_code'] ) ? strtoupper( sanitize_text_field( $params['service_code'] ) ) : ( $log_obj && ! empty( $log_obj->service_code ) ? $log_obj->service_code : 'WXS' );
+		$origin_country   = ! empty( $params['origin_country'] ) ? strtoupper( sanitize_text_field( $params['origin_country'] ) ) : ( $log_obj && ! empty( $log_obj->origin_iata ) ? $log_obj->origin_iata : 'VN' );
+		$destination_iata = ! empty( $params['destination_iata'] ) ? strtoupper( sanitize_text_field( $params['destination_iata'] ) ) : ( $log_obj && ! empty( $log_obj->destination_iata ) ? $log_obj->destination_iata : '' );
+		$destination_name = ! empty( $params['destination_name'] ) ? sanitize_text_field( $params['destination_name'] ) : ( $log_obj && ! empty( $log_obj->destination_country_name ) ? $log_obj->destination_country_name : '' );
+
+		if ( empty( $destination_name ) && $destination_iata && $this->country_repo && method_exists( $this->country_repo, 'get_by_code' ) ) {
+			$country_row = $this->country_repo->get_by_code( $destination_iata );
+			if ( $country_row && ! empty( $country_row->country_name ) ) {
+				$destination_name = $country_row->country_name;
+			}
+		}
+
+		$chargeable_weight_kg = isset( $params['chargeable_weight_kg'] ) ? floatval( $params['chargeable_weight_kg'] ) : ( isset( $params['weight_kg'] ) ? floatval( $params['weight_kg'] ) : ( $log_obj ? floatval( $log_obj->chargeable_weight_kg ) : 0.0 ) );
+		$actual_weight_kg     = isset( $params['actual_weight_kg'] ) ? floatval( $params['actual_weight_kg'] ) : ( $log_obj && null !== $log_obj->actual_weight_kg ? floatval( $log_obj->actual_weight_kg ) : $chargeable_weight_kg );
+		$dim_weight_kg        = isset( $params['dim_weight_kg'] ) ? floatval( $params['dim_weight_kg'] ) : ( $log_obj && null !== $log_obj->dim_weight_kg ? floatval( $log_obj->dim_weight_kg ) : 0.0 );
+
+		$pieces = ! empty( $params['pieces'] )
+			? ( is_array( $params['pieces'] ) ? $params['pieces'] : json_decode( (string) $params['pieces'], true ) )
+			: ( ( $log_obj && ! empty( $log_obj->pieces ) ) ? $log_obj->pieces : [] );
+
+		if ( is_array( $pieces ) && ! empty( $pieces ) ) {
+			$calc_act = 0.0;
+			$calc_dim = 0.0;
+			foreach ( $pieces as $p ) {
+				if ( ! is_array( $p ) ) {
+					continue;
+				}
+				$qty = isset( $p['qty'] ) ? max( 1, (int) $p['qty'] ) : ( isset( $p['quantity'] ) ? max( 1, (int) $p['quantity'] ) : 1 );
+				$w   = isset( $p['weight'] ) ? floatval( $p['weight'] ) : ( isset( $p['actual_weight_kg'] ) ? floatval( $p['actual_weight_kg'] ) : 0.0 );
+				$l   = isset( $p['len'] ) ? floatval( $p['len'] ) : ( isset( $p['length_cm'] ) ? floatval( $p['length_cm'] ) : 0.0 );
+				$wid = isset( $p['wid'] ) ? floatval( $p['wid'] ) : ( isset( $p['width_cm'] ) ? floatval( $p['width_cm'] ) : 0.0 );
+				$h   = isset( $p['hei'] ) ? floatval( $p['hei'] ) : ( isset( $p['height_cm'] ) ? floatval( $p['height_cm'] ) : 0.0 );
+
+				$calc_act += $w * $qty;
+				if ( $l > 0 && $wid > 0 && $h > 0 ) {
+					$calc_dim += ( ( $l * $wid * $h ) / 5500 ) * $qty;
+				}
+			}
+			if ( ( ! isset( $params['actual_weight_kg'] ) || $actual_weight_kg <= 0 || $actual_weight_kg === $chargeable_weight_kg ) && $calc_act > 0 ) {
+				$actual_weight_kg = round( $calc_act, 2 );
+			}
+			if ( ( ! isset( $params['dim_weight_kg'] ) || $dim_weight_kg <= 0 ) && $calc_dim > 0 ) {
+				$dim_weight_kg = round( $calc_dim, 2 );
+			}
+		}
+
+		$total_price_vnd = isset( $params['total_price_vnd'] ) ? absint( $params['total_price_vnd'] ) : ( $log_obj ? absint( $log_obj->total_price_vnd ) : 0 );
+		$base_price_vnd  = isset( $params['base_price_vnd'] ) ? absint( $params['base_price_vnd'] ) : ( $log_obj ? absint( $log_obj->base_price_vnd ) : $total_price_vnd );
+
+		// Breakdown components
+		$log_bd           = ( $log_obj && is_array( $log_obj->breakdown ) ) ? $log_obj->breakdown : [];
+		$fsc_percent      = isset( $params['fsc_percentage'] ) ? floatval( $params['fsc_percentage'] ) : ( isset( $params['fsc_percent'] ) ? floatval( $params['fsc_percent'] ) : ( ! empty( $log_bd['fsc_percent'] ) ? floatval( $log_bd['fsc_percent'] ) : 0.0 ) );
+		$fsc_amount_vnd   = isset( $params['fsc_price_vnd'] ) ? absint( $params['fsc_price_vnd'] ) : ( isset( $params['fsc_amount_vnd'] ) ? absint( $params['fsc_amount_vnd'] ) : ( ! empty( $log_bd['fsc_amount'] ) ? absint( $log_bd['fsc_amount'] ) : 0 ) );
+		$surge_amount_vnd = isset( $params['peak_price_vnd'] ) ? absint( $params['peak_price_vnd'] ) : ( isset( $params['surge_amount_vnd'] ) ? absint( $params['surge_amount_vnd'] ) : ( ! empty( $log_bd['surge_amount'] ) ? absint( $log_bd['surge_amount'] ) : 0 ) );
+		$vat_amount_vnd   = isset( $params['vat_price_vnd'] ) ? absint( $params['vat_price_vnd'] ) : ( isset( $params['vat_amount_vnd'] ) ? absint( $params['vat_amount_vnd'] ) : ( ! empty( $log_bd['vat_amount'] ) ? absint( $log_bd['vat_amount'] ) : 0 ) );
+		$customs_fee_vnd  = isset( $params['customs_fee_vnd'] ) ? absint( $params['customs_fee_vnd'] ) : 0;
+		$vat_rate         = isset( $params['vat_rate'] ) ? floatval( $params['vat_rate'] ) : ( ! empty( $log_bd['vat_rate'] ) ? floatval( $log_bd['vat_rate'] ) : 8.0 );
+
+		$service_name = ! empty( $params['service_name'] ) ? sanitize_text_field( $params['service_name'] ) : $this->get_service_name_vi( $service_code );
+		$transit_time = $this->get_service_transit_time( $service_code );
+
+		// 1. Generate unique quote reference
+		$quote_ref = $this->quote_lead_repo ? $this->quote_lead_repo->generate_quote_ref() : ( 'AS-QUO-' . gmdate( 'Ym' ) . '-' . wp_rand( 1000, 9999 ) );
+
+		// 2. Prepare payload for PDF renderer
+		$pdf_payload = [
+			'company'  => [],
+			'quote'    => [
+				'quote_ref'    => $quote_ref,
+				'created_at'   => date( 'd/m/Y' ),
+				'service_code' => $service_code,
+				'service_name' => $service_name,
+				'direction'    => $direction,
+				'origin'       => ( 'import' === $direction ) ? ( $destination_name ?: $destination_iata ) : 'Việt Nam',
+				'destination'  => ( 'import' === $direction ) ? 'Việt Nam' : ( $destination_name ? "{$destination_name} ({$destination_iata})" : $destination_iata ),
+				'incoterms'    => 'DDU / Door-to-Door',
+				'transit_time' => $transit_time,
+			],
+			'customer' => [
+				'name'    => $name,
+				'company' => $company_name,
+				'phone'   => $clean_phone ?: $phone,
+				'email'   => $email,
+			],
+			'cargo'    => [
+				'pieces'               => $pieces,
+				'total_pieces'         => is_array( $pieces ) && ! empty( $pieces ) ? count( $pieces ) : 1,
+				'gross_weight_kg'      => $actual_weight_kg,
+				'dim_weight_kg'        => $dim_weight_kg,
+				'chargeable_weight_kg' => $chargeable_weight_kg,
+			],
+			'pricing'  => [
+				'base_price_vnd'   => $base_price_vnd,
+				'fsc_percent'      => $fsc_percent,
+				'fsc_amount_vnd'   => $fsc_amount_vnd,
+				'surge_amount_vnd' => $surge_amount_vnd,
+				'customs_fee_vnd'  => $customs_fee_vnd,
+				'vat_rate'         => $vat_rate,
+				'vat_amount_vnd'   => $vat_amount_vnd,
+				'total_price_vnd'  => $total_price_vnd,
+			],
+		];
+
+		// 3. Compile & save PDF
+		$pdf_path = '';
+		$pdf_url  = '';
+		$t_start = microtime( true );
+
+		// 3. Render and save PDF file
+		$pdf_path = '';
+		$pdf_url  = '';
+		if ( $this->pdf_renderer ) {
+			$pdf_file = $this->pdf_renderer->save_pdf_to_file( $pdf_payload, $quote_ref . '.pdf' );
+			if ( is_array( $pdf_file ) ) {
+				$pdf_path = $pdf_file['path'] ?? '';
+				$pdf_url  = $pdf_file['url'] ?? '';
+			}
+		}
+		$t_pdf = round( ( microtime( true ) - $t_start ) * 1000 );
+
+		// 4. Generate download token and URL
+		$download_token = self::generate_download_token( $quote_ref );
+		$download_url   = function_exists( 'rest_url' )
+			? rest_url( 'ups-quote/v1/download-quote?ref=' . rawurlencode( $quote_ref ) . '&token=' . $download_token )
+			: ( $pdf_url ?: '' );
+
+		// 5. Prepare email payload
+		$send_email      = ! isset( $params['send_email'] ) || ! empty( $params['send_email'] );
+		$lead_email_data = [
+			'quote_ref'            => $quote_ref,
+			'contact_name'         => $name,
+			'name'                 => $name,
+			'company_name'         => $company_name,
+			'email'                => $email,
+			'phone'                => $clean_phone ?: $phone,
+			'service_code'         => $service_code,
+			'service_name'         => $service_name,
+			'direction'            => $direction,
+			'destination_name'     => $destination_name ?: $destination_iata,
+			'destination_iata'     => $destination_iata,
+			'chargeable_weight_kg' => $chargeable_weight_kg,
+			'weight_kg'            => $chargeable_weight_kg,
+			'total_price_vnd'      => $total_price_vnd,
+			'notes'                => $notes,
+			'download_url'         => $download_url ?: $pdf_url,
+		];
+
+		// 6. Insert lead record into wp_ups_quote_leads
+		$t_db_start = microtime( true );
+		$lead_id = 0;
+		if ( $this->quote_lead_repo ) {
+			$lead_id = $this->quote_lead_repo->insert( [
+				'quote_ref'            => $quote_ref,
+				'quote_log_id'         => $quote_log_id ?: null,
+				'contact_name'         => $name,
+				'company_name'         => $company_name,
+				'email'                => $email,
+				'phone'                => $clean_phone ?: $phone,
+				'source'               => 'pdf_export',
+				'direction'            => $direction,
+				'service_code'         => $service_code,
+				'origin_country'       => $origin_country,
+				'destination_iata'     => $destination_iata,
+				'destination_name'     => $destination_name,
+				'chargeable_weight_kg' => $chargeable_weight_kg,
+				'total_price_vnd'      => $total_price_vnd,
+				'quote_data_json'      => $pdf_payload,
+				'pdf_path'             => $pdf_path,
+				'email_sent'           => 0,
+				'email_sent_at'        => null,
+				'download_count'       => 1,
+				'ip_address'           => $client_ip,
+				'user_agent'           => ! empty( $_SERVER['HTTP_USER_AGENT'] ) ? mb_substr( sanitize_text_field( (string) $_SERVER['HTTP_USER_AGENT'] ), 0, 255 ) : '',
+			] );
+		}
+
+		// 7. Sync back to quote log if quote_log_id exists, OR create new quote log entry
+		if ( $this->quote_log_repo ) {
+			$contact_info = [
+				'name'         => $name,
+				'phone'        => $clean_phone ?: $phone,
+				'email'        => $email,
+				'company'      => $company_name,
+				'company_name' => $company_name,
+				'notes'        => $notes,
+				'quote_ref'    => $quote_ref,
+				'pdf_url'      => $pdf_url,
+				'source'       => 'pdf_export',
+				'type'         => 'pdf_export',
+				'lead_id'      => $lead_id,
+			];
+
+			if ( $quote_log_id > 0 ) {
+				$log_record = $this->quote_log_repo->get( $quote_log_id );
+				if ( $log_record ) {
+					$bd                = is_array( $log_record->breakdown ) ? $log_record->breakdown : [];
+					$bd['contact']     = $contact_info;
+					$bd['lead']        = $contact_info;
+					$bd['lead_source'] = 'ups_quote_pdf_export';
+					$bd['type']        = 'pdf_export';
+					$this->quote_log_repo->update( $quote_log_id, [ 'breakdown_json' => $bd ] );
+				}
+			} else {
+				$device_type = $this->detect_device_type();
+				$user_agent  = ! empty( $_SERVER['HTTP_USER_AGENT'] ) ? mb_substr( sanitize_text_field( (string) $_SERVER['HTTP_USER_AGENT'] ), 0, 255 ) : '';
+
+				$rate_card_id = 0;
+				if ( $this->rate_card_repo ) {
+					if ( $service_code && method_exists( $this->rate_card_repo, 'get_active_for_service' ) ) {
+						$active_card = $this->rate_card_repo->get_active_for_service( $service_code, $direction );
+					} else {
+						$active_card = $this->rate_card_repo->get_active();
+					}
+					$rate_card_id = $active_card ? (int) $active_card->id : 1;
+				}
+				if ( ! $rate_card_id ) {
+					$rate_card_id = 1;
+				}
+
+				$zone      = ! empty( $params['zone'] ) ? sanitize_text_field( $params['zone'] ) : null;
+				$rate_zone = ! empty( $params['rate_zone'] ) ? sanitize_text_field( $params['rate_zone'] ) : null;
+				if ( ( empty( $zone ) || empty( $rate_zone ) ) && $destination_iata && $service_code && class_exists( 'Allship_UPS_Zone_Resolver' ) ) {
+					$zone_resolver = new Allship_UPS_Zone_Resolver( $this->rate_card_repo, $this->country_repo );
+					$zone_res      = $zone_resolver->resolve( $destination_iata, $service_code, $direction, $rate_card_id );
+					if ( $zone_res && $zone_res->success ) {
+						if ( empty( $zone ) ) {
+							$zone = $zone_res->zone;
+						}
+						if ( empty( $rate_zone ) ) {
+							$rate_zone = $zone_res->rate_zone;
+						}
+					}
+				}
+
+				$new_log_data = [
+					'rate_card_id'         => $rate_card_id,
+					'session_id'           => $quote_ref,
+					'ip_address'           => $client_ip,
+					'device_type'          => $device_type,
+					'user_agent'           => $user_agent,
+					'direction'            => $direction,
+					'origin_iata'          => $origin_country ?: 'VN',
+					'origin_province'      => ! empty( $params['origin'] ) ? sanitize_text_field( $params['origin'] ) : 'TP. Hồ Chí Minh',
+					'destination_iata'     => $destination_iata,
+					'destination_address'  => $destination_name,
+					'service_code'         => $service_code,
+					'shipment_type'        => ! empty( $params['shipment_type'] ) ? sanitize_text_field( $params['shipment_type'] ) : 'nondoc',
+					'zone'                 => $zone,
+					'rate_zone'            => $rate_zone,
+					'actual_weight_kg'     => $actual_weight_kg,
+					'dim_weight_kg'        => $dim_weight_kg,
+					'chargeable_weight_kg' => $chargeable_weight_kg,
+					'base_price_vnd'       => $base_price_vnd,
+					'total_price_vnd'      => $total_price_vnd,
+					'pieces_json'          => $pieces,
+					'breakdown_json'       => [
+						'contact'      => $contact_info,
+						'lead'         => $contact_info,
+						'lead_source'  => 'ups_quote_pdf_export',
+						'type'         => 'pdf_export',
+						'fsc_percent'  => $fsc_percent,
+						'fsc_amount'   => $fsc_amount_vnd,
+						'surge_amount' => $surge_amount_vnd,
+						'customs_fee'  => $customs_fee_vnd,
+						'vat_rate'     => $vat_rate,
+						'vat_amount'   => $vat_amount_vnd,
+					],
+				];
+
+				$quote_log_id = (int) $this->quote_log_repo->insert( $new_log_data );
+
+				if ( $quote_log_id > 0 && $lead_id > 0 && $this->quote_lead_repo ) {
+					$this->quote_lead_repo->update( $lead_id, [ 'quote_log_id' => $quote_log_id ] );
+				}
+			}
+		}
+
+		// 8. Bridge into FluentForm submissions table
+		$ff_entry_id = 0;
+		if ( class_exists( 'Allship_UPS_FluentForm_Bridge' ) ) {
+			$bridge_payload = [
+				'name'                 => $name,
+				'email'                => $email,
+				'phone'                => $clean_phone ?: $phone,
+				'company_name'         => $company_name,
+				'quote_ref'            => $quote_ref,
+				'pdf_url'              => $pdf_url,
+				'download_url'         => $download_url,
+				'notes'                => $notes,
+				'service_code'         => $service_code,
+				'service'              => $service_name,
+				'direction'            => $direction,
+				'origin'               => $origin_country,
+				'destination'          => $destination_name ?: $destination_iata,
+				'chargeable_weight'    => $chargeable_weight_kg,
+				'chargeable_weight_kg' => $chargeable_weight_kg,
+				'total_price'          => $total_price_vnd,
+				'total_price_vnd'      => $total_price_vnd,
+				'hidden_source'        => 'ups_quote_pdf_export',
+				'quote_log_id'         => $quote_log_id ?: null,
+			];
+			$ff_bridge   = new Allship_UPS_FluentForm_Bridge();
+			$ff_entry_id = $ff_bridge->push_lead_to_fluentform( $bridge_payload );
+
+			if ( $quote_log_id > 0 && $ff_entry_id > 0 && $this->quote_log_repo ) {
+				$log_record = $this->quote_log_repo->get( $quote_log_id );
+				if ( $log_record ) {
+					$bd = is_array( $log_record->breakdown ) ? $log_record->breakdown : [];
+					$bd['contact']['ff_entry_id'] = $ff_entry_id;
+					$this->quote_log_repo->update( $quote_log_id, [ 'breakdown_json' => $bd ] );
+				}
+			}
+		}
+
+		// 8. Dispatch emails asynchronously (zero UI wait time!)
+		$this->dispatch_async_email( 'export_quote', [
+			'quote_ref'       => $quote_ref,
+			'lead_email_data' => $lead_email_data,
+			'pdf_path'        => $pdf_path,
+			'send_email'      => $send_email,
+			'lead_id'         => $lead_id,
+		] );
+
+		$response_payload = [
+			'quote_ref'    => $quote_ref,
+			'download_url' => $download_url,
+			'pdf_url'      => $pdf_url,
+			'lead_id'      => $lead_id,
+			'quote_log_id' => $quote_log_id ?: null,
+			'ff_entry_id'  => $ff_entry_id ?: null,
+			'email_sent'   => (bool) ( $send_email && ! empty( $email ) ),
+			'message'      => 'Báo giá đã được tạo thành công và gửi tới email của bạn.',
+		];
+
+		return $this->success_response( $response_payload );
+	}
+
+	/**
+	 * GET /download-quote — Stream or download generated PDF quotation.
+	 *
+	 * @param WP_REST_Request|object $request REST request object.
+	 * @return WP_REST_Response|void
+	 */
+	public function download_quote( $request ) {
+		$params = is_object( $request ) && method_exists( $request, 'get_params' )
+			? $request->get_params()
+			: (array) $request;
+
+		$ref = ! empty( $params['ref'] ) ? sanitize_text_field( $params['ref'] ) : '';
+
+		if ( empty( $ref ) || ! $this->quote_lead_repo ) {
+			return $this->error_response( 'NOT_FOUND', 'Không tìm thấy mã báo giá.', 404 );
+		}
+
+		$lead = $this->quote_lead_repo->get_by_quote_ref( $ref );
+		if ( ! $lead ) {
+			return $this->error_response( 'NOT_FOUND', 'Không tìm thấy thông tin báo giá.', 404 );
+		}
+
+		if ( empty( $lead->pdf_path ) || ! file_exists( $lead->pdf_path ) ) {
+			return $this->error_response( 'FILE_NOT_FOUND', 'File báo giá không tồn tại hoặc đã bị xóa.', 404 );
+		}
+
+		// Security token check (mandatory for downloading quote files)
+		$expected = self::generate_download_token( $ref );
+		if ( empty( $params['token'] ) || ! hash_equals( $expected, (string) $params['token'] ) ) {
+			return $this->error_response( 'FORBIDDEN', 'Token bảo mật không hợp lệ hoặc đã hết hạn.', 403 );
+		}
+
+		// Increment download counter
+		if ( ! empty( $lead->id ) ) {
+			$this->quote_lead_repo->increment_download( (int) $lead->id );
+		}
+
+		$file_path = $lead->pdf_path;
+		$filename  = basename( $file_path );
+
+		if ( defined( 'ALLSHIP_TESTING' ) && ALLSHIP_TESTING ) {
+			return $this->success_response( [
+				'downloaded' => true,
+				'quote_ref'  => $ref,
+				'pdf_path'   => $file_path,
+				'filesize'   => filesize( $file_path ),
+			] );
+		}
+
+		if ( ! headers_sent() ) {
+			header( 'Content-Description: File Transfer' );
+			header( 'Content-Type: application/pdf' );
+			header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+			header( 'Expires: 0' );
+			header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
+			header( 'Pragma: public' );
+			header( 'Content-Length: ' . filesize( $file_path ) );
+		}
+
+		readfile( $file_path );
+		exit;
+	}
+
+	/**
+	 * Get Vietnamese display name for a service code.
+	 *
+	 * @param string $service_code Service code (e.g. WXS, XPR).
+	 * @return string Human-friendly service name.
+	 */
+	public function get_service_name_vi( $service_code ) {
+		$code = strtoupper( trim( (string) $service_code ) );
+		$map  = [
+			'EXW' => 'UPS Express Early',
+			'XPR' => 'UPS Express Plus',
+			'WXS' => 'UPS Express Saver',
+			'XPD' => 'UPS Expedited',
+			'WXP' => 'UPS Express Freight',
+			'WFM' => 'UPS Freight Midday',
+		];
+		return $map[ $code ] ?? ( 'UPS ' . $code );
+	}
+
+	/**
+	 * Get estimated transit time for a service code.
+	 *
+	 * @param string $service_code Service code.
+	 * @return string Transit time description.
+	 */
+	public function get_service_transit_time( $service_code ) {
+		$code = strtoupper( trim( (string) $service_code ) );
+		$map  = [
+			'EXW' => '1 - 2 ngày làm việc (Trước 9:00 AM)',
+			'XPR' => '1 - 2 ngày làm việc (Trước 12:00 PM)',
+			'WXS' => '1 - 3 ngày làm việc (Nhanh nhất)',
+			'XPD' => '3 - 5 ngày làm việc (Tiết kiệm)',
+			'WXP' => '1 - 3 ngày làm việc (Hàng nặng > 70kg)',
+			'WFM' => '2 - 4 ngày làm việc (Hàng pallet/freight)',
+		];
+		return $map[ $code ] ?? '1 - 3 ngày làm việc';
 	}
 
 	/**
@@ -1623,6 +2326,194 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 	}
 
 	/**
+	 * Output JSON response immediately and terminate HTTP connection via fastcgi_finish_request,
+	 * allowing subsequent time-consuming operations (such as wp_mail / SMTP delivery)
+	 * to run asynchronously in the background worker.
+	 *
+	 * @param mixed $data Response payload.
+	 * @param int   $status HTTP status code.
+	 * @return bool True if connection was closed early, false otherwise.
+	 */
+	private function finish_request_early( $data, $status = 200 ) {
+		if ( function_exists( 'fastcgi_finish_request' ) ) {
+			if ( ! headers_sent() ) {
+				status_header( $status );
+				header( 'Content-Type: application/json; charset=' . ( function_exists( 'get_option' ) ? get_option( 'blog_charset', 'utf-8' ) : 'utf-8' ) );
+			}
+			echo wp_json_encode( [
+				'success' => true,
+				'data'    => $data,
+			] );
+
+			while ( ob_get_level() > 0 ) {
+				ob_end_flush();
+			}
+			flush();
+
+			fastcgi_finish_request();
+
+			ignore_user_abort( true );
+			if ( function_exists( 'set_time_limit' ) ) {
+				@set_time_limit( 120 );
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Dispatch email processing to background non-blocking worker.
+	 * Returns immediately so client UI never waits for SMTP delivery.
+	 *
+	 * @param string $action 'export_quote' or 'booking'.
+	 * @param array  $payload Data required for email delivery.
+	 * @return void
+	 */
+	public function dispatch_async_email( $action, array $payload ) {
+		// If running in CLI / Unit tests, execute immediately for deterministic assertions
+		if ( php_sapi_name() === 'cli' || defined( 'ALLSHIP_TESTING' ) ) {
+			$this->execute_email_job( $action, $payload );
+			return;
+		}
+
+		$secret = function_exists( 'wp_salt' ) ? wp_salt( 'nonce' ) : 'allship_secret';
+		$token  = hash_hmac( 'sha256', $action . '|' . ( $payload['quote_ref'] ?? $payload['lead_id'] ?? '' ), $secret );
+		$payload['_async_token']  = $token;
+		$payload['_async_action'] = $action;
+
+		// 1. Primary: Non-blocking HTTP loopback to /async-mail (returns in ~10-20ms)
+		/*
+		if ( function_exists( 'rest_url' ) && function_exists( 'wp_remote_post' ) ) {
+			$async_url = rest_url( 'ups-quote/v1/async-mail' );
+			wp_remote_post(
+				$async_url,
+				[
+					'method'    => 'POST',
+					'timeout'   => 0.1,
+					'blocking'  => false,
+					'sslverify' => false,
+					'headers'   => [ 'Content-Type' => 'application/json' ],
+					'body'      => wp_json_encode( $payload ),
+				]
+			);
+		}
+		*/
+
+		// Secondary fallback: Schedule single WP-Cron event in case loopback is blocked on certain server environments
+		if ( function_exists( 'wp_schedule_single_event' ) ) {
+			wp_schedule_single_event( time(), 'allship_ups_async_send_email', [ $action, $payload ] );
+			if ( function_exists( 'spawn_cron' ) ) {
+				spawn_cron();
+			}
+		}
+	}
+
+	/**
+	 * Internal REST endpoint to process background email sending.
+	 *
+	 * @param WP_REST_Request|object $request
+	 * @return WP_REST_Response
+	 */
+	public function process_async_mail( $request ) {
+		$params = is_object( $request ) && method_exists( $request, 'get_params' ) ? $request->get_params() : (array) $request;
+		$action = $params['_async_action'] ?? '';
+		$token  = $params['_async_token'] ?? '';
+		$ref    = $params['quote_ref'] ?? $params['lead_id'] ?? '';
+		$secret = function_exists( 'wp_salt' ) ? wp_salt( 'nonce' ) : 'allship_secret';
+		$expected = hash_hmac( 'sha256', $action . '|' . $ref, $secret );
+
+		if ( empty( $token ) || ! hash_equals( $expected, (string) $token ) ) {
+			return $this->error_response( 'UNAUTHORIZED', 'Invalid async token', 403 );
+		}
+
+		// Prevent duplicate processing if WP-Cron also fires
+		$dedup_key = 'allship_mail_done_' . md5( $action . '_' . $ref );
+		if ( function_exists( 'get_transient' ) && get_transient( $dedup_key ) ) {
+			return $this->success_response( [ 'skipped' => true ] );
+		}
+		if ( function_exists( 'set_transient' ) ) {
+			set_transient( $dedup_key, 1, 300 );
+		}
+
+		$this->execute_email_job( $action, $params );
+
+		return $this->success_response( [ 'dispatched' => true ] );
+	}
+
+	/**
+	 * Cron hook callback for background email processing.
+	 *
+	 * @param string $action
+	 * @param array  $payload
+	 * @return void
+	 */
+	public function handle_async_email_event( $action, $payload ) {
+		$ref = $payload['quote_ref'] ?? $payload['lead_id'] ?? '';
+		$dedup_key = 'allship_mail_done_' . md5( $action . '_' . $ref );
+		if ( function_exists( 'get_transient' ) && get_transient( $dedup_key ) ) {
+			return;
+		}
+		if ( function_exists( 'set_transient' ) ) {
+			set_transient( $dedup_key, 1, 300 );
+		}
+		$this->execute_email_job( $action, $payload );
+	}
+
+	/**
+	 * Core email execution routine.
+	 *
+	 * @param string $action
+	 * @param array  $params
+	 * @return void
+	 */
+	public function execute_email_job( $action, array $params ) {
+		if ( 'export_quote' === $action ) {
+			$lead_email_data = $params['lead_email_data'] ?? [];
+			$pdf_path        = $params['pdf_path'] ?? '';
+			$send_email      = ! empty( $params['send_email'] );
+			$lead_id         = (int) ( $params['lead_id'] ?? 0 );
+
+			if ( $send_email && $this->quote_mailer && ! empty( $lead_email_data['email'] ) ) {
+				$sent = $this->quote_mailer->send_quote_to_customer( $lead_email_data, $pdf_path );
+				if ( $sent && $lead_id > 0 && $this->quote_lead_repo ) {
+					$this->quote_lead_repo->update( $lead_id, [
+						'email_sent'    => 1,
+						'email_sent_at' => function_exists( 'current_time' ) ? current_time( 'mysql' ) : gmdate( 'Y-m-d H:i:s' ),
+					] );
+				}
+			}
+
+			if ( $this->quote_mailer ) {
+				$this->quote_mailer->send_lead_alert_to_admin( $lead_email_data, $pdf_path );
+			}
+		} elseif ( 'booking' === $action ) {
+			$lead        = $params['lead'] ?? [];
+			$name        = $params['name'] ?? '';
+			$clean_phone = $params['clean_phone'] ?? '';
+
+			if ( function_exists( 'wp_mail' ) && function_exists( 'get_option' ) ) {
+				$admin_email = get_option( 'admin_email' );
+				if ( ! empty( $admin_email ) && is_email( $admin_email ) ) {
+					$price_str = ! empty( $lead['total_price_vnd'] ) ? number_format( $lead['total_price_vnd'], 0, ',', '.' ) . ' VND' : 'Chưa có';
+					$subject   = sprintf( '[Báo giá UPS] Lead đặt dịch vụ từ %s (%s)', $name, $clean_phone );
+					$message   = "Khách hàng gửi yêu cầu tư vấn báo giá UPS:\n\n" .
+						"Họ tên: {$name}\n" .
+						"Số điện thoại: {$clean_phone}\n" .
+						"Email: " . ( $lead['email'] ?? '' ) . "\n" .
+						"Dịch vụ: " . ( $lead['service_code'] ?? '' ) . "\n" .
+						"Tuyến: " . ( $lead['route_summary'] ?? '' ) . "\n" .
+						"Tổng cước tạm tính: {$price_str}\n" .
+						"Ghi chú: " . ( $lead['notes'] ?? '' ) . "\n" .
+						"Thời gian: " . ( $lead['created_at'] ?? '' ) . "\n";
+					wp_mail( $admin_email, $subject, $message );
+				}
+			}
+		}
+	}
+
+	/**
 	 * Helper: Return standard error response.
 	 *
 	 * @param string $code Standard error code.
@@ -1669,5 +2560,16 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 		];
 
 		return isset( $map[ $error_code ] ) ? $map[ $error_code ] : 422;
+	}
+
+	/**
+	 * Generate secure HMAC download token for a quote reference.
+	 *
+	 * @param string $quote_ref Quote reference code.
+	 * @return string 16-character hex token.
+	 */
+	public static function generate_download_token( $quote_ref ) {
+		$secret = function_exists( 'wp_salt' ) ? wp_salt( 'nonce' ) : 'allship_quote_download';
+		return substr( hash_hmac( 'sha256', (string) $quote_ref, $secret ), 0, 16 );
 	}
 }

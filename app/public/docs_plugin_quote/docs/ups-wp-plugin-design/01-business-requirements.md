@@ -29,6 +29,7 @@ Kết quả trả về là bảng giá minh bạch gồm zone, cân tính cướ
 - REST API nội bộ cho form gọi AJAX.
 - Admin upload/import file giá và quản lý cấu hình, bật/tắt service per rate card.
 - Ghi log báo giá.
+- **Xuất báo giá PDF A4 & Thu thập Lead B2B (Value-First Lead Flow)**: Cho phép khách hàng tải bảng báo giá chi tiết khổ A4 (logo doanh nghiệp, watermark, con dấu điện tử), đồng thời thu thập thông tin doanh nghiệp (Tên, SĐT, Email, Công ty), gửi email ngầm không gián đoạn UI và đồng bộ vào FluentForm CRM.
 
 ### Chưa làm trong phase 1
 
@@ -223,3 +224,25 @@ Kết quả public cần hiển thị ghi chú: giá chưa bao gồm VAT/FSC/Sur
 - Cân lẻ luôn làm tròn lên mốc 0.5kg.
 - Nhiều kiện tính đúng theo từng kiện.
 - Admin có thể import lại bảng giá mới mà không sửa code.
+- Xuất file PDF báo giá khổ A4 chuẩn in ấn trong < 1.0 giây, tự động tải xuống trình duyệt và gửi ngầm email đến khách hàng & admin.
+
+## 11. Báo Giá PDF & Chuyển đổi Lead B2B (Value-First Lead Flow)
+
+Chi tiết đặc tả đầy đủ tham chiếu tại [`15-quote-pdf-and-lead-flow.md`](15-quote-pdf-and-lead-flow.md).
+
+1. **Triết lý Value-First**: Trao ngay giá trị hữu hình cho khách hàng (bản báo giá chính thức, chuyên nghiệp có pháp nhân Allship) để đổi lấy thông tin liên hệ B2B chất lượng cao (Họ tên, SĐT, Email, Tên công ty).
+2. **Tiêu chuẩn văn bản A4 đơn trang**:
+   - Khổ giấy A4 dọc (`210mm x 297mm`), mép viền chuẩn (`8mm 12mm 10mm 12mm`), không tràn sang trang 2.
+   - Logo doanh nghiệp lấy từ Media Library (tự scale theo tỷ lệ).
+   - Tên đầy đủ công ty pháp nhân hiển thị trang trọng dưới logo.
+   - Watermark logo trung tâm mờ (opacity 0.04).
+   - Con dấu điện tử đỏ và chữ ký Allship ở góc phải chân trang.
+3. **Hiệu năng Sub-second**:
+   - Render PDF < 0.25s.
+   - Thanh loading tiến độ động mượt mà (0% → 100% trong 1.0s).
+   - Gửi email chạy hoàn toàn dưới nền qua Async Background Dispatcher, triệt tiêu độ trễ gửi SMTP (giảm thời gian chờ đợi từ 13.3s xuống 0.72s).
+4. **Quản lý Lead & Đo lường chuyển đổi**:
+   - Bảng CSDL chuyên dụng `wp_ups_quote_leads` liên kết 1-nhiều với `wp_ups_quote_logs`.
+   - Phân loại trạng thái Lead trực quan trong Quote Logs: `pending` (Cần liên hệ), `contacted` (Đã liên hệ), `converted` (Đã chốt đơn), `quote_only` (Chỉ xem giá).
+   - Đồng bộ 2 chiều sang FluentForm phục vụ bộ phận kinh doanh xử lý đơn.
+

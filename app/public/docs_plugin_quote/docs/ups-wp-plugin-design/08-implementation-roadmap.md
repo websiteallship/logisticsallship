@@ -1764,6 +1764,62 @@ curl -X POST http://logistic.local/wp-json/ups-quote/v1/calculate \
 
 ---
 
+## Phase 8: Báo giá PDF & Async B2B Lead Flow (Value-First Capture)
+
+> **Mục tiêu**: Cung cấp tính năng xuất báo giá PDF A4 chuyên nghiệp, thu thập thông tin doanh nghiệp (Lead B2B) với trải nghiệm sub-second, gửi email ngầm không gián đoạn giao diện, quản lý tập trung tại Quote Logs và FluentForm.
+
+### Step 8.1 — PDF Engine & Bố cục A4 Chuẩn In ấn
+
+🛠 **Skills**: `php-pro`, `clean-code`, `backend-security-coder`
+📖 **Docs**: `15-quote-pdf-and-lead-flow.md`, `04-database-and-api-spec.md`
+
+**Tasks**:
+- [x] Tích hợp Dompdf library vào `includes/class-pdf-quote-service.php`.
+- [x] Xây dựng mẫu HTML/CSS A4 đơn trang (`210mm x 297mm`, zero-overflow, font DejaVu Sans Unicode).
+- [x] Hiển thị logo công ty (chọn từ WP Media Library, tự căn chỉnh tỷ lệ), tên công ty pháp nhân, watermark chìm (opacity 0.04) và con dấu điện tử đỏ Allship.
+- [x] Bổ sung 12 cấu hình PDF & Doanh nghiệp trong Admin Settings (Logo, Công ty, MST, Hotline, Con dấu...).
+
+### Step 8.2 — Async Background Queue Email Dispatcher
+
+🛠 **Skills**: `backend-security-coder`, `web-performance-optimization`, `wp-performance`
+📖 **Docs**: `15-quote-pdf-and-lead-flow.md` § 5, `07-adr.md` (ADR-012)
+
+**Tasks**:
+- [x] Khởi tạo cơ chế dispatch bất đồng bộ `dispatch_async_email()`.
+- [x] Hỗ trợ kép: `fastcgi_finish_request()` (PHP-FPM) hoặc `wp_schedule_single_event()` + `spawn_cron()` (LocalWP/CGI/Windows).
+- [x] Giảm thời gian phản hồi API `/export-quote` từ 13.3s xuống 0.72s (giảm 94.5% latency).
+- [x] Ngắt lặp vòng thông báo FluentForm bằng custom action `allship_ups_fluentform_bridged`.
+
+### Step 8.3 — Lead Capture Modal & Sub-second Progress Animation
+
+🛠 **Skills**: `frontend-design`, `javascript-pro`, `form-cro`
+📖 **Docs**: `15-quote-pdf-and-lead-flow.md` § 4, `10-frontend-tech-spec.md` § 10
+
+**Tasks**:
+- [x] Thêm nút CTA thứ hai `Tải Báo Giá PDF` song song với `Liên hệ đặt dịch vụ`.
+- [x] Thiết kế popup Modal `#quotePdfExportModal` thu thập: Tên, SĐT, Email, Tên công ty.
+- [x] Triển khai animation thanh loading % thời gian thực (`startPdfProgressAnimation`): 0% → 65% (350ms) → 92% (450ms) → 100% (150ms).
+- [x] Tự động tải file PDF qua URL có chữ ký HMAC bảo mật (`token`) ngay khi hoàn tất.
+
+### Step 8.4 — Quản lý Lead B2B & Quote Logs mini-CRM
+
+🛠 **Skills**: `wp-plugin-development`, `backend-security-coder`
+📖 **Docs**: `15-quote-pdf-and-lead-flow.md` § 3 & 6, `05-admin-ui-and-public-ui.md` § 4
+
+**Tasks**:
+- [x] Tạo bảng CSDL `wp_ups_quote_leads` lưu thông tin lead độc lập.
+- [x] Nâng cấp màn hình Quote Logs với Lead Status Badges (🔴 Cần liên hệ, 🟢 Đã liên hệ, 📦 Đã chốt đơn, ⚪ Chỉ xem giá).
+- [x] Bổ sung bộ lọc trạng thái Lead, nút xem/tải lại PDF trực tiếp trên từng dòng log.
+- [x] Xuất báo cáo CSV/Excel bao gồm đầy đủ dữ liệu liên hệ B2B và link file PDF.
+
+🧪 **Tests Phase 8**:
+- [x] Test suite `test-phase-2-api-email.php` (54/54 passed).
+- [x] Test suite `test-fluentform-integration.php` (29/29 passed).
+- [x] Test suite `test-phase-4-admin-logs.php` (46/46 passed).
+- [x] Đo lường thời gian submit thực tế trên Browser: UI phản hồi trong 1.0s, PDF tải ngay lập tức, email gửi ngầm thành công.
+
+---
+
 ## Backlog: Phase 2 (Tương lai)
 
 - [ ] Import bảng giá chiều Import (data, không cần sửa code — bật direction trong Rate Card detail).

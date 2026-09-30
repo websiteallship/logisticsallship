@@ -183,6 +183,118 @@ class Allship_UPS_Admin_Settings {
 			self::SETTINGS_PAGE,
 			'allship_ups_section_advanced'
 		);
+
+		// Section 4: Company Profile & PDF Quotation
+		add_settings_section(
+			'allship_ups_section_company_pdf',
+			__( '4. Thông Tin Doanh Nghiệp & Mẫu Báo Giá PDF (Company Profile & PDF Quote)', 'allship-ups-quote' ),
+			[ $this, 'render_section_company_pdf_description' ],
+			self::SETTINGS_PAGE
+		);
+
+		add_settings_field(
+			'allship_ups_company_name',
+			__( 'Tên Doanh Nghiệp / Công ty', 'allship-ups-quote' ),
+			[ $this, 'render_field_company_name' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_company_pdf'
+		);
+
+		add_settings_field(
+			'allship_ups_company_tax_id',
+			__( 'Mã Số Thuế (Tax ID)', 'allship-ups-quote' ),
+			[ $this, 'render_field_company_tax_id' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_company_pdf'
+		);
+
+		add_settings_field(
+			'allship_ups_company_address',
+			__( 'Địa chỉ Trụ sở', 'allship-ups-quote' ),
+			[ $this, 'render_field_company_address' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_company_pdf'
+		);
+
+		add_settings_field(
+			'allship_ups_company_hotline',
+			__( 'Hotline / Số điện thoại', 'allship-ups-quote' ),
+			[ $this, 'render_field_company_hotline' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_company_pdf'
+		);
+
+		add_settings_field(
+			'allship_ups_company_email',
+			__( 'Email liên hệ Báo giá', 'allship-ups-quote' ),
+			[ $this, 'render_field_company_email' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_company_pdf'
+		);
+
+		add_settings_field(
+			'allship_ups_company_website',
+			__( 'Website Doanh Nghiệp', 'allship-ups-quote' ),
+			[ $this, 'render_field_company_website' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_company_pdf'
+		);
+
+		add_settings_field(
+			'allship_ups_company_logo_url',
+			__( 'Logo Doanh Nghiệp (In trên PDF)', 'allship-ups-quote' ),
+			[ $this, 'render_field_company_logo_url' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_company_pdf'
+		);
+
+		add_settings_field(
+			'allship_ups_company_logo_height',
+			__( 'Kích thước Logo trên PDF (Scale Height)', 'allship-ups-quote' ),
+			[ $this, 'render_field_company_logo_height' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_company_pdf'
+		);
+
+		add_settings_field(
+			'allship_ups_quote_validity_days',
+			__( 'Thời hạn hiệu lực Báo giá (Ngày)', 'allship-ups-quote' ),
+			[ $this, 'render_field_quote_validity_days' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_company_pdf'
+		);
+
+		add_settings_field(
+			'allship_ups_quote_bank_info',
+			__( 'Thông tin Tài khoản Thanh toán', 'allship-ups-quote' ),
+			[ $this, 'render_field_quote_bank_info' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_company_pdf'
+		);
+
+		add_settings_field(
+			'allship_ups_quote_terms_notes',
+			__( 'Điều khoản & Lưu ý mẫu Báo giá', 'allship-ups-quote' ),
+			[ $this, 'render_field_quote_terms_notes' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_company_pdf'
+		);
+
+		add_settings_field(
+			'allship_ups_quote_digital_stamp_url',
+			__( 'URL Ảnh Con Dấu / Chữ Ký Điện Tử', 'allship-ups-quote' ),
+			[ $this, 'render_field_quote_digital_stamp_url' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_company_pdf'
+		);
+
+		add_settings_field(
+			'allship_ups_quote_admin_notify_emails',
+			__( 'Email nhận thông báo Lead xuất PDF', 'allship-ups-quote' ),
+			[ $this, 'render_field_quote_admin_notify_emails' ],
+			self::SETTINGS_PAGE,
+			'allship_ups_section_company_pdf'
+		);
 	}
 
 	/**
@@ -371,6 +483,196 @@ class Allship_UPS_Admin_Settings {
 	}
 
 	/**
+	 * Section 4 description: Company Profile & PDF Quotation.
+	 */
+	public function render_section_company_pdf_description() {
+		echo '<p class="description">' . esc_html__( 'Cấu hình thông tin pháp nhân doanh nghiệp, thông tin thanh toán và các điều khoản hiển thị trên tệp PDF Báo giá xuất cho khách hàng.', 'allship-ups-quote' ) . '</p>';
+	}
+
+	/**
+	 * Render Company Name input.
+	 */
+	public function render_field_company_name() {
+		$value = (string) $this->get_setting( 'company_name', 'CÔNG TY TNHH ALLSHIP LOGISTICS' );
+		?>
+		<input type="text" name="company_name" id="allship_ups_company_name" value="<?php echo esc_attr( $value ); ?>" class="regular-text" style="width: 100%; max-width: 450px;">
+		<p class="description"><?php esc_html_e( 'Tên doanh nghiệp xuất hiện trên Header của tệp Báo giá PDF.', 'allship-ups-quote' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Render Company Tax ID input.
+	 */
+	public function render_field_company_tax_id() {
+		$value = (string) $this->get_setting( 'company_tax_id', '0317320092' );
+		?>
+		<input type="text" name="company_tax_id" id="allship_ups_company_tax_id" value="<?php echo esc_attr( $value ); ?>" class="regular-text" style="width: 200px;">
+		<p class="description"><?php esc_html_e( 'Mã số thuế doanh nghiệp in trên Header báo giá.', 'allship-ups-quote' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Render Company Address input.
+	 */
+	public function render_field_company_address() {
+		$value = (string) $this->get_setting( 'company_address', 'Tầng 3, Tòa nhà Allship, TP. Hồ Chí Minh, Việt Nam' );
+		?>
+		<textarea name="company_address" id="allship_ups_company_address" rows="2" class="large-text" style="max-width: 500px;"><?php echo esc_html( $value ); ?></textarea>
+		<p class="description"><?php esc_html_e( 'Địa chỉ văn phòng / trụ sở chính của công ty.', 'allship-ups-quote' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Render Company Hotline input.
+	 */
+	public function render_field_company_hotline() {
+		$value = (string) $this->get_setting( 'company_hotline', '1900 633 833 / 0903 000 888' );
+		?>
+		<input type="text" name="company_hotline" id="allship_ups_company_hotline" value="<?php echo esc_attr( $value ); ?>" class="regular-text" style="width: 280px;">
+		<p class="description"><?php esc_html_e( 'Hotline tư vấn hỗ trợ hiển thị trên Báo giá PDF.', 'allship-ups-quote' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Render Company Email input.
+	 */
+	public function render_field_company_email() {
+		$value = (string) $this->get_setting( 'company_email', 'quote@allship.vn' );
+		?>
+		<input type="email" name="company_email" id="allship_ups_company_email" value="<?php echo esc_attr( $value ); ?>" class="regular-text" style="width: 280px;">
+		<p class="description"><?php esc_html_e( 'Email phòng cước tiếp nhận phản hồi từ khách hàng.', 'allship-ups-quote' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Render Company Website input.
+	 */
+	public function render_field_company_website() {
+		$value = (string) $this->get_setting( 'company_website', 'https://allship.vn' );
+		?>
+		<input type="url" name="company_website" id="allship_ups_company_website" value="<?php echo esc_attr( $value ); ?>" class="regular-text" style="width: 350px;">
+		<p class="description"><?php esc_html_e( 'Địa chỉ website chính thức của doanh nghiệp.', 'allship-ups-quote' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Render Company Logo input with WP Media Library picker.
+	 */
+	public function render_field_company_logo_url() {
+		$value       = (string) $this->get_setting( 'company_logo_url', '' );
+		$logo_id     = (int) $this->get_setting( 'company_logo_id', 0 );
+		$logo_height = (int) $this->get_setting( 'company_logo_height', 42 );
+		$has_logo    = ! empty( $value );
+		?>
+		<div class="as-field-logo-wrap" style="max-width: 520px;">
+			<div id="allship_logo_preview_container" style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 10px 14px; margin-bottom: 10px; min-height: 52px; display: flex; align-items: center; justify-content: flex-start; gap: 16px;">
+				<img id="allship_ups_logo_preview" src="<?php echo esc_url( $value ); ?>" alt="<?php esc_attr_e( 'Logo preview', 'allship-ups-quote' ); ?>" style="<?php echo $has_logo ? '' : 'display:none; '; ?>height: <?php echo esc_attr( $logo_height ); ?>px; width: auto; max-width: 250px; object-fit: contain; border: 1px solid #e2e8f0; background: #ffffff; padding: 4px;">
+				<div id="allship_logo_placeholder" style="<?php echo $has_logo ? 'display:none;' : ''; ?>color: #64748b; font-size: 13px;">
+					<span class="dashicons dashicons-format-image" style="vertical-align: middle; margin-right: 4px; color: #94a3b8;"></span>
+					<em><?php esc_html_e( 'Chưa chọn logo (Sẽ hiển thị tên công ty dạng chữ)', 'allship-ups-quote' ); ?></em>
+				</div>
+			</div>
+
+			<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+				<button type="button" class="button button-secondary" id="allship_btn_select_logo">
+					<span class="dashicons dashicons-upload" style="margin-top: 3px; font-size: 17px; margin-right: 2px;"></span>
+					<span id="allship_btn_select_logo_text"><?php echo $has_logo ? esc_html__( 'Thay đổi Logo', 'allship-ups-quote' ) : esc_html__( 'Chọn Logo từ Thư viện', 'allship-ups-quote' ); ?></span>
+				</button>
+				<button type="button" class="button button-link-delete" id="allship_btn_remove_logo" style="<?php echo $has_logo ? '' : 'display:none;'; ?> color: #b32d2e; text-decoration: none;">
+					<span class="dashicons dashicons-trash" style="margin-top: 3px; font-size: 17px;"></span>
+					<?php esc_html_e( 'Xóa Logo', 'allship-ups-quote' ); ?>
+				</button>
+			</div>
+
+			<input type="hidden" name="company_logo_url" id="allship_ups_company_logo_url" value="<?php echo esc_attr( $value ); ?>">
+			<input type="hidden" name="company_logo_id" id="allship_ups_company_logo_id" value="<?php echo esc_attr( $logo_id ); ?>">
+
+			<p class="description"><?php esc_html_e( 'Chọn file ảnh logo từ thư viện Media WordPress (PNG trong suốt hoặc JPG sắc nét). Hệ thống tự động nhúng Data URI để in ấn siêu tốc và không bị vỡ tỉ lệ.', 'allship-ups-quote' ); ?></p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render Company Logo Height scale control.
+	 */
+	public function render_field_company_logo_height() {
+		$value = (int) $this->get_setting( 'company_logo_height', 42 );
+		if ( $value < 25 || $value > 80 ) {
+			$value = 42;
+		}
+		?>
+		<div class="as-field-inline" style="display: flex; align-items: center; gap: 14px; max-width: 520px;">
+			<input type="range" name="company_logo_height" id="allship_ups_company_logo_height" min="25" max="80" step="1" value="<?php echo esc_attr( $value ); ?>" style="width: 220px; cursor: pointer;">
+			<div style="font-weight: 600; color: #1e293b; min-width: 55px;">
+				<span id="allship_logo_height_display"><?php echo esc_attr( $value ); ?></span>px
+			</div>
+			<button type="button" class="button button-small" id="allship_btn_reset_logo_height" title="<?php esc_attr_e( 'Đặt về mặc định (42px)', 'allship-ups-quote' ); ?>"><?php esc_html_e( 'Mặc định (42px)', 'allship-ups-quote' ); ?></button>
+		</div>
+		<p class="description"><?php esc_html_e( 'Điều chỉnh chiều cao hiển thị của Logo trên PDF (25px - 80px, chuẩn đẹp: 42px). Chiều rộng sẽ tự động scale theo đúng tỉ lệ gốc (aspect-ratio), đảm bảo logo không bao giờ bị méo hoặc vỡ hình.', 'allship-ups-quote' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Render Quote Validity Days input.
+	 */
+	public function render_field_quote_validity_days() {
+		$value = (int) $this->get_setting( 'quote_validity_days', 14 );
+		?>
+		<div class="as-field-inline">
+			<input type="number" name="quote_validity_days" id="allship_ups_quote_validity_days" value="<?php echo esc_attr( $value ); ?>" min="1" max="365" class="small-text" style="width: 100px;">
+			<span class="as-unit-label"><?php esc_html_e( 'ngày', 'allship-ups-quote' ); ?></span>
+		</div>
+		<p class="description"><?php esc_html_e( 'Số ngày hiệu lực kể từ ngày khách hàng xuất báo giá (Ngày hết hạn = Ngày tạo + Số ngày này).', 'allship-ups-quote' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Render Quote Bank Info textarea.
+	 */
+	public function render_field_quote_bank_info() {
+		$default = "Ngân hàng: Techcombank - Chi nhánh TP.HCM\nSố tài khoản: 19038888999999\nChủ tài khoản: CONG TY TNHH ALLSHIP LOGISTICS";
+		$value   = (string) $this->get_setting( 'quote_bank_info', $default );
+		?>
+		<textarea name="quote_bank_info" id="allship_ups_quote_bank_info" rows="3" class="large-text" style="max-width: 550px; font-family: monospace; font-size: 12px;"><?php echo esc_html( $value ); ?></textarea>
+		<p class="description"><?php esc_html_e( 'Thông tin số tài khoản ngân hàng để khách thanh toán chuyển khoản.', 'allship-ups-quote' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Render Quote Terms Notes textarea.
+	 */
+	public function render_field_quote_terms_notes() {
+		$default = "1. Báo giá chưa bao gồm thuế nhập khẩu và thuế giá trị gia tăng tại nước đến (nếu có).\n2. Hàng hóa phải tuân thủ nghiêm ngặt quy định an toàn bay quốc tế của IATA và UPS.\n3. Thời gian giao hàng dự kiến tính theo ngày làm việc (không bao gồm Thứ 7, Chủ Nhật và ngày lễ).";
+		$value   = (string) $this->get_setting( 'quote_terms_notes', $default );
+		?>
+		<textarea name="quote_terms_notes" id="allship_ups_quote_terms_notes" rows="4" class="large-text" style="max-width: 550px; font-size: 12px; line-height: 1.5;"><?php echo esc_html( $value ); ?></textarea>
+		<p class="description"><?php esc_html_e( 'Các điều khoản thương mại, điều kiện đóng gói và lưu ý in tại Phần 4 của Báo giá PDF.', 'allship-ups-quote' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Render Quote Digital Stamp URL input.
+	 */
+	public function render_field_quote_digital_stamp_url() {
+		$value = (string) $this->get_setting( 'quote_digital_stamp_url', '' );
+		?>
+		<input type="url" name="quote_digital_stamp_url" id="allship_ups_quote_digital_stamp_url" value="<?php echo esc_attr( $value ); ?>" class="large-text" style="max-width: 450px;" placeholder="https://example.com/stamp.png">
+		<p class="description"><?php esc_html_e( 'URL hình ảnh con dấu đỏ hoặc chữ ký điện tử PNG trong suốt in dưới mục Đại diện Allship Logistics.', 'allship-ups-quote' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Render Quote Admin Notify Emails input.
+	 */
+	public function render_field_quote_admin_notify_emails() {
+		$value = (string) $this->get_setting( 'quote_admin_notify_emails', 'sales@allship.vn' );
+		?>
+		<input type="text" name="quote_admin_notify_emails" id="allship_ups_quote_admin_notify_emails" value="<?php echo esc_attr( $value ); ?>" class="large-text" style="max-width: 450px;">
+		<p class="description"><?php esc_html_e( 'Danh sách email nhận thông báo khi có khách tải file báo giá (phân tách nhiều email bằng dấu phẩy).', 'allship-ups-quote' ); ?></p>
+		<?php
+	}
+
+	/**
 	 * Sanitize and validate all settings input.
 	 *
 	 * @param array $input Raw input array from POST.
@@ -420,6 +722,50 @@ class Allship_UPS_Admin_Settings {
 
 		// 12. fluentform_id: Non-negative integer
 		$sanitized['fluentform_id'] = ! empty( $input['fluentform_id'] ) ? absint( $input['fluentform_id'] ) : 0;
+
+		// 13. company_name
+		$sanitized['company_name'] = ! empty( $input['company_name'] ) ? sanitize_text_field( $input['company_name'] ) : 'CÔNG TY TNHH ALLSHIP LOGISTICS';
+
+		// 14. company_tax_id
+		$sanitized['company_tax_id'] = ! empty( $input['company_tax_id'] ) ? sanitize_text_field( $input['company_tax_id'] ) : '';
+
+		// 15. company_address
+		$sanitized['company_address'] = ! empty( $input['company_address'] ) ? sanitize_textarea_field( $input['company_address'] ) : '';
+
+		// 16. company_hotline
+		$sanitized['company_hotline'] = ! empty( $input['company_hotline'] ) ? sanitize_text_field( $input['company_hotline'] ) : '';
+
+		// 17. company_email
+		$sanitized['company_email'] = ! empty( $input['company_email'] ) ? sanitize_email( $input['company_email'] ) : '';
+
+		// 18. company_website
+		$sanitized['company_website'] = ! empty( $input['company_website'] ) ? esc_url_raw( $input['company_website'] ) : '';
+
+		// 19. company_logo_url
+		$sanitized['company_logo_url'] = ! empty( $input['company_logo_url'] ) ? esc_url_raw( $input['company_logo_url'] ) : '';
+
+		// 19b. company_logo_id
+		$sanitized['company_logo_id'] = ! empty( $input['company_logo_id'] ) ? absint( $input['company_logo_id'] ) : 0;
+
+		// 19c. company_logo_height
+		$logo_h = isset( $input['company_logo_height'] ) ? (int) $input['company_logo_height'] : 42;
+		$sanitized['company_logo_height'] = ( $logo_h >= 25 && $logo_h <= 80 ) ? $logo_h : 42;
+
+		// 20. quote_validity_days
+		$days = isset( $input['quote_validity_days'] ) ? (int) $input['quote_validity_days'] : 14;
+		$sanitized['quote_validity_days'] = ( $days > 0 ) ? min( 365, $days ) : 14;
+
+		// 21. quote_bank_info
+		$sanitized['quote_bank_info'] = ! empty( $input['quote_bank_info'] ) ? sanitize_textarea_field( $input['quote_bank_info'] ) : '';
+
+		// 22. quote_terms_notes
+		$sanitized['quote_terms_notes'] = ! empty( $input['quote_terms_notes'] ) ? sanitize_textarea_field( $input['quote_terms_notes'] ) : '';
+
+		// 23. quote_digital_stamp_url
+		$sanitized['quote_digital_stamp_url'] = ! empty( $input['quote_digital_stamp_url'] ) ? esc_url_raw( $input['quote_digital_stamp_url'] ) : '';
+
+		// 24. quote_admin_notify_emails
+		$sanitized['quote_admin_notify_emails'] = ! empty( $input['quote_admin_notify_emails'] ) ? sanitize_text_field( $input['quote_admin_notify_emails'] ) : '';
 
 		return $sanitized;
 	}

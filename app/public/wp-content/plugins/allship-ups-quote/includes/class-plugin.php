@@ -43,6 +43,11 @@ class Allship_UPS_Plugin {
 	private function load_dependencies() {
 		$includes = ALLSHIP_UPS_QUOTE_PATH . 'includes/';
 
+		// Vendor autoloader (Dompdf, etc.)
+		if ( file_exists( ALLSHIP_UPS_QUOTE_PATH . 'vendor/autoload.php' ) ) {
+			require_once ALLSHIP_UPS_QUOTE_PATH . 'vendor/autoload.php';
+		}
+
 		$files = [
 			// Lifecycle & DB
 			'class-activator.php',
@@ -56,6 +61,7 @@ class Allship_UPS_Plugin {
 			'class-zone-repository.php',
 			'class-rate-repository.php',
 			'class-quote-log-repository.php',
+			'class-quote-lead-repository.php',
 			// Services & Calculators
 			'class-service-availability-manager.php',
 			'class-weight-calculator.php',
@@ -63,6 +69,8 @@ class Allship_UPS_Plugin {
 			'class-rate-lookup.php',
 			'class-surcharge-engine.php',
 			'class-quote-calculator.php',
+			'class-quote-pdf-renderer.php',
+			'class-quote-mailer.php',
 			// Importers
 			'importers/class-csv-parser.php',
 			'importers/class-xlsx-reader.php',
@@ -182,6 +190,16 @@ class Allship_UPS_Plugin {
 		if ( class_exists( 'Allship_UPS_FluentForm_Bridge' ) ) {
 			$bridge = new Allship_UPS_FluentForm_Bridge();
 			$bridge->init();
+		}
+
+		// Schedule daily PDF quotes cleanup if not scheduled.
+		if ( function_exists( 'wp_next_scheduled' ) && function_exists( 'wp_schedule_event' ) ) {
+			if ( ! wp_next_scheduled( 'allship_ups_cleanup_old_quotes_cron' ) ) {
+				wp_schedule_event( time(), 'daily', 'allship_ups_cleanup_old_quotes_cron' );
+			}
+		}
+		if ( class_exists( 'Allship_UPS_Quote_Pdf_Renderer' ) ) {
+			add_action( 'allship_ups_cleanup_old_quotes_cron', [ 'Allship_UPS_Quote_Pdf_Renderer', 'cleanup_old_quotes' ] );
 		}
 
 		do_action( 'allship_ups_quote_init', $this );

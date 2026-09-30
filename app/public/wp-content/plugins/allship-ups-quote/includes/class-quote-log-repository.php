@@ -334,8 +334,27 @@ class Allship_UPS_Quote_Log_Repository {
 			$term    = trim( (string) $filters['search'] );
 			$esc     = method_exists( $this->wpdb, 'esc_like' ) ? $this->wpdb->esc_like( $term ) : addcslashes( $term, '_%\\' );
 			$like    = '%' . $esc . '%';
-			$where[] = '( destination_iata LIKE %s OR session_id LIKE %s OR destination_city LIKE %s OR destination_address LIKE %s )';
-			$params  = array_merge( $params, [ $like, $like, $like, $like ] );
+			$where[] = '( destination_iata LIKE %s OR session_id LIKE %s OR destination_city LIKE %s OR destination_address LIKE %s OR breakdown_json LIKE %s )';
+			$params  = array_merge( $params, [ $like, $like, $like, $like, $like ] );
+		}
+
+		if ( ! empty( $filters['lead_type'] ) ) {
+			$lead_type = strtolower( trim( (string) $filters['lead_type'] ) );
+			if ( 'pdf_export' === $lead_type ) {
+				$where[]  = '( breakdown_json LIKE %s OR breakdown_json LIKE %s )';
+				$params[] = '%"type":"pdf_export"%';
+				$params[] = '%"lead_source":"ups_quote_pdf_export"%';
+			} elseif ( 'booking' === $lead_type ) {
+				$where[]  = '( ( breakdown_json LIKE %s OR breakdown_json LIKE %s ) AND breakdown_json NOT LIKE %s AND breakdown_json NOT LIKE %s )';
+				$params[] = '%"contact"%';
+				$params[] = '%"lead"%';
+				$params[] = '%"type":"pdf_export"%';
+				$params[] = '%"lead_source":"ups_quote_pdf_export"%';
+			} elseif ( 'guest' === $lead_type ) {
+				$where[]  = '( breakdown_json IS NULL OR ( breakdown_json NOT LIKE %s AND breakdown_json NOT LIKE %s ) )';
+				$params[] = '%"contact"%';
+				$params[] = '%"lead"%';
+			}
 		}
 
 		return [ implode( ' AND ', $where ), $params ];
@@ -447,7 +466,12 @@ class Allship_UPS_Quote_Log_Repository {
 				'ID',
 				'Date',
 				'Customer Name',
+				'Company Name',
 				'Customer Phone',
+				'Customer Email',
+				'Quote Ref',
+				'Interaction Type',
+				'PDF URL',
 				'Customer Notes',
 				'Direction',
 				'Origin',
@@ -466,12 +490,34 @@ class Allship_UPS_Quote_Log_Repository {
 			]
 		);
 
+		$escape_formula = function( $val ) {
+			if ( is_string( $val ) && '' !== $val ) {
+				$first = $val[0];
+				if ( '=' === $first || '+' === $first || '-' === $first || '@' === $first || "\t" === $first || "\r" === $first ) {
+					return "'" . $val;
+				}
+			}
+			return $val;
+		};
+
 		foreach ( $logs as $log ) {
 			$breakdown     = ! empty( $log->breakdown_json ) ? json_decode( $log->breakdown_json, true ) : [];
 			$contact       = $breakdown['contact'] ?? ( $breakdown['lead'] ?? [] );
-			$contact_name  = $contact['name'] ?? '';
-			$contact_phone = $contact['phone'] ?? '';
-			$contact_notes = $contact['notes'] ?? '';
+			$contact_name  = $escape_formula( $contact['name'] ?? '' );
+			$company_name  = $escape_formula( $contact['company'] ?? ( $contact['company_name'] ?? '' ) );
+			$contact_phone = $escape_formula( $contact['phone'] ?? '' );
+			$contact_email = $escape_formula( $contact['email'] ?? '' );
+			$quote_ref     = $escape_formula( $contact['quote_ref'] ?? '' );
+			$pdf_url       = $contact['pdf_url'] ?? '';
+			$contact_notes = $escape_formula( $contact['notes'] ?? '' );
+			$lead_source   = $breakdown['lead_source'] ?? ( $contact['type'] ?? '' );
+
+			$interaction_type = 'Khách vãng lai';
+			if ( ! empty( $quote_ref ) || 'pdf_export' === $lead_source || 'ups_quote_pdf_export' === $lead_source ) {
+				$interaction_type = 'Báo giá PDF';
+			} elseif ( ! empty( $contact_name ) || ! empty( $contact_phone ) ) {
+				$interaction_type = 'Đặt dịch vụ (Booking)';
+			}
 
 			fputcsv(
 				$stream,
@@ -479,7 +525,12 @@ class Allship_UPS_Quote_Log_Repository {
 					$log->id,
 					$log->created_at,
 					$contact_name,
+					$company_name,
 					$contact_phone,
+					$contact_email,
+					$quote_ref,
+					$interaction_type,
+					$pdf_url,
 					$contact_notes,
 					$log->direction,
 					$log->origin_iata,
@@ -542,7 +593,8 @@ class Allship_UPS_Quote_Log_Repository {
 		fputs( $stream, "  <Table>\n" );
 
 		$headers = [
-			'ID', 'Date', 'Customer Name', 'Customer Phone', 'Customer Notes',
+			'ID', 'Date', 'Customer Name', 'Company Name', 'Customer Phone', 'Customer Email',
+			'Quote Ref', 'Interaction Type', 'PDF URL', 'Customer Notes',
 			'Direction', 'Origin', 'Destination', 'Destination City',
 			'Service', 'Shipment Type', 'Zone', 'Rate Zone', 'Actual Weight (kg)',
 			'Dim Weight (kg)', 'Chargeable Weight (kg)', 'Base Price (VND)',
@@ -555,19 +607,46 @@ class Allship_UPS_Quote_Log_Repository {
 		}
 		fputs( $stream, "   </Row>\n" );
 
+		$escape_formula = function( $val ) {
+			if ( is_string( $val ) && '' !== $val ) {
+				$first = $val[0];
+				if ( '=' === $first || '+' === $first || '-' === $first || '@' === $first || "\t" === $first || "\r" === $first ) {
+					return "'" . $val;
+				}
+			}
+			return $val;
+		};
+
 		foreach ( $logs as $log ) {
 			$breakdown     = ! empty( $log->breakdown_json ) ? json_decode( $log->breakdown_json, true ) : [];
 			$contact       = $breakdown['contact'] ?? ( $breakdown['lead'] ?? [] );
-			$contact_name  = $contact['name'] ?? '';
-			$contact_phone = $contact['phone'] ?? '';
-			$contact_notes = $contact['notes'] ?? '';
+			$contact_name  = $escape_formula( $contact['name'] ?? '' );
+			$company_name  = $escape_formula( $contact['company'] ?? ( $contact['company_name'] ?? '' ) );
+			$contact_phone = $escape_formula( $contact['phone'] ?? '' );
+			$contact_email = $escape_formula( $contact['email'] ?? '' );
+			$quote_ref     = $escape_formula( $contact['quote_ref'] ?? '' );
+			$pdf_url       = $contact['pdf_url'] ?? '';
+			$contact_notes = $escape_formula( $contact['notes'] ?? '' );
+			$lead_source   = $breakdown['lead_source'] ?? ( $contact['type'] ?? '' );
+
+			$interaction_type = 'Khách vãng lai';
+			if ( ! empty( $quote_ref ) || 'pdf_export' === $lead_source || 'ups_quote_pdf_export' === $lead_source ) {
+				$interaction_type = 'Báo giá PDF';
+			} elseif ( ! empty( $contact_name ) || ! empty( $contact_phone ) ) {
+				$interaction_type = 'Đặt dịch vụ (Booking)';
+			}
 
 			fputs( $stream, "   <Row>\n" );
 			$cols = [
 				[ 'Number', $log->id ],
 				[ 'String', $log->created_at ],
 				[ 'String', $contact_name ],
+				[ 'String', $company_name ],
 				[ 'String', $contact_phone ],
+				[ 'String', $contact_email ],
+				[ 'String', $quote_ref ],
+				[ 'String', $interaction_type ],
+				[ 'String', $pdf_url ],
 				[ 'String', $contact_notes ],
 				[ 'String', $log->direction ],
 				[ 'String', $log->origin_iata ],

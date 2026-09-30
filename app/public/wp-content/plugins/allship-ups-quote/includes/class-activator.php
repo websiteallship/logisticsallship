@@ -14,7 +14,7 @@ class Allship_UPS_Activator {
 	/**
 	 * Database schema version.
 	 */
-	const DB_VERSION = '1.2.0';
+	const DB_VERSION = '1.3.0';
 
 	/**
 	 * Run activation tasks: create/update tables and version tracking.
@@ -155,6 +155,37 @@ CREATE TABLE {$prefix}ups_quote_logs (
   KEY destination (destination_iata),
   KEY service_code (service_code),
   KEY ip_address (ip_address)
+) {$charset_collate};
+
+CREATE TABLE {$prefix}ups_quote_leads (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  quote_ref VARCHAR(30) NOT NULL,
+  quote_log_id BIGINT UNSIGNED NULL,
+  contact_name VARCHAR(150) NOT NULL,
+  company_name VARCHAR(255) NULL,
+  email VARCHAR(100) NOT NULL,
+  phone VARCHAR(30) NULL,
+  source VARCHAR(50) DEFAULT 'pdf_export',
+  direction VARCHAR(10) NOT NULL DEFAULT 'export',
+  service_code VARCHAR(20) NOT NULL,
+  origin_country VARCHAR(10) DEFAULT 'VN',
+  destination_iata VARCHAR(10) NOT NULL,
+  destination_name VARCHAR(150) NULL,
+  chargeable_weight_kg DECIMAL(10,3) NOT NULL,
+  total_price_vnd BIGINT UNSIGNED NOT NULL,
+  quote_data_json LONGTEXT NOT NULL,
+  pdf_path VARCHAR(255) NULL,
+  email_sent TINYINT(1) DEFAULT 0,
+  email_sent_at DATETIME NULL,
+  download_count INT UNSIGNED DEFAULT 1,
+  ip_address VARCHAR(45) NULL,
+  user_agent VARCHAR(255) NULL,
+  created_at DATETIME NOT NULL,
+  PRIMARY KEY  (id),
+  UNIQUE KEY quote_ref (quote_ref),
+  KEY email (email),
+  KEY phone (phone),
+  KEY created_at (created_at)
 ) {$charset_collate};";
 
 		dbDelta( $sql );

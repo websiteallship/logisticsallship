@@ -62,6 +62,11 @@ $is_updated = isset( $_GET['settings-updated'] ) && 'true' === $_GET['settings-u
 	</div>
 </div>
 
+<?php
+if ( function_exists( 'wp_enqueue_media' ) ) {
+	wp_enqueue_media();
+}
+?>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 	// Sync toggle checkboxes with their corresponding number inputs for clarity
@@ -89,5 +94,97 @@ document.addEventListener('DOMContentLoaded', function() {
 		toggleEl.addEventListener('change', updateState);
 		updateState();
 	});
+
+	// --- LOGO MEDIA PICKER & SCALING CONTROLS ---
+	const selectLogoBtn   = document.getElementById('allship_btn_select_logo');
+	const removeLogoBtn   = document.getElementById('allship_btn_remove_logo');
+	const logoUrlInput    = document.getElementById('allship_ups_company_logo_url');
+	const logoIdInput     = document.getElementById('allship_ups_company_logo_id');
+	const logoPreviewImg  = document.getElementById('allship_ups_logo_preview');
+	const logoPlaceholder = document.getElementById('allship_logo_placeholder');
+	const selectBtnText   = document.getElementById('allship_btn_select_logo_text');
+	const heightRange     = document.getElementById('allship_ups_company_logo_height');
+	const heightDisplay   = document.getElementById('allship_logo_height_display');
+	const resetHeightBtn  = document.getElementById('allship_btn_reset_logo_height');
+
+	let mediaFrame;
+
+	if (selectLogoBtn) {
+		selectLogoBtn.addEventListener('click', function(e) {
+			e.preventDefault();
+			if (typeof wp === 'undefined' || !wp.media) {
+				alert('Thư viện Media WordPress chưa tải xong. Vui lòng tải lại trang.');
+				return;
+			}
+
+			if (mediaFrame) {
+				mediaFrame.open();
+				return;
+			}
+
+			mediaFrame = wp.media({
+				title: 'Chọn hoặc Tải lên Logo Doanh Nghiệp',
+				button: { text: 'Sử dụng Logo này' },
+				multiple: false,
+				library: { type: 'image' }
+			});
+
+			mediaFrame.on('select', function() {
+				const attachment = mediaFrame.state().get('selection').first().toJSON();
+				if (!attachment || !attachment.url) return;
+
+				if (logoUrlInput) logoUrlInput.value = attachment.url;
+				if (logoIdInput)  logoIdInput.value  = attachment.id || 0;
+
+				if (logoPreviewImg) {
+					logoPreviewImg.src = attachment.url;
+					logoPreviewImg.style.display = 'block';
+				}
+				if (logoPlaceholder) logoPlaceholder.style.display = 'none';
+				if (removeLogoBtn)   removeLogoBtn.style.display   = 'inline-flex';
+				if (selectBtnText)   selectBtnText.textContent     = 'Thay đổi Logo';
+			});
+
+			mediaFrame.open();
+		});
+	}
+
+	if (removeLogoBtn) {
+		removeLogoBtn.addEventListener('click', function(e) {
+			e.preventDefault();
+			if (logoUrlInput) logoUrlInput.value = '';
+			if (logoIdInput)  logoIdInput.value  = '0';
+
+			if (logoPreviewImg) {
+				logoPreviewImg.src = '';
+				logoPreviewImg.style.display = 'none';
+			}
+			if (logoPlaceholder) logoPlaceholder.style.display = 'block';
+			removeLogoBtn.style.display = 'none';
+			if (selectBtnText) selectBtnText.textContent = 'Chọn Logo từ Thư viện';
+		});
+	}
+
+	if (heightRange) {
+		function applyHeight(val) {
+			val = parseInt(val, 10) || 42;
+			if (val < 25) val = 25;
+			if (val > 80) val = 80;
+			if (heightDisplay)  heightDisplay.textContent = val;
+			if (logoPreviewImg) logoPreviewImg.style.height = val + 'px';
+		}
+
+		heightRange.addEventListener('input', function() {
+			applyHeight(this.value);
+		});
+
+		if (resetHeightBtn) {
+			resetHeightBtn.addEventListener('click', function(e) {
+				e.preventDefault();
+				heightRange.value = 42;
+				applyHeight(42);
+			});
+		}
+	}
 });
 </script>

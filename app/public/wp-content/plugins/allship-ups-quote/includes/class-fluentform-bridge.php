@@ -224,6 +224,9 @@ class Allship_UPS_FluentForm_Bridge {
 			'name'                => $lead['name'] ?? '',
 			'phone'               => $lead['phone'] ?? '',
 			'email'               => $lead['email'] ?? '',
+			'company_name'        => $lead['company_name'] ?? ( $lead['company'] ?? '' ),
+			'quote_ref'           => $lead['quote_ref'] ?? '',
+			'pdf_url'             => $lead['pdf_url'] ?? '',
 			'service'             => $lead['service'] ?? ( $lead['service_code'] ?? '' ),
 			'hidden_service_name' => $lead['hidden_service_name'] ?? 'Dịch vụ chuyển phát quốc tế UPS',
 			'message'             => ! empty( $lead['message'] ) ? $lead['message'] : ( $lead['notes'] ?? '' ),
@@ -241,7 +244,7 @@ class Allship_UPS_FluentForm_Bridge {
 			'quote_log_id'        => $lead['quote_log_id'] ?? 0,
 			'route_summary'       => $lead['route_summary'] ?? '',
 			'pieces_json'         => ! empty( $lead['pieces'] ) ? ( is_array( $lead['pieces'] ) ? wp_json_encode( $lead['pieces'] ) : (string) $lead['pieces'] ) : '',
-			'hidden_source'       => 'ups_quote_booking_modal',
+			'hidden_source'       => ! empty( $lead['hidden_source'] ) ? $lead['hidden_source'] : 'ups_quote_booking_modal',
 			'__bridge_sync'       => true, // Flag to prevent infinite hook loop
 		];
 
@@ -286,9 +289,9 @@ class Allship_UPS_FluentForm_Bridge {
 			);
 		}
 
-		// Fire FluentForm notification and submission hooks
+		// Fire custom hook without triggering FluentForm default email notification pipeline
 		if ( function_exists( 'do_action' ) ) {
-			do_action( 'fluentform/submission_inserted', $entry_id, $form_data, $form_obj );
+			do_action( 'allship_ups_fluentform_bridged', $entry_id, $form_data, $form_obj );
 		}
 
 		return $entry_id;

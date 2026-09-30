@@ -568,3 +568,28 @@ fetch((state.config.apiBase || '/wp-json/ups-quote/v1') + '/lead', {
   body: JSON.stringify(leadPayload)
 });
 ```
+
+---
+
+## 10. Value-First PDF Export & Progress Loading UI
+
+Chi tiết tham chiếu tại [`15-quote-pdf-and-lead-flow.md`](15-quote-pdf-and-lead-flow.md).
+
+### 10.1. Nút bấm CTA kép trong Results Area
+- **Nút 1**: `Liên hệ đặt dịch vụ` (Mở booking modal).
+- **Nút 2**: `Tải Báo Giá PDF` (`#quoteExportPdfBtn`) — kích hoạt modal `#quotePdfExportModal`.
+
+### 10.2. Thu thập Lead B2B & Sub-second Progress Animation
+- Khi user gửi form thông tin (Tên, Phone, Email, Công ty):
+  - Ẩn form inputs, hiển thị container loading `#pdfExportProgressWrap`.
+  - Hàm `startPdfProgressAnimation()` chạy tiến độ mô phỏng mượt mà:
+    - Giai đoạn 1: 0% → 65% trong 350ms (Tạo cấu trúc văn bản).
+    - Giai đoạn 2: 65% → 92% trong 450ms (Áp dụng con dấu & chữ ký).
+    - Khi API phản hồi 200 OK: Lập tức vọt lên 100% trong 150ms, hiển thị icon tick xanh `Hoàn tất! Đang tải file xuống...`.
+- Tổng thời gian hoàn tất trung bình: **~0.95s - 1.2s** (không còn tình trạng đơ cứng ở 96%).
+
+### 10.3. Tự động tải file PDF & Đóng Modal
+- Nhận URL bảo mật từ API: `res.data.download_url`.
+- Tạo iframe ẩn hoặc mở `window.location.assign(download_url)` tải file PDF trực tiếp về máy.
+- Hiển thị thông báo thành công và tự động đóng modal sau 1.8s.
+

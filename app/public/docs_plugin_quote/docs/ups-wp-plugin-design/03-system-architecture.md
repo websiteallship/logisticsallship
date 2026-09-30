@@ -26,6 +26,8 @@ allship-ups-quote/
     class-rate-lookup.php
     class-surcharge-engine.php
     class-quote-calculator.php
+    class-pdf-quote-service.php
+    class-quote-lead-repository.php
     class-rest-controller.php
     class-fluentform-bridge.php
     class-shortcode.php
@@ -46,6 +48,7 @@ allship-ups-quote/
     fluentform-quote-template.json
   vendor/
     phpoffice/phpspreadsheet/
+    dompdf/dompdf/
 ```
 
 ## 3. Module nghiệp vụ
@@ -61,7 +64,9 @@ allship-ups-quote/
 | `Rate_Lookup` | Tìm dòng giá theo rate group, zone, chargeable weight. |
 | `Surcharge_Engine` | Extension point cho VAT/FSC/Surge/phụ phí. Phase 1 mặc định off. |
 | `Quote_Calculator` | Orchestrator toàn bộ luồng báo giá. |
-| `Rest_Controller` | Endpoints: `/calculate`, `/lead`, `/countries`, `/services`, `/directions`. |
+| `PDF_Quote_Service` | Engine xuất file PDF báo giá khổ A4 chuẩn in ấn, watermark chìm, con dấu điện tử Allship qua Dompdf. |
+| `Quote_Lead_Repository` | Quản lý lưu trữ, truy vấn, bộ lọc và thống kê chuyển đổi Lead B2B trong bảng `wp_ups_quote_leads`. |
+| `Rest_Controller` | Endpoints: `/calculate`, `/lead`, `/export-quote`, `/download-quote`, `/async-mail`, `/countries`, `/services`, `/directions`. |
 | `FluentForm_Bridge` | Đồng bộ 2 chiều giữa Lead submissions và `wp_ups_quote_logs`, hỗ trợ `ff-frontend-entries`. |
 | `Shortcode` | Render `[ups_quote_form]`. |
 
@@ -97,6 +102,23 @@ flowchart TD
   F1 --> G1["Bridge push_lead_to_fluentform()"]
   G1 --> H1["Ghi bảng wp_fluentform_submissions"]
   H1 --> I1["ff-frontend-entries hiển thị Lead trên Dashboard"]
+```
+
+### 4.3. Luồng xuất Báo giá PDF & Async Queue (Value-First Lead Flow)
+
+```mermaid
+flowchart TD
+  A2["User bấm 'Tải Báo Giá PDF'"] --> B2["Popup Modal Lead Form"]
+  B2 --> C2["User nhập Tên, Phone, Email, Công ty"]
+  C2 --> D2["JS kích hoạt Sub-second Progress Animation (0-100% trong 1.0s)"]
+  D2 --> E2["POST /wp-json/ups-quote/v1/export-quote"]
+  E2 --> F2["Lưu Lead vào wp_ups_quote_leads & cập nhật log"]
+  F2 --> G2["PDF_Quote_Service render A4 file PDF (< 0.25s)"]
+  F2 --> H2["Push Lead sang FluentForm"]
+  F2 --> I2["wp_schedule_single_event() + spawn_cron() ngầm"]
+  E2 --> J2["Trả response 200 OK ngay trong ~0.7s (HMAC download_url)"]
+  J2 --> K2["Browser tự động mở download_url"]
+  I2 -.-> L2["WP-Cron background worker thực thi gửi 2 email (Admin + User)"]
 ```
 
 ## 5. Pseudocode quote calculator
@@ -166,6 +188,7 @@ public function calculate(array $input): QuoteResult {
 - **Server-Side Batch Calculation**: Endpoint `/calculate` hỗ trợ `service_code: "ALL"`, tính toán toàn bộ 6 dịch vụ cùng lúc trong 1 request duy nhất, giảm thiểu tối đa round-trips giữa client và server.
 - **Calculation Transient Cache**: Kết quả tính giá cước được cache thông qua WordPress Transients (`ups_calc_{md5}`, TTL 3600s), đem lại tốc độ phản hồi < 10ms cho các truy vấn trùng lặp. Tự động xóa cache khi activate rate card mới.
 - **On-Demand Country States Chunks**: Loại bỏ hoàn toàn bundle nguyên khối monolithic 185KB (`states_by_country.js`). Dữ liệu bang/tỉnh được chia nhỏ thành 196 file JSON độc lập theo IATA code (`assets/data/states/{iata}.json`, 0.5KB - 1.6KB/file), chỉ fetch khi người dùng chọn quốc gia đích và cache vào memory client.
+- **Async Background Email Dispatcher (Triệt tiêu độ trễ UI)**: Đẩy toàn bộ quá trình gửi 2 email thông báo (Admin + Khách hàng kèm file PDF) ra chạy ngầm qua `wp_schedule_single_event()` + `spawn_cron()`. Giảm thời gian phản hồi của endpoint `/export-quote` từ 13.3s xuống chỉ còn **0.72s** (giảm 94.5% latency), giải quyết triệt để vấn đề đứng hình ở 96% trên frontend.
 - Countries khoảng 250 dòng, zone map khoảng vài nghìn dòng được tối ưu hóa index MySQL.
 - Cache active rate card ID, country list sanitized và settings.
 

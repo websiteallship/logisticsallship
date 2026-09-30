@@ -37,7 +37,7 @@ flowchart TD
     subgraph FFBridge["FluentForm Bridge"]
         J --> K["push_lead_to_fluentform($payload)"]
         K --> L["Insert wp_fluentform_submissions"]
-        L --> M["Fire fluentform/submission_inserted hook"]
+        L --> M["Fire allship_ups_fluentform_bridged hook (tránh loop gửi email)"]
         M --> N["Hiển thị trên bảng Lead ff-frontend-entries"]
     end
 

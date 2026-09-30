@@ -163,6 +163,11 @@ class Allship_UPS_Admin_Menu {
 		$ver = defined( 'ALLSHIP_UPS_QUOTE_VERSION' ) ? ALLSHIP_UPS_QUOTE_VERSION : '1.0.0';
 		$url = defined( 'ALLSHIP_UPS_QUOTE_URL' ) ? ALLSHIP_UPS_QUOTE_URL : plugin_dir_url( dirname( __FILE__ ) );
 
+		// Enqueue WordPress Media Library modal for media uploaders
+		if ( function_exists( 'wp_enqueue_media' ) ) {
+			wp_enqueue_media();
+		}
+
 		// Admin CSS if exists
 		$css_path = dirname( __FILE__ ) . '/assets/css/admin.css';
 		if ( file_exists( $css_path ) ) {

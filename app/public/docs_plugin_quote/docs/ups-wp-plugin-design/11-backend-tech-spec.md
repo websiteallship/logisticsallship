@@ -24,7 +24,8 @@ Plugin (bootstrap)
 │   ├── Country_Repository      → ups_countries
 │   ├── Zone_Repository         → ups_zone_maps
 │   ├── Rate_Repository         → ups_rates
-│   └── Quote_Log_Repository    → ups_quote_logs
+│   ├── Quote_Log_Repository    → ups_quote_logs
+│   └── Quote_Lead_Repository   → ups_quote_leads (quản lý B2B Leads)
 ├── Importers
 │   ├── CSV_Parser              → native fgetcsv
 │   ├── XLSX_Reader             → SimpleXLSX wrapper
@@ -37,7 +38,10 @@ Plugin (bootstrap)
 │   ├── Rate_Lookup             → price lookup, brackets
 │   ├── Surcharge_Engine        → fees (extensible)
 │   └── Quote_Calculator        → orchestrator
-├── REST_Controller             → /calculate, /countries, /services, /directions
+├── Services
+│   ├── PDF_Quote_Service       → Dompdf wrapper, A4 template, watermark, seal
+│   └── FluentForm_Bridge       → 2-way sync giữa Leads và FluentForm submissions
+├── REST_Controller             → /calculate, /lead, /export-quote, /download-quote, /async-mail
 ├── Shortcode                   → [ups_quote_form]
 └── Admin
     ├── Admin_Menu              → menu registration
@@ -45,9 +49,9 @@ Plugin (bootstrap)
     ├── Admin_Rates             → rate CRUD UI
     ├── Admin_Zones             → zone CRUD UI
     ├── Admin_Countries         → country CRUD UI
-    ├── Admin_Settings          → settings form (weight + fees only)
+    ├── Admin_Settings          → settings form (weight, fees, PDF/company)
     ├── Admin_Rate_Cards        → rate card management + direction/service toggles
-    └── Admin_Quote_Logs        → logs + export
+    └── Admin_Quote_Logs        → logs, lead status filter + export CSV/Excel
 ```
 
 ### 1.3. Autoloading
@@ -740,4 +744,63 @@ File: `includes/class-rest-controller.php`
    - Được gọi trực tiếp tại dòng đầu của `prepare_items()`.
    - Kiểm tra `current_user_can('manage_options')` và thực thi xóa danh sách `$_REQUEST['log_ids']`.
    - Xuất notice `notice-success is-dismissible` thông báo số lượng bản ghi đã xoá thành công mà không gây lỗi `headers already sent`.
+
+---
+
+## 11. PDF Export Engine & Async Background Queue
+
+Chi tiết đầy đủ tham chiếu tại tài liệu [`15-quote-pdf-and-lead-flow.md`](15-quote-pdf-and-lead-flow.md).
+
+### 11.1. Dompdf Engine & Render Performance
+
+- **Class**: `Allship_UPS_PDF_Quote_Service` (`includes/class-pdf-quote-service.php`).
+- **Cấu hình Dompdf**:
+  - `isRemoteEnabled => true` (hỗ trợ load asset logo, dấu đỏ).
+  - `defaultFont => 'DejaVu Sans'` (hỗ trợ tiếng Việt Unicode không bị ô vuông).
+  - Tự động fallback nhúng SVG hoặc file path trực tiếp để render < 0.25s.
+- **Bố cục A4 đơn trang (Zero overflow)**:
+  - Khổ A4 đứng (`210mm x 297mm`), margin `8mm 12mm 10mm 12mm`.
+  - Watermark logo trung tâm mờ opacity 0.04.
+  - Con dấu điện tử đỏ & chữ ký Allship ở góc phải chân trang.
+  - Tên công ty pháp nhân hiển thị trang trọng ngay dưới logo thương hiệu.
+
+### 11.2. Async Background Queue Dispatcher
+
+Xử lý triệt để bài toán độ trễ gửi email SMTP (từ 13.3s giảm còn 0.72s):
+
+```php
+// Dispatcher không nghẽn luồng:
+private function dispatch_async_email( int $lead_id, int $log_id, string $pdf_path, array $lead_info ): void {
+    if ( function_exists( 'fastcgi_finish_request' ) ) {
+        // Môi trường PHP-FPM: Đóng kết nối HTTP trước, tiếp tục chạy PHP ngầm
+        fastcgi_finish_request();
+        $this->process_and_send_quote_emails( $lead_id, $log_id, $pdf_path, $lead_info );
+        return;
+    }
+
+    // Môi trường CGI/LocalWP/Shared Host: Lên lịch background cron tức thì
+    wp_schedule_single_event(
+        time(),
+        'allship_ups_send_quote_emails_async',
+        [ $lead_id, $log_id, $pdf_path, $lead_info ]
+    );
+
+    // Kích hoạt worker không chờ đợi (Non-blocking spawn)
+    if ( function_exists( 'spawn_cron' ) ) {
+        spawn_cron( time() );
+    }
+}
+```
+
+- **Hook đăng ký tại `class-plugin.php`**:
+  ```php
+  add_action( 'allship_ups_send_quote_emails_async', [ $rest_controller, 'process_and_send_quote_emails' ], 10, 4 );
+  ```
+- **Bảo mật HMAC Token Download**:
+  ```php
+  $token = hash_hmac( 'sha256', "ups_quote_{$log_id}_{$lead_id}", wp_salt( 'auth' ) );
+  ```
+- **Ngắt lặp thông báo FluentForm**:
+  Sử dụng custom action `allship_ups_fluentform_bridged` thay vì hook chuẩn `submission_inserted` để tránh loop thông báo trùng lặp.
+
 

@@ -179,35 +179,51 @@ Bảng kết quả hiển thị dạng Card Grid (Desktop) và Compact Compariso
 | Base price | Giá cước tạm tính theo bảng giá active |
 | Action Button | Nút "Liên hệ đặt dịch vụ" mở Booking Modal với thông tin tuyến điền sẵn |
 
-## 7. Booking Modal & Đặt dịch vụ (Lead Capture)
+## 7. Dual CTA Buttons & Modal Xuất Báo Giá PDF (Lead Capture)
 
-Khi khách hàng bấm **"Liên hệ đặt dịch vụ"** trên card kết quả, Booking Modal xuất hiện đè lên giao diện với thiết kế sang trọng:
+Trên mỗi thẻ kết quả dịch vụ và thanh tóm tắt Best Price Summary Bar, hệ thống hiển thị cặp nút hành động:
+- **Nút 1: "Liên hệ tư vấn"** (trước đây là Đặt dịch vụ): Mở modal tư vấn dịch vụ dành cho khách muốn nhân viên liên hệ ngay.
+- **Nút 2: "Tải Báo Giá PDF"**: Mở modal thu thập Lead B2B để tải file báo giá chính thức có con dấu điện tử.
 
-### 7.1. Thành phần giao diện Modal:
-1. **Header**: Tiêu đề "Yêu Cầu Tư Vấn & Đặt Dịch Vụ", nút đóng `(X)`, backdrop blur.
+### 7.1. Booking Modal (Liên Hệ Tư Vấn)
+1. **Header**: Tiêu đề "Yêu Cầu Tư Vấn Báo Giá UPS", nút đóng `(X)`, backdrop blur.
 2. **Card Tóm tắt Hành trình & Giá (Route Summary Card)**:
-   - Điểm gửi và Điểm nhận (chi tiết địa chỉ, thành phố, bang, quốc gia).
+   - Tuyến gửi/nhận (chi tiết địa chỉ, thành phố, bang, quốc gia).
    - Badge chiều vận chuyển (`Xuất khẩu` hoặc `Nhập khẩu`).
    - Tên gói dịch vụ đã chọn, trọng lượng tính cước và tổng cước tạm tính màu đỏ thương hiệu `#CE2027`.
-3. **Form Nhập Liệu Khách Hàng**:
-   - `Họ và tên *`: Text input bắt buộc.
-   - `Số điện thoại *`: Tel input bắt buộc, chuẩn số điện thoại Việt Nam (đầu số `0`, `84` hoặc `+84` kèm 9 chữ số tiếp theo).
-   - `Ghi chú về lô hàng`: Textarea nhập yêu cầu thêm (đóng gỗ, lấy hàng giờ hành chính...).
-4. **Các trường ẩn tự động đồng bộ (Hidden Fields)**:
-   - `service`: Tên dịch vụ chuẩn hóa trong 18 tên quốc tế.
-   - `hidden_service_name`: Nhãn phân loại cấp cao.
-   - `message`: Nội dung kết hợp ghi chú và danh sách bóc tách đa kiện hàng dạng list.
-   - `quote_log_id`, `direction`, `origin`, `destination`, `destination_iata`, `service_code`, `chargeable_weight`, `total_price`, `total_price_raw`, `pieces_json`, `hidden_source`.
-5. **Nút Gửi Yêu Cầu**: Có spinner loading animation, ngăn chặn double submit.
+3. **Form Nhập Liệu**: Họ và tên *, Số điện thoại *, Ghi chú lô hàng.
+4. **Trường ẩn đồng bộ FluentForm**: `service`, `hidden_service_name`, `message`, `quote_log_id`, `pieces_json`...
 
-## 8. Quản Lý Bản Ghi Báo Giá (Quote Logs UI)
+### 7.2. Modal Xuất Báo Giá PDF Chính Thức (`#quotePdfExportModal`)
+1. **Trường nhập liệu**:
+   - `Họ và tên *`: In trực tiếp lên phần Người nhận báo giá trên PDF.
+   - `Tên công ty / Doanh nghiệp`: In trang trọng dưới tên khách hàng trên PDF.
+   - `Email nhận file *`: Hệ thống tự động gửi file PDF đính kèm về hòm thư này.
+   - `Số điện thoại / Zalo`: Chuyên viên Allship hỗ trợ giải đáp thủ tục hải quan.
+2. **Thanh Tiến Trình Ngang (Progress Bar % Loading)**:
+   - Khi bấm submit, modal chuyển sang màn hình loading thanh tiến trình thực tế:
+     - 18%: "Đang chuẩn bị dữ liệu tuyến vận chuyển..."
+     - 48%: "Đang tổng hợp thông tin cước & phụ phí..."
+     - 86%: "Đang biên dịch bảng báo giá PDF & con dấu điện tử..."
+     - 100%: "Hoàn tất! Báo giá PDF sẵn sàng tải về..."
+   - **Tối ưu tốc độ**: Nhờ cơ chế gửi email ngầm bất đồng bộ, API phản hồi chỉ sau ~0.7s, tiến trình chạy thẳng 100% trong ~1.0 giây, triệt tiêu hoàn toàn hiện tượng kẹt 96%.
+3. **Màn hình Thành công & Auto-Download**:
+   - Tự động kích hoạt tải file về máy qua liên kết ẩn `a[download]`.
+   - Cung cấp nút bấm "Tải lại file PDF" dự phòng nếu trình duyệt chặn popup.
+
+## 8. Quản Lý Bản Ghi Báo Giá & Lead B2B (Quote Logs Mini-CRM)
 
 Tại menu **UPS Rate Calculator ➔ Quote Logs**:
 - Sử dụng bảng chuẩn `WP_List_Table` với phân trang 20 dòng/trang.
 - **Thao tác hàng loạt (Bulk Delete)**: Admin tích chọn các checkbox bản ghi muốn xoá, chọn action `Xóa` trong dropdown và bấm `Áp dụng`. Hệ thống gọi `process_bulk_action()` thực thi xoá đồng loạt thông qua `delete_multiple()` của repository và hiển thị thông báo thành công.
-- **Bộ lọc mạnh mẽ**: Lọc theo Chiều (Export/Import), Dịch vụ (WXS, XPD, WFM...), Quốc gia đến, Khoảng thời gian (Từ ngày - Đến ngày) và ô tìm kiếm từ khóa.
-- **Xem thông tin liên hệ / Lead**: Đối với các bản ghi khách hàng đã điền form đặt chỗ, hiển thị badge Lead kèm thông tin Họ tên, SĐT, Email và ID liên kết bên FluentForm (`ff_entry_id`).
-- **Xuất dữ liệu**: Nút "Xuất CSV" hỗ trợ định dạng chuẩn UTF-8 BOM, tương thích hoàn hảo với Microsoft Excel mà không bị lỗi font tiếng Việt.
+- **Phân loại Lead Badge tại cột "Khách hàng"**:
+  - `Báo giá PDF`: Badge màu đỏ đậm, hiển thị mã tham chiếu `Quote Ref: AS-QUO-XXXX`, Tên công ty, Email `mailto:`, SĐT `tel:`.
+  - `Đặt dịch vụ`: Badge màu xanh lục, khách điền form yêu cầu tư vấn.
+  - `Khách vãng lai`: Badge màu xám, tra cứu giá tự do.
+- **Cột "Thao tác" — Nút xem file PDF trực tiếp**: Đối với các bản ghi đã xuất PDF, hiển thị nút đỏ biểu tượng PDF cho phép Admin xem/tải lại file bất kỳ lúc nào.
+- **Bộ lọc tương tác (Interaction Filter)**: Dropdown lọc theo loại tương tác (`Tất cả` | `Khách đã xuất PDF` | `Khách đặt dịch vụ` | `Khách vãng lai`).
+- **Modal chi tiết bản ghi (B2B Lead Info Card)**: Hiển thị card riêng biệt nổi bật thông tin doanh nghiệp, MST, người liên hệ, mã hiệu lực và nút mở trực tiếp file PDF.
+- **Xuất dữ liệu Excel / CSV**: Bổ sung đầy đủ cột `Tên công ty`, `Email`, `Quote Ref`, `Loại tương tác`, `Link PDF` kèm tiền tố UTF-8 BOM chuẩn tiếng Việt.
 
 ## 9. UX edge cases
 

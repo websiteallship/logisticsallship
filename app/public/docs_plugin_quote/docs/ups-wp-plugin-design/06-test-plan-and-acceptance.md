@@ -125,6 +125,29 @@ Expected:
 - Shipment chargeable = 4.0kg.
 - Log lưu breakdown từng kiện.
 
+### Case 6 - Value-First PDF Export & Lead Capture
+
+Input:
+- Submit form thông tin tại `#quotePdfExportModal`: Tên, SĐT, Email, Tên công ty.
+- Dữ liệu quote log ID hợp lệ.
+
+Expected:
+- API `POST /export-quote` phản hồi HTTP 200 trong < 1.0 giây (thực tế ~0.72s).
+- Trả về `download_url` kèm token HMAC hợp lệ.
+- Trình duyệt tự động mở link tải file PDF khổ A4.
+- Dữ liệu Lead được ghi nhận vào `wp_ups_quote_leads` và đồng bộ sang FluentForm.
+
+### Case 7 - Async Background Email Dispatcher
+
+Input:
+- Sau khi hoàn tất Case 6.
+
+Expected:
+- Request HTTP trả về ngay mà không phải chờ SMTP gửi email.
+- Background worker kích hoạt gửi 2 email:
+  1. Email Admin: Thông báo lead mới kèm file PDF đính kèm.
+  2. Email Khách hàng: Thư cảm ơn kèm file PDF báo giá chính thức.
+
 ## 5. Acceptance criteria
 
 ### Import
@@ -140,19 +163,23 @@ Expected:
 - Form không hiển thị Import trong phase 1.
 - Service chưa hỗ trợ không xuất hiện hoặc bị disable kèm note.
 - Kết quả hiển thị zone, rate zone, cân tính cước, giá, ghi chú phụ phí.
+- Nút CTA kép: "Liên hệ tư vấn" và "Tải Báo Giá PDF".
+- Modal tải PDF chạy thanh loading mượt mà 0% → 100% trong ~1.0 giây, tự động tải file PDF A4 chuẩn in ấn.
 
-### Admin
+### Admin & B2B Lead CRM
 
-- Admin xem được quote logs.
-- Admin chỉnh được dim divisor và rounding step.
-- Admin bật/tắt phụ phí nhưng mặc định off.
+- Admin xem được quote logs kèm nhãn Lead Status (Cần liên hệ, Đã liên hệ, Đã chốt đơn, Chỉ xem giá).
+- Admin có thể lọc theo trạng thái Lead và click nút xem/tải lại file PDF trực tiếp.
+- Xuất dữ liệu Quote Logs ra file CSV/Excel bao gồm thông tin khách hàng và link PDF.
+- Admin cấu hình được 12 thông số Doanh nghiệp & PDF (Logo từ Media Library, Tên công ty, MST, Hotline, Con dấu...).
 
 ### Kỹ thuật
 
 - Không dùng postmeta để lưu bảng giá.
 - Query lookup có index.
 - Code tuân chuẩn WordPress escaping/sanitization.
-- Có unit tests cho weight, zone, rate lookup.
+- Quá trình gửi email chạy ngầm qua `wp_schedule_single_event()` + `spawn_cron()`, không làm nghẽn kết nối client.
+- Có unit tests cho weight, zone, rate lookup, API PDF export và FluentForm bridge.
 
 ## 6. Rủi ro còn lại
 

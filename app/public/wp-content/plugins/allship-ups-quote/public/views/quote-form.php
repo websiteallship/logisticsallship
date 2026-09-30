@@ -656,15 +656,15 @@ $render_svc_card = function( $code, $cat, $doc_split, $name, $desc, $icon_class,
 		</div>
 
 		<!-- Action Toolbar -->
-		<div class="flex items-center justify-center gap-2 md:gap-3 flex-wrap">
-			<button type="button" class="h-[38px] md:h-[42px] px-3 md:px-4.5 rounded-lg font-sans text-xs md:text-[13px] font-bold inline-flex items-center gap-2 cursor-pointer transition-all bg-white border-[1.5px] border-slate-200 text-slate-700 hover:border-slate-400 hover:bg-slate-50" onclick="window.print()">
-				<i class="ph-bold ph-printer" aria-hidden="true"></i> <?php echo esc_html__( 'In / Lưu PDF', 'allship-ups-quote' ); ?>
+		<div class="flex items-center justify-center gap-2.5 md:gap-3.5 flex-wrap">
+			<button type="button" class="h-[44px] md:h-[48px] px-4 md:px-6 rounded-xl font-sans text-xs md:text-sm font-extrabold inline-flex items-center gap-2 cursor-pointer transition-all duration-200 bg-linear-to-r from-navy-900 to-navy-800 hover:from-navy-800 hover:to-navy-700 text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-98" onclick="openPdfExportModal()">
+				<i class="ph-bold ph-file-pdf text-brand-red text-lg md:text-xl" aria-hidden="true"></i> <span><?php echo esc_html__( 'Tải Báo Giá PDF Chính Thức', 'allship-ups-quote' ); ?></span>
 			</button>
-			<button type="button" class="h-[38px] md:h-[42px] px-3 md:px-4.5 rounded-lg font-sans text-xs md:text-[13px] font-bold inline-flex items-center gap-2 cursor-pointer transition-all bg-white border-[1.5px] border-slate-200 text-slate-700 hover:border-slate-400 hover:bg-slate-50" onclick="scrollToForm()">
-				<i class="ph-bold ph-arrow-counter-clockwise" aria-hidden="true"></i> <?php echo esc_html__( 'Tính lại', 'allship-ups-quote' ); ?>
+			<button type="button" class="h-[44px] md:h-[48px] px-3.5 md:px-5 rounded-xl font-sans text-xs md:text-sm font-bold inline-flex items-center gap-2 cursor-pointer transition-all duration-200 bg-white border border-slate-300 text-slate-700 hover:border-slate-400 hover:bg-slate-50 shadow-xs hover:-translate-y-0.5 active:translate-y-0 active:scale-98" onclick="scrollToForm()">
+				<i class="ph-bold ph-arrow-counter-clockwise text-slate-500" aria-hidden="true"></i> <span><?php echo esc_html__( 'Tính lại', 'allship-ups-quote' ); ?></span>
 			</button>
-			<button type="button" class="h-[38px] md:h-[42px] px-3 md:px-4.5 rounded-lg font-sans text-xs md:text-[13px] font-bold inline-flex items-center gap-2 cursor-pointer transition-all bg-brand-red border-none text-white shadow-brand hover:bg-brand-red-hover" onclick="openBookingModal()">
-				<i class="ph-bold ph-chat-centered-dots" aria-hidden="true"></i> <?php echo esc_html__( 'Liên hệ tư vấn', 'allship-ups-quote' ); ?>
+			<button type="button" class="h-[44px] md:h-[48px] px-4 md:px-6 rounded-xl font-sans text-xs md:text-sm font-extrabold inline-flex items-center gap-2 cursor-pointer transition-all duration-200 bg-linear-to-r from-brand-red to-brand-red-hover hover:from-brand-red-hover hover:to-[#88080C] text-white shadow-brand hover:shadow-[0_6px_20px_rgba(206,32,39,0.35)] hover:-translate-y-0.5 active:translate-y-0 active:scale-98" onclick="openBookingModal()">
+				<i class="ph-bold ph-chat-centered-dots text-base md:text-lg" aria-hidden="true"></i> <span><?php echo esc_html__( 'Liên hệ tư vấn', 'allship-ups-quote' ); ?></span>
 			</button>
 		</div>
 
@@ -673,16 +673,23 @@ $render_svc_card = function( $code, $cat, $doc_split, $name, $desc, $icon_class,
 	<!-- ============================================================== -->
 	<!-- SECTION 7: MOBILE STICKY BOTTOM ACTION BAR                     -->
 	<!-- ============================================================== -->
-	<div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200/80 p-3 z-40 shadow-xl items-center justify-between gap-3" id="mobileStickyActionBar" aria-label="<?php echo esc_attr__( 'Thanh thao tác nhanh đặt dịch vụ', 'allship-ups-quote' ); ?>">
-		<div class="flex flex-col">
-			<div class="text-[10px] uppercase font-extrabold tracking-wide text-slate-400" id="stickyChosenServiceName">UPS Expedited</div>
-			<div class="text-base font-black text-brand-red leading-tight" id="stickyChosenServicePrice">0 đ</div>
+	<div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200/80 p-3 z-40 shadow-xl items-center justify-between gap-2.5" id="mobileStickyActionBar" aria-label="<?php echo esc_attr__( 'Thanh thao tác nhanh liên hệ tư vấn', 'allship-ups-quote' ); ?>">
+		<div class="flex flex-col min-w-0">
+			<div class="text-[10px] uppercase font-extrabold tracking-wide text-slate-400 truncate" id="stickyChosenServiceName">UPS Expedited</div>
+			<div class="text-base font-black text-brand-red leading-tight truncate" id="stickyChosenServicePrice">0 đ</div>
 		</div>
-		<button type="button" onclick="openBookingModal()"
-				class="px-5 py-2.5 rounded-xl bg-brand-red text-white text-xs font-extrabold flex items-center gap-1.5 shadow-brand cursor-pointer">
-			<span><?php echo esc_html__( 'Đặt dịch vụ này', 'allship-ups-quote' ); ?></span>
-			<i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
-		</button>
+		<div class="flex items-center gap-2 shrink-0">
+			<button type="button" onclick="openPdfExportModal()" title="<?php echo esc_attr__( 'Tải file Báo Giá PDF', 'allship-ups-quote' ); ?>"
+					class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center cursor-pointer border border-slate-200 transition-all active:scale-95">
+				<i class="ph-bold ph-file-pdf text-brand-red text-lg" aria-hidden="true"></i>
+			</button>
+			<button type="button" onclick="openBookingModal()"
+					class="px-4 py-2.5 rounded-xl bg-brand-red hover:bg-brand-red-hover text-white text-xs font-extrabold flex items-center gap-1.5 shadow-brand transition-all cursor-pointer active:scale-95">
+				<i class="ph-bold ph-chat-centered-dots" aria-hidden="true"></i>
+				<span><?php echo esc_html__( 'Liên hệ tư vấn', 'allship-ups-quote' ); ?></span>
+				<i class="ph-bold ph-arrow-right text-[11px]" aria-hidden="true"></i>
+			</button>
+		</div>
 	</div>
 
 	<!-- ============================================================== -->
@@ -762,65 +769,308 @@ $render_svc_card = function( $code, $cat, $doc_split, $name, $desc, $icon_class,
 
 	<!-- 8.2 Booking Lead Modal -->
 	<div class="modal-backdrop fixed inset-0 bg-navy-900/60 backdrop-blur-sm z-[200] items-center justify-center p-4 sm:p-5" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle">
-		<div class="bg-white rounded-[20px] max-w-[560px] w-full p-5 md:p-7 shadow-xl relative max-h-[90vh] overflow-y-auto">
-			<button type="button" class="absolute top-4 right-4 w-[34px] h-[34px] bg-slate-100 border-none rounded-full text-slate-600 text-lg cursor-pointer flex items-center justify-center transition-all hover:bg-slate-200 hover:text-navy-900" onclick="closeModals()" aria-label="<?php echo esc_attr__( 'Đóng cửa sổ đặt chỗ', 'allship-ups-quote' ); ?>">&times;</button>
-			<h3 class="text-xl font-extrabold mb-1" id="bookingModalTitle"><?php echo esc_html__( 'Yêu Cầu Tư Vấn & Đặt Dịch Vụ', 'allship-ups-quote' ); ?></h3>
-			<p class="text-[13px] text-slate-500 mb-3"><?php echo esc_html__( 'Chuyên viên Allship sẽ liên hệ trong 5 - 10 phút để xác nhận AWB.', 'allship-ups-quote' ); ?></p>
-
-			<!-- Route summary in Modal -->
-			<div id="modalRouteSummary" class="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-700 leading-relaxed"></div>
-
-			<!-- Inline Booking Notice Box -->
-			<div id="bookingNotice" class="hidden mb-3 p-3 rounded-xl text-xs font-semibold" role="alert" aria-live="polite"></div>
-
-			<!-- Booking Lead Form -->
-			<form id="upsBookingForm" onsubmit="handleBookingSubmit(event)">
-				<div class="flex flex-col gap-3 mb-4">
-					<div>
-						<label for="bookingName" class="text-xs font-bold text-slate-700 mb-1 block">
-							<?php echo esc_html__( 'Họ và tên', 'allship-ups-quote' ); ?> <span class="text-brand-red font-bold">*</span>
-						</label>
-						<input type="text" id="bookingName" name="name" class="w-full h-[44px] bg-[#F1F4F9] border-[1.5px] border-transparent rounded-xl px-4 font-sans text-sm font-semibold text-navy-900 transition-all focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] placeholder:text-slate-400 placeholder:font-medium" required placeholder="<?php echo esc_attr__( 'Nguyễn Văn An', 'allship-ups-quote' ); ?>">
+		<div class="bg-white rounded-[22px] max-w-[560px] w-full p-5 md:p-7 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+			<button type="button" class="absolute top-4 right-4 w-8 h-8 bg-slate-100 border-none rounded-full text-slate-500 hover:text-navy-900 hover:bg-slate-200 cursor-pointer flex items-center justify-center transition-all" onclick="closeModals()" aria-label="<?php echo esc_attr__( 'Đóng cửa sổ tư vấn', 'allship-ups-quote' ); ?>">
+				<i class="ph-bold ph-x text-base" aria-hidden="true"></i>
+			</button>
+			<!-- Booking Form State Container -->
+			<div id="bookingModalFormState">
+				<div class="flex items-center gap-3 mb-1.5">
+					<div class="w-10 h-10 rounded-xl bg-red-50 text-brand-red flex items-center justify-center text-xl shrink-0">
+						<i class="ph-bold ph-chat-centered-dots" aria-hidden="true"></i>
 					</div>
 					<div>
-						<label for="bookingPhone" class="text-xs font-bold text-slate-700 mb-1 block">
-							<?php echo esc_html__( 'Số điện thoại / Zalo', 'allship-ups-quote' ); ?> <span class="text-brand-red font-bold">*</span>
-						</label>
-						<input type="tel" id="bookingPhone" name="phone" class="w-full h-[44px] bg-[#F1F4F9] border-[1.5px] border-transparent rounded-xl px-4 font-sans text-sm font-semibold text-navy-900 transition-all focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] placeholder:text-slate-400 placeholder:font-medium" required placeholder="<?php echo esc_attr__( '090 123 4567', 'allship-ups-quote' ); ?>">
-					</div>
-					<div>
-						<label for="bookingNotes" class="text-xs font-bold text-slate-700 mb-1 block">
-							<?php echo esc_html__( 'Ghi chú về lô hàng', 'allship-ups-quote' ); ?>
-						</label>
-						<textarea id="bookingNotes" name="notes" class="w-full h-[65px] bg-[#F1F4F9] border-[1.5px] border-transparent rounded-xl px-4 py-2 font-sans text-sm font-semibold text-navy-900 transition-all focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] placeholder:text-slate-400 placeholder:font-medium resize-none" placeholder="<?php echo esc_attr__( 'Mô tả hàng hóa, yêu cầu đóng gỗ, lấy hàng tận nơi...', 'allship-ups-quote' ); ?>"></textarea>
+						<h3 class="text-lg md:text-xl font-extrabold text-navy-900 leading-tight" id="bookingModalTitle"><?php echo esc_html__( 'Yêu Cầu Tư Vấn Báo Giá', 'allship-ups-quote' ); ?></h3>
+						<p class="text-xs md:text-[13px] text-slate-500 mt-0.5 leading-snug" id="bookingModalSubtitle"><?php echo esc_html__( 'Chuyên viên Allship sẽ liên hệ trong 5 - 10 phút để xác nhận phương án vận chuyển.', 'allship-ups-quote' ); ?></p>
 					</div>
 				</div>
 
-				<!-- Hidden fields for FluentForm & Quote Logs mapping -->
-				<input type="hidden" name="service" id="bookingService" value="">
-				<input type="hidden" name="hidden_service_name" id="bookingHiddenServiceName" value="">
-				<input type="hidden" name="direction" id="bookingDirection" value="export">
-				<input type="hidden" name="direction_label" id="bookingDirectionLabel" value="Xuất khẩu">
-				<input type="hidden" name="origin" id="bookingOrigin" value="">
-				<input type="hidden" name="destination" id="bookingDestination" value="">
-				<input type="hidden" name="destination_iata" id="bookingDestinationIata" value="">
-				<input type="hidden" name="service_code" id="bookingServiceCode" value="">
-				<input type="hidden" name="service_name" id="bookingServiceName" value="">
-				<input type="hidden" name="chargeable_weight" id="bookingChargeableWeight" value="">
-				<input type="hidden" name="total_price" id="bookingTotalPrice" value="">
-				<input type="hidden" name="total_price_raw" id="bookingTotalPriceRaw" value="0">
-				<input type="hidden" name="quote_log_id" id="bookingQuoteLogId" value="">
-				<input type="hidden" name="route_summary" id="bookingRouteSummary" value="">
-				<input type="hidden" name="pieces_json" id="bookingPiecesJson" value="">
-				<input type="hidden" name="message" id="bookingFormattedMessage" value="">
-				<input type="hidden" name="hidden_source" id="bookingHiddenSource" value="ups_quote_booking_modal">
+				<!-- Route summary in Modal -->
+				<div id="modalRouteSummary" class="mb-4 p-3 bg-slate-50 border border-slate-200/90 rounded-xl text-xs text-slate-700 leading-relaxed"></div>
 
-				<button type="submit" id="btnSubmitBooking" class="btn-calculate w-full h-[46px] bg-linear-to-br from-brand-red to-brand-red-hover border-none rounded-xl text-white font-sans text-sm font-extrabold cursor-pointer flex items-center justify-center gap-2 transition-all shadow-brand relative overflow-hidden">
-					<span class="btn-text flex items-center gap-2"><i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i> <?php echo esc_html__( 'Gửi Yêu Cầu Đặt Chỗ', 'allship-ups-quote' ); ?></span>
-					<div class="spinner" aria-hidden="true"></div>
-				</button>
-			</form>
+				<!-- Inline Booking Notice Box -->
+				<div id="bookingNotice" class="hidden mb-3 p-3 rounded-xl text-xs font-semibold" role="alert" aria-live="polite"></div>
+
+				<!-- Booking Lead Form -->
+				<form id="upsBookingForm" onsubmit="handleBookingSubmit(event)">
+					<div class="flex flex-col gap-3 mb-4">
+						<div>
+							<label for="bookingName" class="text-xs font-bold text-slate-700 mb-1 block">
+								<?php echo esc_html__( 'Họ và tên', 'allship-ups-quote' ); ?> <span class="text-brand-red font-bold">*</span>
+							</label>
+							<input type="text" id="bookingName" name="name" class="w-full h-[46px] bg-slate-50 border border-slate-200/90 rounded-xl px-4 font-sans text-sm font-semibold text-navy-900 transition-all focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] placeholder:text-slate-400 placeholder:font-medium" required placeholder="<?php echo esc_attr__( 'Nguyễn Văn An', 'allship-ups-quote' ); ?>">
+						</div>
+						<div>
+							<label for="bookingPhone" class="text-xs font-bold text-slate-700 mb-1 block">
+								<?php echo esc_html__( 'Số điện thoại / Zalo', 'allship-ups-quote' ); ?> <span class="text-brand-red font-bold">*</span>
+							</label>
+							<input type="tel" id="bookingPhone" name="phone" class="w-full h-[46px] bg-slate-50 border border-slate-200/90 rounded-xl px-4 font-sans text-sm font-semibold text-navy-900 transition-all focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] placeholder:text-slate-400 placeholder:font-medium" required placeholder="<?php echo esc_attr__( '090 123 4567', 'allship-ups-quote' ); ?>">
+						</div>
+						<div>
+							<label for="bookingNotes" class="text-xs font-bold text-slate-700 mb-1 block">
+								<?php echo esc_html__( 'Ghi chú về lô hàng (tùy chọn)', 'allship-ups-quote' ); ?>
+							</label>
+							<textarea id="bookingNotes" name="notes" class="w-full h-[70px] bg-slate-50 border border-slate-200/90 rounded-xl px-4 py-2.5 font-sans text-sm font-semibold text-navy-900 transition-all focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] placeholder:text-slate-400 placeholder:font-medium resize-none" placeholder="<?php echo esc_attr__( 'Mô tả hàng hóa, yêu cầu đóng gỗ, lấy hàng tận nơi...', 'allship-ups-quote' ); ?>"></textarea>
+						</div>
+					</div>
+
+					<!-- Hidden fields for FluentForm & Quote Logs mapping -->
+					<input type="hidden" name="service" id="bookingService" value="">
+					<input type="hidden" name="hidden_service_name" id="bookingHiddenServiceName" value="">
+					<input type="hidden" name="direction" id="bookingDirection" value="export">
+					<input type="hidden" name="direction_label" id="bookingDirectionLabel" value="Xuất khẩu">
+					<input type="hidden" name="origin" id="bookingOrigin" value="">
+					<input type="hidden" name="destination" id="bookingDestination" value="">
+					<input type="hidden" name="destination_iata" id="bookingDestinationIata" value="">
+					<input type="hidden" name="service_code" id="bookingServiceCode" value="">
+					<input type="hidden" name="service_name" id="bookingServiceName" value="">
+					<input type="hidden" name="chargeable_weight" id="bookingChargeableWeight" value="">
+					<input type="hidden" name="total_price" id="bookingTotalPrice" value="">
+					<input type="hidden" name="total_price_raw" id="bookingTotalPriceRaw" value="0">
+					<input type="hidden" name="quote_log_id" id="bookingQuoteLogId" value="">
+					<input type="hidden" name="route_summary" id="bookingRouteSummary" value="">
+					<input type="hidden" name="pieces_json" id="bookingPiecesJson" value="">
+					<input type="hidden" name="message" id="bookingFormattedMessage" value="">
+					<input type="hidden" name="hidden_source" id="bookingHiddenSource" value="ups_quote_booking_modal">
+
+					<button type="submit" id="btnSubmitBooking" class="btn-calculate w-full h-[50px] min-h-[50px] bg-linear-to-r from-brand-red to-brand-red-hover hover:from-brand-red-hover hover:to-[#88080C] border-none rounded-xl text-white font-sans text-sm md:text-base font-extrabold cursor-pointer flex items-center justify-center gap-2 transition-all duration-200 shadow-brand hover:shadow-[0_8px_24px_rgba(206,32,39,0.35)] relative overflow-hidden active:scale-99">
+						<span class="btn-text flex items-center gap-2"><i class="ph-bold ph-paper-plane-tilt text-lg" aria-hidden="true"></i> <?php echo esc_html__( 'Gửi Yêu Cầu Tư Vấn', 'allship-ups-quote' ); ?></span>
+						<div class="spinner" aria-hidden="true"></div>
+					</button>
+				</form>
+			</div>
+
+			<!-- Booking Success State Screen -->
+			<div id="bookingModalSuccessState" class="hidden text-center py-2">
+				<div class="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto mb-3.5 shadow-xs">
+					<i class="ph-bold ph-check text-3xl" aria-hidden="true"></i>
+				</div>
+				<h3 class="text-xl font-extrabold text-navy-900 mb-1.5"><?php echo esc_html__( 'Gửi Yêu Cầu Thành Công!', 'allship-ups-quote' ); ?></h3>
+				<p class="text-xs sm:text-[13px] text-slate-600 mb-4 leading-relaxed max-w-[420px] mx-auto">
+					<?php echo esc_html__( 'Cảm ơn bạn! Thông tin đặt chỗ đã được chuyển đến điều hành Allship. Chuyên viên sẽ liên hệ trong ', 'allship-ups-quote' ); ?><strong class="text-emerald-700">5 - 10 phút</strong><?php echo esc_html__( ' để xác nhận AWB và lịch lấy hàng.', 'allship-ups-quote' ); ?>
+				</p>
+
+				<!-- Confirmation Card -->
+				<div id="bookingSuccessSummaryCard" class="bg-slate-50 border border-slate-200/90 rounded-xl p-3.5 mb-4 text-left text-xs text-slate-700 space-y-2"></div>
+
+				<!-- Quick Hotline Notice -->
+				<div class="bg-blue-50/70 border border-blue-200/60 rounded-xl p-2.5 mb-5 text-xs text-blue-900 flex items-center justify-center gap-2">
+					<i class="ph-bold ph-phone-call text-base text-blue-600 shrink-0" aria-hidden="true"></i>
+					<span><?php echo esc_html__( 'Cần hỗ trợ gấp? Gọi ngay Hotline:', 'allship-ups-quote' ); ?> <a href="tel:1900252338" class="font-extrabold text-brand-red hover:underline">1900 252 338</a></span>
+				</div>
+
+				<!-- Success Actions -->
+				<div class="flex flex-col gap-2">
+					<button type="button" onclick="closeModals()" class="w-full h-[46px] bg-navy-900 hover:bg-navy-800 text-white font-sans text-sm font-extrabold rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer">
+						<i class="ph-bold ph-check" aria-hidden="true"></i>
+						<span><?php echo esc_html__( 'Đã Hiểu & Đóng Cửa Sổ', 'allship-ups-quote' ); ?></span>
+					</button>
+					<button type="button" onclick="resetBookingModalState()" class="text-xs font-semibold text-slate-500 hover:text-brand-red cursor-pointer transition-colors py-1.5 inline-flex items-center justify-center gap-1">
+						<i class="ph ph-arrow-counter-clockwise" aria-hidden="true"></i>
+						<span><?php echo esc_html__( 'Gửi thêm yêu cầu cho lô hàng khác', 'allship-ups-quote' ); ?></span>
+					</button>
+				</div>
+			</div>
 		</div>
 	</div>
 
+	<!-- 8.3 PDF Quotation Export Modal -->
+	<div class="modal-backdrop fixed inset-0 bg-navy-900/60 backdrop-blur-sm z-[200] items-center justify-center p-4 sm:p-5" id="quotePdfExportModal" role="dialog" aria-modal="true" aria-labelledby="pdfExportModalTitle">
+		<div class="bg-white rounded-[22px] max-w-[600px] w-full p-5 md:p-7 shadow-2xl relative max-h-[92vh] overflow-y-auto">
+			<button type="button" class="absolute top-4 right-4 w-8 h-8 bg-slate-100 border-none rounded-full text-slate-500 hover:text-navy-900 hover:bg-slate-200 cursor-pointer flex items-center justify-center transition-all" onclick="closeModals()" aria-label="<?php echo esc_attr__( 'Đóng cửa sổ xuất báo giá', 'allship-ups-quote' ); ?>">
+				<i class="ph-bold ph-x text-base" aria-hidden="true"></i>
+			</button>
+			
+			<!-- State 1: Input Form -->
+			<div id="pdfExportFormState">
+				<div class="flex items-center gap-3 mb-1.5">
+					<div class="w-10 h-10 rounded-xl bg-red-50 text-brand-red flex items-center justify-center text-xl shrink-0">
+						<i class="ph-bold ph-file-pdf" aria-hidden="true"></i>
+					</div>
+					<div>
+						<h3 class="text-lg md:text-xl font-extrabold text-navy-900 leading-tight" id="pdfExportModalTitle">
+							<?php echo esc_html__( 'Xuất Bản Báo Giá Chính Thức (PDF)', 'allship-ups-quote' ); ?>
+						</h3>
+						<p class="text-xs md:text-[13px] text-slate-500 mt-0.5 leading-snug">
+							<?php echo esc_html__( 'Báo giá chính thức tiêu chuẩn quốc tế, tự động gửi về email.', 'allship-ups-quote' ); ?>
+						</p>
+					</div>
+				</div>
+
+				<!-- Quotation Route & Pricing Preview Ribbon -->
+				<div id="pdfModalRouteSummary" class="mb-4 p-3.5 bg-slate-50 border border-slate-200/90 rounded-xl text-xs text-slate-700 leading-relaxed space-y-1.5"></div>
+
+				<!-- Inline Notice / Error Box -->
+				<div id="pdfExportNotice" class="hidden mb-3 p-3 rounded-xl text-xs font-semibold" role="alert" aria-live="polite"></div>
+
+				<!-- PDF Lead Form -->
+				<form id="upsPdfExportForm" onsubmit="handlePdfExportSubmit(event)">
+					<div class="flex flex-col gap-3 mb-4">
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+							<div>
+								<label for="pdfExportName" class="text-xs font-bold text-slate-700 mb-1 block">
+									<?php echo esc_html__( 'Họ và tên người nhận', 'allship-ups-quote' ); ?> <span class="text-brand-red font-bold">*</span>
+								</label>
+								<input type="text" id="pdfExportName" name="name" maxlength="100" autocomplete="name" class="w-full h-[46px] bg-slate-50 border border-slate-200/90 rounded-xl px-4 font-sans text-sm font-semibold text-navy-900 transition-all focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] placeholder:text-slate-400 placeholder:font-medium" required placeholder="<?php echo esc_attr__( 'Nguyễn Văn An', 'allship-ups-quote' ); ?>">
+							</div>
+							<div>
+								<label for="pdfExportCompany" class="text-xs font-bold text-slate-700 mb-1 block">
+									<?php echo esc_html__( 'Tên công ty / Doanh nghiệp', 'allship-ups-quote' ); ?>
+								</label>
+								<input type="text" id="pdfExportCompany" name="company_name" maxlength="150" autocomplete="organization" class="w-full h-[46px] bg-slate-50 border border-slate-200/90 rounded-xl px-4 font-sans text-sm font-semibold text-navy-900 transition-all focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] placeholder:text-slate-400 placeholder:font-medium" placeholder="<?php echo esc_attr__( 'Công ty TNHH Xuất Nhập Khẩu...', 'allship-ups-quote' ); ?>">
+							</div>
+						</div>
+
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+							<div>
+								<label for="pdfExportEmail" class="text-xs font-bold text-slate-700 mb-1 block">
+									<?php echo esc_html__( 'Email nhận file PDF', 'allship-ups-quote' ); ?> <span class="text-brand-red font-bold">*</span>
+								</label>
+								<input type="email" id="pdfExportEmail" name="email" maxlength="100" autocomplete="email" class="w-full h-[46px] bg-slate-50 border border-slate-200/90 rounded-xl px-4 font-sans text-sm font-semibold text-navy-900 transition-all focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] placeholder:text-slate-400 placeholder:font-medium" required placeholder="<?php echo esc_attr__( 'nguyenan@company.com', 'allship-ups-quote' ); ?>">
+							</div>
+							<div>
+								<label for="pdfExportPhone" class="text-xs font-bold text-slate-700 mb-1 block">
+									<?php echo esc_html__( 'Số điện thoại / Zalo', 'allship-ups-quote' ); ?>
+								</label>
+								<input type="tel" id="pdfExportPhone" name="phone" maxlength="20" autocomplete="tel" class="w-full h-[46px] bg-slate-50 border border-slate-200/90 rounded-xl px-4 font-sans text-sm font-semibold text-navy-900 transition-all focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] placeholder:text-slate-400 placeholder:font-medium" placeholder="<?php echo esc_attr__( '090 123 4567', 'allship-ups-quote' ); ?>">
+							</div>
+						</div>
+
+						<div>
+							<label for="pdfExportNotes" class="text-xs font-bold text-slate-700 mb-1 block">
+								<?php echo esc_html__( 'Ghi chú thêm về lô hàng (tùy chọn)', 'allship-ups-quote' ); ?>
+							</label>
+							<textarea id="pdfExportNotes" name="notes" maxlength="500" class="w-full h-[65px] bg-slate-50 border border-slate-200/90 rounded-xl px-4 py-2.5 font-sans text-sm font-semibold text-navy-900 transition-all focus:outline-none focus:bg-white focus:border-brand-red focus:shadow-[0_0_0_3px_rgba(206,32,39,0.12)] placeholder:text-slate-400 placeholder:font-medium resize-none" placeholder="<?php echo esc_attr__( 'Yêu cầu kiểm tra mặt hàng, giấy chứng nhận xuất xứ (C/O), hun trùng...', 'allship-ups-quote' ); ?>"></textarea>
+						</div>
+
+						<!-- Checkbox Add-on -->
+						<label class="flex items-start gap-2.5 cursor-pointer select-none text-xs text-slate-600 mt-1">
+							<input type="checkbox" id="pdfExportAttachPolicies" checked class="mt-0.5 rounded text-brand-red focus:ring-brand-red accent-brand-red cursor-pointer">
+							<span><?php echo esc_html__( 'Gửi kèm bảng kê chi tiết chính sách bảo hiểm và phụ phí nhiên liệu cập nhật.', 'allship-ups-quote' ); ?></span>
+						</label>
+					</div>
+
+					<!-- Hidden Fields -->
+					<input type="hidden" id="pdfExportServiceCode" value="">
+					<input type="hidden" id="pdfExportServiceName" value="">
+					<input type="hidden" id="pdfExportDirection" value="export">
+					<input type="hidden" id="pdfExportDestinationIata" value="">
+					<input type="hidden" id="pdfExportDestinationName" value="">
+					<input type="hidden" id="pdfExportWeightKg" value="0">
+					<input type="hidden" id="pdfExportTotalPriceVnd" value="0">
+					<input type="hidden" id="pdfExportBasePriceVnd" value="0">
+					<input type="hidden" id="pdfExportQuoteLogId" value="">
+
+					<button type="submit" id="btnSubmitPdfExport" class="btn-calculate w-full h-[50px] min-h-[50px] bg-linear-to-r from-brand-red to-brand-red-hover hover:from-brand-red-hover hover:to-[#88080C] border-none rounded-xl text-white font-sans text-sm md:text-base font-extrabold cursor-pointer flex items-center justify-center gap-2 transition-all duration-200 shadow-brand hover:shadow-[0_8px_24px_rgba(206,32,39,0.35)] relative overflow-hidden active:scale-99">
+						<span class="btn-text flex items-center gap-2">
+							<i class="ph-bold ph-download-simple text-lg" aria-hidden="true"></i>
+							<span><?php echo esc_html__( 'Tải Báo Giá PDF & Gửi Về Email', 'allship-ups-quote' ); ?></span>
+						</span>
+						<div class="spinner" aria-hidden="true"></div>
+					</button>
+				</form>
+			</div>
+
+			<!-- State 1.5: Horizontal Progress Bar Loading Screen -->
+			<div id="pdfExportLoadingState" class="hidden text-center py-6 px-2 sm:px-4">
+				<div class="relative w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+					<div class="absolute inset-0 rounded-2xl bg-red-100 animate-ping opacity-30"></div>
+					<div class="relative w-16 h-16 rounded-2xl bg-red-50 border border-red-200 text-brand-red flex items-center justify-center text-3xl shadow-sm">
+						<i class="ph-bold ph-file-pdf animate-pulse" aria-hidden="true"></i>
+					</div>
+				</div>
+
+				<h3 class="text-lg sm:text-xl font-extrabold text-navy-900 mb-1.5">
+					<?php echo esc_html__( 'Đang Khởi Tạo Bảng Báo Giá...', 'allship-ups-quote' ); ?>
+				</h3>
+				<p class="text-xs sm:text-[13px] text-slate-500 mb-6 max-w-[400px] mx-auto leading-relaxed">
+					<?php echo esc_html__( 'Hệ thống đang kết xuất file PDF và chuẩn bị bản gửi qua email.', 'allship-ups-quote' ); ?>
+				</p>
+
+				<!-- Horizontal Progress Bar Box -->
+				<div class="bg-slate-50 border border-slate-200/90 rounded-2xl p-4 sm:p-5 mb-4 text-left shadow-xs">
+					<div class="flex items-center justify-between gap-2 mb-2.5">
+						<span id="pdfExportProgressStepText" class="text-xs font-bold text-navy-900 truncate">
+							<?php echo esc_html__( 'Đang tổng hợp thông tin báo giá...', 'allship-ups-quote' ); ?>
+						</span>
+						<span id="pdfExportProgressPercent" class="text-xs font-black text-brand-red font-mono shrink-0">
+							0%
+						</span>
+					</div>
+
+					<!-- Track and Fill Bar -->
+					<div class="w-full h-3 bg-slate-200/90 rounded-full overflow-hidden p-0.5 relative">
+						<div id="pdfExportProgressBar" class="h-full bg-linear-to-r from-brand-red via-[#e03131] to-brand-red rounded-full transition-all duration-300 ease-out relative" style="width: 0%;">
+							<div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+						</div>
+					</div>
+
+					<!-- Micro-steps Checkpoints -->
+					<div class="grid grid-cols-3 gap-1 mt-3.5 pt-3 border-t border-slate-200/70 text-[10px] sm:text-[11px] font-semibold text-slate-400 text-center">
+						<div id="pdfStep1" class="transition-colors duration-200 text-slate-400 flex items-center justify-center gap-1">
+							<i class="ph-bold ph-check-circle" aria-hidden="true"></i> <span>Dữ liệu tuyến</span>
+						</div>
+						<div id="pdfStep2" class="transition-colors duration-200 text-slate-400 flex items-center justify-center gap-1">
+							<i class="ph-bold ph-check-circle" aria-hidden="true"></i> <span>Biên dịch PDF</span>
+						</div>
+						<div id="pdfStep3" class="transition-colors duration-200 text-slate-400 flex items-center justify-center gap-1">
+							<i class="ph-bold ph-check-circle" aria-hidden="true"></i> <span>Gửi mail & Tải file</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
+					<i class="ph-bold ph-shield-check text-emerald-600 text-sm" aria-hidden="true"></i>
+					<span><?php echo esc_html__( 'Mã hóa tài liệu chuẩn bảo mật Allship Global Express', 'allship-ups-quote' ); ?></span>
+				</div>
+			</div>
+
+			<!-- State 2: Success State Screen -->
+			<div id="pdfExportSuccessState" class="hidden text-center py-2">
+				<div class="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto mb-3.5 shadow-xs">
+					<i class="ph-bold ph-check text-3xl" aria-hidden="true"></i>
+				</div>
+				<h3 class="text-xl font-extrabold text-navy-900 mb-1.5"><?php echo esc_html__( 'Xuất Báo Giá Thành Công!', 'allship-ups-quote' ); ?></h3>
+				<p class="text-xs sm:text-[13px] text-slate-600 mb-4 leading-relaxed max-w-[440px] mx-auto" id="pdfSuccessSubtitle">
+					<?php echo esc_html__( 'Bản báo giá chính thức đã được gửi tới email của bạn và đang tự động tải xuống.', 'allship-ups-quote' ); ?>
+				</p>
+
+				<!-- Generated Quote Reference Badge Card -->
+				<div id="pdfSuccessSummaryCard" class="bg-slate-50 border border-slate-200/90 rounded-xl p-4 mb-4 text-left text-xs text-slate-700 space-y-2"></div>
+
+				<!-- Direct Download CTA (in case browser blocks auto-download) -->
+				<div class="mb-4">
+					<a id="pdfDirectDownloadLink" href="#" target="_blank" download class="w-full h-[46px] bg-linear-to-r from-navy-900 to-navy-800 hover:from-navy-800 hover:to-navy-700 text-white font-sans text-sm font-extrabold rounded-xl transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer no-underline">
+						<i class="ph-bold ph-file-arrow-down text-lg text-brand-red" aria-hidden="true"></i>
+						<span><?php echo esc_html__( 'Bấm Vào Đây Nếu Trình Duyệt Chưa Tải File', 'allship-ups-quote' ); ?></span>
+					</a>
+				</div>
+
+				<!-- Quick Hotline Notice -->
+				<div class="bg-blue-50/70 border border-blue-200/60 rounded-xl p-2.5 mb-4 text-xs text-blue-900 flex items-center justify-center gap-2">
+					<i class="ph-bold ph-phone-call text-base text-blue-600 shrink-0" aria-hidden="true"></i>
+					<span><?php echo esc_html__( 'Cần tư vấn đóng gói hoặc chiết khấu số lượng lớn? Hotline:', 'allship-ups-quote' ); ?> <a href="tel:1900252338" class="font-extrabold text-brand-red hover:underline">1900 252 338</a></span>
+				</div>
+
+				<!-- Success Actions -->
+				<div class="flex flex-col gap-2">
+					<button type="button" onclick="closeModals()" class="w-full h-[44px] bg-slate-100 hover:bg-slate-200 text-navy-900 font-sans text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer">
+						<i class="ph-bold ph-check" aria-hidden="true"></i>
+						<span><?php echo esc_html__( 'Hoàn Tất & Đóng Cửa Sổ', 'allship-ups-quote' ); ?></span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Fullscreen Calculation Loading Overlay (Blocking Page, No Card Box) -->
+	<div id="quoteCalculationOverlay" class="quote-calculation-overlay" role="status" aria-live="assertive" aria-label="<?php echo esc_attr__( 'Đang tính toán giá cước...', 'allship-ups-quote' ); ?>">
+		<div class="quote-calculation-spinner" aria-hidden="true"></div>
+		<p class="quote-calculation-text">
+			<?php echo esc_html__( 'Hệ thống đang tính giá cước tối ưu nhất...', 'allship-ups-quote' ); ?>
+		</p>
+	</div>
+
 </div>
+
+

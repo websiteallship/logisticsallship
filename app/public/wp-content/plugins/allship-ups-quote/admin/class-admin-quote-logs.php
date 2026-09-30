@@ -161,18 +161,42 @@ class Allship_UPS_Quote_Logs_List_Table extends WP_List_Table {
 	protected function column_contact( $item ) {
 		$breakdown = ! empty( $item->breakdown_json ) ? json_decode( $item->breakdown_json, true ) : null;
 		$contact = $breakdown['contact'] ?? ( $breakdown['lead'] ?? null );
-		if ( ! $contact || ( empty( $contact['name'] ) && empty( $contact['phone'] ) ) ) {
+		if ( ! $contact || ( empty( $contact['name'] ) && empty( $contact['phone'] ) && empty( $contact['email'] ) ) ) {
 			return '<span style="color:#94a3b8;font-style:italic;">' . esc_html__( 'Khách vãng lai', 'allship-ups-quote' ) . '</span>';
 		}
 		
-		$name  = ! empty( $contact['name'] ) ? esc_html( $contact['name'] ) : '—';
-		$phone = ! empty( $contact['phone'] ) ? esc_html( $contact['phone'] ) : '';
-		$notes = ! empty( $contact['notes'] ) ? esc_html( wp_trim_words( $contact['notes'], 5, '...' ) ) : '';
+		$name    = ! empty( $contact['name'] ) ? esc_html( $contact['name'] ) : '—';
+		$company = ! empty( $contact['company'] ) ? esc_html( $contact['company'] ) : ( ! empty( $contact['company_name'] ) ? esc_html( $contact['company_name'] ) : '' );
+		$phone   = ! empty( $contact['phone'] ) ? esc_html( $contact['phone'] ) : '';
+		$email   = ! empty( $contact['email'] ) ? esc_html( $contact['email'] ) : '';
+		$notes   = ! empty( $contact['notes'] ) ? esc_html( wp_trim_words( $contact['notes'], 5, '...' ) ) : '';
 		
 		$html = sprintf( '<strong style="color:#0f172a;">%s</strong>', $name );
+		if ( $company ) {
+			$html .= sprintf( '<br><span style="font-size:12px;color:#475569;font-weight:600;">%s</span>', $company );
+		}
+		if ( $email ) {
+			$html .= sprintf( '<br><a href="mailto:%s" style="font-size:12px;color:#0284c7;text-decoration:none;">%s</a>', esc_attr( $email ), $email );
+		}
 		if ( $phone ) {
 			$html .= sprintf( '<br><a href="tel:%s" style="font-size:12px;font-weight:700;color:#2563eb;text-decoration:none;">%s</a>', esc_attr( preg_replace( '/[^0-9+]/', '', $phone ) ), $phone );
 		}
+
+		$quote_ref   = ! empty( $contact['quote_ref'] ) ? esc_html( $contact['quote_ref'] ) : '';
+		$lead_source = $breakdown['lead_source'] ?? ( $contact['type'] ?? '' );
+		if ( ! empty( $quote_ref ) || 'pdf_export' === $lead_source || 'ups_quote_pdf_export' === $lead_source ) {
+			$html .= sprintf(
+				'<br><span class="as-badge as-badge--pdf" style="display:inline-block;margin-top:3px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:700;">%s</span>',
+				esc_html( sprintf( __( 'Báo giá PDF: %s', 'allship-ups-quote' ), ( $quote_ref ?: '—' ) ) )
+			);
+		} elseif ( ! empty( $contact['ff_entry_id'] ) || 'fluentform' === $lead_source ) {
+			$label = ! empty( $contact['ff_entry_id'] ) ? sprintf( __( 'Booking #%s', 'allship-ups-quote' ), $contact['ff_entry_id'] ) : __( 'Booking Modal', 'allship-ups-quote' );
+			$html .= sprintf(
+				'<br><span style="display:inline-block;margin-top:3px;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:700;">%s</span>',
+				esc_html( $label )
+			);
+		}
+
 		if ( $notes ) {
 			$html .= sprintf( '<br><small style="color:#64748b;" title="%s">%s</small>', esc_attr( $contact['notes'] ), $notes );
 		}
@@ -351,7 +375,12 @@ class Allship_UPS_Quote_Logs_List_Table extends WP_List_Table {
 	 * @return string
 	 */
 	protected function column_actions( $item ) {
-		return sprintf(
+		$breakdown = ! empty( $item->breakdown_json ) ? json_decode( $item->breakdown_json, true ) : null;
+		$contact   = $breakdown['contact'] ?? ( $breakdown['lead'] ?? null );
+		$pdf_url   = ! empty( $contact['pdf_url'] ) ? $contact['pdf_url'] : '';
+
+		$html = sprintf(
+			'<div style="display:flex;gap:4px;align-items:center;">' .
 			'<button type="button" class="as-btn as-btn--secondary as-btn--sm btn-view-log-detail" data-id="%d">' .
 			'<span class="dashicons dashicons-visibility" style="margin-top:2px;"></span>' .
 			'<span>%s</span>' .
@@ -359,6 +388,21 @@ class Allship_UPS_Quote_Logs_List_Table extends WP_List_Table {
 			absint( $item->id ),
 			esc_html__( 'Chi tiết', 'allship-ups-quote' )
 		);
+
+		if ( ! empty( $pdf_url ) ) {
+			$html .= sprintf(
+				'<a href="%s" target="_blank" class="as-btn as-btn--outline as-btn--sm" style="text-decoration:none;color:#b91c1c;border-color:#fca5a5;background:#fff;display:inline-flex;align-items:center;gap:3px;" title="%s">' .
+				'<span class="dashicons dashicons-pdf" style="font-size:14px;width:14px;height:14px;"></span>' .
+				'<span>%s</span>' .
+				'</a>',
+				esc_url( $pdf_url ),
+				esc_attr__( 'Xem / Tải file PDF báo giá chính thức', 'allship-ups-quote' ),
+				esc_html__( 'PDF', 'allship-ups-quote' )
+			);
+		}
+
+		$html .= '</div>';
+		return $html;
 	}
 
 	/**
@@ -388,6 +432,7 @@ class Allship_UPS_Quote_Logs_List_Table extends WP_List_Table {
 		$current_dest    = isset( $_REQUEST['destination_iata'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_REQUEST['destination_iata'] ) ) ) : '';
 		$current_from    = isset( $_REQUEST['date_from'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['date_from'] ) ) : '';
 		$current_to      = isset( $_REQUEST['date_to'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['date_to'] ) ) : '';
+		$current_lead    = isset( $_REQUEST['lead_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['lead_type'] ) ) : '';
 
 		?>
 		<div class="alignleft actions as-logs-filter-bar" style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
@@ -396,6 +441,14 @@ class Allship_UPS_Quote_Logs_List_Table extends WP_List_Table {
 				<option value=""><?php esc_html_e( '— Tất cả chiều —', 'allship-ups-quote' ); ?></option>
 				<option value="export" <?php selected( $current_dir, 'export' ); ?>><?php esc_html_e( 'Xuất hàng', 'allship-ups-quote' ); ?></option>
 				<option value="import" <?php selected( $current_dir, 'import' ); ?>><?php esc_html_e( 'Nhập hàng', 'allship-ups-quote' ); ?></option>
+			</select>
+
+			<!-- Lead Type Filter -->
+			<select name="lead_type" id="filter_lead_type" class="as-rates-select" style="height:32px;">
+				<option value=""><?php esc_html_e( '— Tất cả loại khách —', 'allship-ups-quote' ); ?></option>
+				<option value="pdf_export" <?php selected( $current_lead, 'pdf_export' ); ?>><?php esc_html_e( 'Khách đã xuất PDF', 'allship-ups-quote' ); ?></option>
+				<option value="booking" <?php selected( $current_lead, 'booking' ); ?>><?php esc_html_e( 'Khách đặt dịch vụ', 'allship-ups-quote' ); ?></option>
+				<option value="guest" <?php selected( $current_lead, 'guest' ); ?>><?php esc_html_e( 'Khách vãng lai', 'allship-ups-quote' ); ?></option>
 			</select>
 
 			<!-- Service Code Filter -->
@@ -421,7 +474,7 @@ class Allship_UPS_Quote_Logs_List_Table extends WP_List_Table {
 
 			<input type="submit" id="post-query-submit" class="button" value="<?php esc_attr_e( 'Lọc nhật ký', 'allship-ups-quote' ); ?>" style="height:32px;">
 
-			<?php if ( ! empty( $current_dir ) || ! empty( $current_svc ) || ! empty( $current_dest ) || ! empty( $current_from ) || ! empty( $current_to ) || ! empty( $_REQUEST['s'] ) ) : ?>
+			<?php if ( ! empty( $current_dir ) || ! empty( $current_svc ) || ! empty( $current_dest ) || ! empty( $current_from ) || ! empty( $current_to ) || ! empty( $current_lead ) || ! empty( $_REQUEST['s'] ) ) : ?>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=allship-ups-logs' ) ); ?>" class="button" style="height:32px;display:inline-flex;align-items:center;"><?php esc_html_e( 'Xóa lọc', 'allship-ups-quote' ); ?></a>
 			<?php endif; ?>
 		</div>
@@ -483,6 +536,9 @@ class Allship_UPS_Quote_Logs_List_Table extends WP_List_Table {
 		}
 		if ( ! empty( $_REQUEST['date_to'] ) ) {
 			$filters['date_to'] = sanitize_text_field( wp_unslash( $_REQUEST['date_to'] ) );
+		}
+		if ( ! empty( $_REQUEST['lead_type'] ) ) {
+			$filters['lead_type'] = sanitize_text_field( wp_unslash( $_REQUEST['lead_type'] ) );
 		}
 		if ( ! empty( $_REQUEST['s'] ) ) {
 			$filters['search'] = sanitize_text_field( wp_unslash( $_REQUEST['s'] ) );
@@ -595,6 +651,9 @@ class Allship_UPS_Admin_Quote_Logs {
 		}
 		if ( ! empty( $_REQUEST['date_to'] ) ) {
 			$filters['date_to'] = sanitize_text_field( wp_unslash( $_REQUEST['date_to'] ) );
+		}
+		if ( ! empty( $_REQUEST['lead_type'] ) ) {
+			$filters['lead_type'] = sanitize_text_field( wp_unslash( $_REQUEST['lead_type'] ) );
 		}
 		if ( ! empty( $_REQUEST['s'] ) ) {
 			$filters['search'] = sanitize_text_field( wp_unslash( $_REQUEST['s'] ) );

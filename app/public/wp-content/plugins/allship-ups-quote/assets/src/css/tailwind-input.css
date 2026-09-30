@@ -23,6 +23,11 @@
   }
 }
 
-@source "../../public/views/**/*.php";
-@source "../../public/assets/js/**/*.js";
-@source "../../templates/**/*.php";
+@source "../../../public/views/**/*.php";
+@source "../../../public/assets/js/**/*.js";
+@source "../../../templates/**/*.php";
+@source "../../../admin/views/**/*.php";
+@source "./public/views/**/*.php";
+@source "./public/assets/js/**/*.js";
+@source "./templates/**/*.php";
+@source "./admin/views/**/*.php";

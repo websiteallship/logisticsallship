@@ -1739,6 +1739,26 @@
     };
   }
 
+  function showCalculationLoading() {
+    const overlay = document.getElementById('quoteCalculationOverlay');
+    if (overlay) {
+      overlay.classList.add('is-active');
+    }
+    if (document && document.body && document.body.style) {
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function hideCalculationLoading() {
+    const overlay = document.getElementById('quoteCalculationOverlay');
+    if (overlay) {
+      overlay.classList.remove('is-active');
+    }
+    if (document && document.body && document.body.style) {
+      document.body.style.overflow = '';
+    }
+  }
+
   function performCalculation() {
     hideError();
     if (!state.selectedCountry) {
@@ -1757,6 +1777,23 @@
       btn.classList.add('loading');
       btn.disabled = true;
     }
+
+    showCalculationLoading();
+    const startTime = Date.now();
+    const MIN_CALC_DELAY = 1500; // 1.5s delay conveys dedicated route optimization calculation
+
+    const finishCalculation = (callback) => {
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, MIN_CALC_DELAY - elapsed);
+      setTimeout(() => {
+        hideCalculationLoading();
+        if (btn) {
+          btn.classList.remove('loading');
+          btn.disabled = false;
+        }
+        if (typeof callback === 'function') callback();
+      }, remaining);
+    };
 
     // Call REST API asynchronously with service_code: ALL (Thin Client + Server-side Cached Batch)
     if (state.config.apiBase) {
@@ -1789,32 +1826,26 @@
       })
       .then(res => res.json())
       .then(res => {
-        if (res && res.success && res.data && Array.isArray(res.data.services)) {
-          applyServerCalculatedResults(res.data);
-        } else {
-          executeCalculation();
-        }
+        finishCalculation(() => {
+          if (res && res.success && res.data && Array.isArray(res.data.services)) {
+            applyServerCalculatedResults(res.data);
+          } else {
+            executeCalculation();
+          }
+        });
       })
       .catch(err => {
         console.warn('UPS REST calculate sync warning:', err);
-        executeCalculation();
-      })
-      .finally(() => {
-        if (btn) {
-          btn.classList.remove('loading');
-          btn.disabled = false;
-        }
+        finishCalculation(() => {
+          executeCalculation();
+        });
       });
       return;
     }
 
-    setTimeout(() => {
-      if (btn) {
-        btn.classList.remove('loading');
-        btn.disabled = false;
-      }
+    finishCalculation(() => {
       executeCalculation();
-    }, 200);
+    });
   }
 
   function applyServerCalculatedResults(data) {
@@ -2102,9 +2133,14 @@
                     </div>
                   </div>
                 </div>
-                <div class="text-right">
-                  <div class="text-sm font-black ${isCurrent ? 'text-brand-red' : 'text-navy-900'}">${formatVND(s.calc.price)} đ</div>
-                  <div class="text-[9px] text-slate-400">Tạm tính</div>
+                <div class="text-right flex items-center gap-2">
+                  <div>
+                    <div class="text-sm font-black ${isCurrent ? 'text-brand-red' : 'text-navy-900'}">${formatVND(s.calc.price)} đ</div>
+                    <div class="text-[9px] text-slate-400">Tạm tính</div>
+                  </div>
+                  <button type="button" onclick="event.stopPropagation(); UPSQuote.openPdfExportModal('${s.code}')" title="Xuất báo giá PDF" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-brand-red flex items-center justify-center cursor-pointer active:scale-95 border border-slate-200">
+                    <i class="ph-bold ph-file-pdf text-sm"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -2207,9 +2243,14 @@
                   ${priceHTML}
                 </div>
                 ${detailHTML}
-                <button type="button" class="w-full h-10 rounded-xl font-sans text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${isActive ? 'bg-brand-red text-white shadow-brand hover:bg-brand-red-hover' : 'bg-white border-[1.5px] border-slate-300 text-slate-700 hover:border-brand-red hover:text-brand-red'}" onclick="UPSQuote.openBookingModal('${s.code}')">
-                  <i class="ph-bold ph-chat-centered-dots text-sm" aria-hidden="true"></i> Liên hệ đặt dịch vụ
-                </button>
+                <div class="grid grid-cols-2 gap-2.5 mt-3 pt-2.5 border-t border-slate-100">
+                  <button type="button" class="h-10 rounded-xl font-sans text-xs font-bold flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer bg-white border border-slate-200 text-slate-700 hover:border-brand-red/40 hover:text-brand-red hover:bg-red-50/40 shadow-xs active:scale-98" onclick="UPSQuote.openPdfExportModal('${s.code}')" title="Xuất file Báo Giá PDF chính thức">
+                    <i class="ph-bold ph-file-pdf text-brand-red text-base" aria-hidden="true"></i> Tải PDF
+                  </button>
+                  <button type="button" class="h-10 rounded-xl font-sans text-xs font-bold flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer ${isActive ? 'bg-brand-red text-white shadow-brand hover:bg-brand-red-hover' : 'bg-navy-900 text-white hover:bg-navy-800 shadow-xs'} active:scale-98" onclick="UPSQuote.openBookingModal('${s.code}')" title="Liên hệ chuyên viên tư vấn chi tiết">
+                    <i class="ph-bold ph-chat-centered-dots text-sm" aria-hidden="true"></i> Liên hệ tư vấn
+                  </button>
+                </div>
               </div>
             </div>
           `;
@@ -2300,7 +2341,26 @@
     return msg.trim();
   }
 
+  function resetBookingModalState() {
+    const formState = document.getElementById('bookingModalFormState');
+    const successState = document.getElementById('bookingModalSuccessState');
+    const noticeEl = document.getElementById('bookingNotice');
+    const submitBtn = document.getElementById('btnSubmitBooking');
+
+    if (formState) formState.classList.remove('hidden');
+    if (successState) successState.classList.add('hidden');
+    if (noticeEl) {
+      noticeEl.className = 'hidden mb-3 p-3 rounded-xl text-xs font-semibold';
+      noticeEl.innerHTML = '';
+    }
+    if (submitBtn) {
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+    }
+  }
+
   function openBookingModal(targetServiceCode = null) {
+    resetBookingModalState();
     const serviceCodeToUse = targetServiceCode || state.service;
     const isExport = state.direction === 'export';
     const provSelect = document.getElementById('originProvince');
@@ -2495,10 +2555,41 @@
         submitBtn.classList.remove('loading');
         submitBtn.disabled = false;
       }
-      if (noticeEl) {
+
+      const formState = document.getElementById('bookingModalFormState');
+      const successState = document.getElementById('bookingModalSuccessState');
+      const summaryCard = document.getElementById('bookingSuccessSummaryCard');
+
+      if (summaryCard) {
+        const dirBadge = isExport ? 'Xuất khẩu' : 'Nhập khẩu';
+        summaryCard.innerHTML = `
+          <div style="padding-bottom: 8px; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <span style="color: #64748B; font-weight: 500;">Tuyến vận chuyển:</span>
+            <span style="font-weight: 700; color: #0F172A; text-align: right;">${escapeHTML(fromText)} ➔ ${escapeHTML(toText)} (${escapeHTML(dirBadge)})</span>
+          </div>
+          <div style="padding: 8px 0; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <span style="color: #64748B; font-weight: 500;">Gói dịch vụ:</span>
+            <span style="font-weight: 700; color: #0F172A; text-align: right;">${escapeHTML(state.service)} (${escapeHTML(SERVICE_REGISTRY[state.service]?.name || '')})</span>
+          </div>
+          <div style="padding: 8px 0; border-bottom: 1px solid #E2E8F0; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <span style="color: #64748B; font-weight: 500;">Cước tạm tính:</span>
+            <span style="font-weight: 800; color: #CE2027; text-align: right;">${escapeHTML(priceText)} <span style="font-size: 11px; font-weight: 600; color: #64748B;">(${escapeHTML(weightText)})</span></span>
+          </div>
+          <div style="padding-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <span style="color: #64748B; font-weight: 500;">Khách hàng tiếp nhận:</span>
+            <span style="font-weight: 700; color: #047857; text-align: right;">${escapeHTML(name)} · ${escapeHTML(phone)}</span>
+          </div>
+        `;
+      }
+
+      if (formState && successState) {
+        formState.classList.add('hidden');
+        successState.classList.remove('hidden');
+      } else if (noticeEl) {
         noticeEl.className = 'mb-3 p-3 rounded-xl text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 block';
         noticeEl.innerHTML = '<i class="ph-bold ph-check-circle mr-1"></i> Cảm ơn bạn! Yêu cầu tư vấn & đặt chỗ đã được gửi thành công. Chuyên viên Allship sẽ liên hệ trong 5-10 phút.';
       }
+
       if (nameInput) nameInput.value = '';
       if (phoneInput) phoneInput.value = '';
       if (notesInput) notesInput.value = '';
@@ -2511,6 +2602,373 @@
       if (noticeEl) {
         noticeEl.className = 'mb-3 p-3 rounded-xl text-xs font-semibold bg-red-50 text-red-700 border border-red-200 block';
         noticeEl.textContent = err.message || 'Có lỗi xảy ra khi gửi yêu cầu. Vui lòng liên hệ hotline 1900 252 338.';
+      }
+    });
+  }
+
+  // ===== J2. PDF QUOTATION EXPORT MODAL & LEAD CAPTURE =====
+  let pdfProgressInterval = null;
+
+  function updatePdfProgressBar(percent, text, stepIdx) {
+    const bar = document.getElementById('pdfExportProgressBar');
+    const pctEl = document.getElementById('pdfExportProgressPercent');
+    const textEl = document.getElementById('pdfExportProgressStepText');
+    const p = Math.min(100, Math.max(0, Math.round(percent)));
+
+    if (bar) bar.style.width = p + '%';
+    if (pctEl) pctEl.textContent = p + '%';
+    if (textEl && text) textEl.textContent = text;
+
+    for (let i = 1; i <= 3; i++) {
+      const stepEl = document.getElementById('pdfStep' + i);
+      if (stepEl) {
+        if (i <= stepIdx) {
+          stepEl.className = 'transition-colors duration-200 text-brand-red font-bold flex items-center justify-center gap-1';
+        } else {
+          stepEl.className = 'transition-colors duration-200 text-slate-400 font-semibold flex items-center justify-center gap-1';
+        }
+      }
+    }
+  }
+
+  function startPdfProgressAnimation() {
+    if (pdfProgressInterval) clearInterval(pdfProgressInterval);
+    updatePdfProgressBar(18, 'Đang chuẩn bị dữ liệu tuyến vận chuyển...', 1);
+
+    let current = 18;
+    const startTime = Date.now();
+
+    pdfProgressInterval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      if (elapsed < 300) {
+        current = Math.min(48, 18 + Math.round((elapsed / 300) * 30));
+        updatePdfProgressBar(current, 'Đang tổng hợp thông tin cước & phụ phí...', 1);
+      } else if (elapsed < 800) {
+        const stageRatio = (elapsed - 300) / 500;
+        current = Math.min(86, 48 + Math.round(stageRatio * 38));
+        updatePdfProgressBar(current, 'Đang biên dịch bảng báo giá PDF & con dấu điện tử...', 2);
+      } else {
+        if (current < 97) current += 0.25;
+        updatePdfProgressBar(Math.round(current), 'Đang hoàn tất tài liệu & kích hoạt bản sao...', 3);
+      }
+    }, 40);
+  }
+
+  function finishPdfProgressAnimation(callback) {
+    if (pdfProgressInterval) {
+      clearInterval(pdfProgressInterval);
+      pdfProgressInterval = null;
+    }
+    updatePdfProgressBar(100, 'Hoàn tất! Báo giá PDF sẵn sàng tải về...', 3);
+    setTimeout(() => {
+      if (typeof callback === 'function') callback();
+    }, 320);
+  }
+
+  function stopPdfProgressAnimation() {
+    if (pdfProgressInterval) {
+      clearInterval(pdfProgressInterval);
+      pdfProgressInterval = null;
+    }
+    updatePdfProgressBar(0, '', 0);
+  }
+
+  function resetPdfExportModalState() {
+    stopPdfProgressAnimation();
+    const formState = document.getElementById('pdfExportFormState');
+    const loadingState = document.getElementById('pdfExportLoadingState');
+    const successState = document.getElementById('pdfExportSuccessState');
+    const noticeEl = document.getElementById('pdfExportNotice');
+    const form = document.getElementById('upsPdfExportForm');
+    const submitBtn = document.getElementById('btnSubmitPdfExport');
+
+    if (formState) formState.classList.remove('hidden');
+    if (loadingState) loadingState.classList.add('hidden');
+    if (successState) successState.classList.add('hidden');
+    if (noticeEl) {
+      noticeEl.className = 'hidden mb-3 p-3 rounded-xl text-xs font-semibold';
+      noticeEl.innerHTML = '';
+    }
+    if (submitBtn) {
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+    }
+    if (form) form.reset();
+  }
+
+  function openPdfExportModal(targetServiceCode = null) {
+    resetPdfExportModalState();
+    const serviceCodeToUse = targetServiceCode || state.service;
+    const isExport = state.direction === 'export';
+    const provSelect = document.getElementById('originProvince');
+    const originLabel = state.originProvince || document.getElementById('originProvinceDisplay')?.value || provSelect?.value || 'TP. Hồ Chí Minh';
+    const c = state.selectedCountry || { name: 'United States', iata: 'US' };
+
+    const stateSelect = document.getElementById('destState');
+    const stateVal = stateSelect && stateSelect.value && !stateSelect.disabled && stateSelect.options && stateSelect.selectedIndex >= 0
+      ? (stateSelect.options[stateSelect.selectedIndex]?.getAttribute('data-name') || stateSelect.value)
+      : (stateSelect?.value || '');
+    const citySelect = document.getElementById('destCity');
+    const cityVal = citySelect && citySelect.value && citySelect.value !== 'other' ? citySelect.value : '';
+    const zipVal = document.getElementById('destZipcode')?.value.trim() || '';
+    const addrVal = document.getElementById('destAddress')?.value.trim() || '';
+
+    let destParts = [];
+    if (addrVal) destParts.push(addrVal);
+    if (cityVal) destParts.push(cityVal);
+    if (stateVal) destParts.push(stateVal);
+    if (zipVal) destParts.push(zipVal);
+    destParts.push(c.name + ' (' + c.iata + ')');
+
+    const foreignText = destParts.length > 0 ? destParts.join(', ') : `${c.name} (${c.iata})`;
+    const fromText = isExport ? originLabel : foreignText;
+    const toText = isExport ? foreignText : originLabel;
+    const dirBadge = isExport ? 'Xuất khẩu' : 'Nhập khẩu';
+    const weightText = document.getElementById('chargeableWeightVal')?.textContent || '0.00 kg';
+    const weightNum = parseFloat(weightText) || 0;
+    const chosen = state.calculatedResults.find(s => s.code === serviceCodeToUse);
+    const totalPrice = (chosen && chosen.calc.price > 0) ? chosen.calc.price : 0;
+    const priceText = totalPrice > 0 ? formatVND(totalPrice) + ' VND' : 'Liên hệ';
+    const serviceDisplayName = SERVICE_REGISTRY[serviceCodeToUse]?.name || serviceCodeToUse;
+
+    const modalSummary = document.getElementById('pdfModalRouteSummary');
+    if (modalSummary) {
+      modalSummary.innerHTML = `
+        <div style="font-weight: 700; color: #0F172A; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E2E8F0; padding-bottom: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 24px; height: 24px; border-radius: 6px; background: #FEE2E2; color: #CE2027; display: flex; align-items: center; justify-content: center; font-size: 13px;">
+              <i class="ph-bold ph-airplane-tilt" aria-hidden="true"></i>
+            </div>
+            <span style="font-size: 13px; font-weight: 800;">Tuyến: ${escapeHTML(fromText)} ➔ ${escapeHTML(toText)}</span>
+          </div>
+          <span style="font-size: 10px; font-weight: 800; background: #EEF2F6; color: #334155; padding: 3px 8px; border-radius: 6px; border: 1px solid #E2E8F0;">${escapeHTML(dirBadge)}</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px; padding-top: 6px; color: #475569;">
+          <span>Gói dịch vụ: <strong style="color: #0F172A; font-weight: 800;">UPS ${escapeHTML(serviceCodeToUse)} (${escapeHTML(serviceDisplayName)})</strong></span>
+          <span>Cân tính cước: <strong style="color: #0F172A; font-weight: 800; font-family: monospace;">${escapeHTML(weightText)}</strong></span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px; padding-top: 4px;">
+          <span style="color: #64748B;">Tổng cước tạm tính (bao gồm phụ phí):</span>
+          <span style="font-size: 15px; font-weight: 900; color: #CE2027; font-family: monospace;">${escapeHTML(priceText)}</span>
+        </div>
+      `;
+    }
+
+    // Set hidden fields
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.value = (val !== null && val !== undefined) ? String(val) : '';
+    };
+    setVal('pdfExportServiceCode', serviceCodeToUse);
+    setVal('pdfExportServiceName', `UPS ${serviceCodeToUse} - ${serviceDisplayName}`);
+    setVal('pdfExportDirection', state.direction);
+    setVal('pdfExportDestinationIata', c.iata || '');
+    setVal('pdfExportDestinationName', c.name || '');
+    setVal('pdfExportWeightKg', weightNum);
+    setVal('pdfExportTotalPriceVnd', totalPrice);
+    setVal('pdfExportBasePriceVnd', chosen?.calc?.base_price || chosen?.calc?.price || totalPrice);
+    setVal('pdfExportQuoteLogId', state.lastQuoteLogId || '');
+
+    const modal = document.getElementById('quotePdfExportModal');
+    if (modal) {
+      modal.classList.add('open');
+      setTimeout(() => {
+        const nameInput = document.getElementById('pdfExportName');
+        if (nameInput) nameInput.focus();
+      }, 60);
+    }
+  }
+
+  function handlePdfExportSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+
+    const nameInput = document.getElementById('pdfExportName');
+    const companyInput = document.getElementById('pdfExportCompany');
+    const emailInput = document.getElementById('pdfExportEmail');
+    const phoneInput = document.getElementById('pdfExportPhone');
+    const notesInput = document.getElementById('pdfExportNotes');
+    const submitBtn = document.getElementById('btnSubmitPdfExport');
+    const noticeEl = document.getElementById('pdfExportNotice');
+
+    const name = nameInput?.value.trim() || '';
+    const company = companyInput?.value.trim() || '';
+    const email = emailInput?.value.trim() || '';
+    const phone = phoneInput?.value.trim() || '';
+    const notes = notesInput?.value.trim() || '';
+
+    if (!name) {
+      if (noticeEl) {
+        noticeEl.className = 'mb-3 p-3 rounded-xl text-xs font-semibold bg-red-50 text-red-700 border border-red-200 block';
+        noticeEl.textContent = 'Vui lòng nhập họ và tên của bạn.';
+      }
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      if (noticeEl) {
+        noticeEl.className = 'mb-3 p-3 rounded-xl text-xs font-semibold bg-red-50 text-red-700 border border-red-200 block';
+        noticeEl.textContent = 'Vui lòng nhập địa chỉ email hợp lệ để nhận file báo giá PDF.';
+      }
+      return;
+    }
+
+    if (phone) {
+      const cleanPhone = phone.replace(/[\s\-\.\(\)]/g, '');
+      const phoneRegex = /^(\+?[0-9]{8,15})$/;
+      if (!phoneRegex.test(cleanPhone)) {
+        if (noticeEl) {
+          noticeEl.className = 'mb-3 p-3 rounded-xl text-xs font-semibold bg-red-50 text-red-700 border border-red-200 block';
+          noticeEl.textContent = 'Số điện thoại không hợp lệ (từ 8 đến 15 chữ số).';
+        }
+        return;
+      }
+    }
+
+    if (submitBtn) {
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
+    }
+
+    const formState = document.getElementById('pdfExportFormState');
+    const loadingState = document.getElementById('pdfExportLoadingState');
+    const successState = document.getElementById('pdfExportSuccessState');
+
+    if (formState) formState.classList.add('hidden');
+    if (loadingState) loadingState.classList.remove('hidden');
+    if (successState) successState.classList.add('hidden');
+    startPdfProgressAnimation();
+
+    const getVal = (id) => document.getElementById(id)?.value || '';
+    const serviceCode = getVal('pdfExportServiceCode') || state.service;
+    const serviceName = getVal('pdfExportServiceName') || (SERVICE_REGISTRY[serviceCode]?.name || serviceCode);
+    const chosen = state.calculatedResults.find(s => s.code === serviceCode);
+    const totalPrice = parseInt(getVal('pdfExportTotalPriceVnd'), 10) || (chosen?.calc?.price || 0);
+    const basePrice = parseInt(getVal('pdfExportBasePriceVnd'), 10) || totalPrice;
+    const weightKg = parseFloat(getVal('pdfExportWeightKg')) || 0;
+
+    const exportPayload = {
+      name: name,
+      contact_name: name,
+      company_name: company,
+      email: email,
+      phone: phone,
+      notes: notes,
+      service_code: serviceCode,
+      service_name: serviceName,
+      direction: getVal('pdfExportDirection') || state.direction,
+      destination_iata: getVal('pdfExportDestinationIata') || (state.selectedCountry?.iata || 'US'),
+      destination_name: getVal('pdfExportDestinationName') || (state.selectedCountry?.name || 'United States'),
+      chargeable_weight_kg: weightKg,
+      total_price_vnd: totalPrice,
+      base_price_vnd: basePrice,
+      pieces: state.pieces || [],
+      quote_log_id: parseInt(getVal('pdfExportQuoteLogId'), 10) || state.lastQuoteLogId || 0,
+      send_email: true
+    };
+
+    const endpoint = (state.config.apiBase || '/wp-json/ups-quote/v1') + '/export-quote';
+
+    fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-WP-Nonce': state.config.nonce || ''
+      },
+      body: JSON.stringify(exportPayload)
+    })
+    .then(async res => {
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || json.success === false) {
+        throw new Error(json.error?.message || json.message || 'Không thể tạo file báo giá. Vui lòng thử lại.');
+      }
+      return json.data || json;
+    })
+    .then(data => {
+      finishPdfProgressAnimation(() => {
+        if (loadingState) loadingState.classList.add('hidden');
+        if (formState) formState.classList.add('hidden');
+
+        if (submitBtn) {
+          submitBtn.classList.remove('loading');
+          submitBtn.disabled = false;
+        }
+
+        if (data && data.quote_log_id) {
+          state.lastQuoteLogId = data.quote_log_id;
+          const logInput = document.getElementById('pdfExportQuoteLogId');
+          if (logInput) logInput.value = data.quote_log_id;
+        }
+
+        const successState = document.getElementById('pdfExportSuccessState');
+        const summaryCard = document.getElementById('pdfSuccessSummaryCard');
+        const directDlLink = document.getElementById('pdfDirectDownloadLink');
+
+        const downloadUrl = data.download_url || data.pdf_url || '';
+        const quoteRef = data.quote_ref || 'AS-QUO';
+
+        // 1. Programmatic auto-download trigger
+        if (downloadUrl) {
+          try {
+            const dlAnchor = document.createElement('a');
+            dlAnchor.href = downloadUrl;
+            dlAnchor.download = `${quoteRef}.pdf`;
+            dlAnchor.target = '_blank';
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            setTimeout(() => dlAnchor.remove(), 200);
+          } catch (err) {
+            console.warn('Auto download prevented by browser:', err);
+          }
+        }
+
+        // 2. Direct download button href update
+        if (directDlLink) {
+          directDlLink.href = downloadUrl || '#';
+          directDlLink.download = `${quoteRef}.pdf`;
+        }
+
+        // 3. Populate confirmation details card
+        if (summaryCard) {
+          summaryCard.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px solid #E2E8F0;">
+              <span style="color: #64748B;">Mã báo giá chính thức:</span>
+              <span style="font-family: monospace; font-weight: 800; font-size: 13px; color: #CE2027; background: #FEE2E2; padding: 2px 8px; border-radius: 4px;">${escapeHTML(quoteRef)}</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #E2E8F0;">
+              <span style="color: #64748B;">Email người nhận:</span>
+              <strong style="color: #0F172A;">${escapeHTML(email)}</strong>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #E2E8F0;">
+              <span style="color: #64748B;">Đại diện doanh nghiệp:</span>
+              <strong style="color: #0F172A;">${escapeHTML(name)}${company ? ' (' + escapeHTML(company) + ')' : ''}</strong>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 6px;">
+              <span style="color: #64748B;">Gói dịch vụ & Cước:</span>
+              <strong style="color: #047857;">${escapeHTML(serviceName)} — ${formatVND(totalPrice)} VND</strong>
+            </div>
+          `;
+        }
+
+        if (successState) {
+          successState.classList.remove('hidden');
+        }
+      });
+    })
+    .catch(err => {
+      stopPdfProgressAnimation();
+      const loadingState = document.getElementById('pdfExportLoadingState');
+      const formState = document.getElementById('pdfExportFormState');
+      if (loadingState) loadingState.classList.add('hidden');
+      if (formState) formState.classList.remove('hidden');
+
+      if (submitBtn) {
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+      }
+      if (noticeEl) {
+        noticeEl.className = 'mb-3 p-3 rounded-xl text-xs font-semibold bg-red-50 text-red-700 border border-red-200 block';
+        noticeEl.textContent = err.message || 'Đã có lỗi xảy ra trong quá trình xuất PDF. Vui lòng thử lại sau.';
       }
     });
   }
@@ -2575,8 +3033,12 @@
   function closeModals() {
     const booking = document.getElementById('bookingModal');
     const piecesModal = document.getElementById('piecesDetailModal');
+    const pdfModal = document.getElementById('quotePdfExportModal');
     if (booking) booking.classList.remove('open');
     if (piecesModal) piecesModal.classList.remove('open');
+    if (pdfModal) pdfModal.classList.remove('open');
+    resetBookingModalState();
+    resetPdfExportModalState();
   }
 
   // ===== L. MOBILE STICKY ACTION BAR & VIEW TOGGLE =====
@@ -2709,13 +3171,14 @@
     renderPieces();
     recalculateMetrics();
 
-    // Close all combobox dropdowns on outside click
+    // Close all combobox dropdowns and modals on Escape
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         toggleCountryDropdown(false);
         toggleOriginDropdown(false);
         toggleStateDropdown(false);
         toggleCityDropdown(false);
+        closeModals();
       }
     });
 
@@ -2731,6 +3194,12 @@
 
       const cib = document.getElementById('cityCombobox');
       if (cib && !cib.contains(e.target)) toggleCityDropdown(false);
+
+      // Close modal on backdrop click
+      const pdfModal = document.getElementById('quotePdfExportModal');
+      if (pdfModal && e.target === pdfModal) closeModals();
+      const piecesModal = document.getElementById('piecesDetailModal');
+      if (piecesModal && e.target === piecesModal) closeModals();
     });
 
     // Hydrate initial services availability from localized config or sync via REST
@@ -2788,11 +3257,17 @@
     lookupFreightRate,
     performCalculation,
     executeCalculation,
+    showCalculationLoading,
+    hideCalculationLoading,
     setMobileResultView,
     selectServiceFromMobileList,
     updateStickyBar,
     openBookingModal,
+    resetBookingModalState,
     handleBookingSubmit,
+    openPdfExportModal,
+    resetPdfExportModalState,
+    handlePdfExportSubmit,
     openPiecesDetailModal,
     closeModals,
     scrollToForm,
@@ -2828,10 +3303,16 @@
   window.removePiece = removePiece;
   window.updatePiece = updatePiece;
   window.performCalculation = performCalculation;
+  window.showCalculationLoading = showCalculationLoading;
+  window.hideCalculationLoading = hideCalculationLoading;
   window.setMobileResultView = setMobileResultView;
   window.selectServiceFromMobileList = selectServiceFromMobileList;
   window.openBookingModal = openBookingModal;
+  window.resetBookingModalState = resetBookingModalState;
   window.handleBookingSubmit = handleBookingSubmit;
+  window.openPdfExportModal = openPdfExportModal;
+  window.resetPdfExportModalState = resetPdfExportModalState;
+  window.handlePdfExportSubmit = handlePdfExportSubmit;
   window.openPiecesDetailModal = openPiecesDetailModal;
   window.closeModals = closeModals;
   window.scrollToForm = scrollToForm;

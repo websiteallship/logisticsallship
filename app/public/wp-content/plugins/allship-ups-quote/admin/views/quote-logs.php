@@ -42,6 +42,7 @@ $current_filters = [
 	'destination_iata' => ! empty( $_REQUEST['destination_iata'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['destination_iata'] ) ) : '',
 	'date_from'        => ! empty( $_REQUEST['date_from'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['date_from'] ) ) : '',
 	'date_to'          => ! empty( $_REQUEST['date_to'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['date_to'] ) ) : '',
+	'lead_type'        => ! empty( $_REQUEST['lead_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['lead_type'] ) ) : '',
 	's'                => ! empty( $_REQUEST['s'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) : '',
 	'nonce'            => $export_nonce,
 ];
@@ -200,26 +201,56 @@ document.addEventListener('DOMContentLoaded', function() {
 				let contactDetail = '';
 				const contact = (log.breakdown && (log.breakdown.contact || log.breakdown.lead)) || null;
 				const leadSource = (log.breakdown && log.breakdown.lead_source) || '';
-				if (contact && (contact.name || contact.phone || contact.notes)) {
+				if (contact && (contact.name || contact.phone || contact.email || contact.quote_ref)) {
 					const cleanPhone = (contact.phone || '').replace(/[^0-9+]/g, '');
-					let sourceLabel = 'Booking Modal';
-					if (leadSource === 'fluentform' && contact.ff_entry_id) {
-						sourceLabel = 'FluentForm #' + contact.ff_entry_id;
-					} else if (contact.ff_entry_id) {
-						sourceLabel = 'Booking Modal (Entry #' + contact.ff_entry_id + ')';
-					} else if (leadSource === 'fluentform') {
-						sourceLabel = 'FluentForm';
+					const isPdfLead = (contact.type === 'pdf_export' || leadSource === 'ups_quote_pdf_export' || contact.quote_ref);
+					
+					if (isPdfLead) {
+						let pdfBtn = '';
+						if (contact.pdf_url) {
+							pdfBtn = '<a href="' + contact.pdf_url + '" target="_blank" class="as-btn as-btn--primary as-btn--sm" style="display:inline-flex;align-items:center;gap:4px;text-decoration:none;">' +
+								'<span class="dashicons dashicons-pdf" style="font-size:14px;width:14px;height:14px;margin-top:2px;"></span>' +
+								'<span>Mở File PDF Báo Giá Chính Thức</span>' +
+								'</a>';
+						}
+
+						contactDetail = '<div style="background:#fff5f5;padding:14px 16px;border:1px solid #fecaca;border-radius:8px;margin-bottom:16px;">' +
+							'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;border-bottom:1px solid #fee2e2;padding-bottom:10px;">' +
+								'<div style="display:flex;align-items:center;gap:8px;">' +
+									'<strong style="color:#b91c1c;font-size:14px;">Thông Tin Khách Hàng Xuất Báo Giá PDF</strong>' +
+									'<span style="background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;">' + (contact.quote_ref || 'Báo giá PDF') + '</span>' +
+								'</div>' +
+								(pdfBtn ? '<div>' + pdfBtn + '</div>' : '') +
+							'</div>' +
+							'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;">' +
+								'<div><strong>Họ và tên:</strong> <span style="color:#0f172a;font-weight:700;">' + (contact.name || '—') + '</span></div>' +
+								'<div><strong>Tên công ty / Đơn vị:</strong> <span style="color:#0f172a;font-weight:700;">' + (contact.company || contact.company_name || '—') + '</span></div>' +
+								'<div><strong>Email nhận báo giá:</strong> ' + (contact.email ? '<a href="mailto:' + contact.email + '" style="color:#0284c7;font-weight:600;text-decoration:none;">' + contact.email + '</a>' : '—') + '</div>' +
+								'<div><strong>Số điện thoại:</strong> ' + (contact.phone ? '<a href="tel:' + cleanPhone + '" style="color:#2563eb;font-weight:700;text-decoration:none;">' + contact.phone + '</a>' : '—') + '</div>' +
+							'</div>' +
+							(contact.notes ? '<div style="margin-top:10px;font-size:12px;color:#334155;background:#ffffff;padding:8px 10px;border:1px dashed #fca5a5;border-radius:4px;"><strong>Ghi chú:</strong> ' + contact.notes + '</div>' : '') +
+							'</div>';
+					} else {
+						let sourceLabel = 'Booking Modal';
+						if (leadSource === 'fluentform' && contact.ff_entry_id) {
+							sourceLabel = 'FluentForm #' + contact.ff_entry_id;
+						} else if (contact.ff_entry_id) {
+							sourceLabel = 'Booking Modal (Entry #' + contact.ff_entry_id + ')';
+						} else if (leadSource === 'fluentform') {
+							sourceLabel = 'FluentForm';
+						}
+						const sourceBadge = ' <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:700;">' + sourceLabel + '</span>';
+						contactDetail = '<div style="background:#f0f9ff;padding:12px 14px;border:1px solid #bae6fd;border-radius:6px;margin-bottom:16px;">' +
+							'<strong style="display:block;margin-bottom:8px;color:#0369a1;font-size:13px;">Thông Tin Khách Hàng Đặt Dịch Vụ: ' + sourceBadge + '</strong>' +
+							'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">' +
+								'<div><strong>Họ và tên:</strong> <span style="color:#0f172a;font-weight:700;">' + (contact.name || '—') + '</span></div>' +
+								'<div><strong>Số điện thoại / Zalo:</strong> <a href="tel:' + cleanPhone + '" style="color:#2563eb;font-weight:700;text-decoration:none;">' + (contact.phone || '—') + '</a></div>' +
+								(contact.email ? '<div><strong>Email:</strong> ' + contact.email + '</div>' : '') +
+								((contact.company || contact.company_name) ? '<div><strong>Công ty:</strong> ' + (contact.company || contact.company_name) + '</div>' : '') +
+							'</div>' +
+							(contact.notes ? '<div style="margin-top:8px;font-size:12px;color:#334155;background:#ffffff;padding:8px 10px;border:1px dashed #cbd5e1;border-radius:4px;"><strong>Ghi chú từ khách:</strong> ' + contact.notes + '</div>' : '') +
+							'</div>';
 					}
-					const sourceBadge = ' <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:700;">' + sourceLabel + '</span>';
-					contactDetail = '<div style="background:#f0f9ff;padding:12px 14px;border:1px solid #bae6fd;border-radius:6px;margin-bottom:16px;">' +
-						'<strong style="display:block;margin-bottom:8px;color:#0369a1;font-size:13px;">Thông Tin Khách Hàng Đặt Dịch Vụ: ' + sourceBadge + '</strong>' +
-						'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">' +
-							'<div><strong>Họ và tên:</strong> <span style="color:#0f172a;font-weight:700;">' + (contact.name || '—') + '</span></div>' +
-							'<div><strong>Số điện thoại / Zalo:</strong> <a href="tel:' + cleanPhone + '" style="color:#2563eb;font-weight:700;text-decoration:none;">' + (contact.phone || '—') + '</a></div>' +
-							(contact.email ? '<div><strong>Email:</strong> ' + contact.email + '</div>' : '') +
-						'</div>' +
-						(contact.notes ? '<div style="margin-top:8px;font-size:12px;color:#334155;background:#ffffff;padding:8px 10px;border:1px dashed #cbd5e1;border-radius:4px;"><strong>Ghi chú từ khách:</strong> ' + contact.notes + '</div>' : '') +
-						'</div>';
 				}
 
 				let addressDetail = '';
