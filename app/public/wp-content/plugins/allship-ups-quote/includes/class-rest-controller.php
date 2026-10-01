@@ -323,6 +323,30 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 				],
 			]
 		);
+
+		// GET /wp-json/ups-quote/v1/geo-data/(states|cities)/(code)
+		register_rest_route(
+			$this->namespace,
+			'/geo-data/(?P<type>states|cities)/(?P<code>[a-zA-Z0-9_\-\.]+)',
+			[
+				'methods'             => $methods_get,
+				'callback'            => [ $this, 'get_geo_data' ],
+				'permission_callback' => '__return_true',
+				'args'                => [
+					'type' => [
+						'type'              => 'string',
+						'required'          => true,
+						'enum'              => [ 'states', 'cities' ],
+						'sanitize_callback' => 'sanitize_key',
+					],
+					'code' => [
+						'type'              => 'string',
+						'required'          => true,
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+				],
+			]
+		);
 	}
 
 	/**
@@ -2580,5 +2604,49 @@ class Allship_UPS_REST_Controller extends WP_REST_Controller {
 	public static function generate_download_token( $quote_ref ) {
 		$secret = function_exists( 'wp_salt' ) ? wp_salt( 'nonce' ) : 'allship_quote_download';
 		return substr( hash_hmac( 'sha256', (string) $quote_ref, $secret ), 0, 16 );
+	}
+
+	/**
+	 * Serve states and cities geo JSON data securely via REST API proxy.
+	 *
+	 * Prevents client-side exposure of /wp-content/plugins/ file paths.
+	 *
+	 * @param WP_REST_Request $request REST request.
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function get_geo_data( $request ) {
+		$type = $request->get_param( 'type' );
+		$code = (string) $request->get_param( 'code' );
+
+		if ( substr( $code, -5 ) === '.json' ) {
+			$code = substr( $code, 0, -5 );
+		}
+
+		$clean_code = preg_replace( '/[^a-zA-Z0-9_\-]/', '', $code );
+		if ( empty( $clean_code ) || ! in_array( $type, [ 'states', 'cities' ], true ) ) {
+			return new WP_Error( 'allship_ups_invalid_geo_param', __( 'Tham số địa lý không hợp lệ.', 'allship-ups-quote' ), [ 'status' => 400 ] );
+		}
+
+		$data_dir  = dirname( __DIR__ ) . '/public/assets/data/' . $type;
+		$file_path = $data_dir . '/' . $clean_code . '.json';
+
+		if ( ! file_exists( $file_path ) ) {
+			$file_path = $data_dir . '/' . strtoupper( $clean_code ) . '.json';
+		}
+
+		if ( ! file_exists( $file_path ) ) {
+			return new WP_Error( 'allship_ups_geo_not_found', __( 'Không tìm thấy dữ liệu địa lý.', 'allship-ups-quote' ), [ 'status' => 404 ] );
+		}
+
+		$content = file_get_contents( $file_path );
+		$decoded = json_decode( $content, true );
+
+		if ( null === $decoded ) {
+			return new WP_Error( 'allship_ups_geo_parse_error', __( 'Lỗi đọc file dữ liệu.', 'allship-ups-quote' ), [ 'status' => 500 ] );
+		}
+
+		$response = new WP_REST_Response( $decoded, 200 );
+		$response->header( 'Cache-Control', 'public, max-age=604800, stale-while-revalidate=86400' );
+		return $response;
 	}
 }

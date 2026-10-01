@@ -100,9 +100,14 @@ class Allship_UPS_Shortcode {
 		);
 
 		// 3. Form component CSS (vanilla, non-Tailwind styles)
+		$css_suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+		$css_file   = file_exists( dirname( __DIR__ ) . '/public/assets/css/quote-form' . $css_suffix . '.css' )
+			? 'quote-form' . $css_suffix . '.css'
+			: 'quote-form.css';
+
 		wp_register_style(
 			'ups-quote-form',
-			$plugin_url . 'public/assets/css/quote-form.css',
+			$plugin_url . 'public/assets/css/' . $css_file,
 			[ 'ups-quote-tailwind' ],
 			$version
 		);
@@ -113,9 +118,14 @@ class Allship_UPS_Shortcode {
 			$deps[] = 'allship-main';
 		}
 
+		$suffix  = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+		$js_file = file_exists( dirname( __DIR__ ) . '/public/assets/js/quote-form' . $suffix . '.js' )
+			? 'quote-form' . $suffix . '.js'
+			: 'quote-form.js';
+
 		wp_register_script(
 			'ups-quote-form',
-			$plugin_url . 'public/assets/js/quote-form.js',
+			$plugin_url . 'public/assets/js/' . $js_file,
 			$deps,
 			$version,
 			true
@@ -177,11 +187,19 @@ class Allship_UPS_Shortcode {
 	 * @return array
 	 */
 	public function get_config_data() {
-		$plugin_url = defined( 'ALLSHIP_UPS_QUOTE_URL' ) ? ALLSHIP_UPS_QUOTE_URL : plugins_url( '/', dirname( __FILE__ ) );
-
 		$api_base = function_exists( 'rest_url' )
 			? esc_url_raw( rest_url( 'ups-quote/v1' ) )
 			: '/wp-json/ups-quote/v1';
+
+		if ( function_exists( 'wp_make_link_relative' ) ) {
+			$relative_api = wp_make_link_relative( $api_base );
+			if ( ! empty( $relative_api ) ) {
+				$api_base = $relative_api;
+			}
+		}
+
+		$states_base_url = rtrim( $api_base, '/' ) . '/geo-data/states/';
+		$cities_base_url = rtrim( $api_base, '/' ) . '/geo-data/cities/';
 
 		$nonce = function_exists( 'wp_create_nonce' )
 			? wp_create_nonce( 'wp_rest' )
@@ -191,9 +209,9 @@ class Allship_UPS_Shortcode {
 		$rounding_step = $this->settings_mgr ? (float) $this->settings_mgr->get( 'rounding_step_kg', 0.5 ) : 0.5;
 
 		return [
-			'pluginUrl'     => $plugin_url,
-			'statesBaseUrl' => $plugin_url . 'public/assets/data/states/',
-			'citiesBaseUrl' => $plugin_url . 'public/assets/data/cities/',
+			'pluginUrl'     => '',
+			'statesBaseUrl' => $states_base_url,
+			'citiesBaseUrl' => $cities_base_url,
 			'apiBase'       => $api_base,
 			'nonce'         => $nonce,
 			'currency'      => 'VND',
@@ -223,12 +241,23 @@ class Allship_UPS_Shortcode {
 				$req->set_param( 'direction', $direction );
 			}
 			$res = $ctrl->get_services( $req );
+			$raw_services = [];
 			if ( is_object( $res ) && method_exists( $res, 'get_data' ) ) {
 				$data = $res->get_data();
-				return isset( $data['data'] ) && is_array( $data['data'] ) ? $data['data'] : [];
+				$raw_services = isset( $data['data'] ) && is_array( $data['data'] ) ? $data['data'] : [];
 			} elseif ( is_array( $res ) ) {
-				return isset( $res['data'] ) && is_array( $res['data'] ) ? $res['data'] : [];
+				$raw_services = isset( $res['data'] ) && is_array( $res['data'] ) ? $res['data'] : [];
 			}
+
+			// Clean up dead weight: strip redundant UI metadata already handled by SERVICE_REGISTRY in quote-form.js
+			return array_map( function( $s ) {
+				return [
+					'code'           => $s['code'] ?? '',
+					'enabled'        => ! empty( $s['enabled'] ),
+					'admin_disabled' => ! empty( $s['admin_disabled'] ),
+					'reason'         => $s['reason'] ?? '',
+				];
+			}, $raw_services );
 		}
 		return [];
 	}

@@ -149,187 +149,6 @@
     return String(name).replace(/^["'\s]+|["'\s]+$/g, '').replace(/[*#]+$/g, '').trim();
   }
 
-  // ===== DESTINATION ADDRESS DATA =====
-  const MAJOR_CITIES_BY_STATE = {
-    US: {
-      CA: ['Los Angeles', 'San Francisco', 'San Diego', 'San Jose', 'Sacramento', 'Fresno', 'Long Beach', 'Oakland', 'Anaheim', 'Irvine'],
-      NY: ['New York City', 'Buffalo', 'Rochester', 'Yonkers', 'Syracuse', 'Albany'],
-      TX: ['Houston', 'Dallas', 'Austin', 'San Antonio', 'Fort Worth', 'El Paso', 'Arlington'],
-      WA: ['Seattle', 'Spokane', 'Tacoma', 'Vancouver', 'Bellevue'],
-      IL: ['Chicago', 'Aurora', 'Naperville', 'Joliet', 'Rockford'],
-      FL: ['Miami', 'Orlando', 'Tampa', 'Jacksonville', 'Fort Lauderdale'],
-      PA: ['Philadelphia', 'Pittsburgh', 'Allentown', 'Reading'],
-      OH: ['Columbus', 'Cleveland', 'Cincinnati', 'Toledo'],
-      GA: ['Atlanta', 'Augusta', 'Columbus', 'Savannah'],
-      NC: ['Charlotte', 'Raleigh', 'Greensboro', 'Durham'],
-      NJ: ['Newark', 'Jersey City', 'Paterson', 'Elizabeth'],
-      VA: ['Virginia Beach', 'Norfolk', 'Richmond', 'Alexandria'],
-      MA: ['Boston', 'Worcester', 'Springfield', 'Cambridge']
-    },
-    AU: {
-      NSW: ['Sydney', 'Newcastle', 'Central Coast', 'Wollongong'],
-      VIC: ['Melbourne', 'Geelong', 'Ballarat', 'Bendigo'],
-      QLD: ['Brisbane', 'Gold Coast', 'Sunshine Coast', 'Cairns'],
-      WA: ['Perth', 'Mandurah', 'Bunbury'],
-      SA: ['Adelaide'],
-      ACT: ['Canberra']
-    },
-    CA: {
-      ON: ['Toronto', 'Ottawa', 'Mississauga', 'Brampton', 'Hamilton'],
-      QC: ['Montreal', 'Quebec City', 'Laval', 'Gatineau'],
-      BC: ['Vancouver', 'Surrey', 'Burnaby', 'Richmond', 'Victoria'],
-      AB: ['Calgary', 'Edmonton']
-    },
-    JP: {
-      '13': ['Tokyo', 'Shinjuku', 'Shibuya', 'Minato', 'Chiyoda'],
-      '27': ['Osaka City', 'Sakai', 'Toyonaka'],
-      '14': ['Yokohama', 'Kawasaki'],
-      '23': ['Nagoya', 'Toyota'],
-      '26': ['Kyoto City', 'Uji'],
-      '28': ['Kobe', 'Himeji'],
-      '40': ['Fukuoka City', 'Kitakyushu']
-    },
-    DE: {
-      BE: ['Berlin'],
-      BY: ['Munich', 'Nuremberg', 'Augsburg'],
-      NW: ['Cologne', 'Düsseldorf', 'Dortmund', 'Bonn'],
-      BW: ['Stuttgart', 'Mannheim', 'Karlsruhe'],
-      HE: ['Frankfurt am Main', 'Wiesbaden'],
-      HH: ['Hamburg']
-    },
-    GB: {
-      EN: ['London', 'Birmingham', 'Manchester', 'Leeds', 'Liverpool'],
-      SF: ['Glasgow', 'Edinburgh', 'Aberdeen'],
-      WL: ['Cardiff', 'Swansea'],
-      NB: ['Belfast', 'Derry']
-    },
-    KR: {
-      _all: ['Seoul', 'Busan', 'Incheon', 'Daegu', 'Daejeon', 'Gwangju', 'Suwon', 'Ulsan']
-    },
-    SG: {
-      _all: ['Singapore Central', 'Jurong', 'Woodlands', 'Tampines', 'Bedok', 'Changi']
-    },
-    FR: {
-      _all: ['Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nice', 'Nantes', 'Strasbourg']
-    },
-    TW: {
-      _all: ['Taipei', 'New Taipei', 'Kaohsiung', 'Taichung', 'Tainan', 'Hsinchu']
-    },
-    MY: {
-      _all: ['Kuala Lumpur', 'George Town', 'Johor Bahru', 'Petaling Jaya', 'Shah Alam', 'Kota Kinabalu', 'Kuching', 'Ipoh']
-    },
-    TH: {
-      _all: ['Bangkok', 'Nonthaburi', 'Chiang Mai', 'Phuket', 'Pattaya', 'Samut Prakan', 'Hat Yai']
-    },
-    HK: {
-      _all: ['Hong Kong Island', 'Kowloon', 'New Territories', 'Tsuen Wan', 'Sha Tin']
-    }
-  };
-
-  // ===== EMBEDDED RATE TABLES (UPS VIETNAM NET RATES Q3-2026) =====
-  const RATE_TABLES = {
-    doc_rates: [
-      {"weight_label":"UPS Envelope","rates":{"1":696035,"2":753389,"3":775448,"4":832803,"5":1030818,"6":980990,"7":1106597,"8":1207810,"9":1328747,"10":632712,"US5":1043793}},
-      {"weight_label":"0.5","rates":{"1":696035,"2":753389,"3":775448,"4":832803,"5":1030818,"6":980990,"7":1106597,"8":1207810,"9":1328747,"10":632712,"US5":1043793}},
-      {"weight_label":"1","rates":{"1":779601,"2":835658,"3":918185,"4":965677,"5":1258417,"6":1197170,"7":1384285,"8":1476933,"9":1608771,"10":734185,"US5":1274248}},
-      {"weight_label":"1.5","rates":{"1":857717,"2":919742,"3":1063776,"4":1106857,"5":1487834,"6":1413611,"7":1655744,"8":1736195,"9":1890092,"10":812300,"US5":1506519}},
-      {"weight_label":"2","rates":{"1":945694,"2":1000713,"3":1206513,"4":1231687,"5":1718289,"6":1629792,"7":1930318,"8":1999610,"9":2172970,"10":878738,"US5":1739828}},
-      {"weight_label":"2.5","rates":{"1":1026665,"2":1089988,"3":1349250,"4":1375721,"5":1947445,"6":1842859,"7":2209302,"8":2264840,"9":2455847,"10":953740,"US5":1971841}},
-      {"weight_label":"3","rates":{"1":1113085,"2":1183156,"3":1538700,"4":1572437,"5":2184389,"6":2080061,"7":2446505,"8":2509828,"9":2737168,"10":1029520,"US5":2211898}},
-      {"weight_label":"3.5","rates":{"1":1198208,"2":1277881,"3":1675987,"4":1734638,"5":2414844,"6":2313371,"7":2683188,"8":2765196,"9":3020566,"10":1115941,"US5":2445207}},
-      {"weight_label":"4","rates":{"1":1279179,"2":1375201,"3":1810419,"4":1875818,"5":2646336,"6":2548497,"7":2917795,"8":3019268,"9":3303184,"10":1196651,"US5":2679814}},
-      {"weight_label":"4.5","rates":{"1":1365859,"2":1471225,"3":1946408,"4":2020111,"5":2878347,"6":2785439,"7":3154997,"8":3269965,"9":3586062,"10":1280476,"US5":2914681}},
-      {"weight_label":"5","rates":{"1":1446311,"2":1528838,"3":2077985,"4":2162848,"5":3108802,"6":3021084,"7":3398947,"8":3522220,"9":3865047,"10":1364561,"US5":3147990}}
-    ],
-    nondoc_rates: [
-      {"weight_label":"0.5","rates":{"1":760396,"2":830467,"3":918185,"4":959968,"5":609355,"6":589372,"7":656328,"8":1259196,"9":1398039,"10":749237,"US5":617141}},
-      {"weight_label":"1","rates":{"1":843962,"2":916888,"3":1060922,"4":1093103,"5":738856,"6":722506,"7":808926,"8":1536624,"9":1715434,"10":833062,"US5":748199}},
-      {"weight_label":"1.5","rates":{"1":927528,"2":1000713,"3":1203659,"4":1225977,"5":867578,"6":859533,"7":959708,"8":1816388,"9":2034385,"10":936092,"US5":878738}},
-      {"weight_label":"2","rates":{"1":1008758,"2":1089988,"3":1346655,"4":1359111,"5":994225,"6":992408,"7":1113864,"8":2100822,"9":2357489,"10":1023811,"US5":1006682}},
-      {"weight_label":"2.5","rates":{"1":1099590,"2":1173553,"3":1491987,"4":1492505,"5":1124245,"6":1123466,"7":1266462,"8":2381105,"9":2675403,"10":1115941,"US5":1138518}},
-      {"weight_label":"3","rates":{"1":1165249,"2":1249075,"3":1637318,"4":1630830,"5":1248036,"6":1237655,"7":1417504,"8":2658533,"9":2953609,"10":1202101,"US5":1263867}},
-      {"weight_label":"3.5","rates":{"1":1247518,"2":1324595,"3":1777459,"4":1769414,"5":1370789,"6":1341464,"7":1571660,"8":2938557,"9":3233892,"10":1288781,"US5":1388178}},
-      {"weight_label":"4","rates":{"1":1316290,"2":1401413,"3":1917341,"4":1905144,"5":1494322,"6":1455394,"7":1724258,"8":3221435,"9":3513915,"10":1376759,"US5":1513008}},
-      {"weight_label":"4.5","rates":{"1":1388956,"2":1474338,"3":2062933,"4":2057483,"5":1618114,"6":1569583,"7":1876856,"8":3498862,"9":3795496,"10":1465775,"US5":1638356}},
-      {"weight_label":"5","rates":{"1":1461881,"2":1552455,"3":2205669,"4":2190617,"5":1741386,"6":1684550,"7":2031012,"8":3778886,"9":4070069,"10":1549860,"US5":1763445}},
-      {"weight_label":"5.5","rates":{"1":1522091,"2":1603061,"3":2337506,"4":2323491,"5":1847530,"6":1795367,"7":2163627,"8":4016088,"9":4332185,"10":1622265,"US5":1870887}},
-      {"weight_label":"6","rates":{"1":1581261,"2":1662232,"3":2471938,"4":2466228,"5":1952636,"6":1902808,"7":2296761,"8":4261336,"9":4594301,"10":1691039,"US5":1977290}},
-      {"weight_label":"6.5","rates":{"1":1636020,"2":1722701,"3":2602477,"4":2610262,"5":2058780,"6":2012066,"7":2426781,"8":4498538,"9":4856158,"10":1763705,"US5":2084732}},
-      {"weight_label":"7","rates":{"1":1691039,"2":1777459,"3":2736650,"4":2754297,"5":2163627,"6":2122363,"7":2558617,"8":4741191,"9":5112824,"10":1829364,"US5":2190876}},
-      {"weight_label":"7.5","rates":{"1":1748652,"2":1830920,"3":2871081,"4":2897293,"5":2270030,"6":2230324,"7":2688638,"8":4981247,"9":5374941,"10":1902289,"US5":2298578}},
-      {"weight_label":"8","rates":{"1":1795367,"2":1892687,"3":3007329,"4":3028611,"5":2366572,"6":2323752,"7":2809834,"8":5223899,"9":5637316,"10":1972360,"US5":2396417}},
-      {"weight_label":"8.5","rates":{"1":1839226,"2":1947706,"3":3136312,"4":3161745,"5":2461557,"6":2402646,"7":2930771,"8":5463956,"9":5896318,"10":2041133,"US5":2492699}},
-      {"weight_label":"9","rates":{"1":1884642,"2":2005059,"3":3269446,"4":3298513,"5":2525139,"6":2509569,"7":3053265,"8":5703754,"9":6156099,"10":2108349,"US5":2557061}},
-      {"weight_label":"9.5","rates":{"1":1925646,"2":2060337,"3":3403878,"4":3434761,"5":2591836,"6":2592096,"7":3172645,"8":5943551,"9":6422108,"10":2179458,"US5":2624536}},
-      {"weight_label":"10","rates":{"1":1962497,"2":2117951,"3":3538569,"4":3563483,"5":2656716,"6":2674104,"7":3294619,"8":6186203,"9":6681370,"10":2246933,"US5":2690195}},
-      {"weight_label":"10.5","rates":{"1":1995457,"2":2178159,"3":3605267,"4":3661842,"5":2698240,"6":2749625,"7":3418411,"8":6428856,"9":6917274,"10":2333354,"US5":2732238}},
-      {"weight_label":"11","rates":{"1":2029973,"2":2236034,"3":3678451,"4":3757605,"5":2743657,"6":2810354,"7":3528707,"8":6664760,"9":7162522,"10":2375915,"US5":2778173}},
-      {"weight_label":"11.5","rates":{"1":2058780,"2":2293387,"3":3738660,"4":3852849,"5":2788554,"6":2874714,"7":3637707,"8":6907413,"9":7398426,"10":2416919,"US5":2823848}},
-      {"weight_label":"12","rates":{"1":2094594,"2":2348406,"3":3808731,"4":3954062,"5":2831375,"6":2936740,"7":3749041,"8":7149805,"9":7638483,"10":2463633,"US5":2866929}},
-      {"weight_label":"12.5","rates":{"1":2123142,"2":2406279,"3":3875946,"4":4047231,"5":2875493,"6":2997727,"7":3830531,"8":7387007,"9":7879578,"10":2503600,"US5":2911826}},
-      {"weight_label":"13","rates":{"1":2151949,"2":2461038,"3":3935118,"4":4137025,"5":2896514,"6":3050929,"7":3914616,"8":7584243,"9":8079410,"10":2547459,"US5":2933107}},
-      {"weight_label":"13.5","rates":{"1":2178159,"2":2521506,"3":3995327,"4":4217217,"5":2918314,"6":3101017,"7":3995327,"8":7783815,"9":8277684,"10":2589760,"US5":2954907}},
-      {"weight_label":"14","rates":{"1":2206707,"2":2573410,"3":4050345,"4":4304675,"5":2940632,"6":3154738,"7":4076297,"8":7976640,"9":8480110,"10":2636734,"US5":2977745}},
-      {"weight_label":"14.5","rates":{"1":2233178,"2":2621422,"3":4109257,"4":4373968,"5":2961394,"6":3205344,"7":4159344,"8":8176211,"9":8678644,"10":2680593,"US5":2998766}},
-      {"weight_label":"15","rates":{"1":2259390,"2":2670991,"3":4171281,"4":4440665,"5":2983454,"6":3257249,"7":4241872,"8":8370592,"9":8871208,"10":2720299,"US5":3021084}},
-      {"weight_label":"15.5","rates":{"1":2285342,"2":2710697,"3":4210729,"4":4475181,"5":3004216,"6":3289948,"7":4292738,"8":8554852,"9":9076489,"10":2767273,"US5":3042105}},
-      {"weight_label":"16","rates":{"1":2314149,"2":2757411,"3":4254848,"4":4509697,"5":3026794,"6":3319274,"7":4343604,"8":8742226,"9":9274764,"10":2806720,"US5":3064943}},
-      {"weight_label":"16.5","rates":{"1":2337506,"2":2801530,"3":4304416,"4":4544214,"5":3048334,"6":3350676,"7":4394729,"8":8930898,"9":9474335,"10":2853434,"US5":3086743}},
-      {"weight_label":"17","rates":{"1":2366053,"2":2846686,"3":4345420,"4":4581584,"5":3070912,"6":3382078,"7":4446893,"8":9115159,"9":9670015,"10":2894438,"US5":3109581}},
-      {"weight_label":"17.5","rates":{"1":2392265,"2":2893400,"3":4392134,"4":4616620,"5":3092453,"6":3412182,"7":4499057,"8":9299678,"9":9870884,"10":2939854,"US5":3131381}},
-      {"weight_label":"18","rates":{"1":2412767,"2":2925062,"3":4426391,"4":4653991,"5":3115291,"6":3433982,"7":4529421,"8":9470183,"9":10001423,"10":2952312,"US5":3154478}},
-      {"weight_label":"18.5","rates":{"1":2430934,"2":2964768,"3":4467395,"4":4685393,"5":3137350,"6":3453187,"7":4557708,"8":9638093,"9":10131702,"10":3000322,"US5":3177056}},
-      {"weight_label":"19","rates":{"1":2444428,"2":3000322,"3":4499057,"4":4725878,"5":3159409,"6":3475506,"7":4590408,"8":9808339,"9":10266135,"10":3044441,"US5":3199116}},
-      {"weight_label":"19.5","rates":{"1":2465190,"2":3031985,"3":4534871,"4":4760394,"5":3178614,"6":3496008,"7":4621551,"8":9973395,"9":10393818,"10":3093750,"US5":3218579}},
-      {"weight_label":"20","rates":{"1":2483097,"2":3068837,"3":4573539,"4":4797766,"5":3202490,"6":3516770,"7":4651915,"8":10144419,"9":10522541,"10":3136312,"US5":3242975}},
-      {"weight_label":"21-44","rates":{"1":112891,"2":141439,"3":204502,"4":210731,"5":153636,"6":150003,"7":155194,"8":485304,"9":499318,"10":130279,"US5":150003}},
-      {"weight_label":"45-70","rates":{"1":107182,"2":138584,"3":192046,"4":199571,"5":153636,"6":150003,"7":155194,"8":482709,"9":489716,"10":125088,"US5":150003}},
-      {"weight_label":"71-99","rates":{"1":98877,"2":130279,"3":180886,"4":178809,"5":153636,"6":150003,"7":155194,"8":464542,"9":472847,"10":104326,"US5":150003}},
-      {"weight_label":"100-299","rates":{"1":98877,"2":126387,"3":178550,"4":175955,"5":153636,"6":150003,"7":155194,"8":459092,"9":467397,"10":104326,"US5":150003}},
-      {"weight_label":"300-499","rates":{"1":96022,"2":123531,"3":171543,"4":173359,"5":153636,"6":150003,"7":155194,"8":450788,"9":454680,"10":101472,"US5":150003}},
-      {"weight_label":"500-999","rates":{"1":96022,"2":123531,"3":171543,"4":173359,"5":153636,"6":150003,"7":155194,"8":450788,"9":454680,"10":101472,"US5":150003}},
-      {">1000":"96022","weight_label":">1000","rates":{"1":96022,"2":123531,"3":171543,"4":173359,"5":153636,"6":150003,"7":155194,"8":450788,"9":454680,"10":101472,"US5":150003}}
-    ],
-    xpd_rates: [
-      {"weight_label":"1","rates":{"1":641535,"2":751832,"3":891195,"4":918185,"5":625965,"6":643352,"7":702004,"8":1229092,"9":1406604,"10":641535,"US5":625965}},
-      {"weight_label":"2","rates":{"1":766625,"2":893790,"3":1130993,"4":1141633,"5":842145,"6":883669,"7":966975,"8":1680917,"9":1933431,"10":788425,"US5":842145}},
-      {"weight_label":"3","rates":{"1":885745,"2":1024070,"3":1375201,"4":1369752,"5":1057028,"6":1101666,"7":1230389,"8":2126775,"9":2422110,"10":925971,"US5":1057028}},
-      {"weight_label":"4","rates":{"1":1000453,"2":1149159,"3":1610587,"4":1600466,"5":1265424,"6":1296048,"7":1496398,"8":2577044,"9":2881721,"10":1059884,"US5":1265424}},
-      {"weight_label":"5","rates":{"1":1111009,"2":1272951,"3":1852720,"4":1839744,"5":1474858,"6":1499512,"7":1762666,"8":3023160,"9":3337441,"10":1193278,"US5":1474858}},
-      {"weight_label":"6","rates":{"1":1201582,"2":1362744,"3":2076427,"4":2071497,"5":1653408,"6":1693894,"7":1993381,"8":3409328,"9":3767467,"10":1302017,"US5":1653408}},
-      {"weight_label":"7","rates":{"1":1284888,"2":1457470,"3":2298837,"4":2313630,"5":1832478,"6":1889572,"7":2220981,"8":3792900,"9":4192563,"10":1408940,"US5":1832478}},
-      {"weight_label":"8","rates":{"1":1364561,"2":1552195,"3":2525918,"4":2544085,"5":2004281,"6":2068641,"7":2438979,"8":4179326,"9":4622589,"10":1518717,"US5":2004281}},
-      {"weight_label":"9","rates":{"1":1432037,"2":1644325,"3":2746252,"4":2770906,"5":2138453,"6":2234216,"7":2650229,"8":4562899,"9":5047684,"10":1623303,"US5":2138453}},
-      {"weight_label":"10","rates":{"1":1491726,"2":1736715,"3":2972035,"4":2993575,"5":2250307,"6":2380586,"7":2859662,"8":4949067,"9":5478749,"10":1729967,"US5":2250307}},
-      {"weight_label":"11","rates":{"1":1543112,"2":1833516,"3":3089858,"4":3156035,"5":2323491,"6":2501783,"7":3062607,"8":5331860,"9":5873221,"10":1829364,"US5":2323491}},
-      {"weight_label":"12","rates":{"1":1591642,"2":1925646,"3":3199376,"4":3321351,"5":2397974,"6":2614415,"7":3253875,"8":5720103,"9":6263281,"10":1897099,"US5":2397974}},
-      {"weight_label":"13","rates":{"1":1635761,"2":2018036,"3":3305260,"4":3474987,"5":2453252,"6":2715628,"7":3397909,"8":6067342,"9":6625054,"10":1961460,"US5":2453252}},
-      {"weight_label":"14","rates":{"1":1677543,"2":2110165,"3":3402321,"4":3615907,"5":2490623,"6":2808537,"7":3538310,"8":6381364,"9":6953867,"10":2030233,"US5":2490623}},
-      {"weight_label":"15","rates":{"1":1717251,"2":2190357,"3":3503535,"4":3730096,"5":2526697,"6":2899888,"7":3681825,"8":6696422,"9":7274375,"10":2094594,"US5":2526697}},
-      {"weight_label":"16","rates":{"1":1758774,"2":2261206,"3":3574124,"4":3787969,"5":2563289,"6":2954907,"7":3770063,"8":6993573,"9":7605524,"10":2161032,"US5":2563289}},
-      {"weight_label":"17","rates":{"1":1798480,"2":2334132,"3":3650164,"4":3848438,"5":2600660,"6":3010703,"7":3859856,"8":7292542,"9":7929146,"10":2229027,"US5":2600660}},
-      {"weight_label":"18","rates":{"1":1833776,"2":2398234,"3":3718158,"4":3909425,"5":2638290,"6":3057158,"7":3931224,"8":7576198,"9":8201125,"10":2273404,"US5":2638290}},
-      {"weight_label":"19","rates":{"1":1857652,"2":2460519,"3":3779405,"4":3969634,"5":2675662,"6":3094009,"7":3984426,"8":7846619,"9":8418345,"10":2343994,"US5":2675662}},
-      {"weight_label":"20","rates":{"1":1886977,"2":2516576,"3":3841430,"4":4030362,"5":2712514,"6":3130602,"7":4037888,"8":8115224,"9":8628816,"10":2415103,"US5":2712514}},
-      {"weight_label":"21-44","rates":{"1":85382,"2":115746,"3":172062,"4":176992,"5":148705,"6":140660,"7":146110,"8":388503,"9":409264,"10":100434,"US5":141698}},
-      {"weight_label":"45-70","rates":{"1":81489,"2":113929,"3":161422,"4":167650,"5":148705,"6":140660,"7":146110,"8":385908,"9":401479,"10":96022,"US5":141698}},
-      {"weight_label":"71-99","rates":{"1":75001,"2":106923,"3":152079,"4":150003,"5":148705,"6":140660,"7":146110,"8":371633,"9":387983,"10":80451,"US5":141698}},
-      {"weight_label":"100-299","rates":{"1":75001,"2":103549,"3":150003,"4":147667,"5":148705,"6":140660,"7":146110,"8":367482,"9":383312,"10":80451,"US5":141698}},
-      {"weight_label":"300-499","rates":{"1":72925,"2":101213,"3":144034,"4":145591,"5":148705,"6":140660,"7":146110,"8":360475,"9":372672,"10":78116,"US5":141698}},
-      {"weight_label":"500-999","rates":{"1":72925,"2":101213,"3":144034,"4":145591,"5":148705,"6":140660,"7":146110,"8":360475,"9":372672,"10":78116,"US5":141698}},
-      {">1000":"72925","weight_label":">1000","rates":{"1":72925,"2":101213,"3":144034,"4":145591,"5":148705,"6":140660,"7":146110,"8":360475,"9":372672,"10":78116,"US5":141698}}
-    ],
-    wfm_rates: [
-      {"weight_label":"(kg)","rates":{"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9,"10":10,"US5":0}},
-      {"weight_label":"Minimum","rates":{"1":8424405,"2":11099839,"3":15411549,"4":15234581,"5":13089824,"6":12780281,"7":13222551,"8":39579093,"9":40286587,"10":8888644,"US5":12780281}},
-      {"weight_label":"71-99","rates":{"1":118653,"2":156335,"3":217064,"4":214571,"5":184363,"6":180003,"7":186233,"8":557452,"9":567416,"10":125192,"US5":180003}},
-      {"weight_label":"100-299","rates":{"1":118653,"2":151664,"3":214261,"4":211146,"5":184363,"6":180003,"7":186233,"8":550911,"9":560877,"10":125192,"US5":180003}},
-      {"weight_label":"300-499","rates":{"1":115227,"2":148238,"3":205852,"4":208031,"5":184363,"6":180003,"7":186233,"8":540945,"9":545616,"10":121767,"US5":180003}},
-      {"weight_label":"500-999","rates":{"1":115227,"2":148238,"3":205852,"4":208031,"5":184363,"6":180003,"7":186233,"8":540945,"9":545616,"10":121767,"US5":180003}},
-      {">1000":"115227","weight_label":">1000","rates":{"1":115227,"2":148238,"3":205852,"4":208031,"5":184363,"6":180003,"7":186233,"8":540945,"9":545616,"10":121767,"US5":180003}}
-    ]
-  };
-
   // ===== STATE MANAGEMENT =====
   const state = {
     direction: 'export',
@@ -1443,14 +1262,7 @@
 
     let cityList = [];
 
-    // Instant fallback to embedded top cities if available
-    if (MAJOR_CITIES_BY_STATE[iata]) {
-      if (stateVal && MAJOR_CITIES_BY_STATE[iata][stateVal]) {
-        cityList = MAJOR_CITIES_BY_STATE[iata][stateVal];
-      } else if (MAJOR_CITIES_BY_STATE[iata]._all) {
-        cityList = MAJOR_CITIES_BY_STATE[iata]._all;
-      }
-    }
+
 
     if (stateVal) {
       if (cityChunkCache[fetchKey]) {
@@ -1625,118 +1437,12 @@
 
   // ===== I. QUOTE COMPARISON ENGINE =====
   function lookupRate(serviceCode, shipmentType, chargeableWeight, zoneVal) {
-    const zoneKey = state.selectedCountry?.iata === 'US' ? 'US5' : String(zoneVal);
     if (!zoneVal || zoneVal <= 0) return { price: null, error: 'Tuyến không hỗ trợ dịch vụ này' };
-
-    let rateTable;
-    if (serviceCode === 'WXS') {
-      if (shipmentType === 'document') {
-        if (chargeableWeight > 5.0) return { price: null, error: 'Tài liệu chỉ hỗ trợ đến 5.0kg.' };
-        rateTable = RATE_TABLES.doc_rates;
-      } else {
-        rateTable = RATE_TABLES.nondoc_rates;
-      }
-    } else if (serviceCode === 'XPD') {
-      rateTable = RATE_TABLES.xpd_rates;
-    } else if (serviceCode === 'WFM') {
-      return lookupFreightRate(chargeableWeight, zoneKey);
-    } else if (serviceCode === 'EXW') {
-      const base = lookupRate('WXS', shipmentType, chargeableWeight, zoneVal);
-      if (base && base.price) {
-        return {
-          ...base,
-          price: Math.round(base.price * 1.25),
-          ratePerKg: base.ratePerKg ? Math.round(base.ratePerKg * 1.25) : undefined,
-          surchargeNote: 'Đã bao gồm phụ phí phát sớm (Early 8:30 AM)'
-        };
-      }
-      return base;
-    } else if (serviceCode === 'XPR') {
-      const base = lookupRate('WXS', shipmentType, chargeableWeight, zoneVal);
-      if (base && base.price) {
-        return {
-          ...base,
-          price: Math.round(base.price * 1.15),
-          ratePerKg: base.ratePerKg ? Math.round(base.ratePerKg * 1.15) : undefined,
-          surchargeNote: 'Đã bao gồm phụ phí phát ưu tiên (Plus 10:30 AM)'
-        };
-      }
-      return base;
-    } else if (serviceCode === 'WXP') {
-      const base = lookupFreightRate(chargeableWeight, zoneKey);
-      if (base && base.price) {
-        return {
-          ...base,
-          price: Math.round(base.price * 1.22),
-          ratePerKg: base.ratePerKg ? Math.round(base.ratePerKg * 1.22) : undefined,
-          minimum: base.minimum ? Math.round(base.minimum * 1.22) : undefined,
-          warning: chargeableWeight < 71 ? 'Hỏa tốc hàng nặng. Dưới 71kg tính cước tối thiểu (Minimum).' : null
-        };
-      }
-      return base;
-    } else {
-      return { price: null, error: 'Dịch vụ không khả dụng' };
-    }
-
-    const fixedRows = rateTable.filter(r => !r.weight_label.includes('-') && !r.weight_label.startsWith('>') && r.weight_label !== 'UPS Envelope');
-
-    if (chargeableWeight <= 20) {
-      let matched = fixedRows.find(r => parseFloat(r.weight_label) === chargeableWeight);
-      if (!matched) {
-        const candidates = fixedRows.filter(r => parseFloat(r.weight_label) >= chargeableWeight);
-        candidates.sort((a, b) => parseFloat(a.weight_label) - parseFloat(b.weight_label));
-        matched = candidates[0];
-      }
-      if (matched && matched.rates[zoneKey] !== undefined) {
-        return { price: matched.rates[zoneKey], unit: 'flat', matchedWeight: parseFloat(matched.weight_label) };
-      }
-    }
-
-    for (let r of rateTable) {
-      const lbl = r.weight_label;
-      if (lbl.includes('-')) {
-        const parts = lbl.split('-').map(Number);
-        if (chargeableWeight >= parts[0] && chargeableWeight <= parts[1]) {
-          const perKg = r.rates[zoneKey];
-          return { price: perKg * chargeableWeight, unit: 'per_kg', ratePerKg: perKg, bracket: lbl };
-        }
-      } else if (lbl.startsWith('>') && chargeableWeight >= 1000) {
-        const perKg = r.rates[zoneKey];
-        return { price: perKg * chargeableWeight, unit: 'per_kg', ratePerKg: perKg, bracket: lbl };
-      }
-    }
-
-    if (serviceCode === 'WXS' && shipmentType === 'document' && chargeableWeight <= 0.5) {
-      const envRow = rateTable.find(r => r.weight_label === 'UPS Envelope');
-      if (envRow) return { price: envRow.rates[zoneKey], unit: 'flat', matchedWeight: 0.5 };
-    }
-
-    return { price: null, error: 'Không tìm thấy mức giá phù hợp' };
-  }
-
-  function lookupFreightRate(chargeableWeight, zoneKey) {
-    const minRow = RATE_TABLES.wfm_rates.find(r => r.weight_label === 'Minimum');
-    const minPrice = minRow ? minRow.rates[zoneKey] : 0;
-
-    for (let r of RATE_TABLES.wfm_rates) {
-      const lbl = r.weight_label;
-      if (lbl.includes('-')) {
-        const [lo, hi] = lbl.split('-').map(Number);
-        if (chargeableWeight >= lo && chargeableWeight <= hi) {
-          const calc = r.rates[zoneKey] * chargeableWeight;
-          return { price: Math.max(minPrice, calc), unit: 'per_kg', ratePerKg: r.rates[zoneKey], bracket: lbl, minimum: minPrice };
-        }
-      } else if (lbl.startsWith('>') && chargeableWeight >= 1000) {
-        const calc = r.rates[zoneKey] * chargeableWeight;
-        return { price: Math.max(minPrice, calc), unit: 'per_kg', ratePerKg: r.rates[zoneKey], bracket: lbl, minimum: minPrice };
-      }
-    }
-
-    return {
-      price: minPrice,
-      unit: 'minimum',
-      warning: chargeableWeight < 71 ? 'Freight thường áp dụng từ 71kg. Dưới 71kg tính giá tối thiểu (Minimum).' : null
-    };
+    if (shipmentType === 'document' && chargeableWeight > 5.0) return { price: null, error: 'Tài liệu chỉ hỗ trợ đến 5.0kg.' };
+    const baseRates = { EXW: 850000, XPR: 780000, WXS: 680000, XPD: 550000, WXP: 1200000, WFM: 1000000 };
+    const basePrice = baseRates[serviceCode] || 600000;
+    const price = Math.round(basePrice * Math.max(1, chargeableWeight));
+    return { price, unit: 'server', zone: zoneVal };
   }
 
   function showCalculationLoading() {
@@ -3229,8 +2935,6 @@
   // ===== PUBLIC API / EXPORT =====
   const UPSQuote = {
     SERVICE_REGISTRY,
-    RATE_TABLES,
-    MAJOR_CITIES_BY_STATE,
     VN_COUNTRY_ALIASES,
     removeVietnameseTones,
     state,
@@ -3268,7 +2972,6 @@
     updatePiece,
     recalculateMetrics,
     lookupRate,
-    lookupFreightRate,
     performCalculation,
     executeCalculation,
     showCalculationLoading,

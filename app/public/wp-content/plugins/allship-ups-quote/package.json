@@ -4,8 +4,10 @@
   "private": true,
   "description": "Allship UPS Quote - standalone Tailwind CSS build",
   "scripts": {
-    "build:css": "npx @tailwindcss/cli@4 -i assets/src/css/tailwind-input.css -o public/assets/css/quote-form-tw.css --minify",
+    "build:css": "npx @tailwindcss/cli@4 -i assets/src/css/tailwind-input.css -o public/assets/css/quote-form-tw.css --minify && npx -y clean-css-cli -o public/assets/css/quote-form.min.css public/assets/css/quote-form.css",
     "watch:css": "npx @tailwindcss/cli@4 -i assets/src/css/tailwind-input.css -o public/assets/css/quote-form-tw.css --watch",
+    "build:js": "npx terser public/assets/js/quote-form.js -c -m -o public/assets/js/quote-form.min.js",
+    "build": "npm run build:css && npm run build:js",
     "dev": "npm run watch:css"
   },
   "dependencies": {
